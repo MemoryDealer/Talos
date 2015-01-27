@@ -16,10 +16,24 @@
     <Filter Include="Source Files\Core">
       <UniqueIdentifier>{a3760c18-8850-4b8f-89b6-e7fb931d85dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Core">
+      <UniqueIdentifier>{f21fb6a8-0bc7-47cd-85ba-5aae22c72855}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Core\main.cpp">
+    <ClCompile Include="Source\Core\main.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Core\Engine.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Core\Engine.hpp">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\stdafx.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

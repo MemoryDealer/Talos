@@ -10,6 +10,14 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Core\Engine.cpp" />
+    <ClCompile Include="Source\Core\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Core\Engine.hpp" />
+    <ClInclude Include="Source\stdafx.hpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{49CEF8CA-907E-4A2E-94CA-CD5FD1E38EDD}</ProjectGuid>
     <RootNamespace>Engine</RootNamespace>
@@ -51,9 +59,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>Source</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>OgreMain_d.lib;RenderSystem_Direct3D11_d.lib;RenderSystem_GL_d.lib;Plugin_OctreeSceneManager_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -63,6 +73,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>Source</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -70,9 +81,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="Core\main.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
