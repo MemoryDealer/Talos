@@ -27,12 +27,12 @@ int main(int argc, char** argv)
 	Engine engine;
 
 	try{
-		// Run the engine.
 		if (engine.init() == false){
 			return 1;
 		}
 
-		// Continue running...
+		// Start the engine!
+		engine.start(0);
 	}
 	catch (std::exception& e){
 		// Report any exceptions.

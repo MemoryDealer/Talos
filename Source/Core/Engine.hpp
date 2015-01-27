@@ -17,10 +17,12 @@
 // ========================================================================= //
 
 #include <stdafx.hpp>
+#include "EngineState\EngineState.hpp"
 
 // ========================================================================= //
 
-class EngineState{};
+typedef std::stack<std::shared_ptr<EngineState>> EngineStateStack;
+typedef std::vector<std::shared_ptr<EngineState>> EngineStateList;
 
 // ========================================================================= //
 // Holds rendering components, manages engine state stack.
@@ -36,15 +38,31 @@ public:
 	// Sets up initial rendering components and stack for engine states.
 	bool init(void);
 
+	// Updates the active state and calculates elapsed time. This is the main
+	// game update loop.
+	void start(const EngineStateID);
+
+	// Pushes a new active state onto the active state stack.
+	void pushState(const EngineStateID);
+
+	// Pops the active state off the active state stack, activating the next one.
+	// If the stack is empty, the engine is shut down.
+	void popState(void);
+
 private:
 	// Ogre3D components.
-	Ogre::Root*			m_root;
+	Ogre::Root*	m_root;
 	Ogre::RenderWindow* m_renderWindow;
-	Ogre::Viewport*		m_viewport;
-	Ogre::Log*			m_log;
+	Ogre::Viewport*	m_viewport;
+	Ogre::Log* m_log;
+	std::shared_ptr<Ogre::Timer> m_timer; // The core engine timer.
 
 	// State management.
-	std::stack<EngineState>	m_states;
+	EngineStateList m_states;
+	EngineStateStack m_stateStack;
+
+	// Engine data.
+	bool m_active;
 };
 
 // ========================================================================= //

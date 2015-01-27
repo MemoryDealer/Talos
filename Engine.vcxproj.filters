@@ -19,6 +19,12 @@
     <Filter Include="Header Files\Core">
       <UniqueIdentifier>{f21fb6a8-0bc7-47cd-85ba-5aae22c72855}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Core\EngineState">
+      <UniqueIdentifier>{9c2a66a6-dc61-4ddb-ab2b-7e2e9ad3141b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\EngineState">
+      <UniqueIdentifier>{a7d8effa-5810-437b-8b59-cb6d3c5cce0b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\main.cpp">
@@ -27,6 +33,12 @@
     <ClCompile Include="Source\Core\Engine.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Core\EngineState\EngineState.cpp">
+      <Filter>Source Files\Core\EngineState</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\EngineState\IntroState.cpp">
+      <Filter>Source Files\Core\EngineState</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\Engine.hpp">
@@ -34,6 +46,12 @@
     </ClInclude>
     <ClInclude Include="Source\stdafx.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\EngineState\EngineState.hpp">
+      <Filter>Header Files\Core\EngineState</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\EngineState\IntroState.hpp">
+      <Filter>Header Files\Core\EngineState</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
