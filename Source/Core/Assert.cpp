@@ -5,20 +5,39 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: stdafx.hpp
+// File: Assert.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// A single point of access for needed headers.
+// Implements Assert function for macro.
 // ========================================================================= //
 
-// C++.
-#include <stack>
+#include "stdafx.hpp"
+#include "Assert.hpp"
 
-// Ogre3D.
-#include <Ogre.h>
+// ========================================================================= //
 
-// My own files.
-#include "Core/HelperFunctions.hpp"
-#include "Core/Assert.hpp"
+const bool CustomAssert(const bool exp,
+						const char* desc,
+						const int line,
+						const char* file)
+{
+	if (!exp){
+		bool ret = false;
+#ifdef WIN32
+		std::string msg = std::string(desc) + "\r\nFILE: " + std::string(file)
+			+ "\r\nLINE: " + toString(line) + "\r\nDo you wish to break?";
+		if (static_cast<int>(MessageBox(GetForegroundWindow(), 
+			msg.c_str(),
+			"Assertion Triggered!", 
+			MB_YESNO | MB_ICONEXCLAMATION)) == IDYES){
+			ret = true;
+		}
+
+		return ret;
+#endif
+	}
+
+	return false;
+}
 
 // ========================================================================= //

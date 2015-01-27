@@ -15,10 +15,10 @@
 
 // ========================================================================= //
 
-EngineState::EngineState(const EngineStateID id) :
+EngineState::EngineState(void) :
 m_scene(nullptr),
 m_camera(nullptr),
-m_id(0)
+m_active(false)
 {
 
 }

@@ -11,15 +11,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Core\Assert.cpp" />
     <ClCompile Include="Source\Core\Engine.cpp" />
     <ClCompile Include="Source\Core\EngineState\EngineState.cpp" />
     <ClCompile Include="Source\Core\EngineState\IntroState.cpp" />
     <ClCompile Include="Source\Core\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Core\Assert.hpp" />
     <ClInclude Include="Source\Core\Engine.hpp" />
     <ClInclude Include="Source\Core\EngineState\EngineState.hpp" />
     <ClInclude Include="Source\Core\EngineState\IntroState.hpp" />
+    <ClInclude Include="Source\Core\HelperFunctions.hpp" />
     <ClInclude Include="Source\stdafx.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -63,7 +66,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>Source</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Source;Source\Core</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -78,7 +81,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>Source</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Source;Source\Core</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>

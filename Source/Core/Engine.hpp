@@ -16,8 +16,8 @@
 
 // ========================================================================= //
 
-#include <stdafx.hpp>
-#include "EngineState\EngineState.hpp"
+#include "stdafx.hpp"
+#include "EngineState/EngineState.hpp"
 
 // ========================================================================= //
 
@@ -29,10 +29,10 @@ typedef std::vector<std::shared_ptr<EngineState>> EngineStateList;
 class Engine
 {
 public:
-	
+	// Reserves contiguous memory for EngineState's.
 	Engine(void);
 
-	// Frees 
+	// Empty destructor.
 	~Engine(void);
 
 	// Sets up initial rendering components and stack for engine states.
@@ -42,12 +42,27 @@ public:
 	// game update loop.
 	void start(const EngineStateID);
 
+	// Allocates an EngineState object, adds it to the list of states, and 
+	// injects dependencies.
+	void registerState(const EngineStateID);
+
 	// Pushes a new active state onto the active state stack.
 	void pushState(const EngineStateID);
 
 	// Pops the active state off the active state stack, activating the next one.
 	// If the stack is empty, the engine is shut down.
 	void popState(void);
+
+	// Enumerations:
+
+	enum StateID{
+		STATE_INTRO = 0,
+		STATE_MAIN_MENU,
+		STATE_GAME,
+		STATE_PAUSED,
+
+		NUM_STATES
+	};
 
 private:
 	// Ogre3D components.

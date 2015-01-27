@@ -5,20 +5,31 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: stdafx.hpp
+// File: HelperFunctions.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// A single point of access for needed headers.
+// Defines some useful helper functions.
 // ========================================================================= //
 
-// C++.
-#include <stack>
+#ifndef __HELPERFUNCTIONS_HPP__
+#define __HELPERFUNCTIONS_HPP__
 
-// Ogre3D.
-#include <Ogre.h>
+// ========================================================================= //
 
-// My own files.
-#include "Core/HelperFunctions.hpp"
-#include "Core/Assert.hpp"
+#include <string>
+
+// ========================================================================= //
+
+template<typename T>
+static std::string toString(const T& value)
+{
+	std::ostringstream oss;
+	oss << value;
+	return oss.str();
+}
+
+// ========================================================================= //
+
+#endif
 
 // ========================================================================= //

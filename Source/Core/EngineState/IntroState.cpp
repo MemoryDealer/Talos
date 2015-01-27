@@ -15,8 +15,8 @@
 
 // ========================================================================= //
 
-IntroState::IntroState(const EngineStateID id) :
-EngineState(id)
+IntroState::IntroState(void) :
+EngineState()
 {
 
 }
@@ -32,6 +32,8 @@ IntroState::~IntroState(void)
 
 void IntroState::enter(void)
 {
+	m_active = true;
+
 	m_scene = m_root->createSceneManager(Ogre::ST_GENERIC, "IntroSceneManager");
 	m_scene->setAmbientLight(Ogre::ColourValue::White);
 

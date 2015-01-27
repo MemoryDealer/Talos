@@ -12,7 +12,7 @@
 // ========================================================================= //
 
 #include "Engine.hpp"
-#include "EngineState\IntroState.hpp"
+#include "EngineState/IntroState.hpp"
 
 // ========================================================================= //
 
@@ -26,7 +26,7 @@ m_states(),
 m_stateStack(),
 m_active(false)
 {
-	
+	m_states.reserve(5);
 }
 
 // ========================================================================= //
@@ -67,29 +67,24 @@ bool Engine::init(void)
 	// Activate the render window.
 	m_renderWindow->setActive(true);
 
-	// Allocate a timer.
+	// Allocate the main timer.
 	m_timer.reset(new Ogre::Timer());
 
 	// Register all needed game states.
 	// @TODO: Define these in data.
-	m_states.reserve(5);
-
-	std::shared_ptr<EngineState> state;
-	state.reset(new IntroState(0));
-	state->injectDependencies(m_root, m_viewport);
-	m_states.push_back(state);
+	this->registerState(Engine::StateID::STATE_INTRO);
 
 	return true;
 }
 
 // ========================================================================= //
 
-void Engine::start(const EngineStateID stateID)
+void Engine::start(const EngineStateID id)
 {
 	m_active = true;
 
 	// Push the specified state onto the active stack and run the game loop.
-	this->pushState(stateID);
+	this->pushState(id);
 
 	while (m_active == true){
 		// Check for window closing.
@@ -113,8 +108,32 @@ void Engine::start(const EngineStateID stateID)
 
 // ========================================================================= //
 
+void Engine::registerState(const EngineStateID id)
+{
+	std::shared_ptr<EngineState> state(nullptr);
+
+	switch (id){
+	default:
+		return;
+
+	case Engine::StateID::STATE_INTRO:
+		state.reset(new IntroState());
+		break;
+	}
+
+	Assert(state != nullptr, "Test");
+
+	// Add dependencies and register in state list.
+	state->injectDependencies(m_root, m_viewport);
+	m_states.push_back(state);
+}
+
+// ========================================================================= //
+
 void Engine::pushState(const EngineStateID id)
 {
+	Assert(id < Engine::StateID::NUM_STATES, "Invalid EngineStateID");
+
 	// Get a pointer to the specified state.
 	std::shared_ptr<EngineState> state = m_states[id];
 

@@ -39,6 +39,9 @@
     <ClCompile Include="Source\Core\EngineState\IntroState.cpp">
       <Filter>Source Files\Core\EngineState</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Core\Assert.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\Engine.hpp">
@@ -52,6 +55,12 @@
     </ClInclude>
     <ClInclude Include="Source\Core\EngineState\IntroState.hpp">
       <Filter>Header Files\Core\EngineState</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Assert.hpp">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\HelperFunctions.hpp">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

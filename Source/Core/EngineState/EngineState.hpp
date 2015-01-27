@@ -16,7 +16,7 @@
 
 // ========================================================================= //
 
-#include <stdafx.hpp>
+#include "stdafx.hpp"
 
 // ========================================================================= //
 
@@ -29,7 +29,7 @@ class EngineState
 {
 public:
 	// Default initializes member variables.
-	EngineState(const EngineStateID);
+	EngineState(void);
 
 	// Frees any data allocated by member variables.
 	virtual ~EngineState(void);
@@ -52,9 +52,6 @@ public:
 	// create the scene manager from the Ogre::Root object.
 	Ogre::SceneManager* getSceneManager(void) const;
 
-	// Returns state ID.
-	const EngineStateID getID(void) const;
-
 protected:
 	// Ogre3D components.
 	Ogre::Root*	m_root; // Each engine state will have m_root injected.
@@ -63,7 +60,7 @@ protected:
 	Ogre::Camera* m_camera;
 
 	// State data.
-	EngineStateID m_id;
+	bool m_active;
 };
 
 // ========================================================================= //
@@ -72,10 +69,6 @@ protected:
 
 inline Ogre::SceneManager* EngineState::getSceneManager(void) const{
 	return m_scene;
-}
-
-inline const EngineStateID EngineState::getID(void) const{
-	return m_id;
 }
 
 // ========================================================================= //

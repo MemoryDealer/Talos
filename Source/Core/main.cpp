@@ -13,7 +13,7 @@
 
 #include "Engine.hpp"
 
-#if OGRE_PLATFORM == PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#ifdef WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
@@ -32,11 +32,11 @@ int main(int argc, char** argv)
 		}
 
 		// Start the engine!
-		engine.start(0);
+		engine.start(Engine::StateID::STATE_INTRO);
 	}
 	catch (std::exception& e){
 		// Report any exceptions.
-#if OGRE_PLATFORM == PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#ifdef WIN32
 		MessageBox(GetForegroundWindow(), e.what(), "An exception has occurred!", MB_OK | MB_ICONERROR | MB_SETFOREGROUND);
 #else
 		fprintf(stderr, "An exception has occurred: %s\n", e.what());
