@@ -1,0 +1,45 @@
+
+vertex_program BasicShader1_vp hlsl
+{
+	source Basic_vp.hlsl
+	entry_point mainVP
+	target vs_4_0
+}
+
+fragment_program BasicShader1_fp hlsl
+{
+	source Basic_fp.hlsl
+	entry_point mainFP
+	target ps_4_0
+}
+
+vertex_program GL1_vp glsl
+{
+	source Basic_vp.glsl
+}
+
+fragment_program GL1_fp glsl
+{
+	source Basic_fp.glsl
+}
+
+material Basic
+{
+	technique
+	{
+		pass
+		{
+			ambient 	1 1 1
+			
+			vertex_program_ref GL1_vp
+			{
+				
+			}
+			
+			fragment_program_ref GL1_fp
+			{
+			
+			}
+		}
+	}
+}

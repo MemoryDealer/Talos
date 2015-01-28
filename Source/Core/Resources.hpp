@@ -5,46 +5,21 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: main.cpp
+// File: Resources.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements entry point of program.
+// Defines helper function(s) to manage resources.
 // ========================================================================= //
 
-#include "Engine.hpp"
-
-#ifdef WIN32
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
+#ifndef __RESOURCES_HPP__
+#define __RESOURCES_HPP__
 
 // ========================================================================= //
-// Entry point.
-//INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR args, INT)
-int main(int argc, char** argv)
-#else
-int main(int argc, char** argv)
+// Parses resource config file and loads all resources.
+extern void loadOgreResources(void);
+
+// ========================================================================= //
+
 #endif
-{
-	Engine engine;
-
-	try{
-		if (engine.init() == false){
-			return 1;
-		}
-
-		// Start the engine!
-		engine.start(Engine::StateID::STATE_INTRO);
-	}
-	catch (std::exception& e){
-		// Report any exceptions.
-#ifdef WIN32
-		MessageBox(GetForegroundWindow(), e.what(), "An exception has occurred!", MB_OK | MB_ICONERROR | MB_SETFOREGROUND);
-#else
-		fprintf(stderr, "An exception has occurred: %s\n", e.what());
-#endif
-	}
-
-	return 0;
-}
 
 // ========================================================================= //

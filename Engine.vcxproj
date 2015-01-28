@@ -16,6 +16,7 @@
     <ClCompile Include="Source\Core\EngineState\EngineState.cpp" />
     <ClCompile Include="Source\Core\EngineState\IntroState.cpp" />
     <ClCompile Include="Source\Core\main.cpp" />
+    <ClCompile Include="Source\Core\Resources.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\Assert.hpp" />
@@ -23,6 +24,7 @@
     <ClInclude Include="Source\Core\EngineState\EngineState.hpp" />
     <ClInclude Include="Source\Core\EngineState\IntroState.hpp" />
     <ClInclude Include="Source\Core\HelperFunctions.hpp" />
+    <ClInclude Include="Source\Core\Resources.hpp" />
     <ClInclude Include="Source\stdafx.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -72,6 +74,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>OgreMain_d.lib;RenderSystem_Direct3D11_d.lib;RenderSystem_GL_d.lib;Plugin_OctreeSceneManager_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -88,6 +91,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

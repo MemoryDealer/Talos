@@ -13,6 +13,7 @@
 
 #include "Engine.hpp"
 #include "EngineState/IntroState.hpp"
+#include "Resources.hpp"
 
 // ========================================================================= //
 
@@ -47,11 +48,6 @@ bool Engine::init(void)
 	// Initialize Ogre's root component.
 	m_root = new Ogre::Root();
 
-	// @TODO: First check if this is the first run on the machine.
-	// Set rendering device to default.
-	Ogre::RenderSystemList renderers = m_root->getAvailableRenderers();
-	m_root->setRenderSystem(*renderers.begin());
-
 	// Prompt the user with config dialog.
 	if (!m_root->showConfigDialog()){
 		return false;
@@ -67,8 +63,12 @@ bool Engine::init(void)
 	// Activate the render window.
 	m_renderWindow->setActive(true);
 
+	// Load resources for Ogre (from Resources.hpp).
+	loadOgreResources();
+
 	// Allocate the main timer.
 	m_timer.reset(new Ogre::Timer());
+	m_timer->reset(); // Activate timer.
 
 	// Register all needed game states.
 	// @TODO: Define these in data.
@@ -86,6 +86,10 @@ void Engine::start(const EngineStateID id)
 	// Push the specified state onto the active stack and run the game loop.
 	this->pushState(id);
 
+	const double MS_PER_UPDATE = 16.0;
+	double prev = m_timer->getMilliseconds();
+	double lag = 0.0;
+
 	while (m_active == true){
 		// Check for window closing.
 		if (m_renderWindow->isClosed()){
@@ -97,11 +101,20 @@ void Engine::start(const EngineStateID id)
 		// Update the engine if the render window is active.
 		if (m_renderWindow->isActive()){
 
+			double current = m_timer->getMilliseconds();
+			double elapsed = current - prev;
+			prev = current;
+			lag += elapsed;
+
 			// Update the current state.
-			m_stateStack.top()->update();
+			while (lag >= MS_PER_UPDATE){
+				m_stateStack.top()->update();
+
+				lag -= MS_PER_UPDATE;
+			}
 
 			// Render the updated frame.
-			m_root->renderOneFrame();
+			m_root->renderOneFrame(Ogre::Real(lag / MS_PER_UPDATE));
 		}
 	}
 }

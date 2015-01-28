@@ -30,7 +30,7 @@ class Engine
 {
 public:
 	// Reserves contiguous memory for EngineState's.
-	Engine(void);
+	explicit Engine(void);
 
 	// Empty destructor.
 	~Engine(void);

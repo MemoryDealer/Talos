@@ -24,7 +24,7 @@ class IntroState : public EngineState
 {
 public:
 	// Calls EngineState constructor.
-	IntroState(void);
+	explicit IntroState(void);
 
 	// Empty destructor.
 	virtual ~IntroState(void) override;
@@ -39,7 +39,7 @@ public:
 	virtual void update(void) override;
 
 private:
-
+	Ogre::SceneNode* m_cameraNode;
 };
 
 // ========================================================================= //

@@ -29,7 +29,7 @@ class EngineState
 {
 public:
 	// Default initializes member variables.
-	EngineState(void);
+	explicit EngineState(void);
 
 	// Frees any data allocated by member variables.
 	virtual ~EngineState(void);
