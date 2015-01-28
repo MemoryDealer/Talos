@@ -32,7 +32,7 @@ public:
 	explicit EngineState(void);
 
 	// Frees any data allocated by member variables.
-	virtual ~EngineState(void);
+	virtual ~EngineState(void) = 0;
 
 	// Passes pointers to objects that are needed by each state.
 	void injectDependencies(Ogre::Root*, Ogre::Viewport*);

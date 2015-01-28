@@ -38,7 +38,6 @@ void IntroState::enter(void)
 	m_scene->setAmbientLight(Ogre::ColourValue::White);
 
 	m_scene->setSkyDome(true, "Clouds");
-
 	
 	m_camera = m_scene->createCamera("IntroCam");
 	m_camera->setNearClipDistance(1.0);
