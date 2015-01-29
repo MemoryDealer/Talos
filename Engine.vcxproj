@@ -11,6 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Component\Component.cpp" />
+    <ClCompile Include="Source\Component\SceneComponent.cpp" />
     <ClCompile Include="Source\Component\System.cpp" />
     <ClCompile Include="Source\Core\Assert.cpp" />
     <ClCompile Include="Source\Core\Engine.cpp" />
@@ -18,9 +20,12 @@
     <ClCompile Include="Source\Core\EngineState\IntroState.cpp" />
     <ClCompile Include="Source\Core\main.cpp" />
     <ClCompile Include="Source\Core\Resources.cpp" />
+    <ClCompile Include="Source\Entity\Entity.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Component\Component.hpp" />
+    <ClInclude Include="Source\Component\ModelComponent.hpp" />
+    <ClInclude Include="Source\Component\SceneComponent.hpp" />
     <ClInclude Include="Source\Component\System.hpp" />
     <ClInclude Include="Source\Core\Assert.hpp" />
     <ClInclude Include="Source\Core\Engine.hpp" />
@@ -28,7 +33,12 @@
     <ClInclude Include="Source\Core\EngineState\IntroState.hpp" />
     <ClInclude Include="Source\Core\HelperFunctions.hpp" />
     <ClInclude Include="Source\Core\Resources.hpp" />
+    <ClInclude Include="Source\Entity\Entity.hpp" />
     <ClInclude Include="Source\stdafx.hpp" />
+    <ClInclude Include="Source\World\World.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Source\Component\ModelComponent.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{49CEF8CA-907E-4A2E-94CA-CD5FD1E38EDD}</ProjectGuid>

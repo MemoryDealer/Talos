@@ -53,6 +53,7 @@ void IntroState::enter(void)
 	Ogre::SceneNode* n = m_scene->getRootSceneNode()->createChildSceneNode("head");
 	n->attachObject(e);
 	n->setPosition(Ogre::Vector3(0.0, 0.0, 0.0));
+	
 }
 
 // ========================================================================= //

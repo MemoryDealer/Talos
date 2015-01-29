@@ -5,45 +5,27 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: System.hpp
+// File: Component.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines System class.
+// Implements Component class.
 // ========================================================================= //
 
-#ifndef __SYSTEM_HPP__
-#define __SYSTEM_HPP__
-
-// ========================================================================= //
-
-#include "stdafx.hpp"
+#include "Component.hpp"
 
 // ========================================================================= //
 
-class Component;
-
-// ========================================================================= //
-// @TODO: redesign this class as an interface.
-class System
+Component::Component(void) :
+m_name("nil")
 {
-public:
-	// Default initializes component array.
-	explicit System(const unsigned int size);
 
-	// Empty destructor.
-	virtual ~System(void) = 0;
-
-	// Updates each active component.
-	virtual void update(void) = 0;
-
-protected:
-	//T m_components[N];
-	std::vector<std::shared_ptr<Component>> m_components;
-	unsigned int m_numActive;
-};
+}
 
 // ========================================================================= //
 
-#endif
+Component::~Component(void)
+{
+
+}
 
 // ========================================================================= //

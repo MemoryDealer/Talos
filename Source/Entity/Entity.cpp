@@ -5,64 +5,43 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: BaseComponent.hpp
+// File: Entity.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines Component class.
+// Defines Entity class.
 // ========================================================================= //
 
-#ifndef __COMPONENT_HPP__
-#define __COMPONENT_HPP__
-
-// ========================================================================= //
-
-#include "stdafx.hpp"
+#include "Entity.hpp"
 
 // ========================================================================= //
 
-class Component
+Entity::Entity(void) :
+m_id(0),
+m_components()
 {
-public:
-	// Initializes m_name to "nil".
-	explicit Component(void);
 
-	// Empty destructor.
-	virtual ~Component(void) = 0;
-
-	// Getters:
-
-	// Returns the name of the component type.
-	const std::string getName(void) const;
-
-	// Setters:
-
-	// Sets the name of the component (meaning the type).
-	void setName(const std::string& name);
-
-private:
-	std::string m_name;
-};
-
-// ========================================================================= //
-
-// Getters:
-
-const std::string Component::getName(void) const{
-	return m_name;
-}
-
-// Setters:
-
-void Component::setName(const std::string& name){
-	m_name = name;
 }
 
 // ========================================================================= //
 
-typedef std::shared_ptr<Component> ComponentPtr;
+Entity::~Entity(void)
+{
+
+}
 
 // ========================================================================= //
 
-#endif
+ComponentPtr Entity::getComponentPtr(const std::string& name) const
+{
+	/*for (ComponentList::iterator itr = m_components.begin();
+		 itr != m_components.end();
+		 ++itr){
+		if (itr->get()->getName() == name){
+			return *itr;
+		}
+	}*/
+
+	return nullptr;
+}
 
 // ========================================================================= //

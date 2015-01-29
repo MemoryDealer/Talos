@@ -31,6 +31,15 @@
     <Filter Include="Source Files\Component">
       <UniqueIdentifier>{38c6b549-7347-4aa6-a476-3b973284887a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Entity">
+      <UniqueIdentifier>{395780f8-4fa4-40d0-a064-9658caab9c7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entity">
+      <UniqueIdentifier>{25f45093-3c9a-4d18-9bfb-7cfa0043e575}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\World">
+      <UniqueIdentifier>{25398638-7149-4555-8d07-7e16bc1736ff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\main.cpp">
@@ -52,6 +61,15 @@
       <Filter>Source Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\System.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Component.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Entity\Entity.cpp">
+      <Filter>Source Files\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\SceneComponent.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
   </ItemGroup>
@@ -80,8 +98,25 @@
     <ClInclude Include="Source\Component\System.hpp">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Entity\Entity.hpp">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Component\Component.hpp">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Component\SceneComponent.hpp">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\ModelComponent.hpp">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\World\World.hpp">
+      <Filter>Header Files\World</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Source\Component\ModelComponent.cpp">
+      <Filter>Source Files\Component</Filter>
+    </None>
   </ItemGroup>
 </Project>

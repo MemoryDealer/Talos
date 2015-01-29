@@ -5,61 +5,68 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: BaseComponent.hpp
+// File: Entity.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines Component class.
+// Defines Entity class.
 // ========================================================================= //
 
-#ifndef __COMPONENT_HPP__
-#define __COMPONENT_HPP__
-
-// ========================================================================= //
-
-#include "stdafx.hpp"
+#ifndef __ENTITY_HPP__
+#define __ENTITY_HPP__
 
 // ========================================================================= //
 
-class Component
+#include "Component/Component.hpp"
+
+// ========================================================================= //
+
+typedef std::list<ComponentPtr> ComponentList;
+typedef unsigned int EntityID;
+
+// ========================================================================= //
+// Abstract class for anything in the game world, such as players, boxes,
+// walls, doors, particle systems, etc.
+class Entity
 {
 public:
-	// Initializes m_name to "nil".
-	explicit Component(void);
+	// Default initializes member data.
+	explicit Entity(void);
 
-	// Empty destructor.
-	virtual ~Component(void) = 0;
+	// Empty desctructor.
+	virtual ~Entity(void) = 0;
 
 	// Getters:
 
-	// Returns the name of the component type.
-	const std::string getName(void) const;
+	// Returns entity's ID.
+	const EntityID getID(void) const;
+
+	// Returns pointer to component of named type. Returns a nullptr if
+	// it doesn't exist.
+	ComponentPtr getComponentPtr(const std::string& name) const;
 
 	// Setters:
 
-	// Sets the name of the component (meaning the type).
-	void setName(const std::string& name);
+	// Sets a new ID for the entity.
+	void setID(const EntityID);
 
 private:
-	std::string m_name;
+	EntityID m_id;
+	ComponentList m_components;
 };
 
 // ========================================================================= //
 
 // Getters:
 
-const std::string Component::getName(void) const{
-	return m_name;
+inline const EntityID Entity::getID(void) const{
+	return m_id;
 }
 
 // Setters:
 
-void Component::setName(const std::string& name){
-	m_name = name;
+inline void Entity::setID(const EntityID id){
+	m_id = id;
 }
-
-// ========================================================================= //
-
-typedef std::shared_ptr<Component> ComponentPtr;
 
 // ========================================================================= //
 

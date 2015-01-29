@@ -5,42 +5,18 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: System.hpp
+// File: World.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines System class.
+// Defines World class.
 // ========================================================================= //
 
-#ifndef __SYSTEM_HPP__
-#define __SYSTEM_HPP__
-
-// ========================================================================= //
-
-#include "stdafx.hpp"
+#ifndef __WORLD_HPP__
+#define __WORLD_HPP__
 
 // ========================================================================= //
 
-class Component;
 
-// ========================================================================= //
-// @TODO: redesign this class as an interface.
-class System
-{
-public:
-	// Default initializes component array.
-	explicit System(const unsigned int size);
-
-	// Empty destructor.
-	virtual ~System(void) = 0;
-
-	// Updates each active component.
-	virtual void update(void) = 0;
-
-protected:
-	//T m_components[N];
-	std::vector<std::shared_ptr<Component>> m_components;
-	unsigned int m_numActive;
-};
 
 // ========================================================================= //
 
