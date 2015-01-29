@@ -12,6 +12,8 @@
 // ========================================================================= //
 
 #include "IntroState.hpp"
+#include "World/World.hpp"
+#include "Entity/Player.hpp"
 
 // ========================================================================= //
 
@@ -34,25 +36,27 @@ void IntroState::enter(void)
 {
 	m_active = true;
 
-	m_scene = m_root->createSceneManager(Ogre::ST_GENERIC, "IntroSceneManager");
-	m_scene->setAmbientLight(Ogre::ColourValue::White);
+	// Create scene manager.
+	// @TODO: Move viewport injection to Engine.
+	m_world.init(m_root, m_viewport);
 
-	m_scene->setSkyDome(true, "Clouds");
-	
-	m_camera = m_scene->createCamera("IntroCam");
-	m_camera->setNearClipDistance(1.0);
-	m_camera->setAspectRatio(Ogre::Real(m_viewport->getActualWidth()) /
-		Ogre::Real(m_viewport->getActualHeight()));
-	m_viewport->setCamera(m_camera);
+	Ogre::SceneManager* scene = m_world.getSceneManager();
 
-	m_cameraNode = m_scene->getRootSceneNode()->createChildSceneNode("CameraNode");
+	scene->setAmbientLight(Ogre::ColourValue::White);
+
+	scene->setSkyDome(true, "Clouds");
+
+	m_player.reset(new Player());
+	m_player->init(m_world);
+
+	/*m_cameraNode = m_scene->getRootSceneNode()->createChildSceneNode("CameraNode");
 	m_cameraNode->attachObject(m_camera);
 	m_cameraNode->setPosition(Ogre::Vector3(0.0, 50.0, 50.0));
 
 	Ogre::Entity* e = m_scene->createEntity("OgreHead", "ogrehead.mesh");
 	Ogre::SceneNode* n = m_scene->getRootSceneNode()->createChildSceneNode("head");
 	n->attachObject(e);
-	n->setPosition(Ogre::Vector3(0.0, 0.0, 0.0));
+	n->setPosition(Ogre::Vector3(0.0, 0.0, 0.0));*/
 	
 }
 
@@ -60,16 +64,15 @@ void IntroState::enter(void)
 
 void IntroState::exit(void)
 {
-	m_scene->destroyCamera(m_camera);
-	m_root->destroySceneManager(m_scene);
+	m_player->destroy(m_world);
+	m_world.destroy(m_root);
 }
 
 // ========================================================================= //
 
 void IntroState::update(void)
 {
-	m_cameraNode->pitch(Ogre::Degree(1.0));
-	m_scene->getSceneNode("head")->yaw(Ogre::Degree(1.0));
+	m_player->update(m_world);
 }
 
 // ========================================================================= //

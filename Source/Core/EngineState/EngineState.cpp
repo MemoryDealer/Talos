@@ -16,8 +16,7 @@
 // ========================================================================= //
 
 EngineState::EngineState(void) :
-m_scene(nullptr),
-m_camera(nullptr),
+m_world(),
 m_active(false)
 {
 

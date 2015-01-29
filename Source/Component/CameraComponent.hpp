@@ -5,32 +5,36 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: System.hpp
+// File: CameraComponent.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines System class.
+// Defines CameraComponent class.
 // ========================================================================= //
 
-#ifndef __SYSTEM_HPP__
-#define __SYSTEM_HPP__
+#ifndef __CAMERACOMPONENT_HPP__
+#define __CAMERACOMPONENT_HPP__
 
 // ========================================================================= //
 
-#include "stdafx.hpp"
+#include "Component.hpp"
 
 // ========================================================================= //
-// Interface class for all Systems.
-class System
+
+class CameraComponent : public Component
 {
 public:
-	// Empty constructor.
-	explicit System(void) { }
+	explicit CameraComponent(void);
 
-	// Empty destructor.
-	virtual ~System(void) = 0;
+	virtual ~CameraComponent(void) override;
 
-	// Updates each active component.
-	virtual void update(void) = 0;
+	void init(World& world);
+
+	void destroy(World& world);
+
+	void update(void);
+
+private:
+	Ogre::Camera* m_camera;
 };
 
 // ========================================================================= //

@@ -40,6 +40,9 @@
     <Filter Include="Header Files\World">
       <UniqueIdentifier>{25398638-7149-4555-8d07-7e16bc1736ff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\World">
+      <UniqueIdentifier>{e427217c-4a4b-43d1-a8f0-57b038a3726c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\main.cpp">
@@ -60,9 +63,6 @@
     <ClCompile Include="Source\Core\Resources.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\System.cpp">
-      <Filter>Source Files\Component</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Component\Component.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
@@ -70,6 +70,15 @@
       <Filter>Source Files\Entity</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\SceneComponent.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\World\World.cpp">
+      <Filter>Source Files\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Entity\Player.cpp">
+      <Filter>Source Files\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\CameraComponent.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
   </ItemGroup>
@@ -112,6 +121,12 @@
     </ClInclude>
     <ClInclude Include="Source\World\World.hpp">
       <Filter>Header Files\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Entity\Player.hpp">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\CameraComponent.hpp">
+      <Filter>Header Files\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

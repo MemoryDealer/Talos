@@ -17,6 +17,7 @@
 // ========================================================================= //
 
 #include "stdafx.hpp"
+#include "World/World.hpp"
 
 // ========================================================================= //
 
@@ -48,18 +49,15 @@ public:
 
 	// Getters:
 
-	// Returns pointer to Ogre scene manager. Required by Engine class to 
-	// create the scene manager from the Ogre::Root object.
-	Ogre::SceneManager* getSceneManager(void) const;
+
 
 protected:
 	// Ogre3D components.
 	Ogre::Root*	m_root; // Each engine state will have m_root injected.
 	Ogre::Viewport* m_viewport; // Same as m_root.
-	Ogre::SceneManager* m_scene;
-	Ogre::Camera* m_camera;
 
 	// State data.
+	World m_world;
 	bool m_active;
 };
 
@@ -67,9 +65,7 @@ protected:
 
 // Getters:
 
-inline Ogre::SceneManager* EngineState::getSceneManager(void) const{
-	return m_scene;
-}
+
 
 // ========================================================================= //
 

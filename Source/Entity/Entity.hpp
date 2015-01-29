@@ -35,6 +35,9 @@ public:
 	// Empty desctructor.
 	virtual ~Entity(void) = 0;
 
+	// Registers component with the entity.
+	void addComponent(ComponentPtr);
+
 	// Getters:
 
 	// Returns entity's ID.

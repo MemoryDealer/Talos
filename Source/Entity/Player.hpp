@@ -5,29 +5,41 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: System.cpp
+// File: Player.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements System class.
+// Defines Player class.
 // ========================================================================= //
 
-#include "System.hpp"
+#ifndef __PLAYER_HPP__
+#define __PLAYER_HPP__
 
 // ========================================================================= //
 
-template<typename T>
-System::System(const unsigned int size) :
-m_components(),
-m_numActive(0)
+#include "Entity.hpp"
+
+// ========================================================================= //
+// 
+class Player : public Entity
 {
-	m_components = new T[size];
-}
+public:
+	explicit Player(void);
+
+	virtual ~Player(void) override;
+
+	void init(World& world);
+
+	void destroy(World& world);
+
+	void update(World& world);
+
+private:
+	std::shared_ptr<SceneComponent> m_sceneComponent;
+	std::shared_ptr<CameraComponent> m_cameraComponent;
+};
 
 // ========================================================================= //
 
-System::~System(void)
-{
-	
-}
+#endif
 
 // ========================================================================= //

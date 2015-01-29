@@ -5,36 +5,52 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: System.hpp
+// File: Player.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines System class.
+// Implements Player class.
 // ========================================================================= //
 
-#ifndef __SYSTEM_HPP__
-#define __SYSTEM_HPP__
+#include "Player.hpp"
+#include "Component/SceneComponent.hpp"
+#include "Component/CameraComponent.hpp"
 
 // ========================================================================= //
 
-#include "stdafx.hpp"
-
-// ========================================================================= //
-// Interface class for all Systems.
-class System
+Player::Player(void) :
+m_sceneComponent(new SceneComponent()),
+m_cameraComponent(new CameraComponent())
 {
-public:
-	// Empty constructor.
-	explicit System(void) { }
-
-	// Empty destructor.
-	virtual ~System(void) = 0;
-
-	// Updates each active component.
-	virtual void update(void) = 0;
-};
+	this->addComponent(m_sceneComponent);
+	this->addComponent(m_cameraComponent);
+}
 
 // ========================================================================= //
 
-#endif
+Player::~Player(void)
+{
+
+}
+
+// ========================================================================= //
+
+void Player::init(World& world)
+{
+	m_cameraComponent->init(world);
+}
+
+// ========================================================================= //
+
+void Player::destroy(World& world)
+{
+	m_cameraComponent->destroy(world);
+}
+
+// ========================================================================= //
+
+void Player::update(World& world)
+{
+	m_cameraComponent->update();
+}
 
 // ========================================================================= //

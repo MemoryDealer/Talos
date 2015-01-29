@@ -31,6 +31,13 @@ Entity::~Entity(void)
 
 // ========================================================================= //
 
+void Entity::addComponent(ComponentPtr component)
+{
+	m_components.push_back(component);
+}
+
+// ========================================================================= //
+
 ComponentPtr Entity::getComponentPtr(const std::string& name) const
 {
 	/*for (ComponentList::iterator itr = m_components.begin();

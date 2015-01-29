@@ -5,36 +5,44 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: System.hpp
+// File: World.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines System class.
+// Implements World class.
 // ========================================================================= //
 
-#ifndef __SYSTEM_HPP__
-#define __SYSTEM_HPP__
+#include "World.hpp"
 
 // ========================================================================= //
 
-#include "stdafx.hpp"
-
-// ========================================================================= //
-// Interface class for all Systems.
-class System
+World::World(void) :
+m_scene(nullptr),
+m_viewport(nullptr),
+m_systems()
 {
-public:
-	// Empty constructor.
-	explicit System(void) { }
 
-	// Empty destructor.
-	virtual ~System(void) = 0;
-
-	// Updates each active component.
-	virtual void update(void) = 0;
-};
+}
 
 // ========================================================================= //
 
-#endif
+World::~World(void)
+{
+
+}
+
+// ========================================================================= //
+
+void World::init(Ogre::Root* root, Ogre::Viewport* viewport)
+{
+	m_scene = root->createSceneManager(Ogre::ST_GENERIC);
+	m_viewport = viewport;
+}
+
+// ========================================================================= //
+
+void World::destroy(Ogre::Root* root)
+{
+	root->destroySceneManager(m_scene);
+}
 
 // ========================================================================= //

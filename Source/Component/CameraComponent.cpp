@@ -5,71 +5,58 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: BaseComponent.hpp
+// File: CameraComponent.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines Component class.
+// Implements CameraComponent class.
 // ========================================================================= //
 
-#ifndef __COMPONENT_HPP__
-#define __COMPONENT_HPP__
-
-// ========================================================================= //
-
-#include "World/World.hpp"
+#include "CameraComponent.hpp"
 
 // ========================================================================= //
 
-// Forward declare all components here to avoid repeating elsewhere.
-class CameraComponent;
-class ModelComponent;
-class SceneComponent;
-
-// ========================================================================= //
-
-class Component
+CameraComponent::CameraComponent(void) :
+m_camera(nullptr)
 {
-public:
-	// Initializes m_name to "nil".
-	explicit Component(void);
-
-	// Empty destructor.
-	virtual ~Component(void) = 0;
-
-	// Getters:
-
-	// Returns the name of the component type.
-	const std::string getName(void) const;
-
-	// Setters:
-
-	// Sets the name of the component (meaning the type).
-	void setName(const std::string& name);
-
-private:
-	std::string m_name;
-};
-
-// ========================================================================= //
-
-// Getters:
-
-inline const std::string Component::getName(void) const{
-	return m_name;
-}
-
-// Setters:
-
-inline void Component::setName(const std::string& name){
-	m_name = name;
+	this->setName("CameraComponent");
 }
 
 // ========================================================================= //
 
-typedef std::shared_ptr<Component> ComponentPtr;
+CameraComponent::~CameraComponent(void)
+{
+
+}
 
 // ========================================================================= //
 
-#endif
+void CameraComponent::init(World& world)
+{
+	// Create the camera object.
+	m_camera = world.getSceneManager()->createCamera("PlayerCam");
+	m_camera->setNearClipDistance(1.0);
+
+	// Setup viewport aspect ratio and assign camera to viewport.
+	Ogre::Viewport* viewport = world.getViewport();
+	m_camera->setAspectRatio(Ogre::Real(viewport->getActualWidth()) /
+							 Ogre::Real(viewport->getActualHeight()));
+	viewport->setCamera(m_camera);
+
+
+}
+
+// ========================================================================= //
+
+void CameraComponent::destroy(World& world)
+{
+	world.getSceneManager()->destroyCamera(m_camera);
+}
+
+// ========================================================================= //
+
+void CameraComponent::update(void)
+{
+	m_camera->pitch(Ogre::Degree(1.0));
+}
 
 // ========================================================================= //

@@ -19,6 +19,10 @@
 #include "EngineState.hpp"
 
 // ========================================================================= //
+
+class Player;
+
+// ========================================================================= //
 // A test state for now.
 class IntroState : public EngineState
 {
@@ -39,7 +43,7 @@ public:
 	virtual void update(void) override;
 
 private:
-	Ogre::SceneNode* m_cameraNode;
+	std::shared_ptr<Player> m_player;
 };
 
 // ========================================================================= //
