@@ -29,11 +29,25 @@ public:
 	// Empty destructor.
 	virtual ~SceneComponent(void) override;
 
-	
+	virtual void init(EntityPtr, World&) override;
+
+	virtual void destroy(EntityPtr, World&) override;
+
+	virtual void update(EntityPtr, World&) override;
+
+	void attachObject(Ogre::MovableObject*);
+
+	//Ogre::SceneNode* getSceneNode(void) const;
 
 private:
 	Ogre::SceneNode* m_node;
 };
+
+// ========================================================================= //
+
+inline void SceneComponent::attachObject(Ogre::MovableObject* object){
+	m_node->attachObject(object);
+}
 
 // ========================================================================= //
 

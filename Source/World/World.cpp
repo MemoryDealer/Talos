@@ -12,13 +12,16 @@
 // ========================================================================= //
 
 #include "World.hpp"
+#include "Entity/Entity.hpp"
 
 // ========================================================================= //
 
 World::World(void) :
 m_scene(nullptr),
 m_viewport(nullptr),
-m_systems()
+m_systems(),
+m_entityPool(),
+m_numEntities(0)
 {
 
 }
@@ -36,6 +39,9 @@ void World::init(Ogre::Root* root, Ogre::Viewport* viewport)
 {
 	m_scene = root->createSceneManager(Ogre::ST_GENERIC);
 	m_viewport = viewport;
+
+	// Allocate Entity pool.
+	m_entityPool = new EntityPtr[256];
 }
 
 // ========================================================================= //
@@ -43,6 +49,15 @@ void World::init(Ogre::Root* root, Ogre::Viewport* viewport)
 void World::destroy(Ogre::Root* root)
 {
 	root->destroySceneManager(m_scene);
+
+	delete[] m_entityPool;
+}
+
+// ========================================================================= //
+
+EntityPtr World::createEntity(void)
+{
+	return m_entityPool[m_numEntities++];
 }
 
 // ========================================================================= //

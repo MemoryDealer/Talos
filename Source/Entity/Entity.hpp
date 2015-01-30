@@ -20,8 +20,8 @@
 
 // ========================================================================= //
 
-typedef std::list<ComponentPtr> ComponentList;
 typedef unsigned int EntityID;
+typedef std::list<ComponentPtr> ComponentList;
 
 // ========================================================================= //
 // Abstract class for anything in the game world, such as players, boxes,
@@ -33,10 +33,22 @@ public:
 	explicit Entity(void);
 
 	// Empty desctructor.
-	virtual ~Entity(void) = 0;
+	virtual ~Entity(void);
+
+	// Calls init() on all attached components.
+	virtual void init(World& world);
+
+	// Calls destroy() on all attached components.
+	virtual void destroy(World& world);
+
+	// Calls update() on all attached components.
+	virtual void update(World& world);
 
 	// Registers component with the entity.
-	void addComponent(ComponentPtr);
+	void attachComponent(ComponentPtr);
+
+	// Unregisters component from the entity.
+	void detachComponent(ComponentPtr);
 
 	// Getters:
 
@@ -45,6 +57,8 @@ public:
 
 	// Returns pointer to component of named type. Returns a nullptr if
 	// it doesn't exist.
+	// @TODO: Add component-specific getter functions? This would avoid 
+	// having to cast the ComponentPtr everytime it's retrieved.
 	ComponentPtr getComponentPtr(const std::string& name) const;
 
 	// Setters:

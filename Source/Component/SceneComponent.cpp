@@ -12,6 +12,7 @@
 // ========================================================================= //
 
 #include "SceneComponent.hpp"
+#include "Entity/Entity.hpp"
 
 // ========================================================================= //
 
@@ -27,6 +28,28 @@ m_node(nullptr)
 SceneComponent::~SceneComponent(void)
 {
 
+}
+
+// ========================================================================= //
+
+void SceneComponent::init(EntityPtr entity, World& world)
+{
+	m_node = world.getSceneManager()->getRootSceneNode()->
+		createChildSceneNode(toString(entity->getID()));
+}
+
+// ========================================================================= //
+
+void SceneComponent::destroy(EntityPtr entity, World& world)
+{
+	world.getSceneManager()->destroySceneNode(m_node);
+}
+
+// ========================================================================= //
+
+void SceneComponent::update(EntityPtr, World&)
+{
+	m_node->pitch(Ogre::Degree(2.0));
 }
 
 // ========================================================================= //

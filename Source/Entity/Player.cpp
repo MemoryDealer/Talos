@@ -21,8 +21,8 @@ Player::Player(void) :
 m_sceneComponent(new SceneComponent()),
 m_cameraComponent(new CameraComponent())
 {
-	this->addComponent(m_sceneComponent);
-	this->addComponent(m_cameraComponent);
+	this->attachComponent(m_sceneComponent);
+	this->attachComponent(m_cameraComponent);
 }
 
 // ========================================================================= //
@@ -30,27 +30,6 @@ m_cameraComponent(new CameraComponent())
 Player::~Player(void)
 {
 
-}
-
-// ========================================================================= //
-
-void Player::init(World& world)
-{
-	m_cameraComponent->init(world);
-}
-
-// ========================================================================= //
-
-void Player::destroy(World& world)
-{
-	m_cameraComponent->destroy(world);
-}
-
-// ========================================================================= //
-
-void Player::update(World& world)
-{
-	m_cameraComponent->update();
 }
 
 // ========================================================================= //

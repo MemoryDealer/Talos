@@ -21,8 +21,10 @@
 // ========================================================================= //
 
 class System;
+class Entity;
 
 typedef std::vector<std::shared_ptr<System>> SystemList;
+typedef Entity* EntityPtr;
 
 // ========================================================================= //
 // Represents everything in the physical game world. The World holds 
@@ -43,6 +45,14 @@ public:
 	// De-allocates all data.
 	void destroy(Ogre::Root*);
 
+	// Entity pool functions:
+
+	// Get the next free Entity from the internal pool and return a pointer.
+	EntityPtr createEntity(void);
+
+	// Calls destroy on Entity and 
+	void destroyEntity(EntityPtr);
+
 	// Getters:
 
 	// Returns pointer to Ogre::SceneManager for this world.
@@ -52,9 +62,16 @@ public:
 	Ogre::Viewport* getViewport(void) const;
 
 private:
+	// Ogre3D.
 	Ogre::SceneManager* m_scene;
 	Ogre::Viewport*	m_viewport;
+
+	// Systems.
 	SystemList m_systems;
+
+	// Entity pool.
+	EntityPtr* m_entityPool;
+	unsigned int m_numEntities;
 };
 
 // ========================================================================= //

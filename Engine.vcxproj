@@ -29,7 +29,6 @@
     <ClInclude Include="Source\Component\Component.hpp" />
     <ClInclude Include="Source\Component\ModelComponent.hpp" />
     <ClInclude Include="Source\Component\SceneComponent.hpp" />
-    <ClInclude Include="Source\Component\System.hpp" />
     <ClInclude Include="Source\Core\Assert.hpp" />
     <ClInclude Include="Source\Core\Engine.hpp" />
     <ClInclude Include="Source\Core\EngineState\EngineState.hpp" />
@@ -39,6 +38,7 @@
     <ClInclude Include="Source\Entity\Entity.hpp" />
     <ClInclude Include="Source\Entity\Player.hpp" />
     <ClInclude Include="Source\stdafx.hpp" />
+    <ClInclude Include="Source\System\System.hpp" />
     <ClInclude Include="Source\World\World.hpp" />
   </ItemGroup>
   <ItemGroup>

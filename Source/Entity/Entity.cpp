@@ -31,22 +31,65 @@ Entity::~Entity(void)
 
 // ========================================================================= //
 
-void Entity::addComponent(ComponentPtr component)
+void Entity::init(World& world)
+{
+	for (ComponentList::iterator itr = m_components.begin();
+		 itr != m_components.end();
+		 ++itr){
+		(*itr)->init(this, world);
+	}
+}
+
+// ========================================================================= //
+
+void Entity::destroy(World& world)
+{
+	for (ComponentList::iterator itr = m_components.begin();
+		 itr != m_components.end();
+		 ++itr){
+		(*itr)->destroy(this, world);
+	}
+}
+
+// ========================================================================= //
+
+void Entity::update(World& world)
+{
+	for (ComponentList::iterator itr = m_components.begin();
+		 itr != m_components.end();
+		 ++itr){
+		(*itr)->update(this, world);
+	}
+}
+
+// ========================================================================= //
+
+void Entity::attachComponent(ComponentPtr component)
 {
 	m_components.push_back(component);
 }
 
 // ========================================================================= //
 
+void Entity::detachComponent(ComponentPtr component)
+{
+
+}
+
+// ========================================================================= //
+
 ComponentPtr Entity::getComponentPtr(const std::string& name) const
 {
-	/*for (ComponentList::iterator itr = m_components.begin();
+	// @TODO: WHY does this iterator need to be const?
+	for (ComponentList::const_iterator itr = m_components.begin();
 		 itr != m_components.end();
 		 ++itr){
-		if (itr->get()->getName() == name){
+		// Determine if Component's name matches. This is considerably more
+		// efficient than run-time dynamic type checking.
+		if ((*itr)->getName() == name){
 			return *itr;
 		}
-	}*/
+	}
 
 	return nullptr;
 }

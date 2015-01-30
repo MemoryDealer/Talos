@@ -46,14 +46,11 @@ void IntroState::enter(void)
 
 	scene->setSkyDome(true, "Clouds");
 
-	m_player.reset(new Player());
+	m_player = new Player();
 	m_player->init(m_world);
 
-	/*m_cameraNode = m_scene->getRootSceneNode()->createChildSceneNode("CameraNode");
-	m_cameraNode->attachObject(m_camera);
-	m_cameraNode->setPosition(Ogre::Vector3(0.0, 50.0, 50.0));
 
-	Ogre::Entity* e = m_scene->createEntity("OgreHead", "ogrehead.mesh");
+	/*Ogre::Entity* e = m_scene->createEntity("OgreHead", "ogrehead.mesh");
 	Ogre::SceneNode* n = m_scene->getRootSceneNode()->createChildSceneNode("head");
 	n->attachObject(e);
 	n->setPosition(Ogre::Vector3(0.0, 0.0, 0.0));*/

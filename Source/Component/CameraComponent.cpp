@@ -11,11 +11,14 @@
 // Implements CameraComponent class.
 // ========================================================================= //
 
+#include "Entity/Entity.hpp"
 #include "CameraComponent.hpp"
+#include "SceneComponent.hpp"
 
 // ========================================================================= //
 
 CameraComponent::CameraComponent(void) :
+Component(),
 m_camera(nullptr)
 {
 	this->setName("CameraComponent");
@@ -30,7 +33,7 @@ CameraComponent::~CameraComponent(void)
 
 // ========================================================================= //
 
-void CameraComponent::init(World& world)
+void CameraComponent::init(EntityPtr entity, World& world)
 {
 	// Create the camera object.
 	m_camera = world.getSceneManager()->createCamera("PlayerCam");
@@ -42,21 +45,26 @@ void CameraComponent::init(World& world)
 							 Ogre::Real(viewport->getActualHeight()));
 	viewport->setCamera(m_camera);
 
-
+	// Attach camera to scene node of this Entity.
+	ComponentPtr sceneComponent =
+		(entity->getComponentPtr("SceneComponent"));
+	if (sceneComponent != nullptr){
+		static_cast<SceneComponentPtr>(sceneComponent)->attachObject(m_camera);
+	}
 }
 
 // ========================================================================= //
 
-void CameraComponent::destroy(World& world)
+void CameraComponent::destroy(EntityPtr entity, World& world)
 {
 	world.getSceneManager()->destroyCamera(m_camera);
 }
 
 // ========================================================================= //
 
-void CameraComponent::update(void)
+void CameraComponent::update(EntityPtr entity, World& world)
 {
-	m_camera->pitch(Ogre::Degree(1.0));
+	
 }
 
 // ========================================================================= //

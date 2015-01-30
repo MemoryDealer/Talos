@@ -17,14 +17,11 @@
 // ========================================================================= //
 
 #include "EngineState.hpp"
-
-// ========================================================================= //
-
-class Player;
+#include "Entity/Entity.hpp"
 
 // ========================================================================= //
 // A test state for now.
-class IntroState : public EngineState
+class IntroState final : public EngineState
 {
 public:
 	// Calls EngineState constructor.
@@ -43,7 +40,7 @@ public:
 	virtual void update(void) override;
 
 private:
-	std::shared_ptr<Player> m_player;
+	EntityPtr m_player;
 };
 
 // ========================================================================= //

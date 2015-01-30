@@ -21,12 +21,20 @@
 // ========================================================================= //
 
 // Forward declare all components here to avoid repeating elsewhere.
+class Component;
 class CameraComponent;
 class ModelComponent;
 class SceneComponent;
+class Entity;
+
+typedef Component* ComponentPtr;
+typedef CameraComponent* CameraComponentPtr;
+typedef ModelComponent* ModelComponentPtr;
+typedef SceneComponent* SceneComponentPtr;
+typedef Entity* EntityPtr;
 
 // ========================================================================= //
-
+// Holds data & behavior(if necessary) for specific Entity needs.
 class Component
 {
 public:
@@ -35,6 +43,15 @@ public:
 
 	// Empty destructor.
 	virtual ~Component(void) = 0;
+
+	// Interface function for initialization.
+	virtual void init(EntityPtr, World&) = 0;
+
+	// Interface function for destruction.
+	virtual void destroy(EntityPtr, World&) = 0;
+
+	// Interface functionf for updating.
+	virtual void update(EntityPtr, World&) = 0;
 
 	// Getters:
 
@@ -47,7 +64,7 @@ public:
 	void setName(const std::string& name);
 
 private:
-	std::string m_name;
+	std::string m_name; // Identifies the "type" of component by a name.
 };
 
 // ========================================================================= //
@@ -63,10 +80,6 @@ inline const std::string Component::getName(void) const{
 inline void Component::setName(const std::string& name){
 	m_name = name;
 }
-
-// ========================================================================= //
-
-typedef std::shared_ptr<Component> ComponentPtr;
 
 // ========================================================================= //
 

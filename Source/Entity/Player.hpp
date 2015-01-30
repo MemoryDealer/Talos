@@ -19,23 +19,19 @@
 #include "Entity.hpp"
 
 // ========================================================================= //
-// 
-class Player : public Entity
+// The local player.
+class Player final : public Entity
 {
 public:
+	// Allocates components and attaches them to itself.
 	explicit Player(void);
 
+	// Empty destructor.
 	virtual ~Player(void) override;
 
-	void init(World& world);
-
-	void destroy(World& world);
-
-	void update(World& world);
-
 private:
-	std::shared_ptr<SceneComponent> m_sceneComponent;
-	std::shared_ptr<CameraComponent> m_cameraComponent;
+	SceneComponentPtr m_sceneComponent;
+	CameraComponentPtr m_cameraComponent;
 };
 
 // ========================================================================= //
