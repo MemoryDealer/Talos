@@ -26,10 +26,16 @@ public:
 	explicit ModelComponent(void);
 	virtual ~ModelComponent(void) override;
 
-	virtual void update(void) = 0;
+	virtual void init(EntityPtr, World&) override;
+
+	virtual void destroy(EntityPtr, World&) override;
+
+	virtual void update(EntityPtr, World&) override;
+
+	virtual void message(const Message&) override;
 
 private:
-	
+	Ogre::Entity* m_entity;
 };
 
 // ========================================================================= //

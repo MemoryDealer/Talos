@@ -22,6 +22,9 @@
 // Ogre3D.
 #include <Ogre.h>
 
+// SDL.
+#include <SDL.h>
+
 // My own files.
 #include "Core/HelperFunctions.hpp"
 #include "Core/Assert.hpp"

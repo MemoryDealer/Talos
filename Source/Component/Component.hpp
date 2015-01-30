@@ -16,19 +16,24 @@
 
 // ========================================================================= //
 
-#include "World/World.hpp"
+#include "stdafx.hpp"
 
 // ========================================================================= //
 
 // Forward declare all components here to avoid repeating elsewhere.
 class Component;
 class CameraComponent;
+class FirstPersonComponent;
 class ModelComponent;
 class SceneComponent;
+// Other forward declarations.
 class Entity;
+struct Message;
+class World;
 
 typedef Component* ComponentPtr;
 typedef CameraComponent* CameraComponentPtr;
+typedef FirstPersonComponent* FirstPersonComponentPtr;
 typedef ModelComponent* ModelComponentPtr;
 typedef SceneComponent* SceneComponentPtr;
 typedef Entity* EntityPtr;
@@ -50,8 +55,11 @@ public:
 	// Interface function for destruction.
 	virtual void destroy(EntityPtr, World&) = 0;
 
-	// Interface functionf for updating.
+	// Interface function for updating.
 	virtual void update(EntityPtr, World&) = 0;
+
+	// Handles a message received from parent Entity.
+	virtual void message(const Message&) = 0;
 
 	// Getters:
 

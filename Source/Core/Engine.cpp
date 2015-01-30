@@ -41,6 +41,10 @@ Engine::~Engine(void)
 
 bool Engine::init(void)
 {
+	// === //
+
+	// Ogre3D:
+
 	// Create logging system.
 	Ogre::LogManager* logMgr = new Ogre::LogManager();
 	m_log = Ogre::LogManager::getSingleton().createLog("OgreLog.log");
@@ -70,9 +74,30 @@ bool Engine::init(void)
 	m_timer.reset(new Ogre::Timer());
 	m_timer->reset(); // Activate timer.
 
+	// === //
+
+	// SDL:
+
+	// Initialize SDL.
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) != 0){
+		return false;
+	}
+
+	// Associate the Ogre3D window with the SDL_Window.
+	unsigned long data = 0;
+	m_renderWindow->getCustomAttribute("WINDOW", &data);
+	SDL_Window* w = SDL_CreateWindowFrom(reinterpret_cast<void*>(data));
+	SDL_SetWindowGrab(w, SDL_TRUE);
+
+	// === //
+
+	// Engine:
+
 	// Register all needed game states.
 	// @TODO: Define these in data.
 	this->registerState(Engine::StateID::STATE_INTRO);
+
+	// === //
 
 	return true;
 }

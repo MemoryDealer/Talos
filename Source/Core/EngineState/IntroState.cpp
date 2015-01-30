@@ -11,11 +11,14 @@
 // Implements IntroState class.
 // ========================================================================= //
 
+
+#include "Component/CameraComponent.hpp"
+#include "Component/FirstPersonComponent.hpp"
+#include "Component/Message.hpp"
+#include "Component/SceneComponent.hpp"
+#include "Entity/Player.hpp"
 #include "IntroState.hpp"
 #include "World/World.hpp"
-#include "Entity/Player.hpp"
-#include "Component/SceneComponent.hpp"
-#include "Component/CameraComponent.hpp"
 
 // ========================================================================= //
 
@@ -49,9 +52,13 @@ void IntroState::enter(void)
 	scene->setSkyDome(true, "Clouds");
 
 	m_player = m_world.createEntity();
-	m_player->attachComponent(new SceneComponent());
-	m_player->attachComponent(new CameraComponent());
+	FirstPersonComponentPtr fpComponent = new FirstPersonComponent();
+	m_player->attachComponent(fpComponent);
+	CameraComponentPtr cameraComponent = new CameraComponent();
+	m_player->attachComponent(cameraComponent);
 	m_player->init(m_world);
+
+	fpComponent->attachCamera(cameraComponent->getCamera());
 
 	/*Ogre::Entity* e = m_scene->createEntity("OgreHead", "ogrehead.mesh");
 	Ogre::SceneNode* n = m_scene->getRootSceneNode()->createChildSceneNode("head");
@@ -73,6 +80,28 @@ void IntroState::exit(void)
 void IntroState::update(void)
 {
 	m_player->update(m_world);
+
+	SDL_Event e;
+	while (SDL_PollEvent(&e)){
+		switch (e.type){
+		default:
+			break;
+
+		case SDL_MOUSEMOTION:
+			{
+				Message msg;
+				msg.type = MessageType::INPUT_MOUSE_MOTION;
+				msg.mouse.x = e.motion.xrel;
+				msg.mouse.y = e.motion.yrel;
+				m_player->getComponentPtr("FirstPersonComponent")->message(msg);
+			}
+			break;
+
+		case SDL_KEYDOWN:
+			printf("Keydown: %d\n", e.key.keysym.sym);
+			break;
+		}
+	}
 }
 
 // ========================================================================= //

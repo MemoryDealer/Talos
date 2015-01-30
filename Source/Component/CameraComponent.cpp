@@ -11,9 +11,10 @@
 // Implements CameraComponent class.
 // ========================================================================= //
 
-#include "Entity/Entity.hpp"
 #include "CameraComponent.hpp"
+#include "Entity/Entity.hpp"
 #include "SceneComponent.hpp"
+#include "World/World.hpp"
 
 // ========================================================================= //
 
@@ -44,13 +45,6 @@ void CameraComponent::init(EntityPtr entity, World& world)
 	m_camera->setAspectRatio(Ogre::Real(viewport->getActualWidth()) /
 							 Ogre::Real(viewport->getActualHeight()));
 	viewport->setCamera(m_camera);
-
-	// Attach camera to scene node of this Entity.
-	ComponentPtr sceneComponent =
-		(entity->getComponentPtr("SceneComponent"));
-	if (sceneComponent != nullptr){
-		static_cast<SceneComponentPtr>(sceneComponent)->attachObject(m_camera);
-	}
 }
 
 // ========================================================================= //
@@ -65,6 +59,13 @@ void CameraComponent::destroy(EntityPtr entity, World& world)
 void CameraComponent::update(EntityPtr entity, World& world)
 {
 	
+}
+
+// ========================================================================= //
+
+void CameraComponent::message(const Message& msg)
+{
+
 }
 
 // ========================================================================= //

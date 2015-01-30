@@ -30,8 +30,7 @@ public:
 	virtual ~CameraComponent(void) override;
 
 	// Creates Ogre::Camera object, sets its clip distance, sets the aspect
-	// ratio, wires up the camera to the viewport, and attachs the camera
-	// object to the SceneComponent of the parent Entity if it exists.
+	// ratio, wires up the camera to the viewport.
 	virtual void init(EntityPtr, World&) override;
 
 	// Destroys the Ogre::Camera object.
@@ -40,9 +39,23 @@ public:
 	// Empty.
 	virtual void update(EntityPtr, World&) override;
 
+	// Empty.
+	virtual void message(const Message&) override;
+
+	// Getters: 
+
+	// Returns pointer to internal Ogre::Camera.
+	Ogre::Camera* getCamera(void) const;
+
 private:
 	Ogre::Camera* m_camera;
 };
+
+// ========================================================================= //
+
+inline Ogre::Camera* CameraComponent::getCamera(void) const{
+	return m_camera;
+}
 
 // ========================================================================= //
 

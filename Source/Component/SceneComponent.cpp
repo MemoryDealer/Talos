@@ -11,8 +11,10 @@
 // Implements PositionComponent class.
 // ========================================================================= //
 
-#include "SceneComponent.hpp"
 #include "Entity/Entity.hpp"
+#include "Message.hpp"
+#include "SceneComponent.hpp"
+#include "World/World.hpp"
 
 // ========================================================================= //
 
@@ -49,7 +51,14 @@ void SceneComponent::destroy(EntityPtr entity, World& world)
 
 void SceneComponent::update(EntityPtr, World&)
 {
-	m_node->pitch(Ogre::Degree(2.0));
+	
+}
+
+// ========================================================================= //
+
+void SceneComponent::message(const Message& msg)
+{
+
 }
 
 // ========================================================================= //

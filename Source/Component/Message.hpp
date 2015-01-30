@@ -5,55 +5,40 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: GraphicsComponent.cpp
+// File: Message.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements GraphicsComponent class.
+// Defines Message struct for Components.
 // ========================================================================= //
 
-#include "ModelComponent.hpp"
-
-// ========================================================================= //
-
-ModelComponent::ModelComponent(void) :
-m_entity(nullptr)
-{
-	this->setName("ModelComponent");
-}
+#ifndef __MESSAGE_HPP__
+#define __MESSAGE_HPP__
 
 // ========================================================================= //
 
-ModelComponent::~ModelComponent(void)
-{
+enum MessageType{
+	NIL = 0,
 
-}
+	INPUT_MOUSE_MOTION,
 
-// ========================================================================= //
-
-void ModelComponent::init(EntityPtr entity, World& world)
-{
-
-}
+	END
+};
 
 // ========================================================================= //
 
-void ModelComponent::destroy(EntityPtr entity, World& world)
-{
+struct Message{
+	int type;
 
-}
+	union{
+		struct{
+			int x;
+			int y;
+		} mouse;
+	};
+};
 
 // ========================================================================= //
 
-void ModelComponent::update(EntityPtr entity, World& world)
-{
-
-}
-
-// ========================================================================= //
-
-void ModelComponent::message(const Message& msg)
-{
-
-}
+#endif
 
 // ========================================================================= //

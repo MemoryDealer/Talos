@@ -5,60 +5,57 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: PositionComponent.hpp
+// File: FirstPersonComponent.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines PositionComponent class.
+// Defines FirstPersonComponent class.
 // ========================================================================= //
 
-#ifndef __SCENECOMPONENT_HPP__
-#define __SCENECOMPONENT_HPP__
+#ifndef __FIRSTPERSONCOMPONENT_HPP__
+#define __FIRSTPERSONCOMPONENT_HPP__
 
 // ========================================================================= //
 
-#include "Component.hpp"
+#include "SceneComponent.hpp"
 
 // ========================================================================= //
-// Holds information for position in the game world.
-class SceneComponent : public Component
+// Holds data for operating a first person character, a CameraComponent must
+// be used in conjuction with this.
+class FirstPersonComponent final : public SceneComponent
 {
 public:
-	// Default initializes Ogre::SceneNode.
-	explicit SceneComponent(void);
+	// Default initializes scene nodes.
+	explicit FirstPersonComponent(void);
 
 	// Empty destructor.
-	virtual ~SceneComponent(void) override;
+	virtual ~FirstPersonComponent(void) override;
 
-	// Creates a Ogre::SceneNode within the world.
+	// Creates all needed scene nodes for controlling first person camera.
 	virtual void init(EntityPtr, World&) override;
 
-	// Destroys the internal Ogre::SceneNode.
+	// Destroys the internal scene nodes for the camera.
 	virtual void destroy(EntityPtr, World&) override;
 
 	// Empty.
 	virtual void update(EntityPtr, World&) override;
 
-	// Empty.
+	// Handles input messages.
 	virtual void message(const Message&) override;
 
-	// Calls Ogre::SceneNode::attachObject() with parameter.
-	void attachObject(Ogre::MovableObject*);
-
-	// Returns pointer to internal Ogre::SceneNode.
-	Ogre::SceneNode* getSceneNode(void) const;
+	// Attachs a camera to the roll node.
+	void attachCamera(Ogre::Camera* camera);
 
 private:
-	Ogre::SceneNode* m_node;
+	Ogre::SceneNode* m_cameraNode;
+	Ogre::SceneNode* m_yawNode;
+	Ogre::SceneNode* m_pitchNode;
+	Ogre::SceneNode* m_rollNode;
 };
 
 // ========================================================================= //
 
-inline void SceneComponent::attachObject(Ogre::MovableObject* object){
-	m_node->attachObject(object);
-}
-
-inline Ogre::SceneNode* SceneComponent::getSceneNode(void) const{
-	return m_node;
+inline void FirstPersonComponent::attachCamera(Ogre::Camera* camera){
+	m_rollNode->attachObject(camera);
 }
 
 // ========================================================================= //

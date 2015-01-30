@@ -42,6 +42,7 @@ EntityPtr EntityPool::create(void)
 {
 	Assert(m_firstAvail != nullptr, "EntityPool firstAvail = nullptr");
 
+	// O(1) time!
 	EntityPtr e = m_firstAvail;
 	m_firstAvail = e->getNext();
 
