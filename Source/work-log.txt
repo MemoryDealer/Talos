@@ -1,0 +1,57 @@
+A log of all work done on engine.
+
+== 1/19/15 - 1/26/15 ==
+* Read "Game Programming Patterns" by Robert Nystrom in hopes to build a strong design background before starting.
+
+== 1/26/15 ==
+'''Prepared for building a consolidated engine.'''
+* Built Ogre3D dependencies--FreeImage, FreeType, zlib, and zziplib.
+* Built Ogre3D(1.9.0) binaries from latest source.
+* Applied for NVIDIA GameWorks to acquire PhysX SDK, then downloaded Core PhysX SDK(3.3.2).
+* Built RakNet(4.081) binaries.
+* Built CEGUI(0.8.4) binaries (getting CMake to work for this was a little tricky).
+* Acquired irrKlang(1.5.0) SDK.
+* Acquired SDL2(2.0.3) development libraries.
+'''---'''
+* Created Visual Studio 12.0 solution. Added main.cpp, compiled and linked with Ogre3D and Boost successfully.
+* Created Engine class, which initializes Ogre and will manage the engine states (menu, game, pause, etc.).
+* Added stdafx.hpp.
+* Added EngineState class, which is abstract; derived classes represent a single state that can be active at a time. The IntroState has been created as a test.
+* Added EngineState::injectDependencies() which as of now takes pointers to Ogre::Root and Ogre::Viewport initialized by Engine. This can be later expanded to take a struct or perhaps generics. The prevents me from having to use Engine as a singleton by giving each EngineState the objects they need.
+* Tested basic game loop updating and active state updating.
+
+== 1/27/15 ==
+* Added Engine::registerState(). This should be called in for each state that will be needed during initialization.
+* Added Assert(exp, desc) macro, which tests an expression for true and offers the option to break into the debugger if the expression is false. A description is also supplemented for each Assert.
+* Added HelperFunctions.hpp which for now contains a generic toString() function for converting just about anything to std::string.
+* Tried to add a basic mesh and a prefab cube and render it with Direct3D11, however errors were occurring which probably had to do with the shaders I'm using or a bug in the engine. Apparently, Direct3D11 support is not even fully implemented yet, so I may have to use the OpenGL rendering system for the duration of this project.
+* OpenGL shaders working on a basic mesh.
+* Implemented a game loop that uses a fixed time step when updating the state but adjusts for lost time during the rendering phase. Once physics support has been added, it should be "free" and hence the game world will be deterministic.
+* Researched some Entity-component system implementations. Everyone seems to have their own way of doing it, so I'll just have to try it. One of my main goals is to store the components in contiguous memory to optimize cache hits.
+
+== 1/28/15 ==
+* Created base Component and Entity classes. These are abstract; Component can be derived from into a chain (e.g., Component <- InputComponent <- DemoInputComponent) and Entity should only be derived from once per entity (e.g., Entity <- Player, Entity <- Elevator, Entity <- Gun).
+* Created SceneComponent which holds an Ogre::SceneNode to hold the transform in the game world.
+* Made System interface. Each type of component should have its own system (e.g., PhysicsSystem, SceneSystem, ModelSystem, etc.).
+* Created World class which will hold all data for the game world. Each EngineState has one.
+* Created CameraComponent.
+* Created Player class derived from Entity. Added a SceneComponent and CameraComponent. Tested for rendering successfully.
+
+== 1/29/25 ==
+* Modified Entity class to have init(), destroy(), and update() functions implemented. All of these simply traverse the list of Components stored in the Entity. 
+* Component now has pure virtual methods init(), destroy(), update(), all of which take EntityPtr and World& parameters.
+* Added SceneComponent::attachObject() which takes an Ogre::MovableObject* and attaches it to the internal Ogre::SceneNode*.
+* Created EntityPool class, which has O(1) creation time when retrieving the next available Entity from the contiguous array.
+* Delegated Entity creation to the World class, which holds an EntityPool and calls upon it internally.
+* Decoupled SceneComponent from CameraComponent::init(). Use CameraComponent::getCamera() and pass it into SceneComponent::attachObject().
+* Added FirstPersonComponent which sets up a system of nodes that control a first person camera.
+* Added SDL2 and associated the SDL window with the window created by Ogre. 
+* Added Message struct in Component folder. Also enums for message types.
+* Tested input with SDL, setup mouse motion event to move camera.
+
+== TODO ==
+* Add message() function to Entity so it can broadcast to all components.
+* Add System classes for all components to live in. Factory functions in World should create them.
+* Delegate the input handling to InputComponent.
+* Rename Message class to ComponentMessage? This may be wise for the long run.
+* Hide mouse (maybe add CEGUI before this).
