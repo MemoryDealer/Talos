@@ -22,6 +22,7 @@
 
 class System;
 class Entity;
+class EntityPool;
 
 typedef std::vector<std::shared_ptr<System>> SystemList;
 typedef Entity* EntityPtr;
@@ -70,8 +71,7 @@ private:
 	SystemList m_systems;
 
 	// Entity pool.
-	EntityPtr* m_entityPool;
-	unsigned int m_numEntities;
+	std::shared_ptr<EntityPool> m_entityPool;
 };
 
 // ========================================================================= //

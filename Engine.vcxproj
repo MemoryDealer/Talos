@@ -21,7 +21,9 @@
     <ClCompile Include="Source\Core\main.cpp" />
     <ClCompile Include="Source\Core\Resources.cpp" />
     <ClCompile Include="Source\Entity\Entity.cpp" />
+    <ClCompile Include="Source\Entity\EntityPool.cpp" />
     <ClCompile Include="Source\Entity\Player.cpp" />
+    <ClCompile Include="Source\Pool\Pool.cpp" />
     <ClCompile Include="Source\World\World.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -36,7 +38,9 @@
     <ClInclude Include="Source\Core\HelperFunctions.hpp" />
     <ClInclude Include="Source\Core\Resources.hpp" />
     <ClInclude Include="Source\Entity\Entity.hpp" />
+    <ClInclude Include="Source\Entity\EntityPool.hpp" />
     <ClInclude Include="Source\Entity\Player.hpp" />
+    <ClInclude Include="Source\Pool\Pool.hpp" />
     <ClInclude Include="Source\stdafx.hpp" />
     <ClInclude Include="Source\System\System.hpp" />
     <ClInclude Include="Source\World\World.hpp" />

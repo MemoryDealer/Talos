@@ -16,8 +16,9 @@
 // ========================================================================= //
 
 Entity::Entity(void) :
+m_components(),
 m_id(0),
-m_components()
+m_next(nullptr)
 {
 
 }

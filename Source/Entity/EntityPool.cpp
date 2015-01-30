@@ -5,64 +5,56 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: World.cpp
+// File: EntityPool.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements World class.
+// Implements EntityPool class.
 // ========================================================================= //
 
-#include "World.hpp"
-#include "Entity/EntityPool.hpp"
+#include "EntityPool.hpp"
 
 // ========================================================================= //
 
-World::World(void) :
-m_scene(nullptr),
-m_viewport(nullptr),
-m_systems(),
-m_entityPool(nullptr)
+EntityPool::EntityPool(const int size) :
+m_pool(new Entity[size]),
+m_firstAvail(&m_pool[0]),
+m_idCounter(0)
 {
+	// Point each Entity to the next.
+	for (int i = 0; i < size - 1; ++i){
+		m_pool[i].setNext(&m_pool[i + 1]);
+	}
 
+	// Terminate the last one.
+	m_pool[size - 1].setNext(nullptr);
 }
 
 // ========================================================================= //
 
-World::~World(void)
+EntityPool::~EntityPool(void)
 {
-
+	delete[] m_pool;
 }
 
 // ========================================================================= //
 
-void World::init(Ogre::Root* root, Ogre::Viewport* viewport)
+EntityPtr EntityPool::create(void)
 {
-	m_scene = root->createSceneManager(Ogre::ST_GENERIC);
-	m_viewport = viewport;
+	Assert(m_firstAvail != nullptr, "EntityPool firstAvail = nullptr");
 
-	// Allocate Entity pool.
-	// @TODO: Read pool size from config file.
-	m_entityPool.reset(new EntityPool(256));
+	EntityPtr e = m_firstAvail;
+	m_firstAvail = e->getNext();
+
+	e->setID(m_idCounter++);
+	return e;
 }
 
 // ========================================================================= //
 
-void World::destroy(Ogre::Root* root)
+void EntityPool::destroy(EntityPtr e)
 {
-	root->destroySceneManager(m_scene);
-}
-
-// ========================================================================= //
-
-EntityPtr World::createEntity(void)
-{
-	return m_entityPool->create();
-}
-
-// ========================================================================= //
-
-void World::destroyEntity(EntityPtr e)
-{
-	return m_entityPool->destroy(e);
+	e->setNext(m_firstAvail);
+	m_firstAvail = e;
 }
 
 // ========================================================================= //

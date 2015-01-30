@@ -14,6 +14,8 @@
 #include "IntroState.hpp"
 #include "World/World.hpp"
 #include "Entity/Player.hpp"
+#include "Component/SceneComponent.hpp"
+#include "Component/CameraComponent.hpp"
 
 // ========================================================================= //
 
@@ -46,9 +48,10 @@ void IntroState::enter(void)
 
 	scene->setSkyDome(true, "Clouds");
 
-	m_player = new Player();
+	m_player = m_world.createEntity();
+	m_player->attachComponent(new SceneComponent());
+	m_player->attachComponent(new CameraComponent());
 	m_player->init(m_world);
-
 
 	/*Ogre::Entity* e = m_scene->createEntity("OgreHead", "ogrehead.mesh");
 	Ogre::SceneNode* n = m_scene->getRootSceneNode()->createChildSceneNode("head");
