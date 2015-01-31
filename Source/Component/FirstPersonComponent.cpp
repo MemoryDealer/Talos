@@ -11,13 +11,14 @@
 // Implements FirstPersonComponent class.
 // ========================================================================= //
 
+#include "ComponentMessage.hpp"
 #include "FirstPersonComponent.hpp"
-#include "Message.hpp"
 #include "World/World.hpp"
 
 // ========================================================================= //
 
 FirstPersonComponent::FirstPersonComponent(void) :
+SceneComponent(),
 m_yawNode(nullptr),
 m_pitchNode(nullptr),
 m_rollNode(nullptr)
@@ -49,6 +50,11 @@ void FirstPersonComponent::init(EntityPtr entity, World& world)
 
 	// Create roll node as the camera's bottom node.
 	m_rollNode = m_pitchNode->createChildSceneNode();
+
+	// Set to identity rotations.
+	m_yawNode->setOrientation(Ogre::Quaternion::IDENTITY);
+	m_pitchNode->setOrientation(Ogre::Quaternion::IDENTITY);
+	m_rollNode->setOrientation(Ogre::Quaternion::IDENTITY);
 }
 
 // ========================================================================= //
@@ -70,15 +76,47 @@ void FirstPersonComponent::update(EntityPtr, World&)
 
 // ========================================================================= //
 
-void FirstPersonComponent::message(const Message& msg)
+void FirstPersonComponent::message(const ComponentMessage& msg)
 {
+	const Ogre::Real sens = 0.2f;
+
 	switch (msg.type){
 	default:
 		break;
 
-	case MessageType::INPUT_MOUSE_MOTION:
-		m_yawNode->yaw(Ogre::Degree(Ogre::Real(msg.mouse.x)));
-		m_pitchNode->pitch(Ogre::Degree(-Ogre::Real(msg.mouse.y)));
+	case ComponentMessageType::INPUT_MOUSE_MOTION:
+		m_yawNode->yaw(Ogre::Degree(-Ogre::Real(msg.mouse.x) * sens));
+		m_pitchNode->pitch(Ogre::Degree(-Ogre::Real(msg.mouse.y) * sens));
+		{
+			// Prevent the camera from pitching upside down.
+			Ogre::Real pitchAngle = 0.f;
+			Ogre::Real pitchAngleParity = 0.f;
+
+			// Get the angle of rotation around the x-axis.
+			pitchAngle = (2.f * Ogre::Degree(Ogre::Math::ACos(
+				m_pitchNode->getOrientation().w)).valueDegrees());
+
+			pitchAngleParity = m_pitchNode->getOrientation().x;
+
+			// Limit pitch.
+			// @TODO: Define this in data.
+			if (pitchAngle > 80.f){
+				if (pitchAngleParity > 0){
+					m_pitchNode->setOrientation(Ogre::Quaternion(
+						Ogre::Math::Sqrt(0.5f),
+						Ogre::Math::Sqrt(0.5f) - 0.115f,
+						0.f,
+						0.f));
+				}
+				else if(pitchAngleParity < 0){
+					m_pitchNode->setOrientation(Ogre::Quaternion(
+						Ogre::Math::Sqrt(0.5f),
+						-Ogre::Math::Sqrt(0.5f) + 0.115f,
+						0.f,
+						0.f));
+				}
+			}
+		}
 		break;
 	}
 }

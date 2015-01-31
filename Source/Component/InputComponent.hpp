@@ -5,36 +5,44 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: Message.hpp
+// File: InputComponent.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines Message struct for Components.
+// Defines InputComponent class.
 // ========================================================================= //
 
-#ifndef __MESSAGE_HPP__
-#define __MESSAGE_HPP__
-
-// ========================================================================= //
-
-enum MessageType{
-	NIL = 0,
-
-	INPUT_MOUSE_MOTION,
-
-	END
-};
+#ifndef __INPUTCOMPONENT_HPP__
+#define __INPUTCOMPONENT_HPP__
 
 // ========================================================================= //
 
-struct Message{
-	int type;
+#include "Component.hpp"
 
-	union{
-		struct{
-			int x;
-			int y;
-		} mouse;
-	};
+// ========================================================================= //
+// Processes input using SDL library.
+class InputComponent : public Component
+{
+public:
+	// Sets the Component name.
+	explicit InputComponent(void);
+
+	// Empty destructor.
+	virtual ~InputComponent(void) override;
+
+	// Empty.
+	virtual void init(EntityPtr, World&) override;
+
+	// Empty.
+	virtual void destroy(EntityPtr, World&) override;
+
+	// Detects input and messages the Entity.
+	virtual void update(EntityPtr, World&) override;
+
+	// Empty.
+	virtual void message(const ComponentMessage&) override;
+
+private:
+
 };
 
 // ========================================================================= //

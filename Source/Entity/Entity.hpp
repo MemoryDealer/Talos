@@ -16,11 +16,18 @@
 
 // ========================================================================= //
 
-#include "Component/Component.hpp"
+#include "stdafx.hpp"
 
 // ========================================================================= //
 
+class Component;
+struct ComponentMessage;
+class Entity;
+class World;
+
+typedef Component* ComponentPtr;
 typedef unsigned int EntityID;
+typedef Entity* EntityPtr;
 typedef std::list<ComponentPtr> ComponentList;
 
 // ========================================================================= //
@@ -49,6 +56,9 @@ public:
 
 	// Unregisters component from the entity.
 	void detachComponent(ComponentPtr);
+
+	// Broadcasts ComponentMessage to all attached Components.
+	void message(const ComponentMessage&);
 
 	// Getters:
 

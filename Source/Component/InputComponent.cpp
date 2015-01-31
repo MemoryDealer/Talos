@@ -5,57 +5,76 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: GraphicsComponent.cpp
+// File: InputComponent.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements GraphicsComponent class.
+// Implements InputComponent class.
 // ========================================================================= //
 
 #include "ComponentMessage.hpp"
-#include "ModelComponent.hpp"
-#include "World/World.hpp"
+#include "Entity/Entity.hpp"
+#include "InputComponent.hpp"
 
 // ========================================================================= //
 
-ModelComponent::ModelComponent(const std::string& meshFilename) :
-Component(),
-m_entity(nullptr),
-m_meshFilename(meshFilename)
+InputComponent::InputComponent(void) :
+Component()
 {
-	this->setName("ModelComponent");
+	this->setName("InputComponent");
 }
 
 // ========================================================================= //
 
-ModelComponent::~ModelComponent(void)
+InputComponent::~InputComponent(void)
 {
 
 }
 
 // ========================================================================= //
 
-void ModelComponent::init(EntityPtr entity, World& world)
-{
-	m_entity = world.getSceneManager()->createEntity(m_meshFilename);
-}
-
-// ========================================================================= //
-
-void ModelComponent::destroy(EntityPtr entity, World& world)
+void InputComponent::init(EntityPtr entity, World& world)
 {
 
 }
 
 // ========================================================================= //
 
-void ModelComponent::update(EntityPtr entity, World& world)
+void InputComponent::destroy(EntityPtr entity, World& world)
 {
 
 }
 
 // ========================================================================= //
 
-void ModelComponent::message(const ComponentMessage& msg)
+void InputComponent::update(EntityPtr entity, World& world)
+{
+	// Poll SDL for input events.
+	SDL_Event e;
+	ComponentMessage msg;
+	while (SDL_PollEvent(&e)){
+		switch (e.type){
+		default:
+			break;
+
+		case SDL_MOUSEMOTION:
+			msg.type = ComponentMessageType::INPUT_MOUSE_MOTION;
+			// Store mouse's relative movement.
+			msg.mouse.x = e.motion.xrel;
+			msg.mouse.y = e.motion.yrel;
+			break;
+
+		case SDL_KEYDOWN:
+
+			break;
+		}
+	}
+
+	entity->message(msg);
+}
+
+// ========================================================================= //
+
+void InputComponent::message(const ComponentMessage& msg)
 {
 
 }

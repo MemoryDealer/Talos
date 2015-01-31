@@ -19,24 +19,45 @@
 #include "Component.hpp"
 
 // ========================================================================= //
-// Needed information to render a 2D or 3D object.
+// Needed information to render a 3D model in the game world.
 class ModelComponent : public Component
 {
 public:
-	explicit ModelComponent(void);
+	// Default initializes member data, stores mesh filename.
+	explicit ModelComponent(const std::string&);
+
+	// Empty destructor.
 	virtual ~ModelComponent(void) override;
 
+	// Loads Ogre::Entity from scene manager using scene manager.
 	virtual void init(EntityPtr, World&) override;
 
+	// Empty.
 	virtual void destroy(EntityPtr, World&) override;
 
+	// Empty.
 	virtual void update(EntityPtr, World&) override;
 
-	virtual void message(const Message&) override;
+	// Empty.
+	virtual void message(const ComponentMessage&) override;
+
+	// Getters:
+
+	// Returns internal Ogre::Entity pointer.
+	Ogre::Entity* getOgreEntity(void) const;
 
 private:
 	Ogre::Entity* m_entity;
+	std::string m_meshFilename;
 };
+
+// ========================================================================= //
+
+// Getters:
+
+inline Ogre::Entity* ModelComponent::getOgreEntity(void) const{
+	return m_entity;
+}
 
 // ========================================================================= //
 

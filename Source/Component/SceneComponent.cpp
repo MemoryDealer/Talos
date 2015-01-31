@@ -11,8 +11,8 @@
 // Implements PositionComponent class.
 // ========================================================================= //
 
+#include "ComponentMessage.hpp"
 #include "Entity/Entity.hpp"
-#include "Message.hpp"
 #include "SceneComponent.hpp"
 #include "World/World.hpp"
 
@@ -56,7 +56,7 @@ void SceneComponent::update(EntityPtr, World&)
 
 // ========================================================================= //
 
-void SceneComponent::message(const Message& msg)
+void SceneComponent::message(const ComponentMessage& msg)
 {
 
 }

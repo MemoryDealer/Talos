@@ -49,12 +49,6 @@
     <Filter Include="Source Files\System">
       <UniqueIdentifier>{b976e152-4b89-4ce1-a3c7-1a5a5eafac6e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Pool">
-      <UniqueIdentifier>{9e582980-58e3-44c9-8478-0b0c66de7927}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Pool">
-      <UniqueIdentifier>{8d3cecdf-e660-4dda-8f49-1d221dd3f94b}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\main.cpp">
@@ -93,13 +87,13 @@
     <ClCompile Include="Source\Component\CameraComponent.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Pool\Pool.cpp">
-      <Filter>Source Files\Pool</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Entity\EntityPool.cpp">
       <Filter>Source Files\Entity</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\FirstPersonComponent.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\InputComponent.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
   </ItemGroup>
@@ -149,16 +143,16 @@
     <ClInclude Include="Source\System\System.hpp">
       <Filter>Header Files\System</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Pool\Pool.hpp">
-      <Filter>Header Files\Pool</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Entity\EntityPool.hpp">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\FirstPersonComponent.hpp">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Component\Message.hpp">
+    <ClInclude Include="Source\Component\ComponentMessage.hpp">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\InputComponent.hpp">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
   </ItemGroup>
@@ -166,5 +160,10 @@
     <None Include="Source\Component\ModelComponent.cpp">
       <Filter>Source Files\Component</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Source\work-log.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

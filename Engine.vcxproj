@@ -14,6 +14,7 @@
     <ClCompile Include="Source\Component\CameraComponent.cpp" />
     <ClCompile Include="Source\Component\Component.cpp" />
     <ClCompile Include="Source\Component\FirstPersonComponent.cpp" />
+    <ClCompile Include="Source\Component\InputComponent.cpp" />
     <ClCompile Include="Source\Component\SceneComponent.cpp" />
     <ClCompile Include="Source\Core\Assert.cpp" />
     <ClCompile Include="Source\Core\Engine.cpp" />
@@ -24,14 +25,14 @@
     <ClCompile Include="Source\Entity\Entity.cpp" />
     <ClCompile Include="Source\Entity\EntityPool.cpp" />
     <ClCompile Include="Source\Entity\Player.cpp" />
-    <ClCompile Include="Source\Pool\Pool.cpp" />
     <ClCompile Include="Source\World\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Component\CameraComponent.hpp" />
     <ClInclude Include="Source\Component\Component.hpp" />
     <ClInclude Include="Source\Component\FirstPersonComponent.hpp" />
-    <ClInclude Include="Source\Component\Message.hpp" />
+    <ClInclude Include="Source\Component\ComponentMessage.hpp" />
+    <ClInclude Include="Source\Component\InputComponent.hpp" />
     <ClInclude Include="Source\Component\ModelComponent.hpp" />
     <ClInclude Include="Source\Component\SceneComponent.hpp" />
     <ClInclude Include="Source\Core\Assert.hpp" />
@@ -43,13 +44,15 @@
     <ClInclude Include="Source\Entity\Entity.hpp" />
     <ClInclude Include="Source\Entity\EntityPool.hpp" />
     <ClInclude Include="Source\Entity\Player.hpp" />
-    <ClInclude Include="Source\Pool\Pool.hpp" />
     <ClInclude Include="Source\stdafx.hpp" />
     <ClInclude Include="Source\System\System.hpp" />
     <ClInclude Include="Source\World\World.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\Component\ModelComponent.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Source\work-log.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{49CEF8CA-907E-4A2E-94CA-CD5FD1E38EDD}</ProjectGuid>
@@ -94,12 +97,16 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>Source;Source\Core</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <BrowseInformation>false</BrowseInformation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>OgreMain_d.lib;RenderSystem_Direct3D11_d.lib;RenderSystem_GL_d.lib;Plugin_OctreeSceneManager_d.lib;SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

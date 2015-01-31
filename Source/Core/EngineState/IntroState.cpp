@@ -11,10 +11,11 @@
 // Implements IntroState class.
 // ========================================================================= //
 
-
+#include "Component/ComponentMessage.hpp"
 #include "Component/CameraComponent.hpp"
 #include "Component/FirstPersonComponent.hpp"
-#include "Component/Message.hpp"
+#include "Component/InputComponent.hpp"
+#include "Component/ModelComponent.hpp"
 #include "Component/SceneComponent.hpp"
 #include "Entity/Player.hpp"
 #include "IntroState.hpp"
@@ -56,9 +57,15 @@ void IntroState::enter(void)
 	m_player->attachComponent(fpComponent);
 	CameraComponentPtr cameraComponent = new CameraComponent();
 	m_player->attachComponent(cameraComponent);
+	m_player->attachComponent(new InputComponent());
 	m_player->init(m_world);
 
 	fpComponent->attachCamera(cameraComponent->getCamera());
+
+	EntityPtr ogre = m_world.createEntity();
+	ogre->attachComponent(new SceneComponent());
+	//ModelComponent* model = new ModelComponent("ogrehead.mesh");
+	//ogre->attachComponent(model);
 
 	/*Ogre::Entity* e = m_scene->createEntity("OgreHead", "ogrehead.mesh");
 	Ogre::SceneNode* n = m_scene->getRootSceneNode()->createChildSceneNode("head");
@@ -79,29 +86,7 @@ void IntroState::exit(void)
 
 void IntroState::update(void)
 {
-	m_player->update(m_world);
-
-	SDL_Event e;
-	while (SDL_PollEvent(&e)){
-		switch (e.type){
-		default:
-			break;
-
-		case SDL_MOUSEMOTION:
-			{
-				Message msg;
-				msg.type = MessageType::INPUT_MOUSE_MOTION;
-				msg.mouse.x = e.motion.xrel;
-				msg.mouse.y = e.motion.yrel;
-				m_player->getComponentPtr("FirstPersonComponent")->message(msg);
-			}
-			break;
-
-		case SDL_KEYDOWN:
-			printf("Keydown: %d\n", e.key.keysym.sym);
-			break;
-		}
-	}
+	m_world.update();
 }
 
 // ========================================================================= //

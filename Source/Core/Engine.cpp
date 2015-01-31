@@ -87,7 +87,6 @@ bool Engine::init(void)
 	unsigned long data = 0;
 	m_renderWindow->getCustomAttribute("WINDOW", &data);
 	SDL_Window* w = SDL_CreateWindowFrom(reinterpret_cast<void*>(data));
-	SDL_SetWindowGrab(w, SDL_TRUE);
 
 	// === //
 

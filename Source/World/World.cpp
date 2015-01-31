@@ -11,8 +11,13 @@
 // Implements World class.
 // ========================================================================= //
 
-#include "World.hpp"
+#include "Component/CameraComponent.hpp"
+#include "Component/FirstPersonComponent.hpp"
+#include "Component/InputComponent.hpp"
+#include "Component/ModelComponent.hpp"
+#include "Component/SceneComponent.hpp"
 #include "Entity/EntityPool.hpp"
+#include "World.hpp"
 
 // ========================================================================= //
 
@@ -63,6 +68,26 @@ EntityPtr World::createEntity(void)
 void World::destroyEntity(EntityPtr e)
 {
 	return m_entityPool->destroy(e);
+}
+
+// ========================================================================= //
+
+//template<typename T>
+//T* World::createComponent(void)
+//{
+//
+//}
+//
+//// Explicitly instantiate template functions for each Component type.
+//template CameraComponentPtr World::createComponent<CameraComponent>(void);
+
+// ========================================================================= //
+
+void World::update(void)
+{
+	for (int i = 0; i < m_entityPool->m_poolSize; ++i){
+		m_entityPool->m_pool[i].update(*this);
+	}
 }
 
 // ========================================================================= //

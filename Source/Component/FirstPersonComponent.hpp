@@ -40,7 +40,7 @@ public:
 	virtual void update(EntityPtr, World&) override;
 
 	// Handles input messages.
-	virtual void message(const Message&) override;
+	virtual void message(const ComponentMessage&) override;
 
 	// Attachs a camera to the roll node.
 	void attachCamera(Ogre::Camera* camera);

@@ -23,6 +23,8 @@
 // time.
 class EntityPool
 {
+	friend class World;
+
 public:
 	// Allocates pool array, sets the next pointer of each Entity.
 	explicit EntityPool(const int size);
@@ -40,6 +42,7 @@ private:
 	EntityPtr m_pool;
 	EntityPtr m_firstAvail;
 	EntityID m_idCounter;
+	int m_poolSize;
 };
 
 // ========================================================================= //

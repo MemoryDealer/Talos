@@ -12,6 +12,7 @@
 // ========================================================================= //
 
 #include "CameraComponent.hpp"
+#include "ComponentMessage.hpp"
 #include "Entity/Entity.hpp"
 #include "SceneComponent.hpp"
 #include "World/World.hpp"
@@ -63,7 +64,7 @@ void CameraComponent::update(EntityPtr entity, World& world)
 
 // ========================================================================= //
 
-void CameraComponent::message(const Message& msg)
+void CameraComponent::message(const ComponentMessage& msg)
 {
 
 }

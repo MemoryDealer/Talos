@@ -39,7 +39,7 @@ public:
 	virtual void update(EntityPtr, World&) override;
 
 	// Empty.
-	virtual void message(const Message&) override;
+	virtual void message(const ComponentMessage&) override;
 
 	// Calls Ogre::SceneNode::attachObject() with parameter.
 	void attachObject(Ogre::MovableObject*);

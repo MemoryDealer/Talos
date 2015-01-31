@@ -27,8 +27,8 @@ class FirstPersonComponent;
 class ModelComponent;
 class SceneComponent;
 // Other forward declarations.
+struct ComponentMessage;
 class Entity;
-struct Message;
 class World;
 
 typedef Component* ComponentPtr;
@@ -59,7 +59,7 @@ public:
 	virtual void update(EntityPtr, World&) = 0;
 
 	// Handles a message received from parent Entity.
-	virtual void message(const Message&) = 0;
+	virtual void message(const ComponentMessage&) = 0;
 
 	// Getters:
 

@@ -54,6 +54,13 @@ public:
 	// Calls destroy on Entity and 
 	void destroyEntity(EntityPtr);
 
+	// Creates a Component of the requested type.
+	/*template<typename T>
+	T* createComponent(void);*/
+
+	// Updates every active Entity in the game world.
+	void update(void);
+
 	// Getters:
 
 	// Returns pointer to Ogre::SceneManager for this world.

@@ -5,59 +5,43 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: GraphicsComponent.cpp
+// File: Message.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements GraphicsComponent class.
+// Defines Message struct for Components.
 // ========================================================================= //
 
-#include "ComponentMessage.hpp"
-#include "ModelComponent.hpp"
-#include "World/World.hpp"
-
-// ========================================================================= //
-
-ModelComponent::ModelComponent(const std::string& meshFilename) :
-Component(),
-m_entity(nullptr),
-m_meshFilename(meshFilename)
-{
-	this->setName("ModelComponent");
-}
+#ifndef __COMPONENTMESSAGE_HPP__
+#define __COMPONENTMESSAGE_HPP__
 
 // ========================================================================= //
 
-ModelComponent::~ModelComponent(void)
-{
+enum ComponentMessageType{
+	NIL = 0,
 
-}
+	INPUT_MOUSE_MOTION,
 
-// ========================================================================= //
-
-void ModelComponent::init(EntityPtr entity, World& world)
-{
-	m_entity = world.getSceneManager()->createEntity(m_meshFilename);
-}
+	END
+};
 
 // ========================================================================= //
 
-void ModelComponent::destroy(EntityPtr entity, World& world)
-{
+struct ComponentMessage{
 
-}
+	explicit ComponentMessage(void) : type(ComponentMessageType::NIL) { }
+
+	int type;
+
+	union{
+		struct{
+			int x;
+			int y;
+		} mouse;
+	};
+};
 
 // ========================================================================= //
 
-void ModelComponent::update(EntityPtr entity, World& world)
-{
-
-}
-
-// ========================================================================= //
-
-void ModelComponent::message(const ComponentMessage& msg)
-{
-
-}
+#endif
 
 // ========================================================================= //

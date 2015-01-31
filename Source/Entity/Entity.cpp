@@ -11,6 +11,8 @@
 // Defines Entity class.
 // ========================================================================= //
 
+#include "Component/Component.hpp"
+#include "Component/ComponentMessage.hpp"
 #include "Entity.hpp"
 
 // ========================================================================= //
@@ -75,6 +77,22 @@ void Entity::attachComponent(ComponentPtr component)
 void Entity::detachComponent(ComponentPtr component)
 {
 
+}
+
+// ========================================================================= //
+
+void Entity::message(const ComponentMessage& msg)
+{
+	if (msg.type == ComponentMessageType::NIL){
+		return;
+	}
+
+	// Broadcast to all attached components.
+	for (ComponentList::iterator itr = m_components.begin();
+		 itr != m_components.end();
+		 ++itr){
+		(*itr)->message(msg);
+	}
 }
 
 // ========================================================================= //

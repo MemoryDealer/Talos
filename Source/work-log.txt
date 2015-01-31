@@ -49,9 +49,15 @@ A log of all work done on engine.
 * Added Message struct in Component folder. Also enums for message types.
 * Tested input with SDL, setup mouse motion event to move camera.
 
+== 1/30/15 ==
+* Added Entity::message() which broadcasts a message to all attached components.
+* Created InputComponent which detects input and sends a corresponding message to the parent Entity.
+* Added pitch limitation in FirstPersonComponent, so the camera can't be pitched to an upside down state.
+* Made World a friend class of EntityPool, added World::update() which iterates through the EntityPool and calls update on each Entity.
+
 == TODO ==
-* Add message() function to Entity so it can broadcast to all components.
 * Add System classes for all components to live in. Factory functions in World should create them.
-* Delegate the input handling to InputComponent.
-* Rename Message class to ComponentMessage? This may be wise for the long run.
 * Hide mouse (maybe add CEGUI before this).
+* Alphabetize includes everywhere. Folder name is first if in a folder.
+* Make Entity final? Still not sure if I should allow subclassing for convenience. Entities could be data-driven?
+* Mouse camera movement is frame rate dependent.

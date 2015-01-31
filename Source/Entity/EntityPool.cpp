@@ -18,7 +18,8 @@
 EntityPool::EntityPool(const int size) :
 m_pool(new Entity[size]),
 m_firstAvail(&m_pool[0]),
-m_idCounter(0)
+m_idCounter(0),
+m_poolSize(size)
 {
 	// Point each Entity to the next.
 	for (int i = 0; i < size - 1; ++i){
