@@ -13,8 +13,10 @@
   <ItemGroup>
     <ClCompile Include="Source\Component\CameraComponent.cpp" />
     <ClCompile Include="Source\Component\Component.cpp" />
+    <ClCompile Include="Source\Component\ComponentPool.cpp" />
     <ClCompile Include="Source\Component\FirstPersonComponent.cpp" />
     <ClCompile Include="Source\Component\InputComponent.cpp" />
+    <ClCompile Include="Source\Component\ModelComponent.cpp" />
     <ClCompile Include="Source\Component\SceneComponent.cpp" />
     <ClCompile Include="Source\Core\Assert.cpp" />
     <ClCompile Include="Source\Core\Engine.cpp" />
@@ -25,11 +27,13 @@
     <ClCompile Include="Source\Entity\Entity.cpp" />
     <ClCompile Include="Source\Entity\EntityPool.cpp" />
     <ClCompile Include="Source\Entity\Player.cpp" />
+    <ClCompile Include="Source\System\System.cpp" />
     <ClCompile Include="Source\World\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Component\CameraComponent.hpp" />
     <ClInclude Include="Source\Component\Component.hpp" />
+    <ClInclude Include="Source\Component\ComponentPool.hpp" />
     <ClInclude Include="Source\Component\FirstPersonComponent.hpp" />
     <ClInclude Include="Source\Component\ComponentMessage.hpp" />
     <ClInclude Include="Source\Component\InputComponent.hpp" />
@@ -47,9 +51,6 @@
     <ClInclude Include="Source\stdafx.hpp" />
     <ClInclude Include="Source\System\System.hpp" />
     <ClInclude Include="Source\World\World.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Source\Component\ModelComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Source\work-log.txt" />

@@ -5,32 +5,15 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: System.hpp
+// File: System.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines System class.
+// Implements System class.
 // ========================================================================= //
 
-#ifndef __SYSTEM_HPP__
-#define __SYSTEM_HPP__
-
-// ========================================================================= //
-
-#include "stdafx.hpp"
-
-// ========================================================================= //
-// Interface class for all Systems.
-class System
-{
-public:
-	
-
-private:
-	
-};
+#include "System.hpp"
 
 // ========================================================================= //
 
-#endif
 
 // ========================================================================= //

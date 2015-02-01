@@ -5,59 +5,54 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: ModelComponent.cpp
+// File: ComponentPool.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements ModelComponent class.
+// Defines ComponentPool class.
 // ========================================================================= //
 
-#include "ComponentMessage.hpp"
+#ifndef __COMPONENTPOOL_HPP__
+#define __COMPONENTPOOL_HPP__
+
+// ========================================================================= //
+
+#include "CameraComponent.hpp"
+#include "FirstPersonComponent.hpp"
+#include "InputComponent.hpp"
 #include "ModelComponent.hpp"
-#include "World/World.hpp"
+#include "SceneComponent.hpp"
 
 // ========================================================================= //
 
-ModelComponent::ModelComponent(void) :
-Component(),
-m_entity(nullptr),
-m_meshFilename()
+template<typename T>
+class ComponentPool
 {
-	this->setName("ModelComponent");
-}
+public:
+	explicit ComponentPool(const int size) :
+		m_pool(new T[size]),
+		m_numActive(0),
+		m_size(size){ 
+	
+	}
+
+	~ComponentPool(void){ 
+		delete[] m_pool;
+	}
+
+	T* create(void){
+		Assert(m_numActive < m_size, "ComponentPool overflow!");
+
+		return &m_pool[m_numActive++];
+	}
+
+private:
+	T* m_pool;
+	int m_numActive;
+	int m_size;
+};
 
 // ========================================================================= //
 
-ModelComponent::~ModelComponent(void)
-{
-
-}
-
-// ========================================================================= //
-
-void ModelComponent::init(EntityPtr entity, World& world)
-{
-	m_entity = world.getSceneManager()->createEntity(m_meshFilename);
-}
-
-// ========================================================================= //
-
-void ModelComponent::destroy(EntityPtr entity, World& world)
-{
-
-}
-
-// ========================================================================= //
-
-void ModelComponent::update(EntityPtr entity, World& world)
-{
-
-}
-
-// ========================================================================= //
-
-void ModelComponent::message(const ComponentMessage& msg)
-{
-
-}
+#endif
 
 // ========================================================================= //

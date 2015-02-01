@@ -55,6 +55,11 @@ A log of all work done on engine.
 * Added pitch limitation in FirstPersonComponent, so the camera can't be pitched to an upside down state.
 * Made World a friend class of EntityPool, added World::update() which iterates through the EntityPool and calls update on each Entity.
 
+== 1/31/15 ==
+* Created ComponentPool generic class. 
+* Added ComponentPool instances to World for each type of Component. This increases coupling here but Component creation can be confined to the World class rather than allowing dynamic allocation on the fly.
+
+
 == TODO ==
 * Add System classes for all components to live in. Factory functions in World should create them.
 * Hide mouse (maybe add CEGUI before this).

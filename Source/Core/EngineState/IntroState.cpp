@@ -53,17 +53,17 @@ void IntroState::enter(void)
 	scene->setSkyDome(true, "Clouds");
 
 	m_player = m_world.createEntity();
-	FirstPersonComponentPtr fpComponent = new FirstPersonComponent();
+	FirstPersonComponentPtr fpComponent = m_world.createFirstPersonComponent();
 	m_player->attachComponent(fpComponent);
-	CameraComponentPtr cameraComponent = new CameraComponent();
+	CameraComponentPtr cameraComponent = m_world.createCameraComponent();
 	m_player->attachComponent(cameraComponent);
-	m_player->attachComponent(new InputComponent());
+	m_player->attachComponent(m_world.createInputComponent());
 	m_player->init(m_world);
 
 	fpComponent->attachCamera(cameraComponent->getCamera());
 
 	EntityPtr ogre = m_world.createEntity();
-	ogre->attachComponent(new SceneComponent());
+	ogre->attachComponent(m_world.createSceneComponent());
 	//ModelComponent* model = new ModelComponent("ogrehead.mesh");
 	//ogre->attachComponent(model);
 

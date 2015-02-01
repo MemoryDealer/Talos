@@ -96,6 +96,15 @@
     <ClCompile Include="Source\Component\InputComponent.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
+    <ClCompile Include="Source\System\System.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\ComponentPool.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\ModelComponent.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\Engine.hpp">
@@ -128,9 +137,6 @@
     <ClInclude Include="Source\Component\SceneComponent.hpp">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Component\ModelComponent.hpp">
-      <Filter>Header Files\Component</Filter>
-    </ClInclude>
     <ClInclude Include="Source\World\World.hpp">
       <Filter>Header Files\World</Filter>
     </ClInclude>
@@ -155,11 +161,12 @@
     <ClInclude Include="Source\Component\InputComponent.hpp">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Source\Component\ModelComponent.cpp">
-      <Filter>Source Files\Component</Filter>
-    </None>
+    <ClInclude Include="Source\Component\ComponentPool.hpp">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\ModelComponent.hpp">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Source\work-log.txt">

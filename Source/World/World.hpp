@@ -17,15 +17,12 @@
 // ========================================================================= //
 
 #include "stdafx.hpp"
+#include "Component/Component.hpp"
+#include "Component/ComponentPool.hpp"
 
 // ========================================================================= //
 
-class System;
-class Entity;
 class EntityPool;
-
-typedef std::vector<std::shared_ptr<System>> SystemList;
-typedef Entity* EntityPtr;
 
 // ========================================================================= //
 // Represents everything in the physical game world. The World holds 
@@ -54,12 +51,15 @@ public:
 	// Calls destroy on Entity and 
 	void destroyEntity(EntityPtr);
 
-	// Creates a Component of the requested type.
-	/*template<typename T>
-	T* createComponent(void);*/
-
 	// Updates every active Entity in the game world.
 	void update(void);
+
+	// Component factory functions.
+	CameraComponentPtr createCameraComponent(void);
+	FirstPersonComponentPtr createFirstPersonComponent(void);
+	InputComponentPtr createInputComponent(void);
+	ModelComponentPtr createModelComponent(void);
+	SceneComponentPtr createSceneComponent(void);
 
 	// Getters:
 
@@ -74,14 +74,42 @@ private:
 	Ogre::SceneManager* m_scene;
 	Ogre::Viewport*	m_viewport;
 
-	// Systems.
-	SystemList m_systems;
+	// Component pools.
+	std::shared_ptr<ComponentPool<CameraComponent>> m_cameraComponentPool;
+	std::shared_ptr<ComponentPool<FirstPersonComponent>> m_firstPersonComponentPool;
+	std::shared_ptr<ComponentPool<InputComponent>> m_inputComponentPool;
+	std::shared_ptr<ComponentPool<ModelComponent>> m_modelComponentPool;
+	std::shared_ptr<ComponentPool<SceneComponent>> m_sceneComponentPool;
 
 	// Entity pool.
 	std::shared_ptr<EntityPool> m_entityPool;
 };
 
 // ========================================================================= //
+
+// Component factory functions:
+
+inline CameraComponentPtr World::createCameraComponent(void){
+	return m_cameraComponentPool->create();
+}
+
+inline FirstPersonComponentPtr World::createFirstPersonComponent(void){
+	return m_firstPersonComponentPool->create();
+}
+
+inline InputComponentPtr World::createInputComponent(void){
+	return m_inputComponentPool->create();
+}
+
+inline ModelComponentPtr World::createModelComponent(void){
+	return m_modelComponentPool->create();
+}
+
+inline SceneComponentPtr World::createSceneComponent(void){
+	return m_sceneComponentPool->create();
+}
+
+// Getters:
 
 inline Ogre::SceneManager* World::getSceneManager(void) const{
 	return m_scene;

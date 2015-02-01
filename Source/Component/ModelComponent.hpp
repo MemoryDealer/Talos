@@ -5,10 +5,10 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: GraphicsComponent.hpp
+// File: ModelComponent.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines GraphicsComponent class.
+// Defines ModelComponent class.
 // ========================================================================= //
 
 #ifndef __MODELCOMPONENT_HPP__
@@ -24,7 +24,7 @@ class ModelComponent : public Component
 {
 public:
 	// Default initializes member data, stores mesh filename.
-	explicit ModelComponent(const std::string&);
+	explicit ModelComponent(void);
 
 	// Empty destructor.
 	virtual ~ModelComponent(void) override;
