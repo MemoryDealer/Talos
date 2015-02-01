@@ -19,8 +19,11 @@
 
 // ========================================================================= //
 // Entry point.
-//INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR args, INT)
+#ifdef _DEBUG
 int main(int argc, char** argv)
+#else
+INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR args, INT)
+#endif
 #else
 int main(int argc, char** argv)
 #endif

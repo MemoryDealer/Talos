@@ -62,10 +62,16 @@ void IntroState::enter(void)
 
 	fpComponent->attachCamera(cameraComponent->getCamera());
 
-	EntityPtr ogre = m_world.createEntity();
-	ogre->attachComponent(m_world.createSceneComponent());
-	//ModelComponent* model = new ModelComponent("ogrehead.mesh");
-	//ogre->attachComponent(model);
+	m_ogre = m_world.createEntity();
+	SceneComponentPtr sceneComponent = m_world.createSceneComponent();
+	m_ogre->attachComponent(sceneComponent);
+	ModelComponent* model = m_world.createModelComponent();
+	model->setMeshFilename("ogrehead.mesh");
+	m_ogre->attachComponent(model);
+	m_ogre->init(m_world);
+
+	sceneComponent->attachObject(model->getOgreEntity());
+	sceneComponent->getSceneNode()->setPosition(0.0f, -10.0f, -50.0f);
 
 	/*Ogre::Entity* e = m_scene->createEntity("OgreHead", "ogrehead.mesh");
 	Ogre::SceneNode* n = m_scene->getRootSceneNode()->createChildSceneNode("head");
@@ -87,6 +93,8 @@ void IntroState::exit(void)
 void IntroState::update(void)
 {
 	m_world.update();
+	static_cast<SceneComponentPtr>(m_ogre->getComponentPtr("SceneComponent"))
+		->getSceneNode()->rotate(Ogre::Vector3::UNIT_Y, Ogre::Degree(1.0));
 }
 
 // ========================================================================= //

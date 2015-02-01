@@ -58,7 +58,7 @@ A log of all work done on engine.
 == 1/31/15 ==
 * Created ComponentPool generic class. 
 * Added ComponentPool instances to World for each type of Component. This increases coupling here but Component creation can be confined to the World class rather than allowing dynamic allocation on the fly.
-
+* Tested an Entity with an ogrehead.mesh ModelComponent. It rotates at the same rate regardless of frame rate, so my update architecture is indeed frame rate indepedent. Just the mouse relative coordinates depend on the frame time.
 
 == TODO ==
 * Add System classes for all components to live in. Factory functions in World should create them.

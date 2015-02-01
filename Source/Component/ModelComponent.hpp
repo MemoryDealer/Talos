@@ -46,6 +46,10 @@ public:
 	// Returns internal Ogre::Entity pointer.
 	Ogre::Entity* getOgreEntity(void) const;
 
+	// Setters:
+
+	void setMeshFilename(const std::string&);
+
 private:
 	Ogre::Entity* m_entity;
 	std::string m_meshFilename;
@@ -57,6 +61,12 @@ private:
 
 inline Ogre::Entity* ModelComponent::getOgreEntity(void) const{
 	return m_entity;
+}
+
+// Setters;
+
+inline void ModelComponent::setMeshFilename(const std::string& name){
+	m_meshFilename = name;
 }
 
 // ========================================================================= //
