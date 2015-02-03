@@ -15,7 +15,6 @@
     <ClCompile Include="Source\Component\Component.cpp" />
     <ClCompile Include="Source\Component\ComponentPool.cpp" />
     <ClCompile Include="Source\Component\FirstPersonComponent.cpp" />
-    <ClCompile Include="Source\Component\InputComponent.cpp" />
     <ClCompile Include="Source\Component\ModelComponent.cpp" />
     <ClCompile Include="Source\Component\SceneComponent.cpp" />
     <ClCompile Include="Source\Core\Assert.cpp" />
@@ -27,6 +26,7 @@
     <ClCompile Include="Source\Entity\Entity.cpp" />
     <ClCompile Include="Source\Entity\EntityPool.cpp" />
     <ClCompile Include="Source\Entity\Player.cpp" />
+    <ClCompile Include="Source\Input\Input.cpp" />
     <ClCompile Include="Source\System\System.cpp" />
     <ClCompile Include="Source\World\World.cpp" />
   </ItemGroup>
@@ -36,7 +36,6 @@
     <ClInclude Include="Source\Component\ComponentPool.hpp" />
     <ClInclude Include="Source\Component\FirstPersonComponent.hpp" />
     <ClInclude Include="Source\Component\ComponentMessage.hpp" />
-    <ClInclude Include="Source\Component\InputComponent.hpp" />
     <ClInclude Include="Source\Component\ModelComponent.hpp" />
     <ClInclude Include="Source\Component\SceneComponent.hpp" />
     <ClInclude Include="Source\Core\Assert.hpp" />
@@ -48,6 +47,7 @@
     <ClInclude Include="Source\Entity\Entity.hpp" />
     <ClInclude Include="Source\Entity\EntityPool.hpp" />
     <ClInclude Include="Source\Entity\Player.hpp" />
+    <ClInclude Include="Source\Input\Input.hpp" />
     <ClInclude Include="Source\stdafx.hpp" />
     <ClInclude Include="Source\System\System.hpp" />
     <ClInclude Include="Source\World\World.hpp" />

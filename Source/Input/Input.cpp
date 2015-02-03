@@ -5,48 +5,60 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: InputComponent.hpp
+// File: Input.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines InputComponent class.
+// Implements Input class.
 // ========================================================================= //
 
-#ifndef __INPUTCOMPONENT_HPP__
-#define __INPUTCOMPONENT_HPP__
+#include "Component/ComponentMessage.hpp"
+#include "Entity/Entity.hpp"
+#include "Input.hpp"
 
 // ========================================================================= //
 
-#include "Component.hpp"
-
-// ========================================================================= //
-// Processes input using SDL library.
-class InputComponent : public Component
+Input::Input(void) :
+m_player(nullptr),
+m_gui(nullptr)
 {
-public:
-	// Sets the Component name.
-	explicit InputComponent(void);
 
-	// Empty destructor.
-	virtual ~InputComponent(void) override;
-
-	// Empty.
-	virtual void init(EntityPtr, World&) override;
-
-	// Empty.
-	virtual void destroy(EntityPtr, World&) override;
-
-	// Detects input and messages the Entity.
-	virtual void update(EntityPtr, World&) override;
-
-	// Empty.
-	virtual void message(const ComponentMessage&) override;
-
-private:
-
-};
+}
 
 // ========================================================================= //
 
-#endif
+Input::~Input(void)
+{
+
+}
+
+// ========================================================================= //
+
+void Input::handle(const SDL_Event& e)
+{
+	ComponentMessage msg;
+
+	switch (e.type){
+	default:
+		break;
+
+	case SDL_MOUSEBUTTONDOWN:
+
+		break;
+
+	case SDL_MOUSEBUTTONUP:
+
+		break;
+
+	case SDL_MOUSEMOTION:
+		msg.type = ComponentMessageType::INPUT_MOUSE_MOTION;
+		msg.mouse.x = e.motion.xrel;
+		msg.mouse.y = e.motion.yrel;
+		msg.mouse.absx = e.motion.x;
+		msg.mouse.absy = e.motion.y;
+
+		m_player->message(msg);
+		break;
+	}
+}
 
 // ========================================================================= //

@@ -68,11 +68,14 @@ A log of all work done on engine.
 * Synced the CEGUI mouse position using GUIContext::injectMousePosition().
 * Removed window creation from Ogre and let SDL create the window. This way, I have more control over mouse behavior without having to resort to Win32 API. So I can now lock the mouse at the center for camera movement. It can be
 	disable for using the GUI. After the SDL_Window is created, Ogre calls Root::createRenderWindow() using a window handle parameter retrieved from the SDL_Window. 
-	The call to CEGUI::OgreRenderer::bootstrapSystem() also needs a dereferenced Root::getRenderTarget("window name") for initialization. 
+	The call to CEGUI::OgreRenderer::bootstrapSystem() also needs a dereferenced Root::getRenderTarget("window name") for initialization.
+* Added Input class which takes SDL events and handles them, for player input and GUI input.
+* Removed InputComponent as the new Input class takes over. 
 
 == TODO ==
+* Add Observer class to Engine to monitor states.
+* Add Null object pattern to Input.
 * Add System classes for all components to live in. Factory functions in World should create them.
-* Hide mouse (maybe add CEGUI before this).
 * Alphabetize includes everywhere. Folder name is first if in a folder.
 * Make Entity final? Still not sure if I should allow subclassing for convenience. Entities could be data-driven?
 * Mouse camera movement is frame rate dependent.

@@ -24,7 +24,6 @@
 class Component;
 class CameraComponent;
 class FirstPersonComponent;
-class InputComponent;
 class ModelComponent;
 class SceneComponent;
 // Other forward declarations.
@@ -35,7 +34,6 @@ class World;
 typedef Component* ComponentPtr;
 typedef CameraComponent* CameraComponentPtr;
 typedef FirstPersonComponent* FirstPersonComponentPtr;
-typedef InputComponent* InputComponentPtr;
 typedef ModelComponent* ModelComponentPtr;
 typedef SceneComponent* SceneComponentPtr;
 typedef Entity* EntityPtr;

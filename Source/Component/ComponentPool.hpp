@@ -18,7 +18,6 @@
 
 #include "CameraComponent.hpp"
 #include "FirstPersonComponent.hpp"
-#include "InputComponent.hpp"
 #include "ModelComponent.hpp"
 #include "SceneComponent.hpp"
 

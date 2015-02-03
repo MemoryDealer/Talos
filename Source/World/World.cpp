@@ -13,7 +13,6 @@
 
 #include "Component/CameraComponent.hpp"
 #include "Component/FirstPersonComponent.hpp"
-#include "Component/InputComponent.hpp"
 #include "Component/ModelComponent.hpp"
 #include "Component/SceneComponent.hpp"
 #include "Entity/EntityPool.hpp"
@@ -28,7 +27,6 @@ m_viewport(nullptr),
 m_entityPool(nullptr),
 m_cameraComponentPool(nullptr),
 m_firstPersonComponentPool(nullptr),
-m_inputComponentPool(nullptr),
 m_modelComponentPool(nullptr),
 m_sceneComponentPool(nullptr)
 {
@@ -57,7 +55,6 @@ void World::init(void)
 	m_cameraComponentPool.reset(new ComponentPool<CameraComponent>(5));
 	m_firstPersonComponentPool.reset(new ComponentPool<FirstPersonComponent>
 									 (5));
-	m_inputComponentPool.reset(new ComponentPool<InputComponent>(5));
 	m_modelComponentPool.reset(new ComponentPool<ModelComponent>(1024));
 	m_sceneComponentPool.reset(new ComponentPool<SceneComponent>(1024));
 }

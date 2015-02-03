@@ -16,9 +16,10 @@
 
 // ========================================================================= //
 
-#include "stdafx.hpp"
 #include "Component/Component.hpp"
 #include "Component/ComponentPool.hpp"
+#include "Input/Input.hpp"
+#include "stdafx.hpp"
 
 // ========================================================================= //
 
@@ -61,7 +62,6 @@ public:
 	// Component factory functions.
 	CameraComponentPtr createCameraComponent(void);
 	FirstPersonComponentPtr createFirstPersonComponent(void);
-	InputComponentPtr createInputComponent(void);
 	ModelComponentPtr createModelComponent(void);
 	SceneComponentPtr createSceneComponent(void);
 
@@ -72,6 +72,9 @@ public:
 
 	// Returns pointer to the Ogre::Viewport for this world.
 	Ogre::Viewport* getViewport(void) const;
+
+	// Returns reference to internal Input instance.
+	Input& getInput(void);
 
 	// === // 
 
@@ -89,12 +92,14 @@ private:
 	// Component pools.
 	std::shared_ptr<ComponentPool<CameraComponent>> m_cameraComponentPool;
 	std::shared_ptr<ComponentPool<FirstPersonComponent>> m_firstPersonComponentPool;
-	std::shared_ptr<ComponentPool<InputComponent>> m_inputComponentPool;
 	std::shared_ptr<ComponentPool<ModelComponent>> m_modelComponentPool;
 	std::shared_ptr<ComponentPool<SceneComponent>> m_sceneComponentPool;
 
 	// Entity pool.
 	std::shared_ptr<EntityPool> m_entityPool;
+
+	// Input component.
+	Input m_input;
 };
 
 // ========================================================================= //
@@ -114,10 +119,6 @@ inline FirstPersonComponentPtr World::createFirstPersonComponent(void){
 	return m_firstPersonComponentPool->create();
 }
 
-inline InputComponentPtr World::createInputComponent(void){
-	return m_inputComponentPool->create();
-}
-
 inline ModelComponentPtr World::createModelComponent(void){
 	return m_modelComponentPool->create();
 }
@@ -134,6 +135,10 @@ inline Ogre::SceneManager* World::getSceneManager(void) const{
 
 inline Ogre::Viewport* World::getViewport(void) const{
 	return m_viewport;
+}
+
+inline Input& World::getInput(void){
+	return m_input;
 }
 
 // ========================================================================= //

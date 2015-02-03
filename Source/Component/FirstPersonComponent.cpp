@@ -78,7 +78,7 @@ void FirstPersonComponent::update(EntityPtr, World&)
 
 void FirstPersonComponent::message(const ComponentMessage& msg)
 {
-	const Ogre::Real sens = 0.8f;
+	const Ogre::Real sens = 0.2f;
 
 	switch (msg.type){
 	default:

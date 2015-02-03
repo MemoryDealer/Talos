@@ -14,10 +14,10 @@
 #include "Component/ComponentMessage.hpp"
 #include "Component/CameraComponent.hpp"
 #include "Component/FirstPersonComponent.hpp"
-#include "Component/InputComponent.hpp"
 #include "Component/ModelComponent.hpp"
 #include "Component/SceneComponent.hpp"
 #include "Entity/Player.hpp"
+#include "Input/Input.hpp"
 #include "IntroState.hpp"
 #include "World/World.hpp"
 
@@ -41,11 +41,9 @@ IntroState::~IntroState(void)
 void IntroState::enter(void)
 {
 	m_active = true;
-
-	// Create scene manager.
-	// @TODO: Move viewport injection to Engine.
 	m_world.init();
 
+	// Create scene manager.
 	Ogre::SceneManager* scene = m_world.getSceneManager();
 
 	scene->setAmbientLight(Ogre::ColourValue::White);
@@ -57,10 +55,12 @@ void IntroState::enter(void)
 	m_player->attachComponent(fpComponent);
 	CameraComponentPtr cameraComponent = m_world.createCameraComponent();
 	m_player->attachComponent(cameraComponent);
-	m_player->attachComponent(m_world.createInputComponent());
 	m_player->init(m_world);
 
 	fpComponent->attachCamera(cameraComponent->getCamera());
+
+	// Set player pointer for input manager.
+	m_world.getInput().setPlayer(m_player);
 
 	m_ogre = m_world.createEntity();
 	SceneComponentPtr sceneComponent = m_world.createSceneComponent();
@@ -107,6 +107,25 @@ void IntroState::update(void)
 	/*CEGUI::System::getSingleton().getDefaultGUIContext().
 		injectMousePosition(static_cast<float>(msg.mouse.absx),
 		static_cast<float>(msg.mouse.absy));*/
+
+	// Poll SDL for events.
+	SDL_Event e;
+	ComponentMessage msg;
+	while (SDL_PollEvent(&e)){
+		switch (e.type){
+		default:
+			break;
+
+		case SDL_MOUSEBUTTONDOWN:
+		case SDL_MOUSEBUTTONUP:
+		case SDL_MOUSEMOTION:
+		case SDL_KEYDOWN:
+		case SDL_KEYUP:
+			m_world.getInput().handle(e);
+			break;
+
+		}
+	}
 }
 
 // ========================================================================= //

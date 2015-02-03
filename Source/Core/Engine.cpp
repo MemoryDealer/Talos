@@ -60,7 +60,7 @@ bool Engine::init(void)
 	if (!(rs->getName() == "OpenGL Rendering Subsystem")){
 		return false;
 	}
-	m_root->setRenderSystem(rs);
+	m_root->setRenderSystem(rs);	
 
 	// Initialize Ogre root with render system.
 	m_root->initialise(false);
@@ -101,6 +101,7 @@ bool Engine::init(void)
 
 	Ogre::NameValuePairList params;
 	params["externalWindowHandle"] = wHandle;
+	params["vsync"] = "true";
 	m_renderWindow = m_root->createRenderWindow("Engine",
 												width,
 												height,
