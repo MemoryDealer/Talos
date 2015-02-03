@@ -21,8 +21,8 @@
 
 // ========================================================================= //
 
-typedef std::stack<std::shared_ptr<EngineState>> EngineStateStack;
-typedef std::vector<std::shared_ptr<EngineState>> EngineStateList;
+typedef std::stack<EngineStatePtr> EngineStateStack;
+typedef std::vector<EngineStatePtr> EngineStateList;
 
 // ========================================================================= //
 // Holds rendering components, manages engine state stack.
@@ -71,6 +71,9 @@ private:
 	Ogre::Viewport*	m_viewport;
 	Ogre::Log* m_log;
 	std::shared_ptr<Ogre::Timer> m_timer; // The core engine timer.
+
+	// CEGUI components.
+	CEGUI::OgreRenderer* m_ceguiRenderer;
 
 	// State management.
 	EngineStateList m_states;

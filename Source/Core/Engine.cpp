@@ -14,6 +14,7 @@
 #include "Engine.hpp"
 #include "EngineState/IntroState.hpp"
 #include "Resources.hpp"
+#include "World/World.hpp"
 
 // ========================================================================= //
 
@@ -23,6 +24,7 @@ m_renderWindow(nullptr),
 m_viewport(nullptr),
 m_log(nullptr),
 m_timer(nullptr),
+m_ceguiRenderer(nullptr),
 m_states(),
 m_stateStack(),
 m_active(false)
@@ -90,6 +92,23 @@ bool Engine::init(void)
 
 	// === //
 
+	// CEGUI:
+
+	// Bootstrap the rendering system.
+	m_ceguiRenderer = &CEGUI::OgreRenderer::bootstrapSystem();
+
+	// Setup default CEGUI skins.
+	// @TODO: Load from config file.
+	CEGUI::SchemeManager::getSingleton().createFromFile(
+		"AlfiskoSkin.scheme");
+	CEGUI::FontManager::getSingleton().createFromFile("DejaVuSans-10.font");
+	CEGUI::System::getSingleton().getDefaultGUIContext().
+		setDefaultFont("DejaVuSans-10");
+	CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().
+		setDefaultImage("AlfiskoSkin/MouseArrow");
+
+	// === //
+
 	// Engine:
 
 	// Register all needed game states.
@@ -137,6 +156,10 @@ void Engine::start(const EngineStateID id)
 				lag -= MS_PER_UPDATE;
 			}
 
+			// Update CEGUI.
+			CEGUI::System::getSingleton().
+				injectTimePulse(static_cast<float>(lag / MS_PER_UPDATE));
+
 			// Render the updated frame.
 			m_root->renderOneFrame(Ogre::Real(lag / MS_PER_UPDATE));
 		}
@@ -147,7 +170,7 @@ void Engine::start(const EngineStateID id)
 
 void Engine::registerState(const EngineStateID id)
 {
-	std::shared_ptr<EngineState> state(nullptr);
+	EngineStatePtr state(nullptr);
 
 	switch (id){
 	default:
@@ -160,8 +183,13 @@ void Engine::registerState(const EngineStateID id)
 
 	Assert(state != nullptr, "Test");
 
-	// Add dependencies and register in state list.
-	state->injectDependencies(m_root, m_viewport);
+	// Add dependencies.
+	World::Dependencies deps;
+	deps.root = m_root;
+	deps.viewport = m_viewport;
+	state->getWorld().injectDependencies(deps);
+
+	// Add state to list of states.
 	m_states.push_back(state);
 }
 
@@ -172,7 +200,7 @@ void Engine::pushState(const EngineStateID id)
 	Assert(id < Engine::StateID::NUM_STATES, "Invalid EngineStateID");
 
 	// Get a pointer to the specified state.
-	std::shared_ptr<EngineState> state = m_states[id];
+	EngineStatePtr state = m_states[id];
 
 	m_stateStack.push(state);
 
@@ -184,7 +212,7 @@ void Engine::pushState(const EngineStateID id)
 
 void Engine::popState(void)
 {
-	std::shared_ptr<EngineState> state = m_stateStack.top();
+	EngineStatePtr state = m_stateStack.top();
 	state->exit();
 
 	m_stateStack.pop();

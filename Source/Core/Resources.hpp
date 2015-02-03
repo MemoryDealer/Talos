@@ -18,6 +18,9 @@
 // Parses resource config file and loads all resources.
 extern void loadOgreResources(void);
 
+// Sets the resource groups for CEGUI.
+extern void loadCEGUIResources(void);
+
 // ========================================================================= //
 
 #endif

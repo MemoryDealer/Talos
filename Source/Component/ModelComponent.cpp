@@ -19,8 +19,7 @@
 
 ModelComponent::ModelComponent(void) :
 Component(),
-m_entity(nullptr),
-m_meshFilename()
+m_entity(nullptr)
 {
 	this->setName("ModelComponent");
 }
@@ -36,7 +35,7 @@ ModelComponent::~ModelComponent(void)
 
 void ModelComponent::init(EntityPtr entity, World& world)
 {
-	m_entity = world.getSceneManager()->createEntity(m_meshFilename);
+	m_entity = world.getSceneManager()->createEntity(m_filename);
 }
 
 // ========================================================================= //

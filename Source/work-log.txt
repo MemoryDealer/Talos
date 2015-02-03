@@ -60,9 +60,18 @@ A log of all work done on engine.
 * Added ComponentPool instances to World for each type of Component. This increases coupling here but Component creation can be confined to the World class rather than allowing dynamic allocation on the fly.
 * Tested an Entity with an ogrehead.mesh ModelComponent. It rotates at the same rate regardless of frame rate, so my update architecture is indeed frame rate indepedent. Just the mouse relative coordinates depend on the frame time.
 
+== 2/2/15 ==
+* Removed EngineState::injectDepedencies and created World::injecteDependencies. It's called in Engine::registerState().
+* Added World::Dependencies struct for easy parameter passing and change if needed.
+* Started integrating CEGUI. Turns out after compiling CEGUi it generated three headers (Config.h, ModuleConfig.h, and Version.h) which should be copied to the main include directory for CEGUI.
+* Got a basic CEGUI window setup inside the viewport.
+* Synced the CEGUI mouse position using GUIContext::injectMousePosition().
+
 == TODO ==
 * Add System classes for all components to live in. Factory functions in World should create them.
 * Hide mouse (maybe add CEGUI before this).
 * Alphabetize includes everywhere. Folder name is first if in a folder.
 * Make Entity final? Still not sure if I should allow subclassing for convenience. Entities could be data-driven?
 * Mouse camera movement is frame rate dependent.
+* Change std::string id system for components to an enum int system to save memory and CPU cycles.
+* Implement config file loading for options in Engine::init() and others.

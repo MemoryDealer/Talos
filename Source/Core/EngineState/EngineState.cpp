@@ -30,12 +30,3 @@ EngineState::~EngineState(void)
 }
 
 // ========================================================================= //
-
-void EngineState::injectDependencies(Ogre::Root* root, 
-	Ogre::Viewport* viewport)
-{
-	m_root = root;
-	m_viewport = viewport;
-}
-
-// ========================================================================= //

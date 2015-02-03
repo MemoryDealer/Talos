@@ -61,6 +61,8 @@ void InputComponent::update(EntityPtr entity, World& world)
 			// Store mouse's relative movement.
 			msg.mouse.x = e.motion.xrel;
 			msg.mouse.y = e.motion.yrel;
+			msg.mouse.absx = e.motion.x;
+			msg.mouse.absy = e.motion.y;
 			break;
 
 		case SDL_KEYDOWN:

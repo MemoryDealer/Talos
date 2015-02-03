@@ -22,6 +22,7 @@
 // ========================================================================= //
 
 World::World(void) :
+m_root(nullptr),
 m_scene(nullptr),
 m_viewport(nullptr),
 m_entityPool(nullptr),
@@ -43,10 +44,9 @@ World::~World(void)
 
 // ========================================================================= //
 
-void World::init(Ogre::Root* root, Ogre::Viewport* viewport)
+void World::init(void)
 {
-	m_scene = root->createSceneManager(Ogre::ST_GENERIC);
-	m_viewport = viewport;
+	m_scene = m_root->createSceneManager(Ogre::ST_GENERIC);
 
 	// Allocate Entity pool.
 	// @TODO: Read pool size from config file.
@@ -64,9 +64,9 @@ void World::init(Ogre::Root* root, Ogre::Viewport* viewport)
 
 // ========================================================================= //
 
-void World::destroy(Ogre::Root* root)
+void World::destroy(void)
 {
-	root->destroySceneManager(m_scene);
+	m_root->destroySceneManager(m_scene);
 }
 
 // ========================================================================= //
@@ -85,21 +85,10 @@ void World::destroyEntity(EntityPtr e)
 
 // ========================================================================= //
 
-//template<typename T>
-//T* World::createComponent(void)
-//{
-//
-//}
-//
-//// Explicitly instantiate template functions for each Component type.
-//template CameraComponentPtr World::createComponent<CameraComponent>(void);
-
-// ========================================================================= //
-
 void World::update(void)
 {
 	for (int i = 0; i < m_entityPool->m_poolSize; ++i){
-		m_entityPool->m_pool[i].update(*this);
+		m_entityPool->m_pool[i].update(*this); // Dereference self.
 	}
 }
 

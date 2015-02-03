@@ -48,11 +48,12 @@ public:
 
 	// Setters:
 
+	// Sets internal filename of .mesh model.
 	void setMeshFilename(const std::string&);
 
 private:
 	Ogre::Entity* m_entity;
-	std::string m_meshFilename;
+	std::string m_filename; // Filename of .mesh model.
 };
 
 // ========================================================================= //
@@ -63,10 +64,10 @@ inline Ogre::Entity* ModelComponent::getOgreEntity(void) const{
 	return m_entity;
 }
 
-// Setters;
+// Setters:
 
-inline void ModelComponent::setMeshFilename(const std::string& name){
-	m_meshFilename = name;
+inline void ModelComponent::setMeshFilename(const std::string& filename){
+	m_filename = filename;
 }
 
 // ========================================================================= //

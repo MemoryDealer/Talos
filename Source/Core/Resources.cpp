@@ -51,3 +51,14 @@ void loadOgreResources(void)
 }
 
 // ========================================================================= //
+
+void loadCEGUIResources(void)
+{	
+	CEGUI::ImageManager::setImagesetDefaultResourceGroup("Imagesets");
+	CEGUI::Font::setDefaultResourceGroup("Fonts");
+	CEGUI::Scheme::setDefaultResourceGroup("Schemes");
+	CEGUI::WidgetLookManager::setDefaultResourceGroup("LookNFeel");
+	CEGUI::WindowManager::setDefaultResourceGroup("Layouts");
+}
+
+// ========================================================================= //

@@ -21,6 +21,9 @@
 
 // ========================================================================= //
 
+class EngineState;
+
+typedef std::shared_ptr<EngineState> EngineStatePtr;
 typedef unsigned int EngineStateID;
 
 // ========================================================================= //
@@ -35,9 +38,6 @@ public:
 	// Frees any data allocated by member variables.
 	virtual ~EngineState(void) = 0;
 
-	// Passes pointers to objects that are needed by each state.
-	void injectDependencies(Ogre::Root*, Ogre::Viewport*);
-
 	// Initializes state-specific data when it's entered.
 	virtual void enter(void) = 0;
 
@@ -49,7 +49,7 @@ public:
 
 	// Getters:
 
-
+	World& getWorld(void) const;
 
 protected:
 	// Ogre3D components.
@@ -65,7 +65,9 @@ protected:
 
 // Getters:
 
-
+inline World& EngineState::getWorld(void) const{
+	return const_cast<World&>(m_world);
+}
 
 // ========================================================================= //
 

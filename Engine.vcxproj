@@ -84,12 +84,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(OGRE_SDK)\include;$(OGRE_BUILD)\include;$(BOOST_ROOT);$(SDL)\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(OGRE_SDK)\lib;$(BOOST_LIB);$(SDL)\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(OGRE_SDK)\include;$(OGRE_BUILD)\include;$(BOOST_ROOT);$(SDL)\include;$(CEGUI_HEADER)\include;E:\Engine\cegui\cegui\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(OGRE_SDK)\lib;$(BOOST_LIB);$(SDL)\lib\x86;$(CEGUI_LIB);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(OGRE_SDK)\include;$(OGRE_BUILD)\include;$(BOOST_ROOT);$(SDL)\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(OGRE_SDK)\lib;$(BOOST_LIB);$(SDL)\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(OGRE_SDK)\include;$(OGRE_BUILD)\include;$(BOOST_ROOT);$(SDL)\include;$(CEGUI_HEADER)\include;E:\Engine\cegui\cegui\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(OGRE_SDK)\lib;$(BOOST_LIB);$(SDL)\lib\x86;$(CEGUI_LIB);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -102,7 +102,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OgreMain_d.lib;RenderSystem_Direct3D11_d.lib;RenderSystem_GL_d.lib;Plugin_OctreeSceneManager_d.lib;SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OgreMain_d.lib;RenderSystem_Direct3D11_d.lib;RenderSystem_GL_d.lib;Plugin_OctreeSceneManager_d.lib;SDL2.lib;SDL2main.lib;CEGUIBase-0_d.lib;CEGUIOgreRenderer-0_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <Bscmake>
@@ -124,7 +124,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>OgreMain.lib;RenderSystem_Direct3D11.lib;RenderSystem_GL.lib;Plugin_OctreeSceneManager.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OgreMain.lib;RenderSystem_Direct3D11.lib;RenderSystem_GL.lib;Plugin_OctreeSceneManager.lib;SDL2.lib;CEGUIBase.lib;CEGUIOgreRenderer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -36,6 +36,8 @@ struct ComponentMessage{
 		struct{
 			int x;
 			int y;
+			int absx;
+			int absy;
 		} mouse;
 	};
 };

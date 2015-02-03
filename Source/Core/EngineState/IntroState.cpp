@@ -44,7 +44,7 @@ void IntroState::enter(void)
 
 	// Create scene manager.
 	// @TODO: Move viewport injection to Engine.
-	m_world.init(m_root, m_viewport);
+	m_world.init();
 
 	Ogre::SceneManager* scene = m_world.getSceneManager();
 
@@ -73,11 +73,18 @@ void IntroState::enter(void)
 	sceneComponent->attachObject(model->getOgreEntity());
 	sceneComponent->getSceneNode()->setPosition(0.0f, -10.0f, -50.0f);
 
-	/*Ogre::Entity* e = m_scene->createEntity("OgreHead", "ogrehead.mesh");
-	Ogre::SceneNode* n = m_scene->getRootSceneNode()->createChildSceneNode("head");
-	n->attachObject(e);
-	n->setPosition(Ogre::Vector3(0.0, 0.0, 0.0));*/
-	
+	// Setup GUI.
+	CEGUI::WindowManager& wmgr = CEGUI::WindowManager::getSingleton();
+	CEGUI::Window* root = wmgr.createWindow("DefaultWindow", "root");
+	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(root);
+
+	CEGUI::FrameWindow* fwnd = static_cast<CEGUI::FrameWindow*>(
+		wmgr.createWindow("AlfiskoSkin/FrameWindow", "testWindow"));
+	root->addChild(fwnd);
+	fwnd->setPosition(CEGUI::UVector2(CEGUI::UDim(0.25f, 0.0f),
+		CEGUI::UDim(0.25f, 0.0f)));
+	fwnd->setSize(CEGUI::USize(CEGUI::UDim(0.5f, 0.0f), CEGUI::UDim(0.5f, 0.0f)));
+	fwnd->setText("Hello world!");
 }
 
 // ========================================================================= //
@@ -85,7 +92,7 @@ void IntroState::enter(void)
 void IntroState::exit(void)
 {
 	m_player->destroy(m_world);
-	m_world.destroy(m_root);
+	m_world.destroy();
 }
 
 // ========================================================================= //

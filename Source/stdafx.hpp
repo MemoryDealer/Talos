@@ -25,6 +25,10 @@
 // SDL.
 #include <SDL.h>
 
+// CEGUI.
+#include <CEGUI/CEGUI.h>
+#include <CEGUI/RendererModules/Ogre/Renderer.h>
+
 // My own files.
 #include "Core/HelperFunctions.hpp"
 #include "Core/Assert.hpp"

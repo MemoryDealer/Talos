@@ -37,11 +37,15 @@ public:
 	// Empty destructor.
 	~World(void);
 
+	// Passes needed dependencies into World.
+	struct Dependencies;
+	void injectDependencies(const Dependencies&);
+
 	// Allocates the Ogre::SceneManager.
-	void init(Ogre::Root*, Ogre::Viewport*);
+	void init(void);
 
 	// De-allocates all data.
-	void destroy(Ogre::Root*);
+	void destroy(void);
 
 	// Entity pool functions:
 
@@ -69,8 +73,16 @@ public:
 	// Returns pointer to the Ogre::Viewport for this world.
 	Ogre::Viewport* getViewport(void) const;
 
+	// === // 
+
+	struct Dependencies{
+		Ogre::Root* root;
+		Ogre::Viewport* viewport;
+	};
+
 private:
 	// Ogre3D.
+	Ogre::Root* m_root;
 	Ogre::SceneManager* m_scene;
 	Ogre::Viewport*	m_viewport;
 
@@ -86,6 +98,11 @@ private:
 };
 
 // ========================================================================= //
+
+inline void World::injectDependencies(const Dependencies& deps){
+	m_root = deps.root;
+	m_viewport = deps.viewport;
+}
 
 // Component factory functions:
 
