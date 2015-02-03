@@ -24,6 +24,7 @@ m_renderWindow(nullptr),
 m_viewport(nullptr),
 m_log(nullptr),
 m_timer(nullptr),
+m_sdlWindow(nullptr),
 m_ceguiRenderer(nullptr),
 m_states(),
 m_stateStack(),
@@ -45,7 +46,7 @@ bool Engine::init(void)
 {
 	// === //
 
-	// Ogre3D:
+	// Ogre3D and SDL:
 
 	// Create logging system.
 	Ogre::LogManager* logMgr = new Ogre::LogManager();
@@ -54,48 +55,78 @@ bool Engine::init(void)
 	// Initialize Ogre's root component.
 	m_root = new Ogre::Root();
 
-	// Prompt the user with config dialog.
-	if (!m_root->showConfigDialog()){
+	// Set render system.
+	Ogre::RenderSystem* rs = m_root->getRenderSystemByName("OpenGL Rendering Subsystem");
+	if (!(rs->getName() == "OpenGL Rendering Subsystem")){
 		return false;
 	}
+	m_root->setRenderSystem(rs);
 
-	// Initialize render window.
-	m_renderWindow = m_root->initialise(true, "Engine");
-
-	// Initialize viewport for render window.
-	m_viewport = m_renderWindow->addViewport(nullptr);
-	m_viewport->setBackgroundColour(Ogre::ColourValue::Black);
-
-	// Activate the render window.
-	m_renderWindow->setActive(true);
-
-	// Load resources for Ogre (from Resources.hpp).
-	loadOgreResources();
-
-	// Allocate the main timer.
-	m_timer.reset(new Ogre::Timer());
-	m_timer->reset(); // Activate timer.
-
-	// === //
-
-	// SDL:
+	// Initialize Ogre root with render system.
+	m_root->initialise(false);
 
 	// Initialize SDL.
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) != 0){
 		return false;
 	}
 
-	// Associate the Ogre3D window with the SDL_Window.
-	unsigned long data = 0;
-	m_renderWindow->getCustomAttribute("WINDOW", &data);
-	SDL_Window* w = SDL_CreateWindowFrom(reinterpret_cast<void*>(data));
+	// Create the main window with SDL.
+	const int width = 1024;
+	const int height = 768;
+	m_sdlWindow = SDL_CreateWindow(
+		"Engine",
+		SDL_WINDOWPOS_CENTERED,
+		SDL_WINDOWPOS_CENTERED,
+		width,
+		height,
+		SDL_WINDOW_RESIZABLE);
+
+	// Bind mouse to window.
+	SDL_SetRelativeMouseMode(SDL_TRUE);
+
+	// Give the window handle to Ogre.
+	SDL_SysWMinfo wmInfo;
+	SDL_GetVersion(&wmInfo.version);
+	if (SDL_GetWindowWMInfo(m_sdlWindow, &wmInfo) == SDL_FALSE){
+		return false;
+	}
+	Ogre::String wHandle;
+#ifdef WIN32
+	wHandle = Ogre::StringConverter::toString(
+		reinterpret_cast<unsigned long>(wmInfo.info.win.window));
+#elif __LINUX__
+	wHandle = Ogre::StringConverter::toString(
+		reinterpret_cast<unsigned long>(wmInfo.info.x11.window));
+#endif
+
+	Ogre::NameValuePairList params;
+	params["externalWindowHandle"] = wHandle;
+	m_renderWindow = m_root->createRenderWindow("Engine",
+												width,
+												height,
+												false,
+												&params);
+
+	// Initialize Ogre viewport for render window.
+	m_viewport = m_renderWindow->addViewport(nullptr);
+	m_viewport->setBackgroundColour(Ogre::ColourValue::Black);
+
+	// Activate the  Ogre render window.
+	m_renderWindow->setActive(true);
+
+	// Load resources for Ogre (from Resources.hpp).
+	loadOgreResources();
+
+	// Allocate the main Ogre timer.
+	m_timer.reset(new Ogre::Timer());
+	m_timer->reset(); // Activate timer.
 
 	// === //
 
 	// CEGUI:
 
 	// Bootstrap the rendering system.
-	m_ceguiRenderer = &CEGUI::OgreRenderer::bootstrapSystem();
+	m_ceguiRenderer = &CEGUI::OgreRenderer::bootstrapSystem(*(m_root->getRenderTarget("Engine")));
 
 	// Setup default CEGUI skins.
 	// @TODO: Load from config file.
@@ -143,7 +174,6 @@ void Engine::start(const EngineStateID id)
 
 		// Update the engine if the render window is active.
 		if (m_renderWindow->isActive()){
-
 			double current = m_timer->getMilliseconds();
 			double elapsed = current - prev;
 			prev = current;

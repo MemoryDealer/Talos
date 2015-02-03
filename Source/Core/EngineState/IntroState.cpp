@@ -102,6 +102,11 @@ void IntroState::update(void)
 	m_world.update();
 	static_cast<SceneComponentPtr>(m_ogre->getComponentPtr("SceneComponent"))
 		->getSceneNode()->rotate(Ogre::Vector3::UNIT_Y, Ogre::Degree(1.0));
+
+	//! @HACK
+	/*CEGUI::System::getSingleton().getDefaultGUIContext().
+		injectMousePosition(static_cast<float>(msg.mouse.absx),
+		static_cast<float>(msg.mouse.absy));*/
 }
 
 // ========================================================================= //

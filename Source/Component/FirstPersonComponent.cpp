@@ -116,11 +116,6 @@ void FirstPersonComponent::message(const ComponentMessage& msg)
 						0.f));
 				}
 			}
-
-			//! @HACK
-			CEGUI::System::getSingleton().getDefaultGUIContext().
-				injectMousePosition(static_cast<float>(msg.mouse.absx), 
-				static_cast<float>(msg.mouse.absy));
 		}
 		break;
 	}

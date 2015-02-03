@@ -72,6 +72,9 @@ private:
 	Ogre::Log* m_log;
 	std::shared_ptr<Ogre::Timer> m_timer; // The core engine timer.
 
+	// SDL components.
+	SDL_Window* m_sdlWindow;
+
 	// CEGUI components.
 	CEGUI::OgreRenderer* m_ceguiRenderer;
 

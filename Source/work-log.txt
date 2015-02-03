@@ -66,6 +66,9 @@ A log of all work done on engine.
 * Started integrating CEGUI. Turns out after compiling CEGUi it generated three headers (Config.h, ModuleConfig.h, and Version.h) which should be copied to the main include directory for CEGUI.
 * Got a basic CEGUI window setup inside the viewport.
 * Synced the CEGUI mouse position using GUIContext::injectMousePosition().
+* Removed window creation from Ogre and let SDL create the window. This way, I have more control over mouse behavior without having to resort to Win32 API. So I can now lock the mouse at the center for camera movement. It can be
+	disable for using the GUI. After the SDL_Window is created, Ogre calls Root::createRenderWindow() using a window handle parameter retrieved from the SDL_Window. 
+	The call to CEGUI::OgreRenderer::bootstrapSystem() also needs a dereferenced Root::getRenderTarget("window name") for initialization. 
 
 == TODO ==
 * Add System classes for all components to live in. Factory functions in World should create them.

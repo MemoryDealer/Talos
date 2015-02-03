@@ -24,6 +24,7 @@
 
 // SDL.
 #include <SDL.h>
+#include <SDL_syswm.h>
 
 // CEGUI.
 #include <CEGUI/CEGUI.h>
