@@ -16,8 +16,9 @@
 
 // ========================================================================= //
 
-#include "World/World.hpp"
+#include "Observer/Subject.hpp"
 #include "stdafx.hpp"
+#include "World/World.hpp"
 
 // ========================================================================= //
 
@@ -49,12 +50,21 @@ public:
 
 	// Getters:
 
-	World& getWorld(void) const;
+	// Returns Subject for adding Observer objects.
+	Subject& getSubject(void);
+
+	// Returns World for injecting dependencies in Engine.
+	World& getWorld(void);
+
+	// Setters:
+
+	// Sets state to active or not. If true, the state will update itself.
+	// Otherwise no updates will be performed.
+	void setActive(const bool);
 
 protected:
-	// Ogre3D components.
-	Ogre::Root*	m_root; // Each engine state will have m_root injected.
-	Ogre::Viewport* m_viewport; // Same as m_root.
+	// Subject for Engine's Observer.
+	Subject m_subject;
 
 	// State data.
 	World m_world;
@@ -65,8 +75,18 @@ protected:
 
 // Getters:
 
-inline World& EngineState::getWorld(void) const{
-	return const_cast<World&>(m_world);
+inline Subject& EngineState::getSubject(void){
+	return m_subject;
+}
+
+inline World& EngineState::getWorld(void){
+	return m_world;
+}
+
+// Setters:
+
+inline void EngineState::setActive(const bool active){
+	m_active = active;
 }
 
 // ========================================================================= //

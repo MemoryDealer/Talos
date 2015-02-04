@@ -37,8 +37,14 @@ public:
 	// Empty destructor.
 	~Input(void);
 
-	// Processes SDL input events.
-	void handle(const SDL_Event&);
+	// Events returned to the calling EngineState.
+	enum StateEvent{
+		NIL = 0,
+		POP
+	};
+
+	// Processes SDL input events. Returns a StateEvent if needed.
+	const StateEvent handle(const SDL_Event&);
 
 	// Setters:
 

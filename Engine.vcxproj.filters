@@ -52,6 +52,15 @@
     <Filter Include="Header Files\Input">
       <UniqueIdentifier>{b454a6e9-e7ba-436a-9aec-6ed890cae641}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Input">
+      <UniqueIdentifier>{737f8e24-1981-4def-93cf-4f74f2de9558}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Observer">
+      <UniqueIdentifier>{9b178c46-862d-4e5b-b547-77947a38ac0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Observer">
+      <UniqueIdentifier>{45c3cde9-9cc2-4a0c-b6dd-05be897f243f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\main.cpp">
@@ -106,7 +115,10 @@
       <Filter>Source Files\Component</Filter>
     </ClCompile>
     <ClCompile Include="Source\Input\Input.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Observer\Subject.cpp">
+      <Filter>Source Files\Observer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +181,12 @@
     </ClInclude>
     <ClInclude Include="Source\Input\Input.hpp">
       <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Observer\Observer.hpp">
+      <Filter>Header Files\Observer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Observer\Subject.hpp">
+      <Filter>Header Files\Observer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

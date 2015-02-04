@@ -5,29 +5,40 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: EngineState.cpp
+// File: Observer.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements EngineState class.
+// Defines Observer class.
 // ========================================================================= //
 
-#include "EngineState.hpp"
+#ifndef __OBSERVER_HPP__
+#define __OBSERVER_HPP__
 
 // ========================================================================= //
 
-EngineState::EngineState(void) :
-m_subject(),
-m_world(),
-m_active(false)
+#include "stdafx.hpp"
+
+// ========================================================================= //
+
+class Observer;
+
+typedef Observer* ObserverPtr;
+typedef std::vector<ObserverPtr> ObserverList;
+
+// ========================================================================= //
+
+class Observer
 {
+public:
+	explicit Observer(void) { }
 
-}
+	virtual ~Observer(void) = 0 { }
+
+	virtual void onNotify(const unsigned int) = 0;
+};
 
 // ========================================================================= //
 
-EngineState::~EngineState(void)
-{
-
-}
+#endif
 
 // ========================================================================= //

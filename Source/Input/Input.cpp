@@ -33,7 +33,7 @@ Input::~Input(void)
 
 // ========================================================================= //
 
-void Input::handle(const SDL_Event& e)
+const Input::StateEvent Input::handle(const SDL_Event& e)
 {
 	ComponentMessage msg;
 
@@ -58,7 +58,23 @@ void Input::handle(const SDL_Event& e)
 
 		m_player->message(msg);
 		break;
+
+	case SDL_KEYDOWN:
+		switch (e.key.keysym.sym){
+		default:
+			break;
+
+		case SDLK_ESCAPE:
+			return Input::StateEvent::POP;
+		}
+		break;
+
+	case SDL_KEYUP:
+
+		break;
 	}
+
+	return Input::StateEvent::NIL;
 }
 
 // ========================================================================= //

@@ -220,6 +220,9 @@ void Engine::registerState(const EngineStateID id)
 	deps.viewport = m_viewport;
 	state->getWorld().injectDependencies(deps);
 
+	// Add self as an Observer to listen for events.
+	state->getSubject().addObserver(this);
+
 	// Add state to list of states.
 	m_states.push_back(state);
 }
@@ -236,6 +239,7 @@ void Engine::pushState(const EngineStateID id)
 	m_stateStack.push(state);
 
 	// Initialize the state.	
+	state->setActive(true);
 	state->enter();
 }
 
@@ -244,11 +248,26 @@ void Engine::pushState(const EngineStateID id)
 void Engine::popState(void)
 {
 	EngineStatePtr state = m_stateStack.top();
+	state->setActive(false);
 	state->exit();
 
 	m_stateStack.pop();
 	if (m_stateStack.empty() == true){
 		m_active = false;
+	}
+}
+
+// ========================================================================= //
+
+void Engine::onNotify(const unsigned int id)
+{
+	switch (id){
+	default:
+		break;
+
+	case Engine::Notification::POP:
+		this->popState();
+		break;
 	}
 }
 

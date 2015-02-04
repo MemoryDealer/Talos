@@ -17,6 +17,7 @@
 // ========================================================================= //
 
 #include "EngineState/EngineState.hpp"
+#include "Observer/Observer.hpp"
 #include "stdafx.hpp"
 
 // ========================================================================= //
@@ -26,14 +27,14 @@ typedef std::vector<EngineStatePtr> EngineStateList;
 
 // ========================================================================= //
 // Holds rendering components, manages engine state stack.
-class Engine
+class Engine : public Observer
 {
 public:
 	// Reserves contiguous memory for EngineState's.
 	explicit Engine(void);
 
 	// Empty destructor.
-	~Engine(void);
+	virtual ~Engine(void) override;
 
 	// Sets up initial rendering components and stack for engine states.
 	bool init(void);
@@ -53,6 +54,9 @@ public:
 	// If the stack is empty, the engine is shut down.
 	void popState(void);
 
+	// Receive notifications from Subjects (EngineStates).
+	virtual void onNotify(const unsigned int) override;
+
 	// Enumerations:
 
 	enum StateID{
@@ -62,6 +66,10 @@ public:
 		STATE_PAUSED,
 
 		NUM_STATES
+	};
+
+	enum Notification{
+		POP = 1
 	};
 
 private:

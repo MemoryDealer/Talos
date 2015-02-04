@@ -40,7 +40,6 @@ IntroState::~IntroState(void)
 
 void IntroState::enter(void)
 {
-	m_active = true;
 	m_world.init();
 
 	// Create scene manager.
@@ -99,31 +98,41 @@ void IntroState::exit(void)
 
 void IntroState::update(void)
 {
-	m_world.update();
-	static_cast<SceneComponentPtr>(m_ogre->getComponentPtr("SceneComponent"))
-		->getSceneNode()->rotate(Ogre::Vector3::UNIT_Y, Ogre::Degree(1.0));
+	if (m_active == true){
+		m_world.update();
+		static_cast<SceneComponentPtr>(m_ogre->getComponentPtr("SceneComponent"))
+			->getSceneNode()->rotate(Ogre::Vector3::UNIT_Y, Ogre::Degree(1.0));
 
-	//! @HACK
-	/*CEGUI::System::getSingleton().getDefaultGUIContext().
-		injectMousePosition(static_cast<float>(msg.mouse.absx),
-		static_cast<float>(msg.mouse.absy));*/
+		//! @HACK
+		/*CEGUI::System::getSingleton().getDefaultGUIContext().
+			injectMousePosition(static_cast<float>(msg.mouse.absx),
+			static_cast<float>(msg.mouse.absy));*/
 
-	// Poll SDL for events.
-	SDL_Event e;
-	ComponentMessage msg;
-	while (SDL_PollEvent(&e)){
-		switch (e.type){
-		default:
-			break;
+		// Poll SDL for events.
+		SDL_Event e;
+		ComponentMessage msg;
+		while (SDL_PollEvent(&e)){
+			switch (e.type){
+			default:
+				break;
 
-		case SDL_MOUSEBUTTONDOWN:
-		case SDL_MOUSEBUTTONUP:
-		case SDL_MOUSEMOTION:
-		case SDL_KEYDOWN:
-		case SDL_KEYUP:
-			m_world.getInput().handle(e);
-			break;
+			case SDL_MOUSEBUTTONDOWN:
+			case SDL_MOUSEBUTTONUP:
+			case SDL_MOUSEMOTION:
+			case SDL_KEYDOWN:
+			case SDL_KEYUP:
+				switch (m_world.getInput().handle(e)){
+				default:
+					break;
 
+				case Input::StateEvent::POP:
+					m_subject.notify(1);
+					m_active = false;
+					break;
+				}
+				break;
+
+			}
 		}
 	}
 }

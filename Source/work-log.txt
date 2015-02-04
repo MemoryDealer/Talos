@@ -72,8 +72,11 @@ A log of all work done on engine.
 * Added Input class which takes SDL events and handles them, for player input and GUI input.
 * Removed InputComponent as the new Input class takes over. 
 
+== 2/3/15 ==
+* Added Observer and Subject classes. 
+* Made Engine derive from Observer; it receives notifications from EngineStates. So if it receives a "POP" notification from the active state, it will pop that state.
+
 == TODO ==
-* Add Observer class to Engine to monitor states.
 * Add Null object pattern to Input.
 * Add System classes for all components to live in. Factory functions in World should create them.
 * Alphabetize includes everywhere. Folder name is first if in a folder.

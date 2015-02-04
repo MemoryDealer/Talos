@@ -5,29 +5,38 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: EngineState.cpp
+// File: Subject.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements EngineState class.
+// Implements Subject class.
 // ========================================================================= //
 
-#include "EngineState.hpp"
+#include "Subject.hpp"
 
 // ========================================================================= //
 
-EngineState::EngineState(void) :
-m_subject(),
-m_world(),
-m_active(false)
+Subject::Subject(void) :
+m_observers()
+{
+	m_observers.reserve(1);
+}
+
+// ========================================================================= //
+
+Subject::~Subject(void)
 {
 
 }
 
 // ========================================================================= //
 
-EngineState::~EngineState(void)
+void Subject::notify(const unsigned int id)
 {
-
+	for (ObserverList::iterator itr = m_observers.begin();
+		 itr != m_observers.end();
+		 ++itr){
+		(*itr)->onNotify(id);
+	}
 }
 
 // ========================================================================= //
