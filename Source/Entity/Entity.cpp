@@ -67,16 +67,24 @@ void Entity::update(World& world)
 
 // ========================================================================= //
 
-void Entity::attachComponent(ComponentPtr component)
+void Entity::attachComponent(const ComponentPtr component)
 {
 	m_components.push_back(component);
 }
 
 // ========================================================================= //
 
-void Entity::detachComponent(ComponentPtr component)
+void Entity::detachComponent(const ComponentPtr component)
 {
-
+	for (ComponentList::iterator itr = m_components.begin();
+		 itr != m_components.end();){
+		if (*itr == component){
+			itr = m_components.erase(itr);
+		}
+		else{
+			++itr;
+		}
+	}
 }
 
 // ========================================================================= //
@@ -99,7 +107,7 @@ void Entity::message(const ComponentMessage& msg)
 
 ComponentPtr Entity::getComponentPtr(const std::string& name) const
 {
-	// @TODO: WHY does this iterator need to be const?
+	// Must use a const_iterator since this function is bitwise constant.
 	for (ComponentList::const_iterator itr = m_components.begin();
 		 itr != m_components.end();
 		 ++itr){

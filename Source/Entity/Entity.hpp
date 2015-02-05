@@ -31,8 +31,9 @@ typedef Entity* EntityPtr;
 typedef std::list<ComponentPtr> ComponentList;
 
 // ========================================================================= //
-// Abstract class for anything in the game world, such as players, boxes,
-// walls, doors, particle systems, etc.
+// Class for anything in the game world, such as players, boxes,
+// walls, doors, particle systems, etc. Components can be attached and 
+// removed at run-time.
 class Entity
 {
 public:
@@ -52,10 +53,10 @@ public:
 	virtual void update(World& world);
 
 	// Registers component with the entity.
-	void attachComponent(ComponentPtr);
+	void attachComponent(const ComponentPtr);
 
 	// Unregisters component from the entity.
-	void detachComponent(ComponentPtr);
+	void detachComponent(const ComponentPtr);
 
 	// Broadcasts ComponentMessage to all attached Components.
 	void message(const ComponentMessage&);
@@ -80,7 +81,7 @@ public:
 	void setID(const EntityID);
 
 	// Sets the next EntityPtr for the EntityPool.
-	void setNext(EntityPtr);
+	void setNext(const EntityPtr);
 
 private:
 	ComponentList m_components;
@@ -110,7 +111,7 @@ inline void Entity::setID(const EntityID id){
 	m_id = id;
 }
 
-inline void Entity::setNext(EntityPtr next){
+inline void Entity::setNext(const EntityPtr next){
 	m_next = next;
 }
 
