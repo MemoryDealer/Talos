@@ -76,12 +76,16 @@ A log of all work done on engine.
 * Added Observer and Subject classes. 
 * Made Engine derive from Observer; it receives notifications from EngineStates. So if it receives a "POP" notification from the active state, it will pop that state.
 
+== 2/5/15 ==
+* Renamed FirstPersonComponent to ActorComponent, which can be used to control an Entity using either a player, AI, or network player (also replays).
+* Added Command interface class. Command::execute() takes an EntityPtr and can retrieve the components it might need from that pointer.
+* Added a std::map to the Input class to hold a keymap for all keys on the keyboard. 
+* Created CommandRepository which holds a smart pointer to each Command needed in the game. The input class holds an instance of CommandRepository to assign pointers to its keymap.
+* Created NullCommand as per the Null Object pattern.
+
 == TODO ==
-* Create Command class, derive each type of actor command, hold a STL map in Input; on Input::handle() return Command pointer, execute on Entity/Actor in State update. 
-	Change FirstPersonComponent to ActorComponent => add functions to control actor. A component to allow player, AI, or replay control.
-	Command::execute() takes EntityPtr and can get the components it needs (ActorComponent::jump() for example).
-* Add Null object pattern to Input, return NullComponent (store this statically as flyweight) in Entity::getComponentPtr() if not found, add Assert() for debug.
 * Put an EntityRegistry in World which has an associative array of IDs to strings for Entity names.
+* Make sure Entities are destroyed properly when World is destroyed.
 * Alphabetize includes everywhere. Folder name is first if in a folder.
 * Make Entity final? Still not sure if I should allow subclassing for convenience. Entities could be data-driven?
 * Change std::string id system for components to an enum int system to save memory and CPU cycles.

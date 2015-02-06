@@ -5,49 +5,39 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: ComponentPool.hpp
+// File: MoveForward.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines ComponentPool class.
+// Defines MoveForwardCommand class.
 // ========================================================================= //
 
-#ifndef __COMPONENTPOOL_HPP__
-#define __COMPONENTPOOL_HPP__
-
-// ========================================================================= //
-
-#include "ActorComponent.hpp"
-#include "CameraComponent.hpp"
-#include "ModelComponent.hpp"
-#include "SceneComponent.hpp"
+#ifndef __MOVEFORWARD_HPP__
+#define __MOVEFORWARD_HPP__
 
 // ========================================================================= //
 
-template<typename T>
-class ComponentPool
+#include "Command/Command.hpp"
+#include "Component/ActorComponent.hpp"
+
+// ========================================================================= //
+
+class MoveForwardCommand : public Command
 {
 public:
-	explicit ComponentPool(const int size) :
-		m_pool(new T[size]),
-		m_numActive(0),
-		m_size(size){ 
-	
+
+	virtual void execute(EntityPtr entity){
+		ActorComponentPtr actor = static_cast<ActorComponentPtr>(
+			entity->getComponentPtr("ActorComponent"));
+
+		actor->setMovingForward(true);
 	}
 
-	~ComponentPool(void){ 
-		delete[] m_pool;
+	virtual void unexecute(EntityPtr entity){
+		ActorComponentPtr actor = static_cast<ActorComponentPtr>(
+			entity->getComponentPtr("ActorComponent"));
+
+		actor->setMovingForward(false);
 	}
-
-	T* create(void){
-		Assert(m_numActive < m_size, "ComponentPool overflow!");
-
-		return &m_pool[m_numActive++];
-	}
-
-private:
-	T* m_pool;
-	int m_numActive;
-	int m_size;
 };
 
 // ========================================================================= //

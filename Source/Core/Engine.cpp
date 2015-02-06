@@ -82,7 +82,7 @@ bool Engine::init(void)
 		SDL_WINDOW_RESIZABLE);
 
 	// Bind mouse to window.
-	SDL_SetRelativeMouseMode(SDL_TRUE);
+	//SDL_SetRelativeMouseMode(SDL_TRUE);
 
 	// Give the window handle to Ogre.
 	SDL_SysWMinfo wmInfo;
@@ -181,7 +181,7 @@ void Engine::start(const EngineStateID id)
 			lag += elapsed;
 
 			// Update the current state.
-			while (lag >= MS_PER_UPDATE){
+			while (lag >= MS_PER_UPDATE && m_active == true){
 				m_stateStack.top()->update();
 
 				lag -= MS_PER_UPDATE;

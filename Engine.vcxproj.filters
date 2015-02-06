@@ -55,6 +55,15 @@
     <Filter Include="Source Files\Observer">
       <UniqueIdentifier>{45c3cde9-9cc2-4a0c-b6dd-05be897f243f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Command">
+      <UniqueIdentifier>{f8906cdb-ed3f-4b76-890c-ec82ef2e190c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Command\Actor">
+      <UniqueIdentifier>{da41e40d-579e-4088-af72-a52a6827151e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Command">
+      <UniqueIdentifier>{26669008-39ca-4b50-bed1-02a9a9ece098}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\main.cpp">
@@ -93,9 +102,6 @@
     <ClCompile Include="Source\Entity\EntityPool.cpp">
       <Filter>Source Files\Entity</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\FirstPersonComponent.cpp">
-      <Filter>Source Files\Component</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Component\ComponentPool.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
@@ -107,6 +113,12 @@
     </ClCompile>
     <ClCompile Include="Source\Observer\Subject.cpp">
       <Filter>Source Files\Observer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\ActorComponent.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Command\CommandRepository.cpp">
+      <Filter>Source Files\Command</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -149,9 +161,6 @@
     <ClInclude Include="Source\Entity\EntityPool.hpp">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Component\FirstPersonComponent.hpp">
-      <Filter>Header Files\Component</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Component\ComponentMessage.hpp">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
@@ -169,6 +178,30 @@
     </ClInclude>
     <ClInclude Include="Source\Observer\Subject.hpp">
       <Filter>Header Files\Observer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Command\Command.hpp">
+      <Filter>Header Files\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\ActorComponent.hpp">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Command\Actor\MoveForward.hpp">
+      <Filter>Header Files\Command\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Command\Actor\MoveBackward.hpp">
+      <Filter>Header Files\Command\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Command\CommandRepository.hpp">
+      <Filter>Header Files\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Command\Actor\MoveLeft.hpp">
+      <Filter>Header Files\Command\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Command\Actor\MoveRight.hpp">
+      <Filter>Header Files\Command\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Command\NullCommand.hpp">
+      <Filter>Header Files\Command</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -60,8 +60,8 @@ public:
 	void update(void);
 
 	// Component factory functions.
+	ActorComponentPtr createActorComponent(void);
 	CameraComponentPtr createCameraComponent(void);
-	FirstPersonComponentPtr createFirstPersonComponent(void);
 	ModelComponentPtr createModelComponent(void);
 	SceneComponentPtr createSceneComponent(void);
 
@@ -90,8 +90,8 @@ private:
 	Ogre::Viewport*	m_viewport;
 
 	// Component pools.
+	std::shared_ptr<ComponentPool<ActorComponent>> m_actorComponentPool;
 	std::shared_ptr<ComponentPool<CameraComponent>> m_cameraComponentPool;
-	std::shared_ptr<ComponentPool<FirstPersonComponent>> m_firstPersonComponentPool;
 	std::shared_ptr<ComponentPool<ModelComponent>> m_modelComponentPool;
 	std::shared_ptr<ComponentPool<SceneComponent>> m_sceneComponentPool;
 
@@ -111,12 +111,12 @@ inline void World::injectDependencies(const Dependencies& deps){
 
 // Component factory functions:
 
-inline CameraComponentPtr World::createCameraComponent(void){
-	return m_cameraComponentPool->create();
+inline ActorComponentPtr World::createActorComponent(void){
+	return m_actorComponentPool->create();
 }
 
-inline FirstPersonComponentPtr World::createFirstPersonComponent(void){
-	return m_firstPersonComponentPool->create();
+inline CameraComponentPtr World::createCameraComponent(void){
+	return m_cameraComponentPool->create();
 }
 
 inline ModelComponentPtr World::createModelComponent(void){

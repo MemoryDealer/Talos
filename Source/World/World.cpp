@@ -11,8 +11,8 @@
 // Implements World class.
 // ========================================================================= //
 
+#include "Component/ActorComponent.hpp"
 #include "Component/CameraComponent.hpp"
-#include "Component/FirstPersonComponent.hpp"
 #include "Component/ModelComponent.hpp"
 #include "Component/SceneComponent.hpp"
 #include "Entity/EntityPool.hpp"
@@ -25,8 +25,8 @@ m_root(nullptr),
 m_scene(nullptr),
 m_viewport(nullptr),
 m_entityPool(nullptr),
+m_actorComponentPool(nullptr),
 m_cameraComponentPool(nullptr),
-m_firstPersonComponentPool(nullptr),
 m_modelComponentPool(nullptr),
 m_sceneComponentPool(nullptr)
 {
@@ -52,9 +52,8 @@ void World::init(void)
 
 	// Allocate Component pools.
 	// @TODO: Read sizes from config file.
+	m_actorComponentPool.reset(new ComponentPool<ActorComponent>(256));
 	m_cameraComponentPool.reset(new ComponentPool<CameraComponent>(5));
-	m_firstPersonComponentPool.reset(new ComponentPool<FirstPersonComponent>
-									 (5));
 	m_modelComponentPool.reset(new ComponentPool<ModelComponent>(1024));
 	m_sceneComponentPool.reset(new ComponentPool<SceneComponent>(1024));
 }

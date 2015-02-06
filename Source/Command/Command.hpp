@@ -5,49 +5,35 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: ComponentPool.hpp
+// File: Command.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines ComponentPool class.
+// Defines Command class.
 // ========================================================================= //
 
-#ifndef __COMPONENTPOOL_HPP__
-#define __COMPONENTPOOL_HPP__
-
-// ========================================================================= //
-
-#include "ActorComponent.hpp"
-#include "CameraComponent.hpp"
-#include "ModelComponent.hpp"
-#include "SceneComponent.hpp"
+#ifndef __COMMAND_HPP__
+#define __COMMAND_HPP__
 
 // ========================================================================= //
 
-template<typename T>
-class ComponentPool
+#include "Entity/Entity.hpp"
+
+// ========================================================================= //
+
+class Command;
+
+typedef std::shared_ptr<Command> CommandPtr;
+
+// ========================================================================= //
+
+class Command
 {
 public:
-	explicit ComponentPool(const int size) :
-		m_pool(new T[size]),
-		m_numActive(0),
-		m_size(size){ 
-	
-	}
+	explicit Command(void) { }
+	virtual ~Command(void) { }
 
-	~ComponentPool(void){ 
-		delete[] m_pool;
-	}
-
-	T* create(void){
-		Assert(m_numActive < m_size, "ComponentPool overflow!");
-
-		return &m_pool[m_numActive++];
-	}
-
-private:
-	T* m_pool;
-	int m_numActive;
-	int m_size;
+	virtual void execute(EntityPtr) = 0;
+	virtual void unexecute(EntityPtr) { }
 };
 
 // ========================================================================= //

@@ -11,12 +11,12 @@
 // Implements IntroState class.
 // ========================================================================= //
 
+#include "Command/Command.hpp"
+#include "Component/ActorComponent.hpp"
 #include "Component/ComponentMessage.hpp"
 #include "Component/CameraComponent.hpp"
-#include "Component/FirstPersonComponent.hpp"
 #include "Component/ModelComponent.hpp"
 #include "Component/SceneComponent.hpp"
-#include "Entity/Player.hpp"
 #include "Input/Input.hpp"
 #include "IntroState.hpp"
 #include "World/World.hpp"
@@ -50,13 +50,13 @@ void IntroState::enter(void)
 	scene->setSkyDome(true, "Clouds");
 
 	m_player = m_world.createEntity();
-	FirstPersonComponentPtr fpComponent = m_world.createFirstPersonComponent();
-	m_player->attachComponent(fpComponent);
+	ActorComponentPtr actorComponent = m_world.createActorComponent();
+	m_player->attachComponent(actorComponent);
 	CameraComponentPtr cameraComponent = m_world.createCameraComponent();
 	m_player->attachComponent(cameraComponent);
 	m_player->init(m_world);
 
-	fpComponent->attachCamera(cameraComponent->getCamera());
+	actorComponent->attachCamera(cameraComponent->getCamera());
 
 	// Set player pointer for input manager.
 	m_world.getInput().setPlayer(m_player);
@@ -120,18 +120,35 @@ void IntroState::update(void)
 			case SDL_MOUSEBUTTONUP:
 			case SDL_MOUSEMOTION:
 			case SDL_KEYDOWN:
-			case SDL_KEYUP:
-				switch (m_world.getInput().handle(e)){
+				{
+					CommandPtr command = m_world.getInput().handle(e);
+					if (command != nullptr){
+						command->execute(m_player);
+					}
+				}
+				/*switch (m_world.getInput().handle(e)){
 				default:
 					break;
 
-				case Input::StateEvent::POP:
+				case SDLK_ESCAPE:
 					m_subject.notify(1);
 					m_active = false;
 					break;
+				}*/
+				break;
+
+			case SDL_KEYUP:
+				{
+					CommandPtr command = m_world.getInput().handle(e);
+					if (command != nullptr){
+						command->unexecute(m_player);
+					}
 				}
 				break;
 
+			case SDL_QUIT:
+				m_subject.notify(1);
+				break;
 			}
 		}
 	}

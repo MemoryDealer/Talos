@@ -5,43 +5,46 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: FirstPersonComponent.cpp
+// File: ActorComponent.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements FirstPersonComponent class.
+// Implements ActorComponent class.
 // ========================================================================= //
 
+#include "ActorComponent.hpp"
 #include "ComponentMessage.hpp"
-#include "FirstPersonComponent.hpp"
 #include "World/World.hpp"
 
 // ========================================================================= //
 
-FirstPersonComponent::FirstPersonComponent(void) :
+ActorComponent::ActorComponent(void) :
 SceneComponent(),
 m_yawNode(nullptr),
 m_pitchNode(nullptr),
-m_rollNode(nullptr)
+m_rollNode(nullptr),
+m_translate(Ogre::Vector3::ZERO),
+m_speed(1.f),
+m_mode(Mode::SPECTATOR)
 {
-	this->setName("FirstPersonComponent");
+	this->setName("ActorComponent");
 }
 
 // ========================================================================= //
 
-FirstPersonComponent::~FirstPersonComponent(void)
+ActorComponent::~ActorComponent(void)
 {
 
 }
 
 // ========================================================================= //
 
-void FirstPersonComponent::init(EntityPtr entity, World& world)
+void ActorComponent::init(EntityPtr entity, World& world)
 {
 	SceneComponent::init(entity, world);
 
 	// Acquire the camera node from the parent class.
 	m_cameraNode = this->getSceneNode();
-	
+
 	// Create yaw node as the camera's top node.
 	m_yawNode = m_cameraNode->createChildSceneNode();
 
@@ -59,7 +62,7 @@ void FirstPersonComponent::init(EntityPtr entity, World& world)
 
 // ========================================================================= //
 
-void FirstPersonComponent::destroy(EntityPtr entity, World& world)
+void ActorComponent::destroy(EntityPtr entity, World& world)
 {
 	world.getSceneManager()->destroySceneNode(m_yawNode);
 	SceneComponent::destroy(entity, world);
@@ -67,16 +70,27 @@ void FirstPersonComponent::destroy(EntityPtr entity, World& world)
 
 // ========================================================================= //
 
-void FirstPersonComponent::update(EntityPtr, World&)
+void ActorComponent::update(EntityPtr, World&)
 {
 	printf("pos: <%.2f, %.2f, %.2f>\n", m_cameraNode->getPosition().x,
 		   m_cameraNode->getPosition().y,
 		   m_cameraNode->getPosition().z);
+
+	switch (m_mode){
+	default:
+		break;
+
+	case Mode::SPECTATOR:
+		m_cameraNode->translate(m_yawNode->getOrientation() *
+								m_pitchNode->getOrientation() *
+								m_translate,
+								Ogre::SceneNode::TS_LOCAL);
+	}
 }
 
 // ========================================================================= //
 
-void FirstPersonComponent::message(const ComponentMessage& msg)
+void ActorComponent::message(const ComponentMessage& msg)
 {
 	const Ogre::Real sens = 0.2f;
 
@@ -108,7 +122,7 @@ void FirstPersonComponent::message(const ComponentMessage& msg)
 						0.f,
 						0.f));
 				}
-				else if(pitchAngleParity < 0){
+				else if (pitchAngleParity < 0){
 					m_pitchNode->setOrientation(Ogre::Quaternion(
 						Ogre::Math::Sqrt(0.5f),
 						-Ogre::Math::Sqrt(0.5f) + 0.115f,
@@ -119,6 +133,34 @@ void FirstPersonComponent::message(const ComponentMessage& msg)
 		}
 		break;
 	}
+}
+
+// ========================================================================= //
+
+void ActorComponent::setMovingForward(const bool moving)
+{
+	m_translate.z = (moving) ? -m_speed : 0.f;
+}
+
+// ========================================================================= //
+
+void ActorComponent::setMovingBackward(const bool moving)
+{
+	m_translate.z = (moving) ? m_speed : 0.f;
+}
+
+// ========================================================================= //
+
+void ActorComponent::setMovingLeft(const bool moving)
+{
+	m_translate.x = (moving) ? -m_speed : 0.f;
+}
+
+// ========================================================================= //
+
+void ActorComponent::setMovingRight(const bool moving)
+{
+	m_translate.x = (moving) ? m_speed : 0.f;
 }
 
 // ========================================================================= //

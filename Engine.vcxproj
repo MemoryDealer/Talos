@@ -11,10 +11,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Command\CommandRepository.cpp" />
+    <ClCompile Include="Source\Component\ActorComponent.cpp" />
     <ClCompile Include="Source\Component\CameraComponent.cpp" />
     <ClCompile Include="Source\Component\Component.cpp" />
     <ClCompile Include="Source\Component\ComponentPool.cpp" />
-    <ClCompile Include="Source\Component\FirstPersonComponent.cpp" />
     <ClCompile Include="Source\Component\ModelComponent.cpp" />
     <ClCompile Include="Source\Component\SceneComponent.cpp" />
     <ClCompile Include="Source\Core\Assert.cpp" />
@@ -30,10 +31,17 @@
     <ClCompile Include="Source\World\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Command\Actor\MoveBackward.hpp" />
+    <ClInclude Include="Source\Command\Actor\MoveForward.hpp" />
+    <ClInclude Include="Source\Command\Actor\MoveLeft.hpp" />
+    <ClInclude Include="Source\Command\Actor\MoveRight.hpp" />
+    <ClInclude Include="Source\Command\Command.hpp" />
+    <ClInclude Include="Source\Command\CommandRepository.hpp" />
+    <ClInclude Include="Source\Command\NullCommand.hpp" />
+    <ClInclude Include="Source\Component\ActorComponent.hpp" />
     <ClInclude Include="Source\Component\CameraComponent.hpp" />
     <ClInclude Include="Source\Component\Component.hpp" />
     <ClInclude Include="Source\Component\ComponentPool.hpp" />
-    <ClInclude Include="Source\Component\FirstPersonComponent.hpp" />
     <ClInclude Include="Source\Component\ComponentMessage.hpp" />
     <ClInclude Include="Source\Component\ModelComponent.hpp" />
     <ClInclude Include="Source\Component\SceneComponent.hpp" />

@@ -5,49 +5,43 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: ComponentPool.hpp
+// File: CommandRepository.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines ComponentPool class.
+// Defines CommandRepository struct.
 // ========================================================================= //
 
-#ifndef __COMPONENTPOOL_HPP__
-#define __COMPONENTPOOL_HPP__
-
-// ========================================================================= //
-
-#include "ActorComponent.hpp"
-#include "CameraComponent.hpp"
-#include "ModelComponent.hpp"
-#include "SceneComponent.hpp"
+#ifndef __COMMANDREPOSITORY_HPP__
+#define __COMMANDREPOSITORY_HPP__
 
 // ========================================================================= //
 
-template<typename T>
-class ComponentPool
+#include "Command/NullCommand.hpp"
+#include "Command/Actor/MoveBackward.hpp"
+#include "Command/Actor/MoveForward.hpp"
+#include "Command/Actor/MoveLeft.hpp"
+#include "Command/Actor/MoveRight.hpp"
+#include "stdafx.hpp"
+
+// ========================================================================= //
+// A single location to statically store all Command instances needed by an 
+// actor. It's named a struct since all members are public.
+// (note: this uses the Flyweight pattern)
+struct CommandRepository
 {
 public:
-	explicit ComponentPool(const int size) :
-		m_pool(new T[size]),
-		m_numActive(0),
-		m_size(size){ 
-	
-	}
+	// Allocates all Command smart pointers.
+	explicit CommandRepository(void);
 
-	~ComponentPool(void){ 
-		delete[] m_pool;
-	}
+	// Empty destructor (all smart pointers de-allocated).
+	~CommandRepository(void);
 
-	T* create(void){
-		Assert(m_numActive < m_size, "ComponentPool overflow!");
-
-		return &m_pool[m_numActive++];
-	}
-
-private:
-	T* m_pool;
-	int m_numActive;
-	int m_size;
+	// Smart pointers to possible Commands.
+	CommandPtr NullCommand;
+	CommandPtr MoveBackwardCommand;
+	CommandPtr MoveForwardCommand;
+	CommandPtr MoveLeftCommand;
+	CommandPtr MoveRightCommand;
 };
 
 // ========================================================================= //

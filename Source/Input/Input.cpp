@@ -11,6 +11,7 @@
 // Implements Input class.
 // ========================================================================= //
 
+#include "Command/CommandRepository.hpp"
 #include "Component/ComponentMessage.hpp"
 #include "Entity/Entity.hpp"
 #include "Input.hpp"
@@ -19,9 +20,21 @@
 
 Input::Input(void) :
 m_player(nullptr),
-m_gui(nullptr)
+m_gui(nullptr),
+m_commandRepo(new CommandRepository()),
+m_keymap()
 {
+	// @TODO: For every key on keyboard read from keymap file
+	// (add mapKey() function which is a switch-case on the command).
+	for (unsigned int i = 0; i < SDLK_z; ++i){
+		m_keymap.insert(KM_VT(i, m_commandRepo->NullCommand));
+	}
+	m_keymap.insert(KM_VT(SDLK_LALT, m_commandRepo->NullCommand));
 
+	m_keymap.find(SDLK_w)->second = m_commandRepo->MoveForwardCommand;
+	m_keymap.find(SDLK_s)->second = m_commandRepo->MoveBackwardCommand;
+	m_keymap.find(SDLK_a)->second = m_commandRepo->MoveLeftCommand;
+	m_keymap.find(SDLK_d)->second = m_commandRepo->MoveRightCommand;
 }
 
 // ========================================================================= //
@@ -33,7 +46,7 @@ Input::~Input(void)
 
 // ========================================================================= //
 
-const Input::StateEvent Input::handle(const SDL_Event& e)
+const CommandPtr Input::handle(const SDL_Event& e)
 {
 	ComponentMessage msg;
 
@@ -62,19 +75,25 @@ const Input::StateEvent Input::handle(const SDL_Event& e)
 	case SDL_KEYDOWN:
 		switch (e.key.keysym.sym){
 		default:
-			break;
+			return m_keymap.find(e.key.keysym.sym)->second;
 
 		case SDLK_ESCAPE:
-			return Input::StateEvent::POP;
+			return nullptr;
 		}
 		break;
 
 	case SDL_KEYUP:
+		switch (e.key.keysym.sym){
+		default:
+			return m_keymap.find(e.key.keysym.sym)->second;
 
+		case SDLK_ESCAPE:
+			return nullptr;
+		}
 		break;
 	}
 
-	return Input::StateEvent::NIL;
+	return 0;
 }
 
 // ========================================================================= //

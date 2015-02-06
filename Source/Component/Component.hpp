@@ -22,8 +22,8 @@
 
 // Forward declare all components here to avoid repeating elsewhere.
 class Component;
+class ActorComponent;
 class CameraComponent;
-class FirstPersonComponent;
 class ModelComponent;
 class SceneComponent;
 // Other forward declarations.
@@ -32,8 +32,8 @@ class Entity;
 class World;
 
 typedef Component* ComponentPtr;
+typedef ActorComponent* ActorComponentPtr;
 typedef CameraComponent* CameraComponentPtr;
-typedef FirstPersonComponent* FirstPersonComponentPtr;
 typedef ModelComponent* ModelComponentPtr;
 typedef SceneComponent* SceneComponentPtr;
 typedef Entity* EntityPtr;
