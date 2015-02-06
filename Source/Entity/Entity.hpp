@@ -34,7 +34,7 @@ typedef std::list<ComponentPtr> ComponentList;
 // Class for anything in the game world, such as players, boxes,
 // walls, doors, particle systems, etc. Components can be attached and 
 // removed at run-time.
-class Entity
+class Entity final
 {
 public:
 	// Default initializes member data.

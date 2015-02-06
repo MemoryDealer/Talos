@@ -43,12 +43,6 @@
     <Filter Include="Source Files\World">
       <UniqueIdentifier>{e427217c-4a4b-43d1-a8f0-57b038a3726c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\System">
-      <UniqueIdentifier>{34d19b6a-3bf3-4871-b3c4-2dcc11cdddcc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\System">
-      <UniqueIdentifier>{b976e152-4b89-4ce1-a3c7-1a5a5eafac6e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Input">
       <UniqueIdentifier>{b454a6e9-e7ba-436a-9aec-6ed890cae641}</UniqueIdentifier>
     </Filter>
@@ -93,9 +87,6 @@
     <ClCompile Include="Source\World\World.cpp">
       <Filter>Source Files\World</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Entity\Player.cpp">
-      <Filter>Source Files\Entity</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Component\CameraComponent.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
@@ -104,9 +95,6 @@
     </ClCompile>
     <ClCompile Include="Source\Component\FirstPersonComponent.cpp">
       <Filter>Source Files\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\System\System.cpp">
-      <Filter>Source Files\System</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\ComponentPool.cpp">
       <Filter>Source Files\Component</Filter>
@@ -155,14 +143,8 @@
     <ClInclude Include="Source\World\World.hpp">
       <Filter>Header Files\World</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Entity\Player.hpp">
-      <Filter>Header Files\Entity</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Component\CameraComponent.hpp">
       <Filter>Header Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\System\System.hpp">
-      <Filter>Header Files\System</Filter>
     </ClInclude>
     <ClInclude Include="Source\Entity\EntityPool.hpp">
       <Filter>Header Files\Entity</Filter>

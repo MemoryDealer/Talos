@@ -77,7 +77,10 @@ A log of all work done on engine.
 * Made Engine derive from Observer; it receives notifications from EngineStates. So if it receives a "POP" notification from the active state, it will pop that state.
 
 == TODO ==
-* Add Null object pattern to Input.
+* Create Command class, derive each type of actor command, hold a STL map in Input; on Input::handle() return Command pointer, execute on Entity/Actor in State update. 
+	Change FirstPersonComponent to ActorComponent => add functions to control actor. A component to allow player, AI, or replay control.
+	Command::execute() takes EntityPtr and can get the components it needs (ActorComponent::jump() for example).
+* Add Null object pattern to Input, return NullComponent (store this statically as flyweight) in Entity::getComponentPtr() if not found, add Assert() for debug.
 * Put an EntityRegistry in World which has an associative array of IDs to strings for Entity names.
 * Alphabetize includes everywhere. Folder name is first if in a folder.
 * Make Entity final? Still not sure if I should allow subclassing for convenience. Entities could be data-driven?
