@@ -84,6 +84,8 @@ A log of all work done on engine.
 * Created NullCommand as per the Null Object pattern.
 * Moved Input to Engine, so there is a single instance. It is injected into EngineStates.
 * Moved mouse looking control out of ActorComponent::message() and into look(). The MouseMove Command calls look().
+* Added getActorComponent() to Entity since the actor component needs to be retrieve so many times. This is messy IMO but a good decision to avoid repeating myself.
+* It seems that NVIDIA doesn't know how to compile for the current visual studio version...I used the .sln file for the extensions library after changing the Runtime Library option in C/C++ -> Code Generation to /MDd which was previously /MTd. The new .lib file works.
 
 == TODO ==
 * Have a UI object (an interface) which defines functions for GUI events. Derive one for each state. It should have a queue of events that the EngineState::update() function processes.

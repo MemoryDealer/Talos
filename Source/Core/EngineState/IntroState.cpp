@@ -41,7 +41,7 @@ IntroState::~IntroState(void)
 void IntroState::enter(void)
 {
 	m_world.init();
-	m_world.getInput()->setMode(Input::Mode::UI);
+	m_world.getInput()->setMode(Input::Mode::PLAYER);
 
 	// Create scene manager.
 	Ogre::SceneManager* scene = m_world.getSceneManager();

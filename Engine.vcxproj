@@ -92,12 +92,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(OGRE_SDK)\include;$(OGRE_BUILD)\include;$(BOOST_ROOT);$(SDL)\include;$(CEGUI_HEADER)\include;E:\Engine\cegui\cegui\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(OGRE_SDK)\lib;$(BOOST_LIB);$(SDL)\lib\x86;$(CEGUI_LIB);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(OGRE_SDK)\include;$(OGRE_BUILD)\include;$(BOOST_ROOT);$(SDL)\include;$(CEGUI_HEADER)\include;E:\Engine\cegui\cegui\include;$(PHYSX_HEADER);$(IncludePath)</IncludePath>
+    <LibraryPath>$(OGRE_SDK)\lib;$(BOOST_LIB);$(SDL)\lib\x86;$(CEGUI_LIB);$(PHYSX_LIB);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(OGRE_SDK)\include;$(OGRE_BUILD)\include;$(BOOST_ROOT);$(SDL)\include;$(CEGUI_HEADER)\include;E:\Engine\cegui\cegui\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(OGRE_SDK)\lib;$(BOOST_LIB);$(SDL)\lib\x86;$(CEGUI_LIB);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(OGRE_SDK)\include;$(OGRE_BUILD)\include;$(BOOST_ROOT);$(SDL)\include;$(CEGUI_HEADER)\include;E:\Engine\cegui\cegui\include;$(PHYSX_HEADER);$(IncludePath)</IncludePath>
+    <LibraryPath>$(OGRE_SDK)\lib;$(BOOST_LIB);$(SDL)\lib\x86;$(CEGUI_LIB);$(PHYSX_LIB);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -110,7 +110,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OgreMain_d.lib;RenderSystem_Direct3D11_d.lib;RenderSystem_GL_d.lib;Plugin_OctreeSceneManager_d.lib;SDL2.lib;SDL2main.lib;CEGUIBase-0_d.lib;CEGUIOgreRenderer-0_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OgreMain_d.lib;RenderSystem_Direct3D11_d.lib;RenderSystem_GL_d.lib;Plugin_OctreeSceneManager_d.lib;SDL2.lib;SDL2main.lib;CEGUIBase-0_d.lib;CEGUIOgreRenderer-0_d.lib;PhysX3DEBUG_x86.lib;PhysX3CommonDEBUG_x86.lib;PhysX3ExtensionsDEBUG.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <Bscmake>

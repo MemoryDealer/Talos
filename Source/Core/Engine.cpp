@@ -27,6 +27,8 @@ m_log(nullptr),
 m_timer(nullptr),
 m_sdlWindow(nullptr),
 m_ceguiRenderer(nullptr),
+m_foundation(nullptr),
+m_physics(nullptr),
 m_input(nullptr),
 m_states(),
 m_stateStack(),
@@ -152,6 +154,26 @@ bool Engine::init(void)
 
 	// === //
 
+	// PhysX:
+
+	static physx::PxDefaultAllocator defaultAllocator;
+	static physx::PxDefaultErrorCallback defaultErrorCallback;
+
+	m_foundation = PxCreateFoundation(PX_PHYSICS_VERSION, defaultAllocator, defaultErrorCallback);
+
+	// Create top-level physics object.
+	bool recordMemoryAllocations = true;
+	m_physics = PxCreatePhysics(PX_PHYSICS_VERSION, 
+								*m_foundation, 
+								physx::PxTolerancesScale(), 
+								recordMemoryAllocations,
+								nullptr);
+	if (m_physics == nullptr){
+		return false;
+	}
+
+	// === //
+
 	// Engine:
 
 	// Allocate input handler.
@@ -164,6 +186,14 @@ bool Engine::init(void)
 	// === //
 
 	return true;
+}
+
+// ========================================================================= //
+
+void Engine::shutdown(void)
+{
+	m_physics->release();
+	m_foundation->release();
 }
 
 // ========================================================================= //

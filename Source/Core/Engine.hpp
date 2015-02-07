@@ -41,6 +41,9 @@ public:
 	// Sets up initial rendering components and stack for engine states.
 	bool init(void);
 
+	// Frees Engine's data and resources.
+	void shutdown(void);
+
 	// Updates the active state and calculates elapsed time. This is the main
 	// game update loop.
 	void start(const EngineStateID);
@@ -87,6 +90,10 @@ private:
 
 	// CEGUI components.
 	CEGUI::OgreRenderer* m_ceguiRenderer;
+
+	// PhysX components.
+	physx::PxFoundation* m_foundation; // Foundation for PhysX.
+	physx::PxPhysics* m_physics;
 
 	// Input handler.
 	std::shared_ptr<Input> m_input;

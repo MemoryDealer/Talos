@@ -32,6 +32,10 @@
 #include <CEGUI/CEGUI.h>
 #include <CEGUI/RendererModules/Ogre/Renderer.h>
 
+// PhysX
+#define Physx physx
+#include <PxPhysicsAPI.h>
+
 // My own files.
 #include "Core/HelperFunctions.hpp"
 #include "Core/Assert.hpp"
