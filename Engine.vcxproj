@@ -28,6 +28,8 @@
     <ClCompile Include="Source\Entity\EntityPool.cpp" />
     <ClCompile Include="Source\Input\Input.cpp" />
     <ClCompile Include="Source\Observer\Subject.cpp" />
+    <ClCompile Include="Source\Physics\Physics.cpp" />
+    <ClCompile Include="Source\Physics\PScene.cpp" />
     <ClCompile Include="Source\World\World.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -57,6 +59,8 @@
     <ClInclude Include="Source\Input\Input.hpp" />
     <ClInclude Include="Source\Observer\Observer.hpp" />
     <ClInclude Include="Source\Observer\Subject.hpp" />
+    <ClInclude Include="Source\Physics\Physics.hpp" />
+    <ClInclude Include="Source\Physics\PScene.hpp" />
     <ClInclude Include="Source\stdafx.hpp" />
     <ClInclude Include="Source\World\World.hpp" />
   </ItemGroup>

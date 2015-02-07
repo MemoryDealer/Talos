@@ -76,7 +76,7 @@ A log of all work done on engine.
 * Added Observer and Subject classes. 
 * Made Engine derive from Observer; it receives notifications from EngineStates. So if it receives a "POP" notification from the active state, it will pop that state.
 
-== 2/5/15 ==
+== 2/6/15 ==
 * Renamed FirstPersonComponent to ActorComponent, which can be used to control an Entity using either a player, AI, or network player (also replays).
 * Added Command interface class. Command::execute() takes an EntityPtr and can retrieve the components it might need from that pointer.
 * Added a std::map to the Input class to hold a keymap for all keys on the keyboard. 
@@ -87,9 +87,15 @@ A log of all work done on engine.
 * Added getActorComponent() to Entity since the actor component needs to be retrieve so many times. This is messy IMO but a good decision to avoid repeating myself.
 * It seems that NVIDIA doesn't know how to compile for the current visual studio version...I used the .sln file for the extensions library after changing the Runtime Library option in C/C++ -> Code Generation to /MDd which was previously /MTd. The new .lib file works.
 
+== 2/7/15 ==
+* Created Physics class, which is part of Engine. It initializes the base PhysX objects: PxFoundation and PxPhysics. It is passed into PScene:
+* Created PScene class, which is part of World. It contains a PxScene which holds data for a single scene of physics simulation.
+* Made a simple PxRigidDynamic test in IntroState, applied it to the Ogre mesh. I believe I have the simulate() correct on the physx scene, at 1.f / 16.f (16. is the MS_PER_UPDATE in Engine).
+
 == TODO ==
 * Have a UI object (an interface) which defines functions for GUI events. Derive one for each state. It should have a queue of events that the EngineState::update() function processes.
 * Enums appear to be at random places in class definitions, make them consistent.
+* Have all classes that shouldn't be derived from be declared as final.
 * Put an EntityRegistry in World which has an associative array of IDs to strings for Entity names.
 * Make sure Entities are destroyed properly when World is destroyed.
 * Alphabetize includes everywhere. Folder name is first if in a folder.

@@ -5,44 +5,38 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: IntroState.hpp
+// File: PhysicsScene.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines IntroState class.
+// Defines PhysicsScene class.
 // ========================================================================= //
 
-#ifndef __INTROSTATE_HPP__
-#define __INTROSTATE_HPP__
+#ifndef __PSCENE_HPP__
+#define __PSCENE_HPP__
 
 // ========================================================================= //
 
-#include "EngineState.hpp"
-#include "Entity/Entity.hpp"
+#include "Physics.hpp"
 
 // ========================================================================= //
-// A test state for now.
-class IntroState final : public EngineState
+// A single physics scene to be used by a state. PScene is easier to type.
+class PScene final
 {
 public:
-	// Calls EngineState constructor.
-	explicit IntroState(void);
+	explicit PScene(const std::shared_ptr<Physics>);
 
-	// Empty destructor.
-	virtual ~IntroState(void) override;
+	~PScene(void);
 
-	// Set up basic stuff.
-	virtual void enter(void) override;
+	const bool init(void);
 
-	// Free basic stuff.
-	virtual void exit(void) override;
+	void destroy(void);
 
-	// Test.
-	virtual void update(void) override;
+	void simulate(PxReal);
 
-private:
-	EntityPtr m_player;
-	EntityPtr m_ogre;
-	physx::PxRigidDynamic* dyn;
+public:
+	PxPhysics* m_physx;
+	PxScene* m_scene;
+	PxDefaultCpuDispatcher* m_cpuDispatcher;
 };
 
 // ========================================================================= //

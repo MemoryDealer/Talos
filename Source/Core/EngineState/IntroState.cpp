@@ -19,6 +19,7 @@
 #include "Component/SceneComponent.hpp"
 #include "Input/Input.hpp"
 #include "IntroState.hpp"
+#include "Physics/PScene.hpp"
 #include "World/World.hpp"
 
 // ========================================================================= //
@@ -89,6 +90,16 @@ void IntroState::enter(void)
 	quit->setSize(CEGUI::USize(CEGUI::UDim(0.15f, 0.f), CEGUI::UDim(0.05f, 0.f)));
 	fwnd->addChild(quit);*/
 	//quit->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&IntroState::quit, this));
+
+	PxMaterial* mat = m_world.getPScene()->m_physx->createMaterial(0.5f, 0.5f, 0.1f);
+	dyn = PxCreateDynamic(*m_world.getPScene()->m_physx,
+										  PxTransform(PxVec3(0.f, 0.f, 0.f)),
+										  PxSphereGeometry(10.f),
+										  *mat,
+										  PxReal(11.3f));
+	dyn->setLinearVelocity(PxVec3(0.f, 40.f, 0.f));
+	m_world.getPScene()->m_scene->addActor(*dyn);
+	
 }
 
 // ========================================================================= //
@@ -105,12 +116,20 @@ void IntroState::update(void)
 {
 	if (m_active == true){
 		m_world.update();
-		static_cast<SceneComponentPtr>(m_ogre->getComponentPtr("SceneComponent"))
-			->getSceneNode()->rotate(Ogre::Vector3::UNIT_Y, Ogre::Degree(1.0));
+
+		PxTransform transform = dyn->getGlobalPose();
+		PxVec3 p = transform.p;
+		PxQuat q = transform.q;
+		
+		SceneComponentPtr s = static_cast<SceneComponentPtr>(m_ogre->getComponentPtr("SceneComponent"));
+
+		s->getSceneNode()->setPosition(p.x, p.y, p.z);
+		s->getSceneNode()->setOrientation(q.w, q.x, q.y, q.z);
+		
+		//s->getSceneNode()->rotate(Ogre::Vector3::UNIT_Y, Ogre::Degree(1.0));
 
 		// Poll SDL for events.
 		SDL_Event e;
-		ComponentMessage msg;
 		while (SDL_PollEvent(&e)){
 			switch (e.type){
 			default:

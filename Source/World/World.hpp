@@ -24,12 +24,14 @@
 // ========================================================================= //
 
 class EntityPool;
+class Physics;
+class PScene;
 
 // ========================================================================= //
 // Represents everything in the physical game world. The World holds 
 // collections of Systems (which have collections of Components) and Entities
 // (which have pointers to the needed Components in the Systems).
-class World
+class World final
 {
 public:
 	// Default initializes member data.
@@ -73,6 +75,9 @@ public:
 	// Returns pointer to the Ogre::Viewport for this world.
 	Ogre::Viewport* getViewport(void) const;
 
+	// Returns pointer to PScene (physics scene).
+	std::shared_ptr<PScene> getPScene(void) const;
+
 	// Returns reference to internal Input instance.
 	Input* getInput(void) const;
 
@@ -81,6 +86,7 @@ public:
 	struct Dependencies{
 		Ogre::Root* root;
 		Ogre::Viewport* viewport;
+		std::shared_ptr<Physics> physics;
 		Input* input;
 	};
 
@@ -89,6 +95,10 @@ private:
 	Ogre::Root* m_root;
 	Ogre::SceneManager* m_scene;
 	Ogre::Viewport*	m_viewport;
+
+	// PhysX.
+	std::shared_ptr<Physics> m_physics;
+	std::shared_ptr<PScene> m_PScene;
 
 	// Entity pool.
 	std::shared_ptr<EntityPool> m_entityPool;
@@ -108,6 +118,7 @@ private:
 inline void World::injectDependencies(const Dependencies& deps){
 	m_root = deps.root;
 	m_viewport = deps.viewport;
+	m_physics = deps.physics;
 	m_input = deps.input;
 }
 
@@ -137,6 +148,10 @@ inline Ogre::SceneManager* World::getSceneManager(void) const{
 
 inline Ogre::Viewport* World::getViewport(void) const{
 	return m_viewport;
+}
+
+inline std::shared_ptr<PScene> World::getPScene(void) const{
+	return m_PScene;
 }
 
 inline Input* World::getInput(void) const{

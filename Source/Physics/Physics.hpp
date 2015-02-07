@@ -5,44 +5,43 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: IntroState.hpp
+// File: Physics.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines IntroState class.
+// Defines Physics class.
 // ========================================================================= //
 
-#ifndef __INTROSTATE_HPP__
-#define __INTROSTATE_HPP__
+#ifndef __PHYSICS_HPP__
+#define __PHYSICS_HPP__
 
 // ========================================================================= //
 
-#include "EngineState.hpp"
-#include "Entity/Entity.hpp"
+#include "stdafx.hpp"
 
 // ========================================================================= //
-// A test state for now.
-class IntroState final : public EngineState
+
+using namespace physx;
+
+// ========================================================================= //
+// Holds top-level PhysX objects for initialization of the physics engine.
+class Physics final
 {
+	friend class PScene;
+
 public:
-	// Calls EngineState constructor.
-	explicit IntroState(void);
+	explicit Physics(void);
 
-	// Empty destructor.
-	virtual ~IntroState(void) override;
+	~Physics(void);
 
-	// Set up basic stuff.
-	virtual void enter(void) override;
+	const bool init(void);
 
-	// Free basic stuff.
-	virtual void exit(void) override;
-
-	// Test.
-	virtual void update(void) override;
+	void destroy(void);
 
 private:
-	EntityPtr m_player;
-	EntityPtr m_ogre;
-	physx::PxRigidDynamic* dyn;
+	PxFoundation* m_foundation;
+	PxPhysics* m_physx;
+	PxDefaultAllocator m_defaultAllocator;
+	PxDefaultErrorCallback m_defaultErrorCallback;
 };
 
 // ========================================================================= //

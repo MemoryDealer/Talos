@@ -14,6 +14,7 @@
 #include "Engine.hpp"
 #include "EngineState/IntroState.hpp"
 #include "Input/Input.hpp"
+#include "Physics/Physics.hpp"
 #include "Resources.hpp"
 #include "World/World.hpp"
 
@@ -27,7 +28,6 @@ m_log(nullptr),
 m_timer(nullptr),
 m_sdlWindow(nullptr),
 m_ceguiRenderer(nullptr),
-m_foundation(nullptr),
 m_physics(nullptr),
 m_input(nullptr),
 m_states(),
@@ -156,19 +156,8 @@ bool Engine::init(void)
 
 	// PhysX:
 
-	static physx::PxDefaultAllocator defaultAllocator;
-	static physx::PxDefaultErrorCallback defaultErrorCallback;
-
-	m_foundation = PxCreateFoundation(PX_PHYSICS_VERSION, defaultAllocator, defaultErrorCallback);
-
-	// Create top-level physics object.
-	bool recordMemoryAllocations = true;
-	m_physics = PxCreatePhysics(PX_PHYSICS_VERSION, 
-								*m_foundation, 
-								physx::PxTolerancesScale(), 
-								recordMemoryAllocations,
-								nullptr);
-	if (m_physics == nullptr){
+	m_physics.reset(new Physics());
+	if (m_physics->init() == false){
 		return false;
 	}
 
@@ -192,8 +181,9 @@ bool Engine::init(void)
 
 void Engine::shutdown(void)
 {
-	m_physics->release();
-	m_foundation->release();
+	m_physics->destroy();
+	delete m_root;
+	delete Ogre::LogManager::getSingletonPtr();
 }
 
 // ========================================================================= //
@@ -262,6 +252,7 @@ void Engine::registerState(const EngineStateID id)
 	World::Dependencies deps;
 	deps.root = m_root;
 	deps.viewport = m_viewport;
+	deps.physics = m_physics;
 	deps.input = m_input.get();
 	state->getWorld().injectDependencies(deps);
 

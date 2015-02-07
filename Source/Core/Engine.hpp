@@ -23,13 +23,14 @@
 // ========================================================================= //
 
 class Input;
+class Physics;
 
 typedef std::stack<EngineStatePtr> EngineStateStack;
 typedef std::vector<EngineStatePtr> EngineStateList;
 
 // ========================================================================= //
 // Holds rendering components, manages engine state stack.
-class Engine : public Observer
+class Engine final : public Observer
 {
 public:
 	// Reserves contiguous memory for EngineState's.
@@ -91,9 +92,8 @@ private:
 	// CEGUI components.
 	CEGUI::OgreRenderer* m_ceguiRenderer;
 
-	// PhysX components.
-	physx::PxFoundation* m_foundation; // Foundation for PhysX.
-	physx::PxPhysics* m_physics;
+	// Physics.
+	std::shared_ptr<Physics> m_physics;
 
 	// Input handler.
 	std::shared_ptr<Input> m_input;

@@ -67,6 +67,12 @@
     <Filter Include="Header Files\UI">
       <UniqueIdentifier>{5144fd09-27b9-449e-a039-a929204fd3a4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Physics">
+      <UniqueIdentifier>{4821a7f3-8d26-4701-b763-9f16c7152c08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics">
+      <UniqueIdentifier>{6833b68c-1edc-465a-bfb0-f2d3887eba15}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\main.cpp">
@@ -122,6 +128,12 @@
     </ClCompile>
     <ClCompile Include="Source\Command\CommandRepository.cpp">
       <Filter>Source Files\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Physics\Physics.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Physics\PScene.cpp">
+      <Filter>Source Files\Physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -208,6 +220,12 @@
     </ClInclude>
     <ClInclude Include="Source\Command\Actor\MouseMove.hpp">
       <Filter>Header Files\Command\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Physics\Physics.hpp">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Physics\PScene.hpp">
+      <Filter>Header Files\Physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

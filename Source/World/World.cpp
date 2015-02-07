@@ -16,6 +16,7 @@
 #include "Component/ModelComponent.hpp"
 #include "Component/SceneComponent.hpp"
 #include "Entity/EntityPool.hpp"
+#include "Physics/PScene.hpp"
 #include "World.hpp"
 
 // ========================================================================= //
@@ -24,6 +25,8 @@ World::World(void) :
 m_root(nullptr),
 m_scene(nullptr),
 m_viewport(nullptr),
+m_physics(nullptr),
+m_PScene(nullptr),
 m_entityPool(nullptr),
 m_actorComponentPool(nullptr),
 m_cameraComponentPool(nullptr),
@@ -45,7 +48,12 @@ World::~World(void)
 
 void World::init(void)
 {
+	// Create Ogre scene for rendering.
 	m_scene = m_root->createSceneManager(Ogre::ST_GENERIC);
+
+	// Create physics scene.
+	m_PScene.reset(new PScene(m_physics));
+	m_PScene->init();
 
 	// Allocate Entity pool.
 	// @TODO: Read pool size from config file.
@@ -87,6 +95,10 @@ void World::update(void)
 	for (int i = 0; i < m_entityPool->m_poolSize; ++i){
 		m_entityPool->m_pool[i].update(*this); // Dereference self.
 	}
+
+	PxReal step = 1.f / 60.f;
+	step = 1.f / 16.f;
+	m_PScene->simulate(step);
 }
 
 // ========================================================================= //

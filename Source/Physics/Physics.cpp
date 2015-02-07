@@ -5,48 +5,59 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: IntroState.hpp
+// File: Physics.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines IntroState class.
+// Implements Physics class.
 // ========================================================================= //
 
-#ifndef __INTROSTATE_HPP__
-#define __INTROSTATE_HPP__
+#include "Physics.hpp"
 
 // ========================================================================= //
 
-#include "EngineState.hpp"
-#include "Entity/Entity.hpp"
-
-// ========================================================================= //
-// A test state for now.
-class IntroState final : public EngineState
+Physics::Physics(void) :
+m_foundation(nullptr),
+m_physx(nullptr),
+m_defaultAllocator(),
+m_defaultErrorCallback()
 {
-public:
-	// Calls EngineState constructor.
-	explicit IntroState(void);
-
-	// Empty destructor.
-	virtual ~IntroState(void) override;
-
-	// Set up basic stuff.
-	virtual void enter(void) override;
-
-	// Free basic stuff.
-	virtual void exit(void) override;
-
-	// Test.
-	virtual void update(void) override;
-
-private:
-	EntityPtr m_player;
-	EntityPtr m_ogre;
-	physx::PxRigidDynamic* dyn;
-};
+	
+}
 
 // ========================================================================= //
 
-#endif
+Physics::~Physics(void)
+{
+
+}
+
+// ========================================================================= //
+
+const bool Physics::init(void)
+{
+	m_foundation = PxCreateFoundation(PX_PHYSICS_VERSION,
+									  m_defaultAllocator,
+									  m_defaultErrorCallback);
+
+	bool recordMemoryAllocations = true;
+	m_physx = PxCreatePhysics(PX_PHYSICS_VERSION,
+								*m_foundation,
+								PxTolerancesScale(),
+								recordMemoryAllocations,
+								nullptr);
+	if (m_physx == nullptr){
+		return false;
+	}
+
+	return true;
+}
+
+// ========================================================================= //
+
+void Physics::destroy(void)
+{
+	m_physx->release();
+	m_foundation->release();
+}
 
 // ========================================================================= //
