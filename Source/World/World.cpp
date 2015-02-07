@@ -95,10 +95,6 @@ void World::update(void)
 	for (int i = 0; i < m_entityPool->m_poolSize; ++i){
 		m_entityPool->m_pool[i].update(*this); // Dereference self.
 	}
-
-	PxReal step = 1.f / 60.f;
-	step = 1.f / 16.f;
-	m_PScene->simulate(step);
 }
 
 // ========================================================================= //
