@@ -17,6 +17,7 @@
 
 CommandRepository::CommandRepository(void) :
 NullCommand(new ::NullCommand()),
+MouseMoveCommand(new ::MouseMoveCommand()),
 MoveBackwardCommand(new ::MoveBackwardCommand()),
 MoveForwardCommand(new ::MoveForwardCommand()),
 MoveLeftCommand(new ::MoveLeftCommand()),

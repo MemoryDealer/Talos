@@ -5,14 +5,14 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: MoveBackward.hpp
+// File: MouseMove.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines MoveBackwardCommand class.
+// Defines MouseMoveCommand class.
 // ========================================================================= //
 
-#ifndef __MOVEBACKWARD_HPP__
-#define __MOVEBACKWARD_HPP__
+#ifndef __MOUSEMOVE_HPP__
+#define __MOUSEMOVE_HPP__
 
 // ========================================================================= //
 
@@ -21,22 +21,33 @@
 
 // ========================================================================= //
 
-class MoveBackwardCommand : public Command
+class MouseMoveCommand;
+
+typedef std::shared_ptr<MouseMoveCommand> MouseMoveCommandPtr;
+
+// ========================================================================= //
+
+class MouseMoveCommand : public Command
 {
 public:
+	void setXY(const int relx, const int rely);
 
 	virtual void execute(EntityPtr entity) override{
 		ActorComponentPtr actor = entity->getActorComponent();
 
-		actor->setMovingBackward(true);
+		actor->look(m_relx, m_rely);
 	}
 
-	virtual void unexecute(EntityPtr entity) override{
-		ActorComponentPtr actor = entity->getActorComponent();
-
-		actor->setMovingBackward(false);
-	}
+private:
+	int m_relx, m_rely;
 };
+
+// ========================================================================= //
+
+inline void MouseMoveCommand::setXY(const int relx, const int rely){
+	m_relx = relx;
+	m_rely = rely;
+}
 
 // ========================================================================= //
 

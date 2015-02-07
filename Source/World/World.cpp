@@ -28,7 +28,8 @@ m_entityPool(nullptr),
 m_actorComponentPool(nullptr),
 m_cameraComponentPool(nullptr),
 m_modelComponentPool(nullptr),
-m_sceneComponentPool(nullptr)
+m_sceneComponentPool(nullptr),
+m_input(nullptr)
 {
 	
 }

@@ -41,6 +41,7 @@ IntroState::~IntroState(void)
 void IntroState::enter(void)
 {
 	m_world.init();
+	m_world.getInput()->setMode(Input::Mode::UI);
 
 	// Create scene manager.
 	Ogre::SceneManager* scene = m_world.getSceneManager();
@@ -58,9 +59,6 @@ void IntroState::enter(void)
 
 	actorComponent->attachCamera(cameraComponent->getCamera());
 
-	// Set player pointer for input manager.
-	m_world.getInput().setPlayer(m_player);
-
 	m_ogre = m_world.createEntity();
 	SceneComponentPtr sceneComponent = m_world.createSceneComponent();
 	m_ogre->attachComponent(sceneComponent);
@@ -70,20 +68,27 @@ void IntroState::enter(void)
 	m_ogre->init(m_world);
 
 	sceneComponent->attachObject(model->getOgreEntity());
-	sceneComponent->getSceneNode()->setPosition(0.0f, -10.0f, -50.0f);
+	sceneComponent->getSceneNode()->setPosition(0.f, -10.f, -50.f);
 
 	// Setup GUI.
 	CEGUI::WindowManager& wmgr = CEGUI::WindowManager::getSingleton();
-	CEGUI::Window* root = wmgr.createWindow("DefaultWindow", "root");
+
+	/*CEGUI::Window* root = wmgr.createWindow("DefaultWindow", "root");
 	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(root);
 
 	CEGUI::FrameWindow* fwnd = static_cast<CEGUI::FrameWindow*>(
 		wmgr.createWindow("AlfiskoSkin/FrameWindow", "testWindow"));
 	root->addChild(fwnd);
-	fwnd->setPosition(CEGUI::UVector2(CEGUI::UDim(0.25f, 0.0f),
-		CEGUI::UDim(0.25f, 0.0f)));
-	fwnd->setSize(CEGUI::USize(CEGUI::UDim(0.5f, 0.0f), CEGUI::UDim(0.5f, 0.0f)));
+	fwnd->setPosition(CEGUI::UVector2(CEGUI::UDim(0.25f, 0.f),
+		CEGUI::UDim(0.25f, 0.f)));
+	fwnd->setSize(CEGUI::USize(CEGUI::UDim(0.5f, 0.f), CEGUI::UDim(0.5f, 0.f)));
 	fwnd->setText("Hello world!");
+
+	CEGUI::Window* quit = wmgr.createWindow("AlfiskoSkin/Button", "root/quit");
+	quit->setText("Quit");
+	quit->setSize(CEGUI::USize(CEGUI::UDim(0.15f, 0.f), CEGUI::UDim(0.05f, 0.f)));
+	fwnd->addChild(quit);*/
+	//quit->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&IntroState::quit, this));
 }
 
 // ========================================================================= //
@@ -103,11 +108,6 @@ void IntroState::update(void)
 		static_cast<SceneComponentPtr>(m_ogre->getComponentPtr("SceneComponent"))
 			->getSceneNode()->rotate(Ogre::Vector3::UNIT_Y, Ogre::Degree(1.0));
 
-		//! @HACK
-		/*CEGUI::System::getSingleton().getDefaultGUIContext().
-			injectMousePosition(static_cast<float>(msg.mouse.absx),
-			static_cast<float>(msg.mouse.absy));*/
-
 		// Poll SDL for events.
 		SDL_Event e;
 		ComponentMessage msg;
@@ -121,25 +121,16 @@ void IntroState::update(void)
 			case SDL_MOUSEMOTION:
 			case SDL_KEYDOWN:
 				{
-					CommandPtr command = m_world.getInput().handle(e);
+					CommandPtr command = m_world.getInput()->handle(e);
 					if (command != nullptr){
 						command->execute(m_player);
 					}
 				}
-				/*switch (m_world.getInput().handle(e)){
-				default:
-					break;
-
-				case SDLK_ESCAPE:
-					m_subject.notify(1);
-					m_active = false;
-					break;
-				}*/
 				break;
 
 			case SDL_KEYUP:
 				{
-					CommandPtr command = m_world.getInput().handle(e);
+					CommandPtr command = m_world.getInput()->handle(e);
 					if (command != nullptr){
 						command->unexecute(m_player);
 					}

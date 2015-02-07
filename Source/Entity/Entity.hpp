@@ -20,11 +20,13 @@
 
 // ========================================================================= //
 
+class ActorComponent;
 class Component;
 struct ComponentMessage;
 class Entity;
 class World;
 
+typedef ActorComponent* ActorComponentPtr;
 typedef Component* ComponentPtr;
 typedef unsigned int EntityID;
 typedef Entity* EntityPtr;
@@ -71,6 +73,8 @@ public:
 	// @TODO: Add component-specific getter functions? This would avoid 
 	// having to cast the ComponentPtr everytime it's retrieved.
 	ComponentPtr getComponentPtr(const std::string& name) const;
+
+	ActorComponentPtr getActorComponent(void) const;
 
 	// Returns next EntityPtr as part of the EntityPool.
 	EntityPtr getNext(void) const;

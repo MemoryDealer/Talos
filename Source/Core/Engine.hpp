@@ -22,6 +22,8 @@
 
 // ========================================================================= //
 
+class Input;
+
 typedef std::stack<EngineStatePtr> EngineStateStack;
 typedef std::vector<EngineStatePtr> EngineStateList;
 
@@ -85,6 +87,9 @@ private:
 
 	// CEGUI components.
 	CEGUI::OgreRenderer* m_ceguiRenderer;
+
+	// Input handler.
+	std::shared_ptr<Input> m_input;
 
 	// State management.
 	EngineStateList m_states;

@@ -11,6 +11,7 @@
 // Defines Entity class.
 // ========================================================================= //
 
+#include "Component/ActorComponent.hpp"
 #include "Component/Component.hpp"
 #include "Component/ComponentMessage.hpp"
 #include "Entity.hpp"
@@ -91,9 +92,7 @@ void Entity::detachComponent(const ComponentPtr component)
 
 void Entity::message(const ComponentMessage& msg)
 {
-	if (msg.type == ComponentMessageType::NIL){
-		return;
-	}
+	Assert(msg.type != ComponentMessageType::NIL, "NIL Entity message!");
 
 	// Broadcast to all attached components.
 	for (ComponentList::iterator itr = m_components.begin();
@@ -119,6 +118,14 @@ ComponentPtr Entity::getComponentPtr(const std::string& name) const
 	}
 
 	return nullptr;
+}
+
+// ========================================================================= //
+
+ActorComponentPtr Entity::getActorComponent(void) const
+{
+	return static_cast<ActorComponentPtr>(this->getComponentPtr(
+		"ActorComponent"));
 }
 
 // ========================================================================= //

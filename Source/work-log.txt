@@ -82,11 +82,15 @@ A log of all work done on engine.
 * Added a std::map to the Input class to hold a keymap for all keys on the keyboard. 
 * Created CommandRepository which holds a smart pointer to each Command needed in the game. The input class holds an instance of CommandRepository to assign pointers to its keymap.
 * Created NullCommand as per the Null Object pattern.
+* Moved Input to Engine, so there is a single instance. It is injected into EngineStates.
+* Moved mouse looking control out of ActorComponent::message() and into look(). The MouseMove Command calls look().
 
 == TODO ==
+* Have a UI object (an interface) which defines functions for GUI events. Derive one for each state. It should have a queue of events that the EngineState::update() function processes.
+* Enums appear to be at random places in class definitions, make them consistent.
 * Put an EntityRegistry in World which has an associative array of IDs to strings for Entity names.
 * Make sure Entities are destroyed properly when World is destroyed.
 * Alphabetize includes everywhere. Folder name is first if in a folder.
-* Make Entity final? Still not sure if I should allow subclassing for convenience. Entities could be data-driven?
 * Change std::string id system for components to an enum int system to save memory and CPU cycles.
 * Implement config file loading for options in Engine::init() and others.
+* Refer to http://gameprogrammingpatterns.com/event-queue.html for Audio.

@@ -17,6 +17,7 @@
 // ========================================================================= //
 
 #include "Command/NullCommand.hpp"
+#include "Command/Actor/MouseMove.hpp"
 #include "Command/Actor/MoveBackward.hpp"
 #include "Command/Actor/MoveForward.hpp"
 #include "Command/Actor/MoveLeft.hpp"
@@ -38,6 +39,7 @@ public:
 
 	// Smart pointers to possible Commands.
 	CommandPtr NullCommand;
+	MouseMoveCommandPtr MouseMoveCommand;
 	CommandPtr MoveBackwardCommand;
 	CommandPtr MoveForwardCommand;
 	CommandPtr MoveLeftCommand;

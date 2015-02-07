@@ -13,6 +13,7 @@
 
 #include "Engine.hpp"
 #include "EngineState/IntroState.hpp"
+#include "Input/Input.hpp"
 #include "Resources.hpp"
 #include "World/World.hpp"
 
@@ -26,6 +27,7 @@ m_log(nullptr),
 m_timer(nullptr),
 m_sdlWindow(nullptr),
 m_ceguiRenderer(nullptr),
+m_input(nullptr),
 m_states(),
 m_stateStack(),
 m_active(false)
@@ -82,7 +84,8 @@ bool Engine::init(void)
 		SDL_WINDOW_RESIZABLE);
 
 	// Bind mouse to window.
-	//SDL_SetRelativeMouseMode(SDL_TRUE);
+	SDL_SetRelativeMouseMode(SDL_TRUE);
+	SDL_ShowCursor(0);
 
 	// Give the window handle to Ogre.
 	SDL_SysWMinfo wmInfo;
@@ -133,6 +136,14 @@ bool Engine::init(void)
 	// @TODO: Load from config file.
 	CEGUI::SchemeManager::getSingleton().createFromFile(
 		"AlfiskoSkin.scheme");
+	/*CEGUI::SchemeManager::getSingleton().createFromFile(
+		"GameMenu.scheme");
+	CEGUI::SchemeManager::getSingleton().createFromFile(
+		"Generic.scheme");
+	CEGUI::SchemeManager::getSingleton().createFromFile(
+		"VanillaSkin.scheme");
+	CEGUI::SchemeManager::getSingleton().createFromFile(
+		"TaharezLook.scheme");*/
 	CEGUI::FontManager::getSingleton().createFromFile("DejaVuSans-10.font");
 	CEGUI::System::getSingleton().getDefaultGUIContext().
 		setDefaultFont("DejaVuSans-10");
@@ -142,6 +153,9 @@ bool Engine::init(void)
 	// === //
 
 	// Engine:
+
+	// Allocate input handler.
+	m_input.reset(new Input());
 
 	// Register all needed game states.
 	// @TODO: Define these in data.
@@ -218,6 +232,7 @@ void Engine::registerState(const EngineStateID id)
 	World::Dependencies deps;
 	deps.root = m_root;
 	deps.viewport = m_viewport;
+	deps.input = m_input.get();
 	state->getWorld().injectDependencies(deps);
 
 	// Add self as an Observer to listen for events.

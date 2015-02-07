@@ -19,10 +19,9 @@
 // ========================================================================= //
 
 Input::Input(void) :
-m_player(nullptr),
-m_gui(nullptr),
 m_commandRepo(new CommandRepository()),
-m_keymap()
+m_keymap(),
+m_mode(Mode::UI)
 {
 	// @TODO: For every key on keyboard read from keymap file
 	// (add mapKey() function which is a switch-case on the command).
@@ -55,40 +54,86 @@ const CommandPtr Input::handle(const SDL_Event& e)
 		break;
 
 	case SDL_MOUSEBUTTONDOWN:
-
-		break;
-
 	case SDL_MOUSEBUTTONUP:
+		if (m_mode == Mode::UI){
+			// Convert SDL button to CEGUI button.
+			CEGUI::MouseButton button;
+			switch (e.button.button){
+			default:
+				return m_commandRepo->NullCommand;
 
+			case SDL_BUTTON_LEFT:
+				button = CEGUI::MouseButton::LeftButton;
+				break;
+
+			case SDL_BUTTON_RIGHT:
+				button = CEGUI::MouseButton::RightButton;
+				break;
+
+			case SDL_BUTTON_MIDDLE:
+				button = CEGUI::MouseButton::MiddleButton;
+				break;
+			}
+
+			// Inject the mouse button event.
+			if (e.type == SDL_MOUSEBUTTONDOWN){
+				CEGUI::System::getSingleton().getDefaultGUIContext().
+					injectMouseButtonDown(button);
+			}
+			else if (e.type == SDL_MOUSEBUTTONUP){
+				CEGUI::System::getSingleton().getDefaultGUIContext().
+					injectMouseButtonUp(button);
+			}
+		}
+		else{
+
+		}
 		break;
 
 	case SDL_MOUSEMOTION:
-		msg.type = ComponentMessageType::INPUT_MOUSE_MOTION;
-		msg.mouse.x = e.motion.xrel;
-		msg.mouse.y = e.motion.yrel;
-		msg.mouse.absx = e.motion.x;
-		msg.mouse.absy = e.motion.y;
-
-		m_player->message(msg);
+		if (m_mode == Mode::UI){
+			CEGUI::System::getSingleton().getDefaultGUIContext().
+				injectMousePosition(static_cast<float>(e.motion.x), 
+				static_cast<float>(e.motion.y));
+		}
+		else{
+			// Return modified MouseMoveCommand.
+			MouseMoveCommandPtr mmc = m_commandRepo->MouseMoveCommand;
+			mmc->setXY(e.motion.xrel, e.motion.yrel);
+			return mmc;
+		}
 		break;
 
 	case SDL_KEYDOWN:
-		switch (e.key.keysym.sym){
-		default:
-			return m_keymap.find(e.key.keysym.sym)->second;
+		if (m_mode == Mode::UI){
+			
+			CEGUI::System::getSingleton().getDefaultGUIContext().
+				injectKeyDown((CEGUI::Key::Scan)e.key.keysym.scancode);
+		}
+		else{
+			switch (e.key.keysym.sym){
+			default:
+				return m_keymap.find(e.key.keysym.sym)->second;
 
-		case SDLK_ESCAPE:
-			return nullptr;
+			case SDLK_ESCAPE:
+				return nullptr;
+			}
 		}
 		break;
 
 	case SDL_KEYUP:
-		switch (e.key.keysym.sym){
-		default:
-			return m_keymap.find(e.key.keysym.sym)->second;
+		if (m_mode == Mode::UI){
+			CEGUI::System::getSingleton().getDefaultGUIContext().
+				injectKeyUp((CEGUI::Key::Scan)e.key.keysym.scancode);
+		}
+		else{
+			switch (e.key.keysym.sym){
+			default:
+				return m_keymap.find(e.key.keysym.sym)->second;
 
-		case SDLK_ESCAPE:
-			return nullptr;
+			case SDLK_ESCAPE:
+				return nullptr;
+			}
 		}
 		break;
 	}

@@ -25,16 +25,14 @@ class MoveForwardCommand : public Command
 {
 public:
 
-	virtual void execute(EntityPtr entity){
-		ActorComponentPtr actor = static_cast<ActorComponentPtr>(
-			entity->getComponentPtr("ActorComponent"));
+	virtual void execute(EntityPtr entity) override{
+		ActorComponentPtr actor = entity->getActorComponent();
 
 		actor->setMovingForward(true);
 	}
 
-	virtual void unexecute(EntityPtr entity){
-		ActorComponentPtr actor = static_cast<ActorComponentPtr>(
-			entity->getComponentPtr("ActorComponent"));
+	virtual void unexecute(EntityPtr entity) override{
+		ActorComponentPtr actor = entity->getActorComponent();
 
 		actor->setMovingForward(false);
 	}

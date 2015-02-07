@@ -74,13 +74,14 @@ public:
 	Ogre::Viewport* getViewport(void) const;
 
 	// Returns reference to internal Input instance.
-	Input& getInput(void);
+	Input* getInput(void) const;
 
 	// === // 
 
 	struct Dependencies{
 		Ogre::Root* root;
 		Ogre::Viewport* viewport;
+		Input* input;
 	};
 
 private:
@@ -89,17 +90,17 @@ private:
 	Ogre::SceneManager* m_scene;
 	Ogre::Viewport*	m_viewport;
 
+	// Entity pool.
+	std::shared_ptr<EntityPool> m_entityPool;
+
 	// Component pools.
 	std::shared_ptr<ComponentPool<ActorComponent>> m_actorComponentPool;
 	std::shared_ptr<ComponentPool<CameraComponent>> m_cameraComponentPool;
 	std::shared_ptr<ComponentPool<ModelComponent>> m_modelComponentPool;
 	std::shared_ptr<ComponentPool<SceneComponent>> m_sceneComponentPool;
 
-	// Entity pool.
-	std::shared_ptr<EntityPool> m_entityPool;
-
 	// Input component.
-	Input m_input;
+	Input* m_input;
 };
 
 // ========================================================================= //
@@ -107,6 +108,7 @@ private:
 inline void World::injectDependencies(const Dependencies& deps){
 	m_root = deps.root;
 	m_viewport = deps.viewport;
+	m_input = deps.input;
 }
 
 // Component factory functions:
@@ -137,7 +139,7 @@ inline Ogre::Viewport* World::getViewport(void) const{
 	return m_viewport;
 }
 
-inline Input& World::getInput(void){
+inline Input* World::getInput(void) const{
 	return m_input;
 }
 

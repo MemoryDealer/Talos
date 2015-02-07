@@ -64,6 +64,9 @@
     <Filter Include="Source Files\Command">
       <UniqueIdentifier>{26669008-39ca-4b50-bed1-02a9a9ece098}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\UI">
+      <UniqueIdentifier>{5144fd09-27b9-449e-a039-a929204fd3a4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\main.cpp">
@@ -202,6 +205,9 @@
     </ClInclude>
     <ClInclude Include="Source\Command\NullCommand.hpp">
       <Filter>Header Files\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Command\Actor\MouseMove.hpp">
+      <Filter>Header Files\Command\Actor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

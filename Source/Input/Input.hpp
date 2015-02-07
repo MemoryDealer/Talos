@@ -46,33 +46,47 @@ public:
 	// Processes SDL input events. Returns a StateEvent if needed.
 	const CommandPtr handle(const SDL_Event&);
 
+	enum Mode{
+		PLAYER = 0,
+		UI,
+		LOCKED
+	};
+
+	// Getters:
+
+	// Returns current Input mode.
+	const Mode getMode(void) const;
+
 	// Setters:
 
-	// Sets pointer to player Entity.
-	void setPlayer(const EntityPtr);
-
-	// Sets pointer to GUI Entity.
-	void setGUI(const EntityPtr);
+	// Sets the mode of the Input handler.
+	void setMode(const Mode);
 
 private:
-	// There are only two things we need input for: player control and UI.
-	EntityPtr m_player;
-	EntityPtr m_gui;
-
 	std::shared_ptr<CommandRepository> m_commandRepo;
 	KeyMap m_keymap;
+
+	Mode m_mode;
 };
 
 // ========================================================================= //
 
-// Setters:
+// Getters:
 
-inline void Input::setPlayer(const EntityPtr player){
-	m_player = player;
+inline const Input::Mode Input::getMode(void) const{
+	return m_mode;
 }
 
-inline void Input::setGUI(const EntityPtr gui){
-	m_gui = gui;
+// Setters:
+
+inline void Input::setMode(const Mode mode){
+	m_mode = mode;
+	if (m_mode == Mode::PLAYER){
+		SDL_SetRelativeMouseMode(SDL_TRUE);
+	}
+	else if (m_mode == Mode::UI){
+		SDL_SetRelativeMouseMode(SDL_FALSE);
+	}
 }
 
 // ========================================================================= //

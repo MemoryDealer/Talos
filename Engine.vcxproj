@@ -31,6 +31,7 @@
     <ClCompile Include="Source\World\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Command\Actor\MouseMove.hpp" />
     <ClInclude Include="Source\Command\Actor\MoveBackward.hpp" />
     <ClInclude Include="Source\Command\Actor\MoveForward.hpp" />
     <ClInclude Include="Source\Command\Actor\MoveLeft.hpp" />

@@ -51,6 +51,9 @@ public:
 	// Attachs a camera to the roll node.
 	void attachCamera(Ogre::Camera* camera);
 
+	// Changes the actor's orientation based on relative x/y looking.
+	void look(const int relx, const int rely);
+
 	// Getters:
 
 	// ...
