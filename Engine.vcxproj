@@ -116,7 +116,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OgreMain_d.lib;RenderSystem_Direct3D11_d.lib;RenderSystem_GL_d.lib;Plugin_OctreeSceneManager_d.lib;SDL2.lib;SDL2main.lib;CEGUIBase-0_d.lib;CEGUIOgreRenderer-0_d.lib;PhysX3DEBUG_x86.lib;PhysX3CommonDEBUG_x86.lib;PhysX3ExtensionsDEBUG.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OgreMain_d.lib;RenderSystem_Direct3D11_d.lib;RenderSystem_GL_d.lib;Plugin_OctreeSceneManager_d.lib;SDL2.lib;SDL2main.lib;CEGUIBase-0_d.lib;CEGUIOgreRenderer-0_d.lib;PhysX3DEBUG_x86.lib;PhysX3CommonDEBUG_x86.lib;PhysX3ExtensionsDEBUG.lib;PhysX3CharacterKinematicDEBUG_x86.lib;PhysXVisualDebuggerSDKDEBUG.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <Bscmake>

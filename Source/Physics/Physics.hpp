@@ -42,6 +42,7 @@ private:
 	PxPhysics* m_physx;
 	PxDefaultAllocator m_defaultAllocator;
 	PxDefaultErrorCallback m_defaultErrorCallback;
+	PxVisualDebuggerConnection* m_debuggerConnection;
 };
 
 // ========================================================================= //

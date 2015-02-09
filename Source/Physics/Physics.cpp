@@ -19,7 +19,8 @@ Physics::Physics(void) :
 m_foundation(nullptr),
 m_physx(nullptr),
 m_defaultAllocator(),
-m_defaultErrorCallback()
+m_defaultErrorCallback(),
+m_debuggerConnection(nullptr)
 {
 	
 }
@@ -49,6 +50,20 @@ const bool Physics::init(void)
 		return false;
 	}
 
+	/*const char* host = "127.0.0.1";
+	const int port = 5425;
+	const unsigned int timeout = 100;
+
+	PxVisualDebuggerConnectionFlags connectionFlags = 
+		PxVisualDebuggerExt::getAllConnectionFlags();
+
+	m_debuggerConnection = PxVisualDebuggerExt::createConnection(
+		m_physx->getPvdConnectionManager(),
+		host,
+		port,
+		timeout,
+		connectionFlags);*/
+
 	return true;
 }
 
@@ -56,6 +71,8 @@ const bool Physics::init(void)
 
 void Physics::destroy(void)
 {
+	/*m_debuggerConnection->release();*/
+
 	m_physx->release();
 	m_foundation->release();
 }

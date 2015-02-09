@@ -38,20 +38,23 @@ public:
 		DYNAMIC
 	};
 
-	// 
+	// Empty.
 	virtual void init(EntityPtr, World&) override;
+
+	// Initializes PhysX actor, adds to World's PxScene.
 	virtual void init(World&, 
 					  const Type,
 					  PxGeometry&,
-					  const PxReal staticFriction = 0.5f, 
-					  const PxReal dynamicFriction = 0.5f, 
-					  const PxReal restitution = 0.1f,
-					  const PxReal density = 1.f);
+					  const PxReal staticFriction = 0.25f, 
+					  const PxReal dynamicFriction = 0.25f, 
+					  const PxReal restitution = 0.5f,
+					  const PxReal density = 10.f);
 
-	// Empty.
+	// Removes PhysX actor from World's PxScene.
 	virtual void destroy(EntityPtr, World&) override;
 
-	// Empty.
+	// Retrieves the actor's position and orientation, applies them to the
+	// attached SceneComponent for rendering.
 	virtual void update(EntityPtr, World&) override;
 
 	// Empty.
@@ -59,8 +62,24 @@ public:
 
 	// Component functions:
 
+	// Sets PhysX pose position to these coordinates.
+	void setPosition(const PxReal, const PxReal, const PxReal);
+
+	// Sets PhysX pose orientation to this quaternion.
+	void setOrientation(const PxReal, const PxReal, const PxReal, 
+						const PxReal);
+
 	// Translates the PhysX pose directly.
 	void translate(const PxReal, const PxReal, const PxReal);
+
+	// Rotates the PhysX pose by this vector.
+	void rotate(const PxReal, const PxReal, const PxReal);
+
+	// Getters:
+
+	PxRigidActor* getRigidActor(void) const;
+	PxRigidStatic* getStaticActor(void) const;
+	PxRigidDynamic* getDynamicActor(void) const;
 
 private:
 	union{
@@ -71,6 +90,20 @@ private:
 	PxRigidActor* m_actor;
 	PxMaterial* m_mat;
 };
+
+// ========================================================================= //
+
+inline PxRigidActor* PhysicsComponent::getRigidActor(void) const{
+	return m_actor;
+}
+
+inline PxRigidStatic* PhysicsComponent::getStaticActor(void) const{
+	return m_sActor;
+}
+
+inline PxRigidDynamic* PhysicsComponent::getDynamicActor(void) const{
+	return m_dActor;
+}
 
 // ========================================================================= //
 

@@ -69,3 +69,22 @@ void SceneComponent::attachModel(const ModelComponentPtr modelC)
 }
 
 // ========================================================================= //
+
+void SceneComponent::setPosition(const Ogre::Real x, 
+								 const Ogre::Real y, 
+								 const Ogre::Real z)
+{
+	m_node->setPosition(x, y, z);
+}
+
+// ========================================================================= //
+
+void SceneComponent::setOrientation(const Ogre::Real w, 
+									const Ogre::Real x, 
+									const Ogre::Real y,
+									const Ogre::Real z)
+{
+	m_node->setOrientation(w, x, y, z);
+}
+
+// ========================================================================= //

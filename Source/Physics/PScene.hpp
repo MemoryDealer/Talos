@@ -39,10 +39,13 @@ public:
 
 	PxScene* getScene(void) const;
 
+	PxControllerManager* getControllerManager(void) const;
+
 public:
 	PxPhysics* m_physx;
 	PxScene* m_scene;
 	PxDefaultCpuDispatcher* m_cpuDispatcher;
+	PxControllerManager* m_controllerManager;
 };
 
 // ========================================================================= //
@@ -55,6 +58,10 @@ inline PxPhysics* PScene::getSDK(void) const{
 
 inline PxScene* PScene::getScene(void) const{
 	return m_scene;
+}
+
+inline PxControllerManager* PScene::getControllerManager(void) const{
+	return m_controllerManager;
 }
 
 // ========================================================================= //

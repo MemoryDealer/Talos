@@ -70,33 +70,13 @@ void IntroState::enter(void)
 	model->init(m_world, "ogrehead.mesh");
 	m_ogre->attachComponent(model);
 	PhysicsComponentPtr physicsC = m_world.createPhysicsComponent();
-	physicsC->init(m_world, PhysicsComponent::Type::DYNAMIC, PxSphereGeometry(10.f));
+	physicsC->init(m_world, PhysicsComponent::Type::DYNAMIC, PxSphereGeometry(25.f));
 	physicsC->translate(0.f, 150.f, 0.f);
+	physicsC->getDynamicActor()->setLinearVelocity(PxVec3(15.f, 20.f, 5.f));
 	m_ogre->attachComponent(physicsC);
 	m_ogre->init(m_world);
 
 	sceneComponent->attachModel(model);
-	sceneComponent->getSceneNode()->setPosition(0.f, -10.f, -50.f);
-
-	// Setup GUI.
-	CEGUI::WindowManager& wmgr = CEGUI::WindowManager::getSingleton();
-
-	/*CEGUI::Window* root = wmgr.createWindow("DefaultWindow", "root");
-	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(root);
-
-	CEGUI::FrameWindow* fwnd = static_cast<CEGUI::FrameWindow*>(
-		wmgr.createWindow("AlfiskoSkin/FrameWindow", "testWindow"));
-	root->addChild(fwnd);
-	fwnd->setPosition(CEGUI::UVector2(CEGUI::UDim(0.25f, 0.f),
-		CEGUI::UDim(0.25f, 0.f)));
-	fwnd->setSize(CEGUI::USize(CEGUI::UDim(0.5f, 0.f), CEGUI::UDim(0.5f, 0.f)));
-	fwnd->setText("Hello world!");
-
-	CEGUI::Window* quit = wmgr.createWindow("AlfiskoSkin/Button", "root/quit");
-	quit->setText("Quit");
-	quit->setSize(CEGUI::USize(CEGUI::UDim(0.15f, 0.f), CEGUI::UDim(0.05f, 0.f)));
-	fwnd->addChild(quit);*/
-	//quit->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&IntroState::quit, this));
 
 	// Plane.
 	EntityPtr board = m_world.createEntity();
@@ -107,15 +87,33 @@ void IntroState::enter(void)
 	board->attachComponent(modelC);
 	physicsC = m_world.createPhysicsComponent();
 	physicsC->init(m_world, PhysicsComponent::Type::STATIC, physx::PxBoxGeometry(750.f, 0.5f, 750.f));
+	//physicsC->setOrientation(0.9238795325112867f, -0.3826834323650897f, 0.f, 0.f);
 	physicsC->translate(0.f, -50.f, 0.f);
+	//physicsC->rotate(45.f, 0.f, 0.f);
 	board->attachComponent(physicsC);
 	board->init(m_world);
 
 	sceneC->attachModel(modelC);
 
-	/*PxRigidStatic* p = PxCreatePlane(*m_world.getPScene()->m_physx,
-									 PxPlane(PxVec3(0.f, 1.f, 0.f), 50.f),
-									 *mat);*/
+	// Setup GUI.
+	/*CEGUI::WindowManager& wmgr = CEGUI::WindowManager::getSingleton();
+
+	CEGUI::Window* root = wmgr.createWindow("DefaultWindow", "root");
+	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(root);
+
+	CEGUI::FrameWindow* fwnd = static_cast<CEGUI::FrameWindow*>(
+	wmgr.createWindow("AlfiskoSkin/FrameWindow", "testWindow"));
+	root->addChild(fwnd);
+	fwnd->setPosition(CEGUI::UVector2(CEGUI::UDim(0.25f, 0.f),
+	CEGUI::UDim(0.25f, 0.f)));
+	fwnd->setSize(CEGUI::USize(CEGUI::UDim(0.5f, 0.f), CEGUI::UDim(0.5f, 0.f)));
+	fwnd->setText("Hello world!");
+
+	CEGUI::Window* quit = wmgr.createWindow("AlfiskoSkin/Button", "root/quit");
+	quit->setText("Quit");
+	quit->setSize(CEGUI::USize(CEGUI::UDim(0.15f, 0.f), CEGUI::UDim(0.05f, 0.f)));
+	fwnd->addChild(quit);*/
+	//quit->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&IntroState::quit, this));
 }
 
 // ========================================================================= //

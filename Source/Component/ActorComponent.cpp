@@ -13,6 +13,7 @@
 
 #include "ActorComponent.hpp"
 #include "ComponentMessage.hpp"
+#include "Physics/PScene.hpp"
 #include "World/World.hpp"
 
 // ========================================================================= //
@@ -23,8 +24,9 @@ m_yawNode(nullptr),
 m_pitchNode(nullptr),
 m_rollNode(nullptr),
 m_translate(Ogre::Vector3::ZERO),
-m_speed(1.f),
-m_mode(Mode::SPECTATOR)
+m_speed(7.f),
+m_mode(Mode::PLAYER),
+m_pxController(nullptr)
 {
 	this->setName("ActorComponent");
 }
@@ -58,6 +60,18 @@ void ActorComponent::init(EntityPtr entity, World& world)
 	m_yawNode->setOrientation(Ogre::Quaternion::IDENTITY);
 	m_pitchNode->setOrientation(Ogre::Quaternion::IDENTITY);
 	m_rollNode->setOrientation(Ogre::Quaternion::IDENTITY);
+
+	// Create PhysX character controller.
+	PxCapsuleControllerDesc desc;
+	desc.position = PxExtendedVec3(0.f, 0.f, 0.f);
+	desc.height = 35.f;
+	desc.radius = 80.f;
+	PxMaterial* mat = world.getPScene()->getSDK()->createMaterial(0.3f,
+																  0.2f,
+																  0.9f);
+	desc.material = mat;
+	m_pxController = world.getPScene()->getControllerManager()->
+		createController(desc);
 }
 
 // ========================================================================= //
@@ -72,10 +86,6 @@ void ActorComponent::destroy(EntityPtr entity, World& world)
 
 void ActorComponent::update(EntityPtr, World&)
 {
-	printf("pos: <%.2f, %.2f, %.2f>\n", m_cameraNode->getPosition().x,
-		   m_cameraNode->getPosition().y,
-		   m_cameraNode->getPosition().z);
-
 	switch (m_mode){
 	default:
 		break;
@@ -85,6 +95,26 @@ void ActorComponent::update(EntityPtr, World&)
 								m_pitchNode->getOrientation() *
 								m_translate,
 								Ogre::SceneNode::TS_LOCAL);
+		break;
+
+	case Mode::PLAYER:
+		{
+			Ogre::Vector3 translate = m_yawNode->getOrientation() *
+				m_pitchNode->getOrientation() *
+				m_translate;
+			PxVec3 disp(translate.x, -9.81f, translate.z);
+			PxU32 flags = m_pxController->move(disp,
+											   0.5f,
+											   16.f,
+											   0);
+			PxExtendedVec3 pos = m_pxController->getPosition();
+			m_cameraNode->setPosition(Ogre::Real(pos.x), 
+									Ogre::Real(pos.y), 
+									Ogre::Real(pos.z));
+
+			
+		}
+		break;
 	}
 }
 

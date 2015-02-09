@@ -18,7 +18,8 @@
 PScene::PScene(const std::shared_ptr<Physics> physics) :
 m_physx(physics->m_physx),
 m_scene(nullptr),
-m_cpuDispatcher(nullptr)
+m_cpuDispatcher(nullptr),
+m_controllerManager(nullptr)
 {
 	
 }
@@ -53,10 +54,14 @@ const bool PScene::init(void)
 	// ...
 #endif
 
+	// Create the physX scene.
 	m_scene = m_physx->createScene(desc);
 	if (!m_scene){
 		return false;
 	}
+
+	// Create character controller manager.
+	m_controllerManager = PxCreateControllerManager(*m_scene);
 
 	return true;
 }

@@ -19,6 +19,10 @@
 #include "SceneComponent.hpp"
 
 // ========================================================================= //
+
+using namespace physx;
+
+// ========================================================================= //
 // Allows an Entity to be controlled by either: a player giving local input,
 // an AI, a networked player, or from a list of replay commands.
 class ActorComponent final : public SceneComponent
@@ -78,13 +82,16 @@ public:
 	void setMovingRight(const bool);
 
 private:
+	// Ogre3D.
 	Ogre::SceneNode* m_cameraNode;
 	Ogre::SceneNode* m_yawNode;
 	Ogre::SceneNode* m_pitchNode;
 	Ogre::SceneNode* m_rollNode;
-
 	Ogre::Vector3 m_translate;
 	Ogre::Real m_speed;
+
+	// PhysX.
+	PxController* m_pxController;
 
 	Mode m_mode;
 };

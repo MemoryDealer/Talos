@@ -58,7 +58,7 @@ void PhysicsComponent::init(World& world,
 														dynamicFriction,
 														restitution);
 
-
+	// Create a static PhysX actor.
 	if (type == Type::STATIC){
 		m_sActor = PxCreateStatic(*world.getPScene()->getSDK(),
 								  PxTransform(PxVec3(0.f, 0.f, 0.f)),
@@ -68,6 +68,7 @@ void PhysicsComponent::init(World& world,
 		world.getPScene()->getScene()->addActor(*m_sActor);
 		m_actor = m_sActor;
 	}
+	// Create a dynamic PhysX actor.
 	else if(type == Type::DYNAMIC){
 		m_dActor = PxCreateDynamic(*world.getPScene()->getSDK(),
 								   PxTransform(PxVec3(0.f, 0.f, 0.f)),
@@ -78,19 +79,23 @@ void PhysicsComponent::init(World& world,
 		world.getPScene()->getScene()->addActor(*m_dActor);
 		m_actor = m_dActor;
 	}
+
+	/*PxRigidStatic* p = PxCreatePlane(*m_world.getPScene()->m_physx,
+	PxPlane(PxVec3(0.f, 1.f, 0.f), 50.f),
+	*mat);*/
 }
 
 // ========================================================================= //
 
-// Empty.
-void PhysicsComponent::destroy(EntityPtr, World&)
+void PhysicsComponent::destroy(EntityPtr entity, World& world)
 {
+	Assert(m_actor != nullptr, "Null m_actor!");
 
+	world.getPScene()->getScene()->removeActor(*m_actor);
 }
 
 // ========================================================================= //
 
-// Empty.
 void PhysicsComponent::update(EntityPtr entity, World& world)
 {
 	PxTransform transform = m_actor->getGlobalPose();
@@ -98,15 +103,53 @@ void PhysicsComponent::update(EntityPtr entity, World& world)
 	SceneComponentPtr sceneC = static_cast<SceneComponentPtr>
 		(entity->getComponentPtr("SceneComponent"));
 
-	sceneC->getSceneNode()->setPosition(transform.p.x, transform.p.y, transform.p.z);
+	Assert(sceneC != nullptr, 
+		   "PhysicsComponent without corresponding SceneComponent");
+
+	// Set position and orientation.
+	sceneC->setPosition(transform.p.x, transform.p.y, transform.p.z);
+	sceneC->setOrientation(transform.q.w, transform.q.x, transform.q.y,
+						   transform.q.z);
 }
 
 // ========================================================================= //
 
-// Empty.
 void PhysicsComponent::message(const ComponentMessage&)
 {
 
+}
+
+// ========================================================================= //
+
+void PhysicsComponent::setPosition(const PxReal x, 
+								   const PxReal y , 
+								   const PxReal z)
+{
+	PxTransform transform = m_actor->getGlobalPose();
+
+	transform.p.x = x;
+	transform.p.y = y;
+	transform.p.z = z;
+
+	m_actor->setGlobalPose(transform, true);
+}
+
+// ========================================================================= //
+
+// Sets PhysX pose orientation to this quaternion.
+void PhysicsComponent::setOrientation(const PxReal w, 
+									  const PxReal x, 
+									  const PxReal y,
+									  const PxReal z)
+{
+	PxTransform transform = m_actor->getGlobalPose();
+
+	transform.q.w = w;
+	transform.q.x = x;
+	transform.q.y = y;
+	transform.q.z = z;
+
+	m_actor->setGlobalPose(transform, true);
 }
 
 // ========================================================================= //
@@ -120,6 +163,21 @@ void PhysicsComponent::translate(const PxReal dx,
 	transform.p.x += dx;
 	transform.p.y += dy;
 	transform.p.z += dz;
+
+	m_actor->setGlobalPose(transform, true);
+}
+
+// ========================================================================= //
+
+void PhysicsComponent::rotate(const PxReal dx,
+							  const PxReal dy,
+							  const PxReal dz)
+{
+	PxTransform transform = m_actor->getGlobalPose();
+
+	PxVec3 v(dx, dy, dz);
+	//v.normalize();
+	transform.rotate(v);
 
 	m_actor->setGlobalPose(transform, true);
 }
