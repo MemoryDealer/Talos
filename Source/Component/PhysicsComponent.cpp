@@ -80,6 +80,8 @@ void PhysicsComponent::init(World& world,
 		m_actor = m_dActor;
 	}
 
+	// @TODO: Set user data of actor to EntityPtr?
+
 	/*PxRigidStatic* p = PxCreatePlane(*m_world.getPScene()->m_physx,
 	PxPlane(PxVec3(0.f, 1.f, 0.f), 50.f),
 	*mat);*/
@@ -173,6 +175,7 @@ void PhysicsComponent::rotate(const PxReal dx,
 							  const PxReal dy,
 							  const PxReal dz)
 {
+	// @TODO: This doesn't worK!
 	PxTransform transform = m_actor->getGlobalPose();
 
 	PxVec3 v(dx, dy, dz);

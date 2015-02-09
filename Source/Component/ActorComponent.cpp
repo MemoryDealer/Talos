@@ -105,7 +105,7 @@ void ActorComponent::update(EntityPtr, World&)
 			PxVec3 disp(translate.x, -9.81f, translate.z);
 			PxU32 flags = m_pxController->move(disp,
 											   0.5f,
-											   16.f,
+											   1.f / 16.f,
 											   0);
 			PxExtendedVec3 pos = m_pxController->getPosition();
 			m_cameraNode->setPosition(Ogre::Real(pos.x), 
