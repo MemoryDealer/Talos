@@ -64,6 +64,7 @@ void World::init(void)
 	m_actorComponentPool.reset(new ComponentPool<ActorComponent>(256));
 	m_cameraComponentPool.reset(new ComponentPool<CameraComponent>(5));
 	m_modelComponentPool.reset(new ComponentPool<ModelComponent>(1024));
+	m_physicsComponentPool.reset(new ComponentPool<PhysicsComponent>(1024));
 	m_sceneComponentPool.reset(new ComponentPool<SceneComponent>(1024));
 }
 

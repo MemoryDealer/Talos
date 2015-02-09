@@ -97,6 +97,13 @@ void ActorComponent::message(const ComponentMessage& msg)
 
 // ========================================================================= //
 
+void ActorComponent::attachCamera(const CameraComponentPtr cameraC)
+{
+	m_rollNode->attachObject(cameraC->getCamera());
+}
+
+// ========================================================================= //
+
 void ActorComponent::look(const int relx, const int rely)
 {
 	const Ogre::Real sens = 0.2f;

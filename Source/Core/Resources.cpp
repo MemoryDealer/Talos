@@ -52,6 +52,28 @@ void loadOgreResources(void)
 
 // ========================================================================= //
 
+void loadMeshes(void)
+{
+	// Planes.
+	Ogre::Plane plane(Ogre::Vector3::UNIT_Y, 0);
+
+	Ogre::MeshManager::getSingleton().
+		createPlane("Plane/Board", 
+		Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,								  
+		plane, 
+		1500, 
+		1500, 
+		20, 
+		20, 
+		true, 
+		1, 
+		10, 
+		10, 
+		Ogre::Vector3::UNIT_Z);
+}
+
+// ========================================================================= //
+
 void loadCEGUIResources(void)
 {	
 	CEGUI::ImageManager::setImagesetDefaultResourceGroup("Imagesets");

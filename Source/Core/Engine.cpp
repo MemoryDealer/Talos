@@ -122,6 +122,7 @@ bool Engine::init(void)
 
 	// Load resources for Ogre (from Resources.hpp).
 	loadOgreResources();
+	loadMeshes();
 
 	// Allocate the main Ogre timer.
 	m_timer.reset(new Ogre::Timer());

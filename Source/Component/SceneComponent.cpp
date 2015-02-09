@@ -62,3 +62,10 @@ void SceneComponent::message(const ComponentMessage& msg)
 }
 
 // ========================================================================= //
+
+void SceneComponent::attachModel(const ModelComponentPtr modelC)
+{
+	m_node->attachObject(modelC->getOgreEntity());
+}
+
+// ========================================================================= //

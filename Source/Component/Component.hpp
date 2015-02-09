@@ -25,6 +25,7 @@ class Component;
 class ActorComponent;
 class CameraComponent;
 class ModelComponent;
+class PhysicsComponent;
 class SceneComponent;
 // Other forward declarations.
 struct ComponentMessage;
@@ -35,6 +36,7 @@ typedef Component* ComponentPtr;
 typedef ActorComponent* ActorComponentPtr;
 typedef CameraComponent* CameraComponentPtr;
 typedef ModelComponent* ModelComponentPtr;
+typedef PhysicsComponent* PhysicsComponentPtr;
 typedef SceneComponent* SceneComponentPtr;
 typedef Entity* EntityPtr;
 

@@ -17,6 +17,7 @@
     <ClCompile Include="Source\Component\Component.cpp" />
     <ClCompile Include="Source\Component\ComponentPool.cpp" />
     <ClCompile Include="Source\Component\ModelComponent.cpp" />
+    <ClCompile Include="Source\Component\PhysicsComponent.cpp" />
     <ClCompile Include="Source\Component\SceneComponent.cpp" />
     <ClCompile Include="Source\Core\Assert.cpp" />
     <ClCompile Include="Source\Core\Engine.cpp" />
@@ -47,6 +48,7 @@
     <ClInclude Include="Source\Component\ComponentPool.hpp" />
     <ClInclude Include="Source\Component\ComponentMessage.hpp" />
     <ClInclude Include="Source\Component\ModelComponent.hpp" />
+    <ClInclude Include="Source\Component\PhysicsComponent.hpp" />
     <ClInclude Include="Source\Component\SceneComponent.hpp" />
     <ClInclude Include="Source\Core\Assert.hpp" />
     <ClInclude Include="Source\Core\Engine.hpp" />

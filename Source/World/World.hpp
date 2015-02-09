@@ -65,6 +65,7 @@ public:
 	ActorComponentPtr createActorComponent(void);
 	CameraComponentPtr createCameraComponent(void);
 	ModelComponentPtr createModelComponent(void);
+	PhysicsComponentPtr createPhysicsComponent(void);
 	SceneComponentPtr createSceneComponent(void);
 
 	// Getters:
@@ -107,6 +108,7 @@ private:
 	std::shared_ptr<ComponentPool<ActorComponent>> m_actorComponentPool;
 	std::shared_ptr<ComponentPool<CameraComponent>> m_cameraComponentPool;
 	std::shared_ptr<ComponentPool<ModelComponent>> m_modelComponentPool;
+	std::shared_ptr<ComponentPool<PhysicsComponent>> m_physicsComponentPool;
 	std::shared_ptr<ComponentPool<SceneComponent>> m_sceneComponentPool;
 
 	// Input component.
@@ -134,6 +136,10 @@ inline CameraComponentPtr World::createCameraComponent(void){
 
 inline ModelComponentPtr World::createModelComponent(void){
 	return m_modelComponentPool->create();
+}
+
+inline PhysicsComponentPtr World::createPhysicsComponent(void){
+	return m_physicsComponentPool->create();
 }
 
 inline SceneComponentPtr World::createSceneComponent(void){

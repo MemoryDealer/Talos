@@ -93,9 +93,15 @@ A log of all work done on engine.
 * Made a simple PxRigidDynamic test in IntroState, applied it to the Ogre mesh. I believe I have the simulate() correct on the physx scene, at 1.f / 16.f (16. is the MS_PER_UPDATE in Engine).
 * Got a sample sphere rigid dynamic actor to roll off a static box actor. Next I must integrate this code into components.
 
+== 2/8/15 ==
+* Added loadMeshes() in Resources.cpp, which is called after loadOgreResources() in Engine::init(). For now it just creates a mesh in memory to be used for a plane.
+* Created PhysicsComponent, which holds either a static or dynamic PhysX actor.
+
 == TODO ==
 * Have a UI object (an interface) which defines functions for GUI events. Derive one for each state. It should have a queue of events that the EngineState::update() function processes.
 * Enums appear to be at random places in class definitions, make them consistent.
+* Consider moving most of the needed data for components into an overloaded init() function like in PhysicsComponent.
+* Have a pointer to an EntityFactor in World? 
 * Have all classes that shouldn't be derived from be declared as final.
 * Put an EntityRegistry in World which has an associative array of IDs to strings for Entity names.
 * Make sure Entities are destroyed properly when World is destroyed.

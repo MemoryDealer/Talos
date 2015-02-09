@@ -18,6 +18,9 @@
 // Parses resource config file and loads all resources.
 extern void loadOgreResources(void);
 
+// Loads any meshes needed throughout Engine.
+extern void loadMeshes(void);
+
 // Sets the resource groups for CEGUI.
 extern void loadCEGUIResources(void);
 

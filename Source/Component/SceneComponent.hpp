@@ -41,8 +41,10 @@ public:
 	// Empty.
 	virtual void message(const ComponentMessage&) override;
 
-	// Calls Ogre::SceneNode::attachObject() with parameter.
-	void attachObject(Ogre::MovableObject*);
+	// Component functions:
+
+	// Joins a ModelComponent to itself.
+	void attachModel(const ModelComponentPtr);
 
 	// Returns pointer to internal Ogre::SceneNode.
 	Ogre::SceneNode* getSceneNode(void) const;
@@ -52,10 +54,6 @@ private:
 };
 
 // ========================================================================= //
-
-inline void SceneComponent::attachObject(Ogre::MovableObject* object){
-	m_node->attachObject(object);
-}
 
 inline Ogre::SceneNode* SceneComponent::getSceneNode(void) const{
 	return m_node;

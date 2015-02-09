@@ -20,7 +20,7 @@ m_physx(physics->m_physx),
 m_scene(nullptr),
 m_cpuDispatcher(nullptr)
 {
-
+	
 }
 
 // ========================================================================= //
@@ -70,9 +70,11 @@ void PScene::destroy(void)
 
 // ========================================================================= //
 
-void PScene::simulate(PxReal dt)
+void PScene::simulate(PxReal speed)
 {
-	m_scene->simulate(dt);
+	const PxReal step = 1.f / 16.f;
+
+	m_scene->simulate(step * speed);
 	m_scene->fetchResults(true);
 }
 

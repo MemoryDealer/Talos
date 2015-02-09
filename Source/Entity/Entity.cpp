@@ -68,9 +68,10 @@ void Entity::update(World& world)
 
 // ========================================================================= //
 
-void Entity::attachComponent(const ComponentPtr component)
+ComponentPtr Entity::attachComponent(const ComponentPtr component)
 {
 	m_components.push_back(component);
+	return component;
 }
 
 // ========================================================================= //

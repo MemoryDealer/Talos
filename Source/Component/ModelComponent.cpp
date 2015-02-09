@@ -35,7 +35,19 @@ ModelComponent::~ModelComponent(void)
 
 void ModelComponent::init(EntityPtr entity, World& world)
 {
-	m_entity = world.getSceneManager()->createEntity(m_filename);
+	
+}
+
+// ========================================================================= //
+
+void ModelComponent::init(World& world,
+						  const std::string& meshName,
+						  const std::string& matName)
+{
+	m_entity = world.getSceneManager()->createEntity(meshName);
+	if (matName != ""){
+		m_entity->setMaterialName(matName);
+	}
 }
 
 // ========================================================================= //

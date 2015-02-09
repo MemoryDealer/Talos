@@ -31,13 +31,31 @@ public:
 
 	void destroy(void);
 
-	void simulate(PxReal);
+	void simulate(PxReal speed = 1.0f);
+
+	// Getters:
+
+	PxPhysics* getSDK(void) const;
+
+	PxScene* getScene(void) const;
 
 public:
 	PxPhysics* m_physx;
 	PxScene* m_scene;
 	PxDefaultCpuDispatcher* m_cpuDispatcher;
 };
+
+// ========================================================================= //
+
+// Getters:
+
+inline PxPhysics* PScene::getSDK(void) const{
+	return m_physx;
+}
+
+inline PxScene* PScene::getScene(void) const{
+	return m_scene;
+}
 
 // ========================================================================= //
 

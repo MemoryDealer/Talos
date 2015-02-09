@@ -54,8 +54,9 @@ public:
 	// Calls update() on all attached components.
 	virtual void update(World& world);
 
-	// Registers component with the entity.
-	void attachComponent(const ComponentPtr);
+	// Registers Component with the entity. Returns a pointer to the newly
+	// attached Component for convenience.
+	ComponentPtr attachComponent(const ComponentPtr);
 
 	// Unregisters component from the entity.
 	void detachComponent(const ComponentPtr);

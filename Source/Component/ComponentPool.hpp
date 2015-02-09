@@ -19,6 +19,7 @@
 #include "ActorComponent.hpp"
 #include "CameraComponent.hpp"
 #include "ModelComponent.hpp"
+#include "PhysicsComponent.hpp"
 #include "SceneComponent.hpp"
 
 // ========================================================================= //
