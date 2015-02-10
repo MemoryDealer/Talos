@@ -24,7 +24,7 @@ m_yawNode(nullptr),
 m_pitchNode(nullptr),
 m_rollNode(nullptr),
 m_translate(Ogre::Vector3::ZERO),
-m_speed(7.f),
+m_speed(0.5f),
 m_mode(Mode::PLAYER),
 m_pxController(nullptr)
 {
@@ -64,14 +64,15 @@ void ActorComponent::init(EntityPtr entity, World& world)
 	// Create PhysX character controller.
 	PxCapsuleControllerDesc desc;
 	desc.position = PxExtendedVec3(0.f, 0.f, 0.f);
-	desc.height = 35.f;
-	desc.radius = 80.f;
-	PxMaterial* mat = world.getPScene()->getSDK()->createMaterial(0.3f,
-																  0.2f,
-																  0.9f);
+	desc.height = 1.8288f;
+	desc.radius = 0.3048f;
+	PxMaterial* mat = world.getPScene()->getSDK()->createMaterial(0.5f,
+																  0.5f,
+																  0.1f);
 	desc.material = mat;
 	m_pxController = world.getPScene()->getControllerManager()->
 		createController(desc);
+	m_pxController->getActor()->setMass(80.f);
 }
 
 // ========================================================================= //
@@ -102,14 +103,15 @@ void ActorComponent::update(EntityPtr, World&)
 			Ogre::Vector3 translate = m_yawNode->getOrientation() *
 				m_pitchNode->getOrientation() *
 				m_translate;
-			PxVec3 disp(translate.x, -9.81f, translate.z);
+			const PxReal gravity = -9.81f / 16.f;
+			PxVec3 disp(translate.x, gravity, translate.z);
 			PxU32 flags = m_pxController->move(disp,
-											   0.5f,
-											   1.f / 16.f,
+											   0.001f,
+											   16.f,
 											   0);
 			PxExtendedVec3 pos = m_pxController->getPosition();
 			m_cameraNode->setPosition(Ogre::Real(pos.x), 
-									Ogre::Real(pos.y), 
+									Ogre::Real(pos.y) + 0.8644f, 
 									Ogre::Real(pos.z));
 
 			

@@ -40,6 +40,11 @@ const bool Physics::init(void)
 									  m_defaultAllocator,
 									  m_defaultErrorCallback);
 
+	PxTolerancesScale scale;
+	scale.length = 100;
+	scale.mass = 1000;
+	scale.speed = 10;
+
 	bool recordMemoryAllocations = true;
 	m_physx = PxCreatePhysics(PX_PHYSICS_VERSION,
 								*m_foundation,

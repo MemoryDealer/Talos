@@ -75,7 +75,7 @@ void PhysicsComponent::init(World& world,
 								   geometry,
 								   *m_mat,
 								   density);
-
+		
 		world.getPScene()->getScene()->addActor(*m_dActor);
 		m_actor = m_dActor;
 	}

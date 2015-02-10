@@ -79,7 +79,7 @@ void PScene::simulate(PxReal speed)
 {
 	const PxReal step = 1.f / 16.f;
 
-	m_scene->simulate(step * speed);
+	m_scene->simulate(step);
 	m_scene->fetchResults(true);
 }
 

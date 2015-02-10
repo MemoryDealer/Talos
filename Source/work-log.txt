@@ -100,11 +100,17 @@ A log of all work done on engine.
 * Also modified the attach*() functions for Components to take the proper Component rather than the internal data (such as Ogre::Camera etc.); it is all done internally within the Component.
 * Added several wrapper functions for PhysicsComponent to modify the Entity's location and rotation. rotate() however does not affect the PhysX transform and I don't know why.
 * Tested both a static plane and dynamic sphere using the PhysicsComponent. Tested rotating the plane with quaternion black voodoo magic to a 45 degree angle with success. 
-* Added the PhysX kinematic character controller to ActorComponent. This also required a controller manager to be setup in the PScene. Got a simple movement system working, it will take much more experimentation and work to get it right. 
+* Added the PhysX kinematic character controller to ActorComponent. Thisalso required a controller manager to be setup in the PScene. Got a simple movement system working, it will take much more experimentation and work to get it right. 
+
+== 2/9/15 ==
+* After a considerably long time of experimentation, I've converted the PhysX units to a 1 unit = 1 meter scale.
+
 
 == TODO ==
 * Put character controller data into config file to speed up testing.
 * When holding a direction and immediately switching to the opposite direction, there is a one second pause before changing, fix this.
+* Make a default material for physx stored in PScene.
+* Make player move same speed when looking up/down, a vector needs to be normalized I think.
 * Have a UI object (an interface) which defines functions for GUI events. Derive one for each state. It should have a queue of events that the EngineState::update() function processes.
 * Enums appear to be at random places in class definitions, make them consistent.
 * Consider moving most of the needed data for components into an overloaded init() function like in PhysicsComponent.

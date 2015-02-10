@@ -70,13 +70,18 @@ void IntroState::enter(void)
 	model->init(m_world, "ogrehead.mesh");
 	m_ogre->attachComponent(model);
 	PhysicsComponentPtr physicsC = m_world.createPhysicsComponent();
-	physicsC->init(m_world, PhysicsComponent::Type::DYNAMIC, PxSphereGeometry(25.f));
-	physicsC->translate(0.f, 150.f, 0.f);
-	physicsC->getDynamicActor()->setLinearVelocity(PxVec3(15.f, 20.f, 5.f));
+	physicsC->init(m_world, PhysicsComponent::Type::DYNAMIC, 
+				  // PxBoxGeometry(1.f, 1.f, 1.f), 
+				  PxSphereGeometry(5.f),
+				   0.5f, 0.5f, 0.1f
+				   );
+	//physicsC->translate(0.f, -39.f, 0.f);
+	physicsC->getDynamicActor()->setLinearVelocity(PxVec3(0.5f, 0.f, 0.f));
 	m_ogre->attachComponent(physicsC);
 	m_ogre->init(m_world);
 
 	sceneComponent->attachModel(model);
+	//sceneComponent->getSceneNode()->scale(0.1f, 0.1f, 0.1f);
 
 	// Plane.
 	EntityPtr board = m_world.createEntity();
@@ -86,7 +91,7 @@ void IntroState::enter(void)
 	modelC->init(m_world, "Plane/Board", "Board");
 	board->attachComponent(modelC);
 	physicsC = m_world.createPhysicsComponent();
-	physicsC->init(m_world, PhysicsComponent::Type::STATIC, physx::PxBoxGeometry(750.f, 0.5f, 750.f));
+	physicsC->init(m_world, PhysicsComponent::Type::STATIC, physx::PxBoxGeometry(75.f, 5.f, 75.f));
 	//physicsC->setOrientation(0.9238795325112867f, -0.3826834323650897f, 0.f, 0.f);
 	physicsC->translate(0.f, -50.f, 0.f);
 	//physicsC->rotate(45.f, 0.f, 0.f);

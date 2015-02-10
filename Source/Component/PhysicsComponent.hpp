@@ -45,9 +45,9 @@ public:
 	virtual void init(World&, 
 					  const Type,
 					  PxGeometry&,
-					  const PxReal staticFriction = 0.25f, 
-					  const PxReal dynamicFriction = 0.25f, 
-					  const PxReal restitution = 0.5f,
+					  const PxReal staticFriction = 0.5f, 
+					  const PxReal dynamicFriction = 0.5f, 
+					  const PxReal restitution = 0.3f,
 					  const PxReal density = 10.f);
 
 	// Removes PhysX actor from World's PxScene.
