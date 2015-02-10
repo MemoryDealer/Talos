@@ -79,6 +79,12 @@
     <Filter Include="Source Files\CC">
       <UniqueIdentifier>{8ac1274a-79d8-4214-85b9-af078da497e7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Rendering">
+      <UniqueIdentifier>{51c2eb99-f7a5-423f-a0ad-6ad16e1085b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering">
+      <UniqueIdentifier>{1a9eb4f5-aed3-444c-ac20-6ce6ed324288}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\main.cpp">
@@ -146,6 +152,12 @@
     </ClCompile>
     <ClCompile Include="Source\CC\KCC.cpp">
       <Filter>Source Files\CC</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\DynamicRenderable.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\DynamicLines.cpp">
+      <Filter>Source Files\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -247,6 +259,12 @@
     </ClInclude>
     <ClInclude Include="Source\CC\DCC.hpp">
       <Filter>Header Files\CC</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\DynamicLines.hpp">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\DynamicRenderable.hpp">
+      <Filter>Header Files\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

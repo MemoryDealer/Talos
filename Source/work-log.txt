@@ -106,11 +106,13 @@ A log of all work done on engine.
 * After a considerably long time of experimentation, I've converted the PhysX units to a 1 unit = 1 meter scale.
 * Fixed pause when changing directions while moving.
 * Created KCC (Kinematic Character Controller) class to encapsulate PhysX controller. The ActorComponent allocates it. Also made DCC(Dynamic ..) which will be implemented at a later time.
+* Fixed player movement to move at the same speed regardless of the camera's pitch.
+* Added DynamicRenderable class from Ogre3D website.
+* Added DynamicLines class for drawing debug lines or for any need of line drawing.
 
 == TODO ==
 * Put character controller data into config file to speed up testing.
 * Make a default material for physx stored in PScene.
-* Make player move same speed when looking up/down, a vector needs to be normalized I think.
 * Make PhysX use software mode if NVIDIA card is not detected.
 * Have a UI object (an interface) which defines functions for GUI events. Derive one for each state. It should have a queue of events that the EngineState::update() function processes.
 * Enums appear to be at random places in class definitions, make them consistent.

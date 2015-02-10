@@ -20,6 +20,7 @@
 #include "Input/Input.hpp"
 #include "IntroState.hpp"
 #include "Physics/PScene.hpp"
+#include "Rendering/DynamicLines.hpp"
 #include "World/World.hpp"
 
 // ========================================================================= //
@@ -98,6 +99,22 @@ void IntroState::enter(void)
 	board->init(m_world);
 
 	sceneC->attachModel(modelC);
+
+	// Test dynamic lines.
+	std::deque<Ogre::Vector3> points;
+	points.push_back(Ogre::Vector3(0.f, 0.f, 0.f));
+	points.push_back(Ogre::Vector3(75.f, 10.f, 0.f));
+	points.push_back(Ogre::Vector3(0.f, -50.f, 0.f));
+	points.push_back(Ogre::Vector3(75.f, -150.f, 0.f));
+
+	DynamicLines* lines = new DynamicLines(Ogre::RenderOperation::OT_LINE_LIST);
+	for (unsigned int i = 0; i < points.size(); ++i){
+		lines->addPoint(points[i]);
+	}
+	lines->update();
+	Ogre::SceneNode* lnode = m_world.getSceneManager()->
+		getRootSceneNode()->createChildSceneNode("lines");
+	lnode->attachObject(lines);
 
 	// Setup GUI.
 	/*CEGUI::WindowManager& wmgr = CEGUI::WindowManager::getSingleton();
