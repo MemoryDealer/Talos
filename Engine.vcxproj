@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\CC\KCC.cpp" />
     <ClCompile Include="Source\Command\CommandRepository.cpp" />
     <ClCompile Include="Source\Component\ActorComponent.cpp" />
     <ClCompile Include="Source\Component\CameraComponent.cpp" />
@@ -34,6 +35,8 @@
     <ClCompile Include="Source\World\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\CC\DCC.hpp" />
+    <ClInclude Include="Source\CC\KCC.hpp" />
     <ClInclude Include="Source\Command\Actor\MouseMove.hpp" />
     <ClInclude Include="Source\Command\Actor\MoveBackward.hpp" />
     <ClInclude Include="Source\Command\Actor\MoveForward.hpp" />

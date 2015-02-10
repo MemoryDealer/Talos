@@ -73,6 +73,12 @@
     <Filter Include="Source Files\Physics">
       <UniqueIdentifier>{6833b68c-1edc-465a-bfb0-f2d3887eba15}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\CC">
+      <UniqueIdentifier>{155a413a-4312-474c-aa9f-5ed8e1d999bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\CC">
+      <UniqueIdentifier>{8ac1274a-79d8-4214-85b9-af078da497e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\main.cpp">
@@ -137,6 +143,9 @@
     </ClCompile>
     <ClCompile Include="Source\Component\PhysicsComponent.cpp">
       <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CC\KCC.cpp">
+      <Filter>Source Files\CC</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -232,6 +241,12 @@
     </ClInclude>
     <ClInclude Include="Source\Component\PhysicsComponent.hpp">
       <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CC\KCC.hpp">
+      <Filter>Header Files\CC</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CC\DCC.hpp">
+      <Filter>Header Files\CC</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

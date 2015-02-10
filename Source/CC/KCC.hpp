@@ -5,37 +5,44 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: MoveBackward.hpp
+// File: KCC.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines MoveBackwardCommand class.
+// Defines KCC class.
 // ========================================================================= //
 
-#ifndef __MOVEBACKWARD_HPP__
-#define __MOVEBACKWARD_HPP__
-
-// ========================================================================= //
-
-#include "Command/Command.hpp"
-#include "Component/ActorComponent.hpp"
+#ifndef __KCC_HPP__
+#define __KCC_HPP__
 
 // ========================================================================= //
 
-class MoveBackwardCommand : public Command
+#include "stdafx.hpp"
+
+// ========================================================================= //
+
+using namespace physx;
+
+// ========================================================================= //
+
+class World;
+
+// ========================================================================= //
+// Kinematic character controller using PhysX.
+class KCC final
 {
 public:
+	explicit KCC(void);
 
-	virtual void execute(EntityPtr entity) override{
-		ActorComponentPtr actor = entity->getActorComponent();
+	~KCC(void);
 
-		actor->setMovingBack(true);
-	}
+	bool init(World&);
 
-	virtual void unexecute(EntityPtr entity) override{
-		ActorComponentPtr actor = entity->getActorComponent();
+	void destroy(World&);
 
-		actor->setMovingBack(false);
-	}
+	PxExtendedVec3 update(const PxReal, const PxReal, const PxReal);
+
+private:
+	PxController* m_controller;
 };
 
 // ========================================================================= //

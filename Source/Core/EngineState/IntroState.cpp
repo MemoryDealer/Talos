@@ -75,13 +75,12 @@ void IntroState::enter(void)
 				  PxSphereGeometry(5.f),
 				   0.5f, 0.5f, 0.1f
 				   );
-	//physicsC->translate(0.f, -39.f, 0.f);
+	physicsC->translate(25.f, 0.f, 0.f);
 	physicsC->getDynamicActor()->setLinearVelocity(PxVec3(0.5f, 0.f, 0.f));
 	m_ogre->attachComponent(physicsC);
 	m_ogre->init(m_world);
 
 	sceneComponent->attachModel(model);
-	//sceneComponent->getSceneNode()->scale(0.1f, 0.1f, 0.1f);
 
 	// Plane.
 	EntityPtr board = m_world.createEntity();

@@ -5,37 +5,26 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: MoveBackward.hpp
+// File: DCC.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines MoveBackwardCommand class.
+// Defines DCC class.
 // ========================================================================= //
 
-#ifndef __MOVEBACKWARD_HPP__
-#define __MOVEBACKWARD_HPP__
+#ifndef __DCC_HPP__
+#define __DCC_HPP__
 
 // ========================================================================= //
-
-#include "Command/Command.hpp"
-#include "Component/ActorComponent.hpp"
-
-// ========================================================================= //
-
-class MoveBackwardCommand : public Command
+// Dynamic character controller using PhysX. TBI.
+class DCC
 {
 public:
+	explicit DCC(void) { }
 
-	virtual void execute(EntityPtr entity) override{
-		ActorComponentPtr actor = entity->getActorComponent();
+	~DCC(void) { }
 
-		actor->setMovingBack(true);
-	}
+private:
 
-	virtual void unexecute(EntityPtr entity) override{
-		ActorComponentPtr actor = entity->getActorComponent();
-
-		actor->setMovingBack(false);
-	}
 };
 
 // ========================================================================= //
