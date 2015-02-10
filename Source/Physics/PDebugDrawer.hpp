@@ -5,72 +5,55 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: ModelComponent.cpp
+// File: PDebugDrawer.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements ModelComponent class.
+// Defines PDebugDrawer class.
 // ========================================================================= //
 
-#include "ComponentMessage.hpp"
-#include "ModelComponent.hpp"
-#include "World/World.hpp"
+#ifndef __PDEBUGDRAWER_HPP__
+#define __PDEBUGDRAWER_HPP__
 
 // ========================================================================= //
 
-ModelComponent::ModelComponent(void) :
-Component(),
-m_entity(nullptr)
+#include "stdafx.hpp"
+
+// ========================================================================= //
+
+using namespace physx;
+
+// ========================================================================= //
+
+class DynamicLines;
+
+// ========================================================================= //
+// Draws registered PhysX actors using dynamic lines in Ogre3D.
+class PDebugDrawer final
 {
-	this->setName("ModelComponent");
-}
+public:
+	explicit PDebugDrawer(void);
+
+	~PDebugDrawer(void);
+
+	// Adds a PhysX actor to the debug drawing list.
+	void add(PxRigidActor*, PxGeometry&);
+
+	// Gets the pose of each PhysX actor and updates the lines.
+	void update(void);
+
+	struct Node{
+		explicit Node(void) : lines(nullptr), actor(nullptr) { }
+
+		std::shared_ptr<DynamicLines> lines;
+		PxRigidActor* actor;
+	};
+
+private:
+	std::vector<Node> m_nodes;
+};
 
 // ========================================================================= //
 
-ModelComponent::~ModelComponent(void)
-{
-
-}
-
-// ========================================================================= //
-
-void ModelComponent::init(EntityPtr entity, World& world)
-{
-	
-}
-
-// ========================================================================= //
-
-void ModelComponent::init(World& world,
-						  const std::string& meshName,
-						  const std::string& matName)
-{
-	m_entity = world.getSceneManager()->createEntity(meshName);
-	if (matName != ""){
-		m_entity->setMaterialName(matName);
-	}
-
-	this->setInitialized(true);
-}
-
-// ========================================================================= //
-
-void ModelComponent::destroy(EntityPtr entity, World& world)
-{
-
-}
-
-// ========================================================================= //
-
-void ModelComponent::update(EntityPtr entity, World& world)
-{
-
-}
-
-// ========================================================================= //
-
-void ModelComponent::message(const ComponentMessage& msg)
-{
-
-}
+#endif
 
 // ========================================================================= //

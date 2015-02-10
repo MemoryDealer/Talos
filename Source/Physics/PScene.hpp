@@ -19,7 +19,11 @@
 #include "Physics.hpp"
 
 // ========================================================================= //
-// A single physics scene to be used by a state. PScene is easier to type.
+
+class PDebugDrawer;
+
+// ========================================================================= //
+// A single physics scene to be used by a state (PScene is easier to type).
 class PScene final
 {
 public:
@@ -33,6 +37,12 @@ public:
 
 	void simulate(PxReal speed = 1.0f);
 
+	// Allocates internal debug drawer.
+	void loadDebugDrawer(void);
+
+	// Adds the actor to the internal debug drawer.
+	void addToDebugDrawer(PxRigidActor*, PxGeometry&);
+
 	// Getters:
 
 	PxPhysics* getSDK(void) const;
@@ -41,11 +51,18 @@ public:
 
 	PxControllerManager* getControllerManager(void) const;
 
+	// Returns true if the debug drawer is activated.
+	const bool isUsingDebugDrawer(void) const;
+
+	// Setters:
+
 public:
 	PxPhysics* m_physx;
 	PxScene* m_scene;
 	PxDefaultCpuDispatcher* m_cpuDispatcher;
 	PxControllerManager* m_controllerManager;
+	std::shared_ptr<PDebugDrawer> m_debugDrawer;
+	bool m_useDebugDrawer;
 };
 
 // ========================================================================= //
@@ -62,6 +79,10 @@ inline PxScene* PScene::getScene(void) const{
 
 inline PxControllerManager* PScene::getControllerManager(void) const{
 	return m_controllerManager;
+}
+
+inline const bool PScene::isUsingDebugDrawer(void) const{
+	return m_useDebugDrawer;
 }
 
 // ========================================================================= //

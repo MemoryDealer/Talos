@@ -91,6 +91,21 @@ void Entity::detachComponent(const ComponentPtr component)
 
 // ========================================================================= //
 
+const bool Entity::checkComponents(void) const
+{
+	for (ComponentList::const_iterator itr = m_components.begin();
+		 itr != m_components.end();
+		 ++itr){
+		if ((*itr)->isInitialized() == false){
+			return false;
+		}
+	}
+
+	return true;
+}
+
+// ========================================================================= //
+
 void Entity::message(const ComponentMessage& msg)
 {
 	Assert(msg.type != ComponentMessageType::NIL, "NIL Entity message!");

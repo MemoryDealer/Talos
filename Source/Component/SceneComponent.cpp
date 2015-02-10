@@ -36,8 +36,12 @@ SceneComponent::~SceneComponent(void)
 
 void SceneComponent::init(EntityPtr entity, World& world)
 {
+	Assert(m_node == nullptr, "init() called more than once!");
+
 	m_node = world.getSceneManager()->getRootSceneNode()->
 		createChildSceneNode(toString(entity->getID()));
+
+	this->setInitialized(true);
 }
 
 // ========================================================================= //
@@ -65,6 +69,8 @@ void SceneComponent::message(const ComponentMessage& msg)
 
 void SceneComponent::attachModel(const ModelComponentPtr modelC)
 {
+	Assert(modelC != nullptr, "null ModelComponentPtr");
+
 	m_node->attachObject(modelC->getOgreEntity());
 }
 

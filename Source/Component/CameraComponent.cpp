@@ -46,6 +46,8 @@ void CameraComponent::init(EntityPtr entity, World& world)
 	m_camera->setAspectRatio(Ogre::Real(viewport->getActualWidth()) /
 							 Ogre::Real(viewport->getActualHeight()));
 	viewport->setCamera(m_camera);
+
+	this->setInitialized(true);
 }
 
 // ========================================================================= //

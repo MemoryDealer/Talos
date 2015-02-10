@@ -24,6 +24,7 @@ enum{
 
 DynamicLines::DynamicLines(const Ogre::RenderOperation::OperationType type) :
 m_points(),
+m_origin(Ogre::Vector3::ZERO),
 m_dirty(true)
 {
 	this->init(type, false);
@@ -41,7 +42,7 @@ DynamicLines::~DynamicLines(void)
 
 void DynamicLines::addPoint(const Ogre::Vector3& p)
 {
-	m_points.push_back(p);
+	m_points.push_back(m_origin + p);
 	m_dirty = true;
 }
 
@@ -51,8 +52,7 @@ void DynamicLines::addPoint(const Ogre::Real x,
 							const Ogre::Real y, 
 							const Ogre::Real z)
 {
-	m_points.push_back(Ogre::Vector3(x, y, z));
-	m_dirty = true;
+	this->addPoint(Ogre::Vector3(x, y, z));
 }
 
 // ========================================================================= //
@@ -62,8 +62,31 @@ void DynamicLines::setPoint(const unsigned short index,
 {
 	Assert(index < m_points.size(), "Point index out of bounds!");
 
-	m_points[index] = p;
+	m_points[index] = m_origin + p;
 	m_dirty = true;
+}
+
+// ========================================================================= //
+
+void DynamicLines::translate(const Ogre::Vector3& offset)
+{
+	m_origin += offset;
+	for (std::vector<Ogre::Vector3>::iterator itr = m_points.begin();
+		 itr != m_points.end();
+		 ++itr){
+		*itr += offset;
+	}
+
+	m_dirty = true;
+}
+
+// ========================================================================= //
+
+void DynamicLines::translate(const Ogre::Real dx, 
+							 const Ogre::Real dy, 
+							 const Ogre::Real dz)
+{
+	this->translate(Ogre::Vector3(dx, dy, dz));
 }
 
 // ========================================================================= //
@@ -72,6 +95,31 @@ void DynamicLines::clear(void)
 {
 	m_points.clear();
 	m_dirty = true;
+}
+
+// ========================================================================= //
+
+void DynamicLines::setOrigin(const Ogre::Vector3& origin)
+{
+	// Reset all points to zero origin.
+	for (std::vector<Ogre::Vector3>::iterator itr = m_points.begin();
+		 itr != m_points.end();
+		 ++itr){
+		*itr -= m_origin;
+		*itr += origin;
+	}
+
+	m_origin = origin;
+	m_dirty = true;
+}
+
+// ========================================================================= //
+
+void DynamicLines::setOrigin(const Ogre::Real x, 
+							 const Ogre::Real y, 
+							 const Ogre::Real z)
+{
+	this->setOrigin(Ogre::Vector3(x, y, z));
 }
 
 // ========================================================================= //
@@ -146,6 +194,24 @@ void DynamicLines::fillHardwareBuffers(void)
 	mBox.setExtents(aabbMin, aabbMax);
 
 	m_dirty = false;
+}
+
+// ========================================================================= //
+
+void DynamicLines::setColour(const Colour colour)
+{
+	switch (colour){
+	default:
+		break;
+
+		case Colour::WHITE:
+			this->setMaterial("BaseWhiteNoLighting");
+			break;
+
+		case Colour::RED:
+			this->setMaterial("BaseRedNoLighting");
+			break;
+	}
 }
 
 // ========================================================================= //

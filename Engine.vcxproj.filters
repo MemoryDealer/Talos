@@ -159,6 +159,9 @@
     <ClCompile Include="Source\Rendering\DynamicLines.cpp">
       <Filter>Source Files\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Physics\PDebugDrawer.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\Engine.hpp">
@@ -265,6 +268,9 @@
     </ClInclude>
     <ClInclude Include="Source\Rendering\DynamicRenderable.hpp">
       <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Physics\PDebugDrawer.hpp">
+      <Filter>Header Files\Physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -20,15 +20,21 @@
 
 // ========================================================================= //
 // Draws lines dynamically using hardware buffers.
-class DynamicLines : public DynamicRenderable
+class DynamicLines final : public DynamicRenderable
 {
 public:
-	// Calls init, sets material, flags as dirty.
+	// Calls init, sets material to default white, flags as dirty.
 	explicit DynamicLines(const Ogre::RenderOperation::OperationType =
 						  Ogre::RenderOperation::OT_LINE_STRIP);
 
 	// Empty destructor.
 	virtual ~DynamicLines(void) override;
+
+	// Possible colours for lines.
+	enum Colour{
+		WHITE = 0,
+		RED
+	};
 
 	// Adds a point to the list.
 	void addPoint(const Ogre::Vector3&);
@@ -38,6 +44,18 @@ public:
 
 	// Changes location of an existing point.
 	void setPoint(const unsigned short index, const Ogre::Vector3&);
+
+	// Moves the entire list of points by specified offset.
+	void translate(const Ogre::Vector3&);
+
+	// Moves the entire list of points by specified offset.
+	void translate(const Ogre::Real, const Ogre::Real, const Ogre::Real);
+
+	// Sets origin (where all points will be off-set from).
+	void setOrigin(const Ogre::Vector3&);
+
+	// Sets origin (where all points will be off-set from).
+	void setOrigin(const Ogre::Real, const Ogre::Real, const Ogre::Real);
 
 	// Removes all points from the point list.
 	void clear(void);
@@ -58,6 +76,9 @@ public:
 	// Sets the type of operation to draw with.
 	void setOperationType(const Ogre::RenderOperation::OperationType);
 
+	// Changes the colour of the lines being rendered.
+	void setColour(const Colour);
+
 protected:
 	// Implements DynamicRenderable's function, creates a simple vertex-only
 	// declaration.
@@ -69,6 +90,7 @@ protected:
 
 private:
 	std::vector<Ogre::Vector3> m_points;
+	Ogre::Vector3 m_origin;
 	bool m_dirty;
 };
 

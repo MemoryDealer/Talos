@@ -75,6 +75,8 @@ void ActorComponent::init(EntityPtr entity, World& world)
 		m_kcc = new KCC();
 		m_kcc->init(world);
 	}
+
+	this->setInitialized(true);
 }
 
 // ========================================================================= //
@@ -123,6 +125,9 @@ void ActorComponent::update(EntityPtr, World&)
 	// Modify original movement vector.
 	translate.x /= forwards.y;
 	translate.z /= forwards.y;
+
+	// Prevent faster movement when moving diagonally.
+	translate.normalise();
 
 	switch (m_mode){
 	default:

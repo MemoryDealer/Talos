@@ -58,6 +58,10 @@ public:
 	// Calls destroy on Entity and 
 	void destroyEntity(EntityPtr);
 
+	// Checks if each Entity's Components have been initialized. Returns true
+	// if they all have. Should be called after initial scene setup.
+	const bool checkEntities(void) const;
+
 	// Updates every active Entity in the game world.
 	void update(void);
 

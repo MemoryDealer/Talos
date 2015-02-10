@@ -91,6 +91,20 @@ void World::destroyEntity(EntityPtr e)
 
 // ========================================================================= //
 
+const bool World::checkEntities(void) const
+{
+	for (int i = 0; i < m_entityPool->m_poolSize; ++i){
+		EntityPtr entity = &m_entityPool->m_pool[i];
+		if (entity->checkComponents() == false){
+			return false;
+		}
+	}
+
+	return true;
+}
+
+// ========================================================================= //
+
 void World::update(void)
 {
 	for (int i = 0; i < m_entityPool->m_poolSize; ++i){

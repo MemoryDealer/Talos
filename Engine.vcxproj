@@ -30,6 +30,7 @@
     <ClCompile Include="Source\Entity\EntityPool.cpp" />
     <ClCompile Include="Source\Input\Input.cpp" />
     <ClCompile Include="Source\Observer\Subject.cpp" />
+    <ClCompile Include="Source\Physics\PDebugDrawer.cpp" />
     <ClCompile Include="Source\Physics\Physics.cpp" />
     <ClCompile Include="Source\Physics\PScene.cpp" />
     <ClCompile Include="Source\Rendering\DynamicLines.cpp" />
@@ -66,6 +67,7 @@
     <ClInclude Include="Source\Input\Input.hpp" />
     <ClInclude Include="Source\Observer\Observer.hpp" />
     <ClInclude Include="Source\Observer\Subject.hpp" />
+    <ClInclude Include="Source\Physics\PDebugDrawer.hpp" />
     <ClInclude Include="Source\Physics\Physics.hpp" />
     <ClInclude Include="Source\Physics\PScene.hpp" />
     <ClInclude Include="Source\Rendering\DynamicLines.hpp" />

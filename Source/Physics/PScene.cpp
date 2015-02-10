@@ -11,6 +11,7 @@
 // Implements PhysicsScene class.
 // ========================================================================= //
 
+#include "PDebugDrawer.hpp"
 #include "PScene.hpp"
 
 // ========================================================================= //
@@ -19,7 +20,9 @@ PScene::PScene(const std::shared_ptr<Physics> physics) :
 m_physx(physics->m_physx),
 m_scene(nullptr),
 m_cpuDispatcher(nullptr),
-m_controllerManager(nullptr)
+m_controllerManager(nullptr),
+m_debugDrawer(nullptr),
+m_useDebugDrawer(false)
 {
 	
 }
@@ -81,6 +84,28 @@ void PScene::simulate(PxReal speed)
 
 	m_scene->simulate(step);
 	m_scene->fetchResults(true);
+
+	if (m_useDebugDrawer){
+		m_debugDrawer->update();
+	}
+}
+
+// ========================================================================= //
+
+void PScene::loadDebugDrawer(void)
+{
+	m_debugDrawer.reset(new PDebugDrawer());
+	m_useDebugDrawer = true;
+}
+
+// ========================================================================= //
+
+void PScene::addToDebugDrawer(PxRigidActor* actor, 
+							  PxGeometry& geometry)
+{
+	Assert(m_debugDrawer != nullptr, "Un-allocated debug drawer");
+
+	m_debugDrawer->add(actor, geometry);
 }
 
 // ========================================================================= //

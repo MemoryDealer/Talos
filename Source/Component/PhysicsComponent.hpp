@@ -43,6 +43,7 @@ public:
 
 	// Initializes PhysX actor, adds to World's PxScene.
 	virtual void init(World&, 
+					  EntityPtr,
 					  const Type,
 					  PxGeometry&,
 					  const PxReal staticFriction = 0.5f, 

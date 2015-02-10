@@ -44,6 +44,7 @@ void IntroState::enter(void)
 {
 	m_world.init();
 	m_world.getInput()->setMode(Input::Mode::PLAYER);
+	m_world.getPScene()->loadDebugDrawer();
 
 	// Create scene manager.
 	Ogre::SceneManager* scene = m_world.getSceneManager();
@@ -55,10 +56,11 @@ void IntroState::enter(void)
 	// Create player entity.
 	m_player = m_world.createEntity();
 	ActorComponentPtr actorComponent = m_world.createActorComponent();
+	actorComponent->init(m_player, m_world);
 	m_player->attachComponent(actorComponent);
 	CameraComponentPtr cameraComponent = m_world.createCameraComponent();
+	cameraComponent->init(m_player, m_world);
 	m_player->attachComponent(cameraComponent);
-	m_player->init(m_world);
 
 	// Wire up camera component to actor component.
 	actorComponent->attachCamera(cameraComponent);
@@ -66,12 +68,13 @@ void IntroState::enter(void)
 	// Create a dynamic object as an ogre mesh.
 	m_ogre = m_world.createEntity();
 	SceneComponentPtr sceneComponent = m_world.createSceneComponent();
+	sceneComponent->init(m_ogre, m_world);
 	m_ogre->attachComponent(sceneComponent);
 	ModelComponent* model = m_world.createModelComponent();
 	model->init(m_world, "ogrehead.mesh");
 	m_ogre->attachComponent(model);
 	PhysicsComponentPtr physicsC = m_world.createPhysicsComponent();
-	physicsC->init(m_world, PhysicsComponent::Type::DYNAMIC, 
+	physicsC->init(m_world, m_ogre, PhysicsComponent::Type::DYNAMIC, 
 				  // PxBoxGeometry(1.f, 1.f, 1.f), 
 				  PxSphereGeometry(5.f),
 				   0.5f, 0.5f, 0.1f
@@ -79,42 +82,25 @@ void IntroState::enter(void)
 	physicsC->translate(25.f, 0.f, 0.f);
 	physicsC->getDynamicActor()->setLinearVelocity(PxVec3(0.5f, 0.f, 0.f));
 	m_ogre->attachComponent(physicsC);
-	m_ogre->init(m_world);
 
-	sceneComponent->attachModel(model);
+	//sceneComponent->attachModel(model);
 
 	// Plane.
 	EntityPtr board = m_world.createEntity();
 	SceneComponentPtr sceneC = m_world.createSceneComponent();
+	sceneC->init(board, m_world);
 	board->attachComponent(sceneC);
 	ModelComponentPtr modelC = m_world.createModelComponent();
 	modelC->init(m_world, "Plane/Board", "Board");
 	board->attachComponent(modelC);
 	physicsC = m_world.createPhysicsComponent();
-	physicsC->init(m_world, PhysicsComponent::Type::STATIC, physx::PxBoxGeometry(75.f, 5.f, 75.f));
+	physicsC->init(m_world, board, PhysicsComponent::Type::STATIC, physx::PxBoxGeometry(75.f, 5.f, 75.f));
 	//physicsC->setOrientation(0.9238795325112867f, -0.3826834323650897f, 0.f, 0.f);
 	physicsC->translate(0.f, -50.f, 0.f);
 	//physicsC->rotate(45.f, 0.f, 0.f);
 	board->attachComponent(physicsC);
-	board->init(m_world);
 
 	sceneC->attachModel(modelC);
-
-	// Test dynamic lines.
-	std::deque<Ogre::Vector3> points;
-	points.push_back(Ogre::Vector3(0.f, 0.f, 0.f));
-	points.push_back(Ogre::Vector3(75.f, 10.f, 0.f));
-	points.push_back(Ogre::Vector3(0.f, -50.f, 0.f));
-	points.push_back(Ogre::Vector3(75.f, -150.f, 0.f));
-
-	DynamicLines* lines = new DynamicLines(Ogre::RenderOperation::OT_LINE_LIST);
-	for (unsigned int i = 0; i < points.size(); ++i){
-		lines->addPoint(points[i]);
-	}
-	lines->update();
-	Ogre::SceneNode* lnode = m_world.getSceneManager()->
-		getRootSceneNode()->createChildSceneNode("lines");
-	lnode->attachObject(lines);
 
 	// Setup GUI.
 	/*CEGUI::WindowManager& wmgr = CEGUI::WindowManager::getSingleton();
@@ -135,6 +121,10 @@ void IntroState::enter(void)
 	quit->setSize(CEGUI::USize(CEGUI::UDim(0.15f, 0.f), CEGUI::UDim(0.05f, 0.f)));
 	fwnd->addChild(quit);*/
 	//quit->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&IntroState::quit, this));
+
+	if (m_world.checkEntities() == false){
+		throw std::exception("World::checkEntities() reported uninitialized Entity");
+	}
 }
 
 // ========================================================================= //
@@ -165,6 +155,7 @@ void IntroState::update(void)
 			case SDL_MOUSEMOTION:
 			case SDL_KEYDOWN:
 				{
+					// Send input commands to the player.
 					CommandPtr command = m_world.getInput()->handle(e);
 					if (command != nullptr){
 						command->execute(m_player);

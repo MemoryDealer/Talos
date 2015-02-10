@@ -46,6 +46,7 @@ void PhysicsComponent::init(EntityPtr, World&)
 // ========================================================================= //
 
 void PhysicsComponent::init(World& world, 
+							EntityPtr entity,
 							const Type type,
 							PxGeometry& geometry,
 							const PxReal staticFriction,
@@ -80,11 +81,22 @@ void PhysicsComponent::init(World& world,
 		m_actor = m_dActor;
 	}
 
+	if (m_actor != nullptr){
+		m_actor->userData = static_cast<EntityPtr>(entity);
+
+		// Add to debug drawer if activated.
+		if (world.getPScene()->isUsingDebugDrawer()){
+			world.getPScene()->addToDebugDrawer(m_actor, geometry);
+		}		
+	}
+
 	// @TODO: Set user data of actor to EntityPtr?
 
 	/*PxRigidStatic* p = PxCreatePlane(*m_world.getPScene()->m_physx,
 	PxPlane(PxVec3(0.f, 1.f, 0.f), 50.f),
 	*mat);*/
+
+	this->setInitialized(true);
 }
 
 // ========================================================================= //

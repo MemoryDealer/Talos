@@ -61,6 +61,10 @@ public:
 	// Unregisters component from the entity.
 	void detachComponent(const ComponentPtr);
 
+	// Checks if all attached Components have been initialized. Returns true
+	// if so.
+	const bool checkComponents(void) const;
+
 	// Broadcasts ComponentMessage to all attached Components.
 	void message(const ComponentMessage&);
 
