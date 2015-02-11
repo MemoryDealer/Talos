@@ -245,9 +245,6 @@
     <ClInclude Include="Source\Command\NullCommand.hpp">
       <Filter>Header Files\Command</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Command\Actor\MouseMove.hpp">
-      <Filter>Header Files\Command\Actor</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Physics\Physics.hpp">
       <Filter>Header Files\Physics</Filter>
     </ClInclude>
@@ -271,6 +268,9 @@
     </ClInclude>
     <ClInclude Include="Source\Physics\PDebugDrawer.hpp">
       <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Command\Actor\Look.hpp">
+      <Filter>Header Files\Command\Actor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

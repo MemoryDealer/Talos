@@ -5,14 +5,14 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: MouseMove.hpp
+// File: Look.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines MouseMoveCommand class.
+// Defines Look class.
 // ========================================================================= //
 
-#ifndef __MOUSEMOVE_HPP__
-#define __MOUSEMOVE_HPP__
+#ifndef __LOOK_HPP__
+#define __LOOK_HPP__
 
 // ========================================================================= //
 
@@ -21,13 +21,13 @@
 
 // ========================================================================= //
 
-class MouseMoveCommand;
+class LookCommand;
 
-typedef std::shared_ptr<MouseMoveCommand> MouseMoveCommandPtr;
+typedef std::shared_ptr<LookCommand> LookCommandPtr;
 
 // ========================================================================= //
 
-class MouseMoveCommand : public Command
+class LookCommand : public Command
 {
 public:
 	void setXY(const int relx, const int rely);
@@ -44,7 +44,7 @@ private:
 
 // ========================================================================= //
 
-inline void MouseMoveCommand::setXY(const int relx, const int rely){
+inline void LookCommand::setXY(const int relx, const int rely){
 	m_relx = relx;
 	m_rely = rely;
 }

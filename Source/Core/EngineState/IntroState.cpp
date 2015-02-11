@@ -83,7 +83,7 @@ void IntroState::enter(void)
 	physicsC->getDynamicActor()->setLinearVelocity(PxVec3(0.5f, 0.f, 0.f));
 	m_ogre->attachComponent(physicsC);
 
-	//sceneComponent->attachModel(model);
+	sceneComponent->attachModel(model);
 
 	// Plane.
 	EntityPtr board = m_world.createEntity();

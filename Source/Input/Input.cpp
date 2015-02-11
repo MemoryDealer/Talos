@@ -98,9 +98,9 @@ const CommandPtr Input::handle(const SDL_Event& e)
 		}
 		else{
 			// Return modified MouseMoveCommand.
-			MouseMoveCommandPtr mmc = m_commandRepo->MouseMoveCommand;
-			mmc->setXY(e.motion.xrel, e.motion.yrel);
-			return mmc;
+			LookCommandPtr lc = m_commandRepo->LookCommand;
+			lc->setXY(e.motion.xrel, e.motion.yrel);
+			return lc;
 		}
 		break;
 

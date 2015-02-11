@@ -19,6 +19,7 @@
 PScene::PScene(const std::shared_ptr<Physics> physics) :
 m_physx(physics->m_physx),
 m_scene(nullptr),
+m_defaultMaterial(nullptr),
 m_cpuDispatcher(nullptr),
 m_controllerManager(nullptr),
 m_debugDrawer(nullptr),
@@ -54,7 +55,7 @@ const bool PScene::init(void)
 	}
 
 #ifdef PX_WINDOWS
-	// ...
+	// CUDA...
 #endif
 
 	// Create the physX scene.
@@ -62,6 +63,9 @@ const bool PScene::init(void)
 	if (!m_scene){
 		return false;
 	}
+
+	// Create default material.
+	m_defaultMaterial = m_physx->createMaterial(0.5f, 0.5f, 0.1f);
 
 	// Create character controller manager.
 	m_controllerManager = PxCreateControllerManager(*m_scene);
@@ -73,14 +77,17 @@ const bool PScene::init(void)
 
 void PScene::destroy(void)
 {
-
+	m_controllerManager->release();
+	m_defaultMaterial->release();
+	m_scene->release();
+	m_cpuDispatcher->release();
 }
 
 // ========================================================================= //
 
 void PScene::simulate(PxReal speed)
 {
-	const PxReal step = 1.f / 16.f;
+	const PxReal step = 1.f / 16.f * speed;
 
 	m_scene->simulate(step);
 	m_scene->fetchResults(true);

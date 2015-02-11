@@ -116,14 +116,19 @@ A log of all work done on engine.
 	any nullptrs when Components need each other's data. Then, World::checkEntities() is called after scene creation, which checks if every Component attached to every Entity has been initialized. 
 * Put in about 10 hours today.
 
+== 2/10/15 ==
+* Not much time to work today :(
+* Added default material to PScene which is used by PhysicsComponent.
+* Renamed MouseMoveCommand to LookCommand. This makes more sense for Actors being controlled by AI.
+
 == TODO ==
+* Add a "clock speed" variable to the World, should affect physics etc.
+* Allow debug player mode, which can switch between spectating and playing.
 * Put character controller data into config file to speed up testing.
-* Make a default material for physx stored in PScene.
 * Make PScene optional when initializing World.
 * Make PhysX use software mode if NVIDIA card is not detected.
 * Have a UI object (an interface) which defines functions for GUI events. Derive one for each state. It should have a queue of events that the EngineState::update() function processes.
 * Enums appear to be at random places in class definitions, make them consistent.
-* Consider moving most of the needed data for components into an overloaded init() function like in PhysicsComponent.
 * Have a pointer to an EntityFactor in World? (For creating specific Entities such as box, enemy, etc.)
 * Have all classes that shouldn't be derived from be declared as final.
 * Put an EntityRegistry in World which has an associative array of IDs to strings for Entity names.

@@ -55,9 +55,18 @@ void PhysicsComponent::init(World& world,
 							const PxReal density)
 {
 	// Create the physics material.
-	m_mat = world.getPScene()->getSDK()->createMaterial(staticFriction,
-														dynamicFriction,
-														restitution);
+	if (staticFriction == 0.5f &&
+		dynamicFriction == 0.5f &&
+		restitution == 0.1f){
+		// Use default if no material parameters were specified/changed.
+		m_mat = world.getPScene()->getDefaultMaterial();
+	}
+	else{
+		// Create a new material.
+		m_mat = world.getPScene()->getSDK()->createMaterial(staticFriction,
+															dynamicFriction,
+															restitution);
+	}
 
 	// Create a static PhysX actor.
 	if (type == Type::STATIC){

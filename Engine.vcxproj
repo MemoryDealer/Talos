@@ -40,7 +40,7 @@
   <ItemGroup>
     <ClInclude Include="Source\CC\DCC.hpp" />
     <ClInclude Include="Source\CC\KCC.hpp" />
-    <ClInclude Include="Source\Command\Actor\MouseMove.hpp" />
+    <ClInclude Include="Source\Command\Actor\Look.hpp" />
     <ClInclude Include="Source\Command\Actor\MoveBackward.hpp" />
     <ClInclude Include="Source\Command\Actor\MoveForward.hpp" />
     <ClInclude Include="Source\Command\Actor\MoveLeft.hpp" />

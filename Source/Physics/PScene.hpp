@@ -49,6 +49,8 @@ public:
 
 	PxScene* getScene(void) const;
 
+	PxMaterial* getDefaultMaterial(void) const;
+
 	PxControllerManager* getControllerManager(void) const;
 
 	// Returns true if the debug drawer is activated.
@@ -59,6 +61,7 @@ public:
 public:
 	PxPhysics* m_physx;
 	PxScene* m_scene;
+	PxMaterial* m_defaultMaterial;
 	PxDefaultCpuDispatcher* m_cpuDispatcher;
 	PxControllerManager* m_controllerManager;
 	std::shared_ptr<PDebugDrawer> m_debugDrawer;
@@ -75,6 +78,10 @@ inline PxPhysics* PScene::getSDK(void) const{
 
 inline PxScene* PScene::getScene(void) const{
 	return m_scene;
+}
+
+inline PxMaterial* PScene::getDefaultMaterial(void) const{
+	return m_defaultMaterial;
 }
 
 inline PxControllerManager* PScene::getControllerManager(void) const{
