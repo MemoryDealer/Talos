@@ -17,6 +17,7 @@
 #include "Component/SceneComponent.hpp"
 #include "Entity/EntityPool.hpp"
 #include "Physics/PScene.hpp"
+#include "Pool/Pool.hpp"
 #include "World.hpp"
 
 // ========================================================================= //
@@ -25,6 +26,7 @@ World::World(void) :
 m_root(nullptr),
 m_scene(nullptr),
 m_viewport(nullptr),
+m_dLight(nullptr),
 m_physics(nullptr),
 m_PScene(nullptr),
 m_entityPool(nullptr),
@@ -51,6 +53,16 @@ void World::init(void)
 	// Create Ogre scene for rendering.
 	m_scene = m_root->createSceneManager(Ogre::ST_GENERIC);
 
+	// Set default ambient light to darkness.
+	m_scene->setAmbientLight(Ogre::ColourValue::Black);
+
+	// Create directional light and set it to nothing.
+	m_dLight = m_scene->createLight("dLight");
+	m_dLight->setType(Ogre::Light::LT_DIRECTIONAL);
+	m_dLight->setDiffuseColour(Ogre::ColourValue::Black);
+	m_dLight->setSpecularColour(Ogre::ColourValue::Black);
+	m_dLight->setDirection(Ogre::Vector3::NEGATIVE_UNIT_Y);
+
 	// Create physics scene.
 	m_PScene.reset(new PScene(m_physics));
 	m_PScene->init();
@@ -61,11 +73,12 @@ void World::init(void)
 
 	// Allocate Component pools.
 	// @TODO: Read sizes from config file.
-	m_actorComponentPool.reset(new ComponentPool<ActorComponent>(256));
-	m_cameraComponentPool.reset(new ComponentPool<CameraComponent>(5));
-	m_modelComponentPool.reset(new ComponentPool<ModelComponent>(1024));
-	m_physicsComponentPool.reset(new ComponentPool<PhysicsComponent>(1024));
-	m_sceneComponentPool.reset(new ComponentPool<SceneComponent>(1024));
+	m_actorComponentPool.reset(new Pool<ActorComponent>(256));
+	m_cameraComponentPool.reset(new Pool<CameraComponent>(5));
+	m_lightComponentPool.reset(new Pool<LightComponent>(16));
+	m_modelComponentPool.reset(new Pool<ModelComponent>(1024));
+	m_physicsComponentPool.reset(new Pool<PhysicsComponent>(1024));
+	m_sceneComponentPool.reset(new Pool<SceneComponent>(1024));
 }
 
 // ========================================================================= //
@@ -110,6 +123,44 @@ void World::update(void)
 	for (int i = 0; i < m_entityPool->m_poolSize; ++i){
 		m_entityPool->m_pool[i].update(*this); // Dereference self.
 	}
+}
+
+// ========================================================================= //
+
+// Component factory functions:
+
+ActorComponentPtr World::createActorComponent(void){
+	return m_actorComponentPool->create();
+}
+
+// ========================================================================= //
+
+CameraComponentPtr World::createCameraComponent(void){
+	return m_cameraComponentPool->create();
+}
+
+// ========================================================================= //
+
+LightComponentPtr World::createLightComponent(void){
+	return m_lightComponentPool->create();
+}
+
+// ========================================================================= //
+
+ModelComponentPtr World::createModelComponent(void){
+	return m_modelComponentPool->create();
+}
+
+// ========================================================================= //
+
+PhysicsComponentPtr World::createPhysicsComponent(void){
+	return m_physicsComponentPool->create();
+}
+
+// ========================================================================= //
+
+SceneComponentPtr World::createSceneComponent(void){
+	return m_sceneComponentPool->create();
 }
 
 // ========================================================================= //

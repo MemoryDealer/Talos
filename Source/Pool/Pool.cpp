@@ -5,54 +5,52 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: ComponentPool.hpp
+// File: Pool.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines ComponentPool class.
+// Implements Pool class.
 // ========================================================================= //
 
-#ifndef __COMPONENTPOOL_HPP__
-#define __COMPONENTPOOL_HPP__
+#include "Component/ActorComponent.hpp"
+#include "Component/CameraComponent.hpp"
+#include "Component/LightComponent.hpp"
+#include "Component/ModelComponent.hpp"
+#include "Component/PhysicsComponent.hpp"
+#include "Component/SceneComponent.hpp"
+#include "Pool.hpp"
 
 // ========================================================================= //
 
-#include "ActorComponent.hpp"
-#include "CameraComponent.hpp"
-#include "ModelComponent.hpp"
-#include "PhysicsComponent.hpp"
-#include "SceneComponent.hpp"
+// Explicitly instantiate ComponentPools.
+template class Pool<ActorComponent>;
+template class Pool<CameraComponent>;
+template class Pool<LightComponent>;
+template class Pool<ModelComponent>;
+template class Pool<PhysicsComponent>;
+template class Pool<SceneComponent>;
 
 // ========================================================================= //
 
 template<typename T>
-class ComponentPool
+Pool<T>::Pool(const int size) :
+m_pool(new T[size]),
+m_numActive(0),
+m_size(size){
+
+}
+
+template<typename T>
+Pool<T>::~Pool(void)
 {
-public:
-	explicit ComponentPool(const int size) :
-		m_pool(new T[size]),
-		m_numActive(0),
-		m_size(size){ 
-	
-	}
+	delete[] m_pool;
+}
 
-	~ComponentPool(void){ 
-		delete[] m_pool;
-	}
+template<typename T>
+T* Pool<T>::create(void)
+{
+	Assert(m_numActive < m_size, "Pool overflow!");
 
-	T* create(void){
-		Assert(m_numActive < m_size, "ComponentPool overflow!");
-
-		return &m_pool[m_numActive++];
-	}
-
-private:
-	T* m_pool;
-	int m_numActive;
-	int m_size;
-};
-
-// ========================================================================= //
-
-#endif
+	return &m_pool[m_numActive++];
+}
 
 // ========================================================================= //

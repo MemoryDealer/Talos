@@ -77,7 +77,7 @@ public:
 	// it doesn't exist.
 	// @TODO: Add component-specific getter functions? This would avoid 
 	// having to cast the ComponentPtr everytime it's retrieved.
-	ComponentPtr getComponentPtr(const std::string& name) const;
+	ComponentPtr getComponentPtr(const unsigned int) const;
 
 	ActorComponentPtr getActorComponent(void) const;
 

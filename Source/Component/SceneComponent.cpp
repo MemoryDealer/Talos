@@ -11,6 +11,8 @@
 // Implements PositionComponent class.
 // ========================================================================= //
 
+#include "Component/LightComponent.hpp"
+#include "Component/ModelComponent.hpp"
 #include "ComponentMessage.hpp"
 #include "Entity/Entity.hpp"
 #include "SceneComponent.hpp"
@@ -22,7 +24,7 @@ SceneComponent::SceneComponent(void) :
 Component(),
 m_node(nullptr)
 {
-	this->setName("SceneComponent");
+	this->setType(Component::Type::Scene);
 }
 
 // ========================================================================= //
@@ -72,6 +74,15 @@ void SceneComponent::attachModel(const ModelComponentPtr modelC)
 	Assert(modelC != nullptr, "null ModelComponentPtr");
 
 	m_node->attachObject(modelC->getOgreEntity());
+}
+
+// ========================================================================= //
+
+void SceneComponent::attachLight(const LightComponentPtr lightC)
+{
+	Assert(lightC != nullptr, "null LightComponentPtr");
+
+	m_node->attachObject(lightC->getLight());
 }
 
 // ========================================================================= //

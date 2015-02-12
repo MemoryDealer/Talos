@@ -143,10 +143,6 @@ inline const bool ActorComponent::isMovingRight(void) const{
 
 // Setters:
 
-inline void ActorComponent::setMode(const Mode mode){
-	m_mode = mode;
-}
-
 inline void ActorComponent::setMovingForward(const bool moving){
 	m_movingForward = moving;
 }

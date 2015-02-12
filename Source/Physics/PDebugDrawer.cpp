@@ -53,6 +53,7 @@ void PDebugDrawer::add(PxRigidActor* actor, PxGeometry& geometry)
 			PxSphereGeometry sphere = static_cast<PxSphereGeometry&>(geometry);
 			const PxReal offset = sphere.radius * 2;
 			const int numPoints = 24;
+			//const int t = (offset + Ogre::Math::Sqrt(5.f)) / 2.f;
 			const Ogre::Vector3 points[numPoints] = {
 				{ 0.f, offset, 0.f }, { offset, 0.f, 0.f },
 				{ 0.f, offset, 0.f }, { -offset, 0.f, 0.f },
@@ -66,6 +67,8 @@ void PDebugDrawer::add(PxRigidActor* actor, PxGeometry& geometry)
 				{ offset, 0.f, 0.f }, { 0.f, 0.f, -offset },
 				{ -offset, 0.f, 0.f }, { 0.f, 0.f, offset },
 				{ -offset, 0.f, 0.f }, { 0.f, 0.f, -offset }
+
+				
 			};
 
 			node.lines.reset(new DynamicLines());
@@ -83,7 +86,7 @@ void PDebugDrawer::add(PxRigidActor* actor, PxGeometry& geometry)
 		EntityPtr entity = static_cast<EntityPtr>(node.actor->userData);
 		// Get the Ogre::SceneNode and attach the DynamicLines to it.
 		SceneComponentPtr sceneC = static_cast<SceneComponentPtr>(
-			entity->getComponentPtr("SceneComponent"));
+			entity->getComponentPtr(Component::Type::Scene));
 		Ogre::SceneNode* lnode = sceneC->getSceneNode();
 		lnode->attachObject(node.lines.get());
 

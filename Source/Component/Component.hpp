@@ -24,6 +24,7 @@
 class Component;
 class ActorComponent;
 class CameraComponent;
+class LightComponent;
 class ModelComponent;
 class PhysicsComponent;
 class SceneComponent;
@@ -35,6 +36,7 @@ class World;
 typedef Component* ComponentPtr;
 typedef ActorComponent* ActorComponentPtr;
 typedef CameraComponent* CameraComponentPtr;
+typedef LightComponent* LightComponentPtr;
 typedef ModelComponent* ModelComponentPtr;
 typedef PhysicsComponent* PhysicsComponentPtr;
 typedef SceneComponent* SceneComponentPtr;
@@ -45,6 +47,16 @@ typedef Entity* EntityPtr;
 class Component
 {
 public:
+	enum Type{
+		Nil = 0,
+		Actor,
+		Camera,
+		Light,
+		Model,
+		Physics,
+		Scene
+	};
+
 	// Initializes m_name to "nil".
 	explicit Component(void);
 
@@ -66,21 +78,23 @@ public:
 	// Getters:
 
 	// Returns the name of the component type.
-	const std::string getName(void) const;
+	const Type getType(void) const;
 
 	// Returns true if Component has been initialized.
 	const bool isInitialized(void) const;
 
 	// Setters:
 
-	// Sets the name of the component (meaning the type).
-	void setName(const std::string&);
-
 	// Sets initialization state of Component.
 	void setInitialized(const bool);
 
+protected:
+
+	// Sets type of Component, called by derived Component constructor.
+	void setType(const Type);
+
 private:
-	std::string m_name; // Identifies the "type" of component by a name.
+	Type m_type;
 	bool m_initialized;
 };
 
@@ -88,8 +102,8 @@ private:
 
 // Getters:
 
-inline const std::string Component::getName(void) const{
-	return m_name;
+inline const Component::Type Component::getType(void) const{
+	return m_type;
 }
 
 inline const bool Component::isInitialized(void) const{
@@ -98,8 +112,8 @@ inline const bool Component::isInitialized(void) const{
 
 // Setters:
 
-inline void Component::setName(const std::string& name){
-	m_name = name;
+inline void Component::setType(const Type type){
+	m_type = type;
 }
 
 inline void Component::setInitialized(const bool initialized){

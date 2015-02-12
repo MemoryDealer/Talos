@@ -19,7 +19,7 @@
 #include "Component.hpp"
 
 // ========================================================================= //
-// Holds information for position in the game world.
+// Holds transform information for position in the game world.
 class SceneComponent : public Component
 {
 public:
@@ -45,6 +45,9 @@ public:
 
 	// Joins a ModelComponent to itself.
 	void attachModel(const ModelComponentPtr);
+
+	// Joins a LightComponent to itself.
+	void attachLight(const LightComponentPtr);
 
 	// Sets position of Ogre::SceneNode. 
 	// Note: This may be overriden by a PhysicsComponent attached to the

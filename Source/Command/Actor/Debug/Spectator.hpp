@@ -5,49 +5,37 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: IntroState.hpp
+// File: Spectator.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines IntroState class.
+// Defines Spectator class.
 // ========================================================================= //
 
-#ifndef __INTROSTATE_HPP__
-#define __INTROSTATE_HPP__
-
-// ========================================================================= //
-
-#include "EngineState.hpp"
+#ifndef __SPECTATOR_HPP__
+#define __SPECTATOR_HPP__
 
 // ========================================================================= //
 
-class Entity;
-
-typedef Entity* EntityPtr;
+#include "Command/Command.hpp"
+#include "Component/ActorComponent.hpp"
 
 // ========================================================================= //
-// A test state for now.
-class IntroState final : public EngineState
+
+class SpectatorCommand : public Command
 {
 public:
-	// Calls EngineState constructor.
-	explicit IntroState(void);
+	
+	virtual void execute(EntityPtr entity) override{
+		ActorComponentPtr actor = entity->getActorComponent();
 
-	// Empty destructor.
-	virtual ~IntroState(void) override;
+		actor->setMode(ActorComponent::Mode::SPECTATOR);
+	}
 
-	// Set up basic stuff.
-	virtual void enter(void) override;
+	virtual void unexecute(EntityPtr entity) override{
+		ActorComponentPtr actor = entity->getActorComponent();
 
-	// Free basic stuff.
-	virtual void exit(void) override;
-
-	// Test.
-	virtual void update(void) override;
-
-private:
-	EntityPtr m_player;
-	EntityPtr m_ogre;
-	physx::PxRigidDynamic* dyn;
+		actor->setMode(ActorComponent::Mode::PLAYER);
+	}
 };
 
 // ========================================================================= //

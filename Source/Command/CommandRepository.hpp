@@ -22,6 +22,7 @@
 #include "Command/Actor/MoveForward.hpp"
 #include "Command/Actor/MoveLeft.hpp"
 #include "Command/Actor/MoveRight.hpp"
+#include "Command/Actor/Debug/Spectator.hpp"
 #include "stdafx.hpp"
 
 // ========================================================================= //
@@ -44,6 +45,7 @@ public:
 	CommandPtr MoveForwardCommand;
 	CommandPtr MoveLeftCommand;
 	CommandPtr MoveRightCommand;
+	CommandPtr SpectatorCommand;
 };
 
 // ========================================================================= //

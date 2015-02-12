@@ -121,7 +121,14 @@ A log of all work done on engine.
 * Added default material to PScene which is used by PhysicsComponent.
 * Renamed MouseMoveCommand to LookCommand. This makes more sense for Actors being controlled by AI.
 
+== 2/11/15 ==
+* Changed Component's name string to an enum type for faster run-time checking.
+* Added LightComponent, created point light as test.
+* Replaced ComponentPool with Pool, which uses proper template instantiation in the cpp file, reducing compile times.
+* Added SpectatorCommand to switch player into spectator mode temporarily while holding down a key (space at the moment).
+
 == TODO ==
+* Add fog.
 * Add a "clock speed" variable to the World, should affect physics etc.
 * Allow debug player mode, which can switch between spectating and playing.
 * Put character controller data into config file to speed up testing.

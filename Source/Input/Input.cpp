@@ -34,6 +34,7 @@ m_mode(Mode::UI)
 	m_keymap.find(SDLK_s)->second = m_commandRepo->MoveBackwardCommand;
 	m_keymap.find(SDLK_a)->second = m_commandRepo->MoveLeftCommand;
 	m_keymap.find(SDLK_d)->second = m_commandRepo->MoveRightCommand;
+	m_keymap.find(SDLK_SPACE)->second = m_commandRepo->SpectatorCommand;
 }
 
 // ========================================================================= //

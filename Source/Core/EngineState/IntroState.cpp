@@ -15,8 +15,11 @@
 #include "Component/ActorComponent.hpp"
 #include "Component/ComponentMessage.hpp"
 #include "Component/CameraComponent.hpp"
+#include "Component/LightComponent.hpp"
 #include "Component/ModelComponent.hpp"
+#include "Component/PhysicsComponent.hpp"
 #include "Component/SceneComponent.hpp"
+#include "Entity/Entity.hpp"
 #include "Input/Input.hpp"
 #include "IntroState.hpp"
 #include "Physics/PScene.hpp"
@@ -43,13 +46,12 @@ IntroState::~IntroState(void)
 void IntroState::enter(void)
 {
 	m_world.init();
+	m_world.setLightColour(0.25f, 0.15f, 0.20f);
 	m_world.getInput()->setMode(Input::Mode::PLAYER);
 	m_world.getPScene()->loadDebugDrawer();
 
 	// Create scene manager.
 	Ogre::SceneManager* scene = m_world.getSceneManager();
-
-	scene->setAmbientLight(Ogre::ColourValue::White);
 
 	scene->setSkyDome(true, "Clouds");
 
@@ -76,14 +78,20 @@ void IntroState::enter(void)
 	PhysicsComponentPtr physicsC = m_world.createPhysicsComponent();
 	physicsC->init(m_world, m_ogre, PhysicsComponent::Type::DYNAMIC, 
 				  // PxBoxGeometry(1.f, 1.f, 1.f), 
-				  PxSphereGeometry(5.f),
+				  PxSphereGeometry(5.5f),
 				   0.5f, 0.5f, 0.1f
 				   );
 	physicsC->translate(25.f, 0.f, 0.f);
-	physicsC->getDynamicActor()->setLinearVelocity(PxVec3(0.5f, 0.f, 0.f));
+	physicsC->getDynamicActor()->setLinearVelocity(PxVec3(1.5f, 0.f, 0.f));
 	m_ogre->attachComponent(physicsC);
+	LightComponentPtr lightC = m_world.createLightComponent();
+	lightC->init(m_world, LightComponent::Type::POINT);
+	lightC->setColour(50.f, 0.f, 50.f);
+	lightC->setRange(175.f);
+	m_ogre->attachComponent(lightC);
 
-	sceneComponent->attachModel(model);
+	//sceneComponent->attachModel(model);
+	sceneComponent->attachLight(lightC);
 
 	// Plane.
 	EntityPtr board = m_world.createEntity();

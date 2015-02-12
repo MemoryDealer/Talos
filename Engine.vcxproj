@@ -16,7 +16,7 @@
     <ClCompile Include="Source\Component\ActorComponent.cpp" />
     <ClCompile Include="Source\Component\CameraComponent.cpp" />
     <ClCompile Include="Source\Component\Component.cpp" />
-    <ClCompile Include="Source\Component\ComponentPool.cpp" />
+    <ClCompile Include="Source\Component\LightComponent.cpp" />
     <ClCompile Include="Source\Component\ModelComponent.cpp" />
     <ClCompile Include="Source\Component\PhysicsComponent.cpp" />
     <ClCompile Include="Source\Component\SceneComponent.cpp" />
@@ -33,6 +33,7 @@
     <ClCompile Include="Source\Physics\PDebugDrawer.cpp" />
     <ClCompile Include="Source\Physics\Physics.cpp" />
     <ClCompile Include="Source\Physics\PScene.cpp" />
+    <ClCompile Include="Source\Pool\Pool.cpp" />
     <ClCompile Include="Source\Rendering\DynamicLines.cpp" />
     <ClCompile Include="Source\Rendering\DynamicRenderable.cpp" />
     <ClCompile Include="Source\World\World.cpp" />
@@ -40,6 +41,7 @@
   <ItemGroup>
     <ClInclude Include="Source\CC\DCC.hpp" />
     <ClInclude Include="Source\CC\KCC.hpp" />
+    <ClInclude Include="Source\Command\Actor\Debug\Spectator.hpp" />
     <ClInclude Include="Source\Command\Actor\Look.hpp" />
     <ClInclude Include="Source\Command\Actor\MoveBackward.hpp" />
     <ClInclude Include="Source\Command\Actor\MoveForward.hpp" />
@@ -51,8 +53,8 @@
     <ClInclude Include="Source\Component\ActorComponent.hpp" />
     <ClInclude Include="Source\Component\CameraComponent.hpp" />
     <ClInclude Include="Source\Component\Component.hpp" />
-    <ClInclude Include="Source\Component\ComponentPool.hpp" />
     <ClInclude Include="Source\Component\ComponentMessage.hpp" />
+    <ClInclude Include="Source\Component\LightComponent.hpp" />
     <ClInclude Include="Source\Component\ModelComponent.hpp" />
     <ClInclude Include="Source\Component\PhysicsComponent.hpp" />
     <ClInclude Include="Source\Component\SceneComponent.hpp" />
@@ -70,6 +72,7 @@
     <ClInclude Include="Source\Physics\PDebugDrawer.hpp" />
     <ClInclude Include="Source\Physics\Physics.hpp" />
     <ClInclude Include="Source\Physics\PScene.hpp" />
+    <ClInclude Include="Source\Pool\Pool.hpp" />
     <ClInclude Include="Source\Rendering\DynamicLines.hpp" />
     <ClInclude Include="Source\Rendering\DynamicRenderable.hpp" />
     <ClInclude Include="Source\stdafx.hpp" />

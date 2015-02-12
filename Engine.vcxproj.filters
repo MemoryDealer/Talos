@@ -85,6 +85,15 @@
     <Filter Include="Source Files\Rendering">
       <UniqueIdentifier>{1a9eb4f5-aed3-444c-ac20-6ce6ed324288}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Pool">
+      <UniqueIdentifier>{e457d8f7-d8f0-410f-9c3f-d5340306599a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Pool">
+      <UniqueIdentifier>{2cb6d0a9-c1e0-4529-bd60-8f6ff12b5a4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Command\Actor\Debug">
+      <UniqueIdentifier>{e35d73ed-8b96-456e-ab25-8e4211eb7d16}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\main.cpp">
@@ -123,9 +132,6 @@
     <ClCompile Include="Source\Entity\EntityPool.cpp">
       <Filter>Source Files\Entity</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\ComponentPool.cpp">
-      <Filter>Source Files\Component</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Component\ModelComponent.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
@@ -161,6 +167,12 @@
     </ClCompile>
     <ClCompile Include="Source\Physics\PDebugDrawer.cpp">
       <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\LightComponent.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Pool\Pool.cpp">
+      <Filter>Source Files\Pool</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -204,9 +216,6 @@
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\ComponentMessage.hpp">
-      <Filter>Header Files\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\ComponentPool.hpp">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\ModelComponent.hpp">
@@ -271,6 +280,15 @@
     </ClInclude>
     <ClInclude Include="Source\Command\Actor\Look.hpp">
       <Filter>Header Files\Command\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\LightComponent.hpp">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Pool\Pool.hpp">
+      <Filter>Header Files\Pool</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Command\Actor\Debug\Spectator.hpp">
+      <Filter>Header Files\Command\Actor\Debug</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

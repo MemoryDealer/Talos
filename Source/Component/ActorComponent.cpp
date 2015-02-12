@@ -12,6 +12,7 @@
 // ========================================================================= //
 
 #include "ActorComponent.hpp"
+#include "CameraComponent.hpp"
 #include "CC/DCC.hpp"
 #include "CC/KCC.hpp"
 #include "ComponentMessage.hpp"
@@ -37,7 +38,7 @@ m_movingBack(false),
 m_movingLeft(false),
 m_movingRight(false)
 {
-	this->setName("ActorComponent");
+	this->setType(Component::Type::Actor);
 }
 
 // ========================================================================= //
@@ -134,8 +135,7 @@ void ActorComponent::update(EntityPtr, World&)
 		break;
 
 	case Mode::SPECTATOR:
-		m_cameraNode->translate(translate,
-								Ogre::SceneNode::TS_LOCAL);
+		m_cameraNode->translate(translate, Ogre::SceneNode::TS_LOCAL);
 		break;
 
 	case Mode::PLAYER:
@@ -205,6 +205,27 @@ void ActorComponent::look(const int relx, const int rely)
 					0.f));
 			}
 		}
+	}
+}
+
+// ========================================================================= //
+
+void ActorComponent::setMode(const Mode mode)
+{
+	m_mode = mode;
+
+	switch (m_mode){
+	default:
+		break;
+
+	case Mode::PLAYER:
+		// For debugging.
+		m_kcc->setPosition(m_cameraNode->getPosition());
+		break;
+
+	case Mode::SPECTATOR:
+
+		break;
 	}
 }
 

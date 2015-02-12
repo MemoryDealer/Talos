@@ -12,7 +12,6 @@
 // ========================================================================= //
 
 #include "Component/ActorComponent.hpp"
-#include "Component/Component.hpp"
 #include "Component/ComponentMessage.hpp"
 #include "Entity.hpp"
 
@@ -120,7 +119,7 @@ void Entity::message(const ComponentMessage& msg)
 
 // ========================================================================= //
 
-ComponentPtr Entity::getComponentPtr(const std::string& name) const
+ComponentPtr Entity::getComponentPtr(const unsigned int type) const
 {
 	// Must use a const_iterator since this function is bitwise constant.
 	for (ComponentList::const_iterator itr = m_components.begin();
@@ -128,7 +127,7 @@ ComponentPtr Entity::getComponentPtr(const std::string& name) const
 		 ++itr){
 		// Determine if Component's name matches. This is considerably more
 		// efficient than run-time dynamic type checking.
-		if ((*itr)->getName() == name){
+		if ((*itr)->getType() == type){
 			return *itr;
 		}
 	}
@@ -140,8 +139,8 @@ ComponentPtr Entity::getComponentPtr(const std::string& name) const
 
 ActorComponentPtr Entity::getActorComponent(void) const
 {
-	return static_cast<ActorComponentPtr>(this->getComponentPtr(
-		"ActorComponent"));
+	return static_cast<ActorComponentPtr>(
+		this->getComponentPtr(Component::Type::Actor));
 }
 
 // ========================================================================= //

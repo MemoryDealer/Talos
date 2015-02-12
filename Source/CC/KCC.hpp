@@ -41,9 +41,29 @@ public:
 
 	PxExtendedVec3 update(const PxReal, const PxReal, const PxReal);
 
+	// Setters:
+
+	void setPosition(const PxReal, const PxReal, const PxReal);
+
+	void setPosition(const Ogre::Vector3&);
+
 private:
 	PxController* m_controller;
 };
+
+// ========================================================================= //
+
+// Setters:
+
+inline void KCC::setPosition(const PxReal x, 
+							 const PxReal y, 
+							 const PxReal z){
+	m_controller->setPosition(PxExtendedVec3(x, y, z));
+}
+
+inline void KCC::setPosition(const Ogre::Vector3& p){
+	this->setPosition(p.x, p.y, p.z);
+}
 
 // ========================================================================= //
 

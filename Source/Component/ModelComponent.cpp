@@ -21,7 +21,7 @@ ModelComponent::ModelComponent(void) :
 Component(),
 m_entity(nullptr)
 {
-	this->setName("ModelComponent");
+	this->setType(Component::Type::Model);
 }
 
 // ========================================================================= //

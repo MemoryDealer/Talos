@@ -16,7 +16,7 @@
 // ========================================================================= //
 
 Component::Component(void) :
-m_name("nil"),
+m_type(Type::Nil),
 m_initialized(false)
 {
 

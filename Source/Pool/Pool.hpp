@@ -5,12 +5,35 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: ComponentPool.cpp
+// File: Pool.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements ComponentPool class.
+// Defines Pool class.
 // ========================================================================= //
 
-#include "ComponentPool.hpp"
+#ifndef __POOL_HPP__
+#define __POOL_HPP__
+
+// ========================================================================= //
+// Generic class for pooling objects in contiguous memory.
+template<typename T>
+class Pool
+{
+public:
+	explicit Pool(const int size);
+
+	~Pool(void);
+
+	T* create(void);
+
+private:
+	T* m_pool;
+	int m_numActive;
+	int m_size;
+};
+
+// ========================================================================= //
+
+#endif
 
 // ========================================================================= //

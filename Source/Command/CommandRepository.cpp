@@ -21,7 +21,8 @@ LookCommand(new ::LookCommand()),
 MoveBackwardCommand(new ::MoveBackwardCommand()),
 MoveForwardCommand(new ::MoveForwardCommand()),
 MoveLeftCommand(new ::MoveLeftCommand()),
-MoveRightCommand(new ::MoveRightCommand())
+MoveRightCommand(new ::MoveRightCommand()),
+SpectatorCommand(new ::SpectatorCommand())
 {
 
 }

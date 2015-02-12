@@ -5,68 +5,65 @@
 // Proprietary and confidential.
 // Written by Jordan Sparks <unixunited@live.com> January 2015.
 // ========================================================================= //
-// File: CameraComponent.cpp
+// File: LightComponent.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements CameraComponent class.
+// Implements LightComponent class.
 // ========================================================================= //
 
-#include "CameraComponent.hpp"
-#include "ComponentMessage.hpp"
-#include "Entity/Entity.hpp"
-#include "SceneComponent.hpp"
+#include "LightComponent.hpp"
 #include "World/World.hpp"
 
 // ========================================================================= //
 
-CameraComponent::CameraComponent(void) :
-Component(),
-m_camera(nullptr)
+LightComponent::LightComponent(void) :
+m_light(nullptr)
 {
-	this->setType(Component::Type::Camera);
+	this->setType(Component::Type::Light);
 }
 
 // ========================================================================= //
 
-CameraComponent::~CameraComponent(void)
+LightComponent::~LightComponent(void)
 {
 
 }
 
 // ========================================================================= //
 
-void CameraComponent::init(EntityPtr entity, World& world)
+void LightComponent::init(EntityPtr entity, World& world)
 {
-	// Create the camera object.
-	m_camera = world.getSceneManager()->createCamera("PlayerCam");
-	m_camera->setNearClipDistance(0.1f);
 
-	// Setup viewport aspect ratio and assign camera to viewport.
-	Ogre::Viewport* viewport = world.getViewport();
-	m_camera->setAspectRatio(Ogre::Real(viewport->getActualWidth()) /
-							 Ogre::Real(viewport->getActualHeight()));
-	viewport->setCamera(m_camera);
+}
+
+// ========================================================================= //
+
+void LightComponent::init(World& world, const Type type)
+{
+	m_light = world.getSceneManager()->createLight();
+	m_light->setType((type == Type::POINT) ? Ogre::Light::LT_POINT :
+					 Ogre::Light::LT_SPOTLIGHT);
 
 	this->setInitialized(true);
 }
 
 // ========================================================================= //
 
-void CameraComponent::destroy(EntityPtr entity, World& world)
+void LightComponent::destroy(EntityPtr entity, World& world)
 {
-	world.getSceneManager()->destroyCamera(m_camera);
+	world.getSceneManager()->destroyLight(m_light);
 }
 
 // ========================================================================= //
 
-void CameraComponent::update(EntityPtr entity, World& world)
+void LightComponent::update(EntityPtr entity, World& world)
 {
-	
+
 }
 
 // ========================================================================= //
 
-void CameraComponent::message(const ComponentMessage& msg)
+void LightComponent::message(const ComponentMessage&)
 {
 
 }

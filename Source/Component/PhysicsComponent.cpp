@@ -26,7 +26,7 @@ m_dActor(nullptr),
 m_actor(nullptr),
 m_mat(nullptr)
 {
-
+	this->setType(Component::Type::Physics);
 }
 
 // ========================================================================= //
@@ -124,7 +124,7 @@ void PhysicsComponent::update(EntityPtr entity, World& world)
 	PxTransform transform = m_actor->getGlobalPose();
 
 	SceneComponentPtr sceneC = static_cast<SceneComponentPtr>
-		(entity->getComponentPtr("SceneComponent"));
+		(entity->getComponentPtr(Component::Type::Scene));
 
 	Assert(sceneC != nullptr, 
 		   "PhysicsComponent without corresponding SceneComponent");
