@@ -41,24 +41,24 @@ class World;
 class KCC final
 {
 public:
-	explicit KCC(void);
+    explicit KCC(void);
 
-	~KCC(void);
+    ~KCC(void);
 
-	bool init(World&);
+    bool init(World&);
 
-	void destroy(World&);
+    void destroy(World&);
 
-	PxExtendedVec3 update(const PxReal, const PxReal, const PxReal);
+    PxExtendedVec3 update(const PxReal, const PxReal, const PxReal);
 
-	// Setters:
+    // Setters:
 
-	void setPosition(const PxReal, const PxReal, const PxReal);
+    void setPosition(const PxReal, const PxReal, const PxReal);
 
-	void setPosition(const Ogre::Vector3&);
+    void setPosition(const Ogre::Vector3&);
 
 private:
-	PxController* m_controller;
+    PxController* m_controller;
 };
 
 // ========================================================================= //
@@ -66,13 +66,13 @@ private:
 // Setters:
 
 inline void KCC::setPosition(const PxReal x, 
-							 const PxReal y, 
-							 const PxReal z){
-	m_controller->setPosition(PxExtendedVec3(x, y, z));
+                             const PxReal y, 
+                             const PxReal z){
+    m_controller->setPosition(PxExtendedVec3(x, y, z));
 }
 
 inline void KCC::setPosition(const Ogre::Vector3& p){
-	this->setPosition(p.x, p.y, p.z);
+    this->setPosition(p.x, p.y, p.z);
 }
 
 // ========================================================================= //

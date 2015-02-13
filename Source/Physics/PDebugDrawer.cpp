@@ -31,7 +31,7 @@
 PDebugDrawer::PDebugDrawer(void) :
 m_nodes()
 {
-	m_nodes.reserve(256);
+    m_nodes.reserve(256);
 }
 
 // ========================================================================= //
@@ -45,80 +45,80 @@ PDebugDrawer::~PDebugDrawer(void)
 
 void PDebugDrawer::add(PxRigidActor* actor, PxGeometry& geometry)
 {
-	Node node;
-	node.actor = actor;
+    Node node;
+    node.actor = actor;
 
-	// Allocate a new set of DynamicLines. Create points for the type of 
-	// geometry on this actor.
-	switch (geometry.getType()){
-	default:
-		break;
+    // Allocate a new set of DynamicLines. Create points for the type of 
+    // geometry on this actor.
+    switch (geometry.getType()){
+    default:
+        break;
 
-	case PxGeometryType::eBOX:
+    case PxGeometryType::eBOX:
 
-		break;
+        break;
 
-	case PxGeometryType::eSPHERE:
-		{
-			PxSphereGeometry sphere = static_cast<PxSphereGeometry&>(geometry);
-			const PxReal offset = sphere.radius * 2;
-			const int numPoints = 24;
-			//const int t = (offset + Ogre::Math::Sqrt(5.f)) / 2.f;
-			const Ogre::Vector3 points[numPoints] = {
-				{ 0.f, offset, 0.f }, { offset, 0.f, 0.f },
-				{ 0.f, offset, 0.f }, { -offset, 0.f, 0.f },
-				{ 0.f, offset, 0.f }, { 0.f, 0.f, offset },
-				{ 0.f, offset, 0.f }, { 0.f, 0.f, -offset },
-				{ 0.f, -offset, 0.f }, { offset, 0.f, 0.f },
-				{ 0.f, -offset, 0.f }, { -offset, 0.f, 0.f },
-				{ 0.f, -offset, 0.f }, { 0.f, 0.f, offset },
-				{ 0.f, -offset, 0.f }, { 0.f, 0.f, -offset },
-				{ offset, 0.f, 0.f }, { 0.f, 0.f, offset },
-				{ offset, 0.f, 0.f }, { 0.f, 0.f, -offset },
-				{ -offset, 0.f, 0.f }, { 0.f, 0.f, offset },
-				{ -offset, 0.f, 0.f }, { 0.f, 0.f, -offset }
+    case PxGeometryType::eSPHERE:
+        {
+            PxSphereGeometry sphere = static_cast<PxSphereGeometry&>(geometry);
+            const PxReal offset = sphere.radius * 2;
+            const int numPoints = 24;
+            //const int t = (offset + Ogre::Math::Sqrt(5.f)) / 2.f;
+            const Ogre::Vector3 points[numPoints] = {
+                { 0.f, offset, 0.f }, { offset, 0.f, 0.f },
+                { 0.f, offset, 0.f }, { -offset, 0.f, 0.f },
+                { 0.f, offset, 0.f }, { 0.f, 0.f, offset },
+                { 0.f, offset, 0.f }, { 0.f, 0.f, -offset },
+                { 0.f, -offset, 0.f }, { offset, 0.f, 0.f },
+                { 0.f, -offset, 0.f }, { -offset, 0.f, 0.f },
+                { 0.f, -offset, 0.f }, { 0.f, 0.f, offset },
+                { 0.f, -offset, 0.f }, { 0.f, 0.f, -offset },
+                { offset, 0.f, 0.f }, { 0.f, 0.f, offset },
+                { offset, 0.f, 0.f }, { 0.f, 0.f, -offset },
+                { -offset, 0.f, 0.f }, { 0.f, 0.f, offset },
+                { -offset, 0.f, 0.f }, { 0.f, 0.f, -offset }
 
-				
-			};
+                
+            };
 
-			node.lines.reset(new DynamicLines());
+            node.lines.reset(new DynamicLines());
 
-			for (int i = 0; i < numPoints; ++i){
-				node.lines->addPoint(points[i]);
-			}
-		}
-		break;
-	}
+            for (int i = 0; i < numPoints; ++i){
+                node.lines->addPoint(points[i]);
+            }
+        }
+        break;
+    }
 
-	// Setup DynamicLines.
-	if (node.lines != nullptr){
-		// Get EntityPtr from actor's user data.
-		EntityPtr entity = static_cast<EntityPtr>(node.actor->userData);
-		// Get the Ogre::SceneNode and attach the DynamicLines to it.
-		SceneComponentPtr sceneC = static_cast<SceneComponentPtr>(
-			entity->getComponentPtr(Component::Type::Scene));
-		Ogre::SceneNode* lnode = sceneC->getSceneNode();
-		lnode->attachObject(node.lines.get());
+    // Setup DynamicLines.
+    if (node.lines != nullptr){
+        // Get EntityPtr from actor's user data.
+        EntityPtr entity = static_cast<EntityPtr>(node.actor->userData);
+        // Get the Ogre::SceneNode and attach the DynamicLines to it.
+        SceneComponentPtr sceneC = static_cast<SceneComponentPtr>(
+            entity->getComponentPtr(Component::Type::Scene));
+        Ogre::SceneNode* lnode = sceneC->getSceneNode();
+        lnode->attachObject(node.lines.get());
 
-		// Set line colour to red for dynamic actors.
-		if (node.actor->getType() == PxActorType::eRIGID_DYNAMIC){
-			node.lines->setColour(DynamicLines::Colour::RED);
-		}
+        // Set line colour to red for dynamic actors.
+        if (node.actor->getType() == PxActorType::eRIGID_DYNAMIC){
+            node.lines->setColour(DynamicLines::Colour::RED);
+        }
 
-		// Add to list of debug nodes.
-		m_nodes.push_back(node);
-	}
+        // Add to list of debug nodes.
+        m_nodes.push_back(node);
+    }
 }
 
 // ========================================================================= //
 
 void PDebugDrawer::update(void)
 {
-	for (std::vector<Node>::iterator itr = m_nodes.begin();
-		 itr != m_nodes.end();
-		 ++itr){
-		itr->lines->update();
-	}
+    for (std::vector<Node>::iterator itr = m_nodes.begin();
+         itr != m_nodes.end();
+         ++itr){
+        itr->lines->update();
+    }
 }
 
 // ========================================================================= //

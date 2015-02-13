@@ -35,17 +35,17 @@ class MoveBackwardCommand : public Command
 {
 public:
 
-	virtual void execute(EntityPtr entity) override{
-		ActorComponentPtr actor = entity->getActorComponent();
+    virtual void execute(EntityPtr entity) override{
+        ActorComponentPtr actor = entity->getActorComponent();
 
-		actor->setMovingBack(true);
-	}
+        actor->setMovingBack(true);
+    }
 
-	virtual void unexecute(EntityPtr entity) override{
-		ActorComponentPtr actor = entity->getActorComponent();
+    virtual void unexecute(EntityPtr entity) override{
+        ActorComponentPtr actor = entity->getActorComponent();
 
-		actor->setMovingBack(false);
-	}
+        actor->setMovingBack(false);
+    }
 };
 
 // ========================================================================= //

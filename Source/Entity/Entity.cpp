@@ -46,111 +46,111 @@ Entity::~Entity(void)
 
 void Entity::init(World& world)
 {
-	for (ComponentList::iterator itr = m_components.begin();
-		 itr != m_components.end();
-		 ++itr){
-		(*itr)->init(this, world);
-	}
+    for (ComponentList::iterator itr = m_components.begin();
+         itr != m_components.end();
+         ++itr){
+        (*itr)->init(this, world);
+    }
 }
 
 // ========================================================================= //
 
 void Entity::destroy(World& world)
 {
-	for (ComponentList::iterator itr = m_components.begin();
-		 itr != m_components.end();
-		 ++itr){
-		(*itr)->destroy(this, world);
-	}
+    for (ComponentList::iterator itr = m_components.begin();
+         itr != m_components.end();
+         ++itr){
+        (*itr)->destroy(this, world);
+    }
 }
 
 // ========================================================================= //
 
 void Entity::update(World& world)
 {
-	for (ComponentList::iterator itr = m_components.begin();
-		 itr != m_components.end();
-		 ++itr){
-		(*itr)->update(this, world);
-	}
+    for (ComponentList::iterator itr = m_components.begin();
+         itr != m_components.end();
+         ++itr){
+        (*itr)->update(this, world);
+    }
 }
 
 // ========================================================================= //
 
 ComponentPtr Entity::attachComponent(const ComponentPtr component)
 {
-	m_components.push_back(component);
-	return component;
+    m_components.push_back(component);
+    return component;
 }
 
 // ========================================================================= //
 
 void Entity::detachComponent(const ComponentPtr component)
 {
-	for (ComponentList::iterator itr = m_components.begin();
-		 itr != m_components.end();){
-		if (*itr == component){
-			itr = m_components.erase(itr);
-		}
-		else{
-			++itr;
-		}
-	}
+    for (ComponentList::iterator itr = m_components.begin();
+         itr != m_components.end();){
+        if (*itr == component){
+            itr = m_components.erase(itr);
+        }
+        else{
+            ++itr;
+        }
+    }
 }
 
 // ========================================================================= //
 
 const bool Entity::checkComponents(void) const
 {
-	for (ComponentList::const_iterator itr = m_components.begin();
-		 itr != m_components.end();
-		 ++itr){
-		if ((*itr)->isInitialized() == false){
-			return false;
-		}
-	}
+    for (ComponentList::const_iterator itr = m_components.begin();
+         itr != m_components.end();
+         ++itr){
+        if ((*itr)->isInitialized() == false){
+            return false;
+        }
+    }
 
-	return true;
+    return true;
 }
 
 // ========================================================================= //
 
 void Entity::message(const ComponentMessage& msg)
 {
-	Assert(msg.type != ComponentMessageType::NIL, "NIL Entity message!");
+    Assert(msg.type != ComponentMessageType::NIL, "NIL Entity message!");
 
-	// Broadcast to all attached components.
-	for (ComponentList::iterator itr = m_components.begin();
-		 itr != m_components.end();
-		 ++itr){
-		(*itr)->message(msg);
-	}
+    // Broadcast to all attached components.
+    for (ComponentList::iterator itr = m_components.begin();
+         itr != m_components.end();
+         ++itr){
+        (*itr)->message(msg);
+    }
 }
 
 // ========================================================================= //
 
 ComponentPtr Entity::getComponentPtr(const unsigned int type) const
 {
-	// Must use a const_iterator since this function is bitwise constant.
-	for (ComponentList::const_iterator itr = m_components.begin();
-		 itr != m_components.end();
-		 ++itr){
-		// Determine if Component's name matches. This is considerably more
-		// efficient than run-time dynamic type checking.
-		if ((*itr)->getType() == type){
-			return *itr;
-		}
-	}
+    // Must use a const_iterator since this function is bitwise constant.
+    for (ComponentList::const_iterator itr = m_components.begin();
+         itr != m_components.end();
+         ++itr){
+        // Determine if Component's name matches. This is considerably more
+        // efficient than run-time dynamic type checking.
+        if ((*itr)->getType() == type){
+            return *itr;
+        }
+    }
 
-	return nullptr;
+    return nullptr;
 }
 
 // ========================================================================= //
 
 ActorComponentPtr Entity::getActorComponent(void) const
 {
-	return static_cast<ActorComponentPtr>(
-		this->getComponentPtr(Component::Type::Actor));
+    return static_cast<ActorComponentPtr>(
+        this->getComponentPtr(Component::Type::Actor));
 }
 
 // ========================================================================= //

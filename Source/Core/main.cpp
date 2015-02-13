@@ -38,26 +38,26 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR args, INT)
 int main(int argc, char** argv)
 #endif
 {
-	Engine engine;
+    Engine engine;
 
-	try{
-		if (engine.init() == false){
-			return 1;
-		}
+    try{
+        if (engine.init() == false){
+            return 1;
+        }
 
-		// Start the engine!
-		engine.start(Engine::StateID::STATE_INTRO);
-	}
-	catch (std::exception& e){
-		// Report any exceptions.
+        // Start the engine!
+        engine.start(Engine::StateID::STATE_INTRO);
+    }
+    catch (std::exception& e){
+        // Report any exceptions.
 #ifdef WIN32
-		MessageBox(GetForegroundWindow(), e.what(), "An exception has occurred!", MB_OK | MB_ICONERROR | MB_SETFOREGROUND);
+        MessageBox(GetForegroundWindow(), e.what(), "An exception has occurred!", MB_OK | MB_ICONERROR | MB_SETFOREGROUND);
 #else
-		fprintf(stderr, "An exception has occurred: %s\n", e.what());
+        fprintf(stderr, "An exception has occurred: %s\n", e.what());
 #endif
-	}
+    }
 
-	return 0;
+    return 0;
 }
 
 // ========================================================================= //

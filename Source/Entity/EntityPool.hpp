@@ -33,26 +33,26 @@
 // time.
 class EntityPool
 {
-	friend class World;
+    friend class World;
 
 public:
-	// Allocates pool array, sets the next pointer of each Entity.
-	explicit EntityPool(const int size);
+    // Allocates pool array, sets the next pointer of each Entity.
+    explicit EntityPool(const int size);
 
-	// Deallocates pool array.
-	~EntityPool(void);
+    // Deallocates pool array.
+    ~EntityPool(void);
 
-	// Acquires the next available Entity, sets the ID and returns it.
-	EntityPtr create(void);
+    // Acquires the next available Entity, sets the ID and returns it.
+    EntityPtr create(void);
 
-	// Sets the next available Entity to the provided pointer.
-	void destroy(EntityPtr);
+    // Sets the next available Entity to the provided pointer.
+    void destroy(EntityPtr);
 
 private:
-	EntityPtr m_pool;
-	EntityPtr m_firstAvail;
-	EntityID m_idCounter;
-	int m_poolSize;
+    EntityPtr m_pool;
+    EntityPtr m_firstAvail;
+    EntityID m_idCounter;
+    int m_poolSize;
 };
 
 // ========================================================================= //

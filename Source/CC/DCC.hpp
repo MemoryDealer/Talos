@@ -29,9 +29,9 @@
 class DCC
 {
 public:
-	explicit DCC(void) { }
+    explicit DCC(void) { }
 
-	~DCC(void) { }
+    ~DCC(void) { }
 
 private:
 

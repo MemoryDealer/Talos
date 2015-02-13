@@ -43,77 +43,77 @@ typedef std::vector<EngineStatePtr> EngineStateList;
 class Engine final : public Observer
 {
 public:
-	// Reserves contiguous memory for EngineState's.
-	explicit Engine(void);
+    // Reserves contiguous memory for EngineState's.
+    explicit Engine(void);
 
-	// Empty destructor.
-	virtual ~Engine(void) override;
+    // Empty destructor.
+    virtual ~Engine(void) override;
 
-	// Sets up initial rendering components and stack for engine states.
-	bool init(void);
+    // Sets up initial rendering components and stack for engine states.
+    bool init(void);
 
-	// Frees Engine's data and resources.
-	void shutdown(void);
+    // Frees Engine's data and resources.
+    void shutdown(void);
 
-	// Updates the active state and calculates elapsed time. This is the main
-	// game update loop.
-	void start(const EngineStateID);
+    // Updates the active state and calculates elapsed time. This is the main
+    // game update loop.
+    void start(const EngineStateID);
 
-	// Allocates an EngineState object, adds it to the list of states, and 
-	// injects dependencies.
-	void registerState(const EngineStateID);
+    // Allocates an EngineState object, adds it to the list of states, and 
+    // injects dependencies.
+    void registerState(const EngineStateID);
 
-	// Pushes a new active state onto the active state stack.
-	void pushState(const EngineStateID);
+    // Pushes a new active state onto the active state stack.
+    void pushState(const EngineStateID);
 
-	// Pops the active state off the active state stack, activating the next one.
-	// If the stack is empty, the engine is shut down.
-	void popState(void);
+    // Pops the active state off the active state stack, activating the next one.
+    // If the stack is empty, the engine is shut down.
+    void popState(void);
 
-	// Receive notifications from Subjects (EngineStates).
-	virtual void onNotify(const unsigned int) override;
+    // Receive notifications from Subjects (EngineStates).
+    virtual void onNotify(const unsigned int) override;
 
-	// Enumerations:
+    // Enumerations:
 
-	enum StateID{
-		STATE_INTRO = 0,
-		STATE_MAIN_MENU,
-		STATE_GAME,
-		STATE_PAUSED,
+    enum StateID{
+        STATE_INTRO = 0,
+        STATE_MAIN_MENU,
+        STATE_GAME,
+        STATE_PAUSED,
 
-		NUM_STATES
-	};
+        NUM_STATES
+    };
 
-	enum Notification{
-		POP = 1
-	};
+    enum Notification{
+        POP = 1
+    };
 
 private:
-	// Ogre3D components.
-	Ogre::Root*	m_root;
-	Ogre::RenderWindow* m_renderWindow;
-	Ogre::Viewport*	m_viewport;
-	Ogre::Log* m_log;
-	std::shared_ptr<Ogre::Timer> m_timer; // The core engine timer.
+    // Ogre3D components.
+    Ogre::Root*    m_root;
+    Ogre::RenderWindow* m_renderWindow;
+    Ogre::Viewport*    m_viewport;
+    Ogre::Log* m_log;
+    std::shared_ptr<Ogre::Timer> m_timer; // The core engine timer.
 
-	// SDL components.
-	SDL_Window* m_sdlWindow;
+    // SDL components.
+    SDL_Window* m_sdlWindow;
 
-	// CEGUI components.
-	CEGUI::OgreRenderer* m_ceguiRenderer;
+    // CEGUI components.
+    CEGUI::OgreRenderer* m_ceguiRenderer;
 
-	// Physics.
-	std::shared_ptr<Physics> m_physics;
+    // Physics.
+    std::shared_ptr<Physics> m_physics;
 
-	// Input handler.
-	std::shared_ptr<Input> m_input;
+    // Input handler.
+    std::shared_ptr<Input> m_input;
 
-	// State management.
-	EngineStateList m_states;
-	EngineStateStack m_stateStack;
+    // State management.
+    EngineStateList m_states;
+    EngineStateStack m_stateStack;
 
-	// Engine data.
-	bool m_active;
+    // Engine data.
+    bool m_active;
 };
 
 // ========================================================================= //

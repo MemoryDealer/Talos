@@ -36,23 +36,23 @@ using namespace physx;
 // Holds top-level PhysX objects for initialization of the physics engine.
 class Physics final
 {
-	friend class PScene;
+    friend class PScene;
 
 public:
-	explicit Physics(void);
+    explicit Physics(void);
 
-	~Physics(void);
+    ~Physics(void);
 
-	const bool init(void);
+    const bool init(void);
 
-	void destroy(void);
+    void destroy(void);
 
 private:
-	PxFoundation* m_foundation;
-	PxPhysics* m_physx;
-	PxDefaultAllocator m_defaultAllocator;
-	PxDefaultErrorCallback m_defaultErrorCallback;
-	PxVisualDebuggerConnection* m_debuggerConnection;
+    PxFoundation* m_foundation;
+    PxPhysics* m_physx;
+    PxDefaultAllocator m_defaultAllocator;
+    PxDefaultErrorCallback m_defaultErrorCallback;
+    PxVisualDebuggerConnection* m_debuggerConnection;
 };
 
 // ========================================================================= //

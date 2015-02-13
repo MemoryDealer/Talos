@@ -33,7 +33,7 @@ CameraComponent::CameraComponent(void) :
 Component(),
 m_camera(nullptr)
 {
-	this->setType(Component::Type::Camera);
+    this->setType(Component::Type::Camera);
 }
 
 // ========================================================================= //
@@ -47,31 +47,31 @@ CameraComponent::~CameraComponent(void)
 
 void CameraComponent::init(EntityPtr entity, World& world)
 {
-	// Create the camera object.
-	m_camera = world.getSceneManager()->createCamera("PlayerCam");
-	m_camera->setNearClipDistance(0.1f);
+    // Create the camera object.
+    m_camera = world.getSceneManager()->createCamera("PlayerCam");
+    m_camera->setNearClipDistance(0.1f);
 
-	// Setup viewport aspect ratio and assign camera to viewport.
-	Ogre::Viewport* viewport = world.getViewport();
-	m_camera->setAspectRatio(Ogre::Real(viewport->getActualWidth()) /
-							 Ogre::Real(viewport->getActualHeight()));
-	viewport->setCamera(m_camera);
+    // Setup viewport aspect ratio and assign camera to viewport.
+    Ogre::Viewport* viewport = world.getViewport();
+    m_camera->setAspectRatio(Ogre::Real(viewport->getActualWidth()) /
+                             Ogre::Real(viewport->getActualHeight()));
+    viewport->setCamera(m_camera);
 
-	this->setInitialized(true);
+    this->setInitialized(true);
 }
 
 // ========================================================================= //
 
 void CameraComponent::destroy(EntityPtr entity, World& world)
 {
-	world.getSceneManager()->destroyCamera(m_camera);
+    world.getSceneManager()->destroyCamera(m_camera);
 }
 
 // ========================================================================= //
 
 void CameraComponent::update(EntityPtr entity, World& world)
 {
-	
+    
 }
 
 // ========================================================================= //

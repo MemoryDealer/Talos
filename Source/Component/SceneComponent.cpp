@@ -34,7 +34,7 @@ SceneComponent::SceneComponent(void) :
 Component(),
 m_node(nullptr)
 {
-	this->setType(Component::Type::Scene);
+    this->setType(Component::Type::Scene);
 }
 
 // ========================================================================= //
@@ -48,26 +48,26 @@ SceneComponent::~SceneComponent(void)
 
 void SceneComponent::init(EntityPtr entity, World& world)
 {
-	Assert(m_node == nullptr, "init() called more than once!");
+    Assert(m_node == nullptr, "init() called more than once!");
 
-	m_node = world.getSceneManager()->getRootSceneNode()->
-		createChildSceneNode(toString(entity->getID()));
+    m_node = world.getSceneManager()->getRootSceneNode()->
+        createChildSceneNode(toString(entity->getID()));
 
-	this->setInitialized(true);
+    this->setInitialized(true);
 }
 
 // ========================================================================= //
 
 void SceneComponent::destroy(EntityPtr entity, World& world)
 {
-	world.getSceneManager()->destroySceneNode(m_node);
+    world.getSceneManager()->destroySceneNode(m_node);
 }
 
 // ========================================================================= //
 
 void SceneComponent::update(EntityPtr, World&)
 {
-	
+    
 }
 
 // ========================================================================= //
@@ -81,37 +81,37 @@ void SceneComponent::message(const ComponentMessage& msg)
 
 void SceneComponent::attachModel(const ModelComponentPtr modelC)
 {
-	Assert(modelC != nullptr, "null ModelComponentPtr");
+    Assert(modelC != nullptr, "null ModelComponentPtr");
 
-	m_node->attachObject(modelC->getOgreEntity());
+    m_node->attachObject(modelC->getOgreEntity());
 }
 
 // ========================================================================= //
 
 void SceneComponent::attachLight(const LightComponentPtr lightC)
 {
-	Assert(lightC != nullptr, "null LightComponentPtr");
+    Assert(lightC != nullptr, "null LightComponentPtr");
 
-	m_node->attachObject(lightC->getLight());
+    m_node->attachObject(lightC->getLight());
 }
 
 // ========================================================================= //
 
 void SceneComponent::setPosition(const Ogre::Real x, 
-								 const Ogre::Real y, 
-								 const Ogre::Real z)
+                                 const Ogre::Real y, 
+                                 const Ogre::Real z)
 {
-	m_node->setPosition(x, y, z);
+    m_node->setPosition(x, y, z);
 }
 
 // ========================================================================= //
 
 void SceneComponent::setOrientation(const Ogre::Real w, 
-									const Ogre::Real x, 
-									const Ogre::Real y,
-									const Ogre::Real z)
+                                    const Ogre::Real x, 
+                                    const Ogre::Real y,
+                                    const Ogre::Real z)
 {
-	m_node->setOrientation(w, x, y, z);
+    m_node->setOrientation(w, x, y, z);
 }
 
 // ========================================================================= //

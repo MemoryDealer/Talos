@@ -43,42 +43,42 @@ typedef unsigned int EngineStateID;
 class EngineState
 {
 public:
-	// Default initializes member variables.
-	explicit EngineState(void);
+    // Default initializes member variables.
+    explicit EngineState(void);
 
-	// Frees any data allocated by member variables.
-	virtual ~EngineState(void) = 0;
+    // Frees any data allocated by member variables.
+    virtual ~EngineState(void) = 0;
 
-	// Initializes state-specific data when it's entered.
-	virtual void enter(void) = 0;
+    // Initializes state-specific data when it's entered.
+    virtual void enter(void) = 0;
 
-	// Cleans up any state-specific data on exit.
-	virtual void exit(void) = 0;
+    // Cleans up any state-specific data on exit.
+    virtual void exit(void) = 0;
 
-	// Updates the state, should be called each frame when active.
-	virtual void update(void) = 0;
+    // Updates the state, should be called each frame when active.
+    virtual void update(void) = 0;
 
-	// Getters:
+    // Getters:
 
-	// Returns Subject for adding Observer objects.
-	Subject& getSubject(void);
+    // Returns Subject for adding Observer objects.
+    Subject& getSubject(void);
 
-	// Returns World for injecting dependencies in Engine.
-	World& getWorld(void);
+    // Returns World for injecting dependencies in Engine.
+    World& getWorld(void);
 
-	// Setters:
+    // Setters:
 
-	// Sets state to active or not. If true, the state will update itself.
-	// Otherwise no updates will be performed.
-	void setActive(const bool);
+    // Sets state to active or not. If true, the state will update itself.
+    // Otherwise no updates will be performed.
+    void setActive(const bool);
 
 protected:
-	// Subject for Engine's Observer.
-	Subject m_subject;
+    // Subject for Engine's Observer.
+    Subject m_subject;
 
-	// State data.
-	World m_world;
-	bool m_active;
+    // State data.
+    World m_world;
+    bool m_active;
 };
 
 // ========================================================================= //
@@ -86,17 +86,17 @@ protected:
 // Getters:
 
 inline Subject& EngineState::getSubject(void){
-	return m_subject;
+    return m_subject;
 }
 
 inline World& EngineState::getWorld(void){
-	return m_world;
+    return m_world;
 }
 
 // Setters:
 
 inline void EngineState::setActive(const bool active){
-	m_active = active;
+    m_active = active;
 }
 
 // ========================================================================= //

@@ -33,39 +33,39 @@
 class Subject
 {
 public:
-	// Reserves a buffer of one Observer.
-	explicit Subject(void);
+    // Reserves a buffer of one Observer.
+    explicit Subject(void);
 
-	// Empty destructor.
-	~Subject(void);
+    // Empty destructor.
+    ~Subject(void);
 
-	void addObserver(const ObserverPtr);
+    void addObserver(const ObserverPtr);
 
-	void removeObserver(const ObserverPtr);
+    void removeObserver(const ObserverPtr);
 
-	// Notifies all attached Observers.
-	void notify(const unsigned int);
+    // Notifies all attached Observers.
+    void notify(const unsigned int);
 
 private:
-	ObserverList m_observers;
+    ObserverList m_observers;
 };
 
 // ========================================================================= //
 
 inline void Subject::addObserver(const ObserverPtr obs){
-	m_observers.push_back(obs);
+    m_observers.push_back(obs);
 }
 
 inline void Subject::removeObserver(const ObserverPtr obs){
-	for (ObserverList::iterator itr = m_observers.begin();
-		 itr != m_observers.end();){
-		if (*itr == obs){
-			itr = m_observers.erase(itr);
-		}
-		else{
-			++itr;
-		}
-	}
+    for (ObserverList::iterator itr = m_observers.begin();
+         itr != m_observers.end();){
+        if (*itr == obs){
+            itr = m_observers.erase(itr);
+        }
+        else{
+            ++itr;
+        }
+    }
 }
 
 // ========================================================================= //

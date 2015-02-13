@@ -40,11 +40,11 @@ typedef std::vector<ObserverPtr> ObserverList;
 class Observer
 {
 public:
-	explicit Observer(void) { }
+    explicit Observer(void) { }
 
-	virtual ~Observer(void) = 0 { }
+    virtual ~Observer(void) = 0 { }
 
-	virtual void onNotify(const unsigned int) = 0;
+    virtual void onNotify(const unsigned int) = 0;
 };
 
 // ========================================================================= //

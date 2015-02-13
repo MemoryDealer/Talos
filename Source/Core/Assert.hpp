@@ -27,16 +27,16 @@
 // ========================================================================= //
 // Offers user a chance to break into the debugger when an assertion fails.
 extern const bool CustomAssert(const bool, 
-							   const char*, 
-							   const int, 
-							   const char*);
+                               const char*, 
+                               const int, 
+                               const char*);
 
 // ========================================================================= //
 
 #ifdef _DEBUG
 #define Assert(exp, desc)\
 if (CustomAssert(static_cast<const bool>(exp), desc, __LINE__, __FILE__))\
-	{ _asm { int 3 } } // Triggers break in debugger.
+    { _asm { int 3 } } // Triggers break in debugger.
 #else
 #define Assert(exp, desc) ;
 #endif

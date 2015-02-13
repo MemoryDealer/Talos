@@ -31,7 +31,7 @@ ModelComponent::ModelComponent(void) :
 Component(),
 m_entity(nullptr)
 {
-	this->setType(Component::Type::Model);
+    this->setType(Component::Type::Model);
 }
 
 // ========================================================================= //
@@ -45,21 +45,21 @@ ModelComponent::~ModelComponent(void)
 
 void ModelComponent::init(EntityPtr entity, World& world)
 {
-	
+    
 }
 
 // ========================================================================= //
 
 void ModelComponent::init(World& world,
-						  const std::string& meshName,
-						  const std::string& matName)
+                          const std::string& meshName,
+                          const std::string& matName)
 {
-	m_entity = world.getSceneManager()->createEntity(meshName);
-	if (matName != ""){
-		m_entity->setMaterialName(matName);
-	}
+    m_entity = world.getSceneManager()->createEntity(meshName);
+    if (matName != ""){
+        m_entity->setMaterialName(matName);
+    }
 
-	this->setInitialized(true);
+    this->setInitialized(true);
 }
 
 // ========================================================================= //

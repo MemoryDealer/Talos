@@ -31,42 +31,42 @@ m_firstAvail(&m_pool[0]),
 m_idCounter(0),
 m_poolSize(size)
 {
-	// Point each Entity to the next.
-	for (int i = 0; i < size - 1; ++i){
-		m_pool[i].setNext(&m_pool[i + 1]);
-	}
+    // Point each Entity to the next.
+    for (int i = 0; i < size - 1; ++i){
+        m_pool[i].setNext(&m_pool[i + 1]);
+    }
 
-	// Terminate the last one.
-	m_pool[size - 1].setNext(nullptr);
+    // Terminate the last one.
+    m_pool[size - 1].setNext(nullptr);
 }
 
 // ========================================================================= //
 
 EntityPool::~EntityPool(void)
 {
-	delete[] m_pool;
+    delete[] m_pool;
 }
 
 // ========================================================================= //
 
 EntityPtr EntityPool::create(void)
 {
-	Assert(m_firstAvail != nullptr, "EntityPool firstAvail = nullptr");
+    Assert(m_firstAvail != nullptr, "EntityPool firstAvail = nullptr");
 
-	// O(1) time!
-	EntityPtr e = m_firstAvail;
-	m_firstAvail = e->getNext();
+    // O(1) time!
+    EntityPtr e = m_firstAvail;
+    m_firstAvail = e->getNext();
 
-	e->setID(m_idCounter++);
-	return e;
+    e->setID(m_idCounter++);
+    return e;
 }
 
 // ========================================================================= //
 
 void EntityPool::destroy(EntityPtr e)
 {
-	e->setNext(m_firstAvail);
-	m_firstAvail = e;
+    e->setNext(m_firstAvail);
+    m_firstAvail = e;
 }
 
 // ========================================================================= //

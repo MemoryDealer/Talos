@@ -41,25 +41,25 @@ class DynamicLines;
 class PDebugDrawer final
 {
 public:
-	explicit PDebugDrawer(void);
+    explicit PDebugDrawer(void);
 
-	~PDebugDrawer(void);
+    ~PDebugDrawer(void);
 
-	// Adds a PhysX actor to the debug drawing list.
-	void add(PxRigidActor*, PxGeometry&);
+    // Adds a PhysX actor to the debug drawing list.
+    void add(PxRigidActor*, PxGeometry&);
 
-	// Gets the pose of each PhysX actor and updates the lines.
-	void update(void);
+    // Gets the pose of each PhysX actor and updates the lines.
+    void update(void);
 
-	struct Node{
-		explicit Node(void) : lines(nullptr), actor(nullptr) { }
+    struct Node{
+        explicit Node(void) : lines(nullptr), actor(nullptr) { }
 
-		std::shared_ptr<DynamicLines> lines;
-		PxRigidActor* actor;
-	};
+        std::shared_ptr<DynamicLines> lines;
+        PxRigidActor* actor;
+    };
 
 private:
-	std::vector<Node> m_nodes;
+    std::vector<Node> m_nodes;
 };
 
 // ========================================================================= //

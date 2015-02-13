@@ -35,7 +35,7 @@ m_controllerManager(nullptr),
 m_debugDrawer(nullptr),
 m_useDebugDrawer(false)
 {
-	
+    
 }
 
 // ========================================================================= //
@@ -49,80 +49,80 @@ PScene::~PScene(void)
 
 const bool PScene::init(void)
 {
-	PxSceneDesc desc(m_physx->getTolerancesScale());
-	desc.gravity = PxVec3(0.f, -9.81f, 0.f);
+    PxSceneDesc desc(m_physx->getTolerancesScale());
+    desc.gravity = PxVec3(0.f, -9.81f, 0.f);
 
-	if (!desc.cpuDispatcher){
-		m_cpuDispatcher = PxDefaultCpuDispatcherCreate(4);
-		if (!m_cpuDispatcher){
-			return false;
-		}
-		desc.cpuDispatcher = m_cpuDispatcher;
-	}
+    if (!desc.cpuDispatcher){
+        m_cpuDispatcher = PxDefaultCpuDispatcherCreate(4);
+        if (!m_cpuDispatcher){
+            return false;
+        }
+        desc.cpuDispatcher = m_cpuDispatcher;
+    }
 
-	if (!desc.filterShader){
-		desc.filterShader = PxDefaultSimulationFilterShader;
-	}
+    if (!desc.filterShader){
+        desc.filterShader = PxDefaultSimulationFilterShader;
+    }
 
 #ifdef PX_WINDOWS
-	// CUDA...
+    // CUDA...
 #endif
 
-	// Create the physX scene.
-	m_scene = m_physx->createScene(desc);
-	if (!m_scene){
-		return false;
-	}
+    // Create the physX scene.
+    m_scene = m_physx->createScene(desc);
+    if (!m_scene){
+        return false;
+    }
 
-	// Create default material.
-	m_defaultMaterial = m_physx->createMaterial(0.5f, 0.5f, 0.1f);
+    // Create default material.
+    m_defaultMaterial = m_physx->createMaterial(0.5f, 0.5f, 0.1f);
 
-	// Create character controller manager.
-	m_controllerManager = PxCreateControllerManager(*m_scene);
+    // Create character controller manager.
+    m_controllerManager = PxCreateControllerManager(*m_scene);
 
-	return true;
+    return true;
 }
 
 // ========================================================================= //
 
 void PScene::destroy(void)
 {
-	m_controllerManager->release();
-	m_defaultMaterial->release();
-	m_scene->release();
-	m_cpuDispatcher->release();
+    m_controllerManager->release();
+    m_defaultMaterial->release();
+    m_scene->release();
+    m_cpuDispatcher->release();
 }
 
 // ========================================================================= //
 
 void PScene::simulate(PxReal speed)
 {
-	const PxReal step = 1.f / 16.f * speed;
+    const PxReal step = 1.f / 16.f * speed;
 
-	m_scene->simulate(step);
-	m_scene->fetchResults(true);
+    m_scene->simulate(step);
+    m_scene->fetchResults(true);
 
-	if (m_useDebugDrawer){
-		m_debugDrawer->update();
-	}
+    if (m_useDebugDrawer){
+        m_debugDrawer->update();
+    }
 }
 
 // ========================================================================= //
 
 void PScene::loadDebugDrawer(void)
 {
-	m_debugDrawer.reset(new PDebugDrawer());
-	m_useDebugDrawer = true;
+    m_debugDrawer.reset(new PDebugDrawer());
+    m_useDebugDrawer = true;
 }
 
 // ========================================================================= //
 
 void PScene::addToDebugDrawer(PxRigidActor* actor, 
-							  PxGeometry& geometry)
+                              PxGeometry& geometry)
 {
-	Assert(m_debugDrawer != nullptr, "Un-allocated debug drawer");
+    Assert(m_debugDrawer != nullptr, "Un-allocated debug drawer");
 
-	m_debugDrawer->add(actor, geometry);
+    m_debugDrawer->add(actor, geometry);
 }
 
 // ========================================================================= //

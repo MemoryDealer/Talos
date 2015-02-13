@@ -33,54 +33,54 @@
 class SceneComponent : public Component
 {
 public:
-	// Default initializes Ogre::SceneNode.
-	explicit SceneComponent(void);
+    // Default initializes Ogre::SceneNode.
+    explicit SceneComponent(void);
 
-	// Empty destructor.
-	virtual ~SceneComponent(void) override;
+    // Empty destructor.
+    virtual ~SceneComponent(void) override;
 
-	// Creates a Ogre::SceneNode within the world.
-	virtual void init(EntityPtr, World&) override;
+    // Creates a Ogre::SceneNode within the world.
+    virtual void init(EntityPtr, World&) override;
 
-	// Destroys the internal Ogre::SceneNode.
-	virtual void destroy(EntityPtr, World&) override;
+    // Destroys the internal Ogre::SceneNode.
+    virtual void destroy(EntityPtr, World&) override;
 
-	// Empty.
-	virtual void update(EntityPtr, World&) override;
+    // Empty.
+    virtual void update(EntityPtr, World&) override;
 
-	// Empty.
-	virtual void message(const ComponentMessage&) override;
+    // Empty.
+    virtual void message(const ComponentMessage&) override;
 
-	// Component functions:
+    // Component functions:
 
-	// Joins a ModelComponent to itself.
-	void attachModel(const ModelComponentPtr);
+    // Joins a ModelComponent to itself.
+    void attachModel(const ModelComponentPtr);
 
-	// Joins a LightComponent to itself.
-	void attachLight(const LightComponentPtr);
+    // Joins a LightComponent to itself.
+    void attachLight(const LightComponentPtr);
 
-	// Sets position of Ogre::SceneNode. 
-	// Note: This may be overriden by a PhysicsComponent attached to the
-	// same Entity.
-	void setPosition(const Ogre::Real, const Ogre::Real, const Ogre::Real);
+    // Sets position of Ogre::SceneNode. 
+    // Note: This may be overriden by a PhysicsComponent attached to the
+    // same Entity.
+    void setPosition(const Ogre::Real, const Ogre::Real, const Ogre::Real);
 
-	// Sets orientation of Ogre::SceneNode.
-	void setOrientation(const Ogre::Real, const Ogre::Real, const Ogre::Real,
-						const Ogre::Real);
+    // Sets orientation of Ogre::SceneNode.
+    void setOrientation(const Ogre::Real, const Ogre::Real, const Ogre::Real,
+                        const Ogre::Real);
 
-	// Getters:
+    // Getters:
 
-	// Returns pointer to internal Ogre::SceneNode.
-	Ogre::SceneNode* getSceneNode(void) const;
+    // Returns pointer to internal Ogre::SceneNode.
+    Ogre::SceneNode* getSceneNode(void) const;
 
 private:
-	Ogre::SceneNode* m_node;
+    Ogre::SceneNode* m_node;
 };
 
 // ========================================================================= //
 
 inline Ogre::SceneNode* SceneComponent::getSceneNode(void) const{
-	return m_node;
+    return m_node;
 }
 
 // ========================================================================= //

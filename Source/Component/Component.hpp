@@ -57,55 +57,55 @@ typedef Entity* EntityPtr;
 class Component
 {
 public:
-	enum Type{
-		Nil = 0,
-		Actor,
-		Camera,
-		Light,
-		Model,
-		Physics,
-		Scene
-	};
+    enum Type{
+        Nil = 0,
+        Actor,
+        Camera,
+        Light,
+        Model,
+        Physics,
+        Scene
+    };
 
-	// Initializes m_name to "nil".
-	explicit Component(void);
+    // Initializes m_name to "nil".
+    explicit Component(void);
 
-	// Empty destructor.
-	virtual ~Component(void) = 0;
+    // Empty destructor.
+    virtual ~Component(void) = 0;
 
-	// Interface function for initialization.
-	virtual void init(EntityPtr, World&) = 0;
+    // Interface function for initialization.
+    virtual void init(EntityPtr, World&) = 0;
 
-	// Interface function for destruction.
-	virtual void destroy(EntityPtr, World&) = 0;
+    // Interface function for destruction.
+    virtual void destroy(EntityPtr, World&) = 0;
 
-	// Interface function for updating.
-	virtual void update(EntityPtr, World&) = 0;
+    // Interface function for updating.
+    virtual void update(EntityPtr, World&) = 0;
 
-	// Handles a message received from parent Entity.
-	virtual void message(const ComponentMessage&) = 0;
+    // Handles a message received from parent Entity.
+    virtual void message(const ComponentMessage&) = 0;
 
-	// Getters:
+    // Getters:
 
-	// Returns the name of the component type.
-	const Type getType(void) const;
+    // Returns the name of the component type.
+    const Type getType(void) const;
 
-	// Returns true if Component has been initialized.
-	const bool isInitialized(void) const;
+    // Returns true if Component has been initialized.
+    const bool isInitialized(void) const;
 
-	// Setters:
+    // Setters:
 
-	// Sets initialization state of Component.
-	void setInitialized(const bool);
+    // Sets initialization state of Component.
+    void setInitialized(const bool);
 
 protected:
 
-	// Sets type of Component, called by derived Component constructor.
-	void setType(const Type);
+    // Sets type of Component, called by derived Component constructor.
+    void setType(const Type);
 
 private:
-	Type m_type;
-	bool m_initialized;
+    Type m_type;
+    bool m_initialized;
 };
 
 // ========================================================================= //
@@ -113,21 +113,21 @@ private:
 // Getters:
 
 inline const Component::Type Component::getType(void) const{
-	return m_type;
+    return m_type;
 }
 
 inline const bool Component::isInitialized(void) const{
-	return m_initialized;
+    return m_initialized;
 }
 
 // Setters:
 
 inline void Component::setType(const Type type){
-	m_type = type;
+    m_type = type;
 }
 
 inline void Component::setInitialized(const bool initialized){
-	m_initialized = initialized;
+    m_initialized = initialized;
 }
 
 // ========================================================================= //

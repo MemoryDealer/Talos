@@ -33,9 +33,9 @@
 template<typename T>
 static std::string toString(const T& value)
 {
-	std::ostringstream oss;
-	oss << value;
-	return oss.str();
+    std::ostringstream oss;
+    oss << value;
+    return oss.str();
 }
 
 // ========================================================================= //

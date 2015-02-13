@@ -35,17 +35,17 @@ class MoveForwardCommand : public Command
 {
 public:
 
-	virtual void execute(EntityPtr entity) override{
-		ActorComponentPtr actor = entity->getActorComponent();
+    virtual void execute(EntityPtr entity) override{
+        ActorComponentPtr actor = entity->getActorComponent();
 
-		actor->setMovingForward(true);
-	}
+        actor->setMovingForward(true);
+    }
 
-	virtual void unexecute(EntityPtr entity) override{
-		ActorComponentPtr actor = entity->getActorComponent();
+    virtual void unexecute(EntityPtr entity) override{
+        ActorComponentPtr actor = entity->getActorComponent();
 
-		actor->setMovingForward(false);
-	}
+        actor->setMovingForward(false);
+    }
 };
 
 // ========================================================================= //

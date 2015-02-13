@@ -27,27 +27,27 @@
 // ========================================================================= //
 
 const bool CustomAssert(const bool exp,
-						const char* desc,
-						const int line,
-						const char* file)
+                        const char* desc,
+                        const int line,
+                        const char* file)
 {
-	if (!exp){
-		bool ret = false;
+    if (!exp){
+        bool ret = false;
 #ifdef WIN32
-		std::string msg = std::string(desc) + "\r\nFILE: " + std::string(file)
-			+ "\r\nLINE: " + toString(line) + "\r\nDo you wish to break?";
-		if (static_cast<int>(MessageBox(GetForegroundWindow(), 
-			msg.c_str(),
-			"Assertion Triggered!", 
-			MB_YESNO | MB_ICONEXCLAMATION)) == IDYES){
-			ret = true;
-		}
+        std::string msg = std::string(desc) + "\r\nFILE: " + std::string(file)
+            + "\r\nLINE: " + toString(line) + "\r\nDo you wish to break?";
+        if (static_cast<int>(MessageBox(GetForegroundWindow(), 
+            msg.c_str(),
+            "Assertion Triggered!", 
+            MB_YESNO | MB_ICONEXCLAMATION)) == IDYES){
+            ret = true;
+        }
 
-		return ret;
+        return ret;
 #endif
-	}
+    }
 
-	return false;
+    return false;
 }
 
 // ========================================================================= //

@@ -34,9 +34,9 @@ class NullCommand : public Command
 {
 public:
 
-	virtual void execute(EntityPtr entity) override{
-		return;
-	}
+    virtual void execute(EntityPtr entity) override{
+        return;
+    }
 };
 
 // ========================================================================= //

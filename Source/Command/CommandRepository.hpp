@@ -42,20 +42,20 @@
 struct CommandRepository
 {
 public:
-	// Allocates all Command smart pointers.
-	explicit CommandRepository(void);
+    // Allocates all Command smart pointers.
+    explicit CommandRepository(void);
 
-	// Empty destructor (all smart pointers de-allocated).
-	~CommandRepository(void);
+    // Empty destructor (all smart pointers de-allocated).
+    ~CommandRepository(void);
 
-	// Smart pointers to possible Commands.
-	CommandPtr NullCommand;
-	LookCommandPtr LookCommand;
-	CommandPtr MoveBackwardCommand;
-	CommandPtr MoveForwardCommand;
-	CommandPtr MoveLeftCommand;
-	CommandPtr MoveRightCommand;
-	CommandPtr SpectatorCommand;
+    // Smart pointers to possible Commands.
+    CommandPtr NullCommand;
+    LookCommandPtr LookCommand;
+    CommandPtr MoveBackwardCommand;
+    CommandPtr MoveForwardCommand;
+    CommandPtr MoveLeftCommand;
+    CommandPtr MoveRightCommand;
+    CommandPtr SpectatorCommand;
 };
 
 // ========================================================================= //

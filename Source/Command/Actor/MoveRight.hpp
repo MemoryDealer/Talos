@@ -35,17 +35,17 @@ class MoveRightCommand : public Command
 {
 public:
 
-	virtual void execute(EntityPtr entity) override{
-		ActorComponentPtr actor = entity->getActorComponent();
+    virtual void execute(EntityPtr entity) override{
+        ActorComponentPtr actor = entity->getActorComponent();
 
-		actor->setMovingRight(true);
-	}
+        actor->setMovingRight(true);
+    }
 
-	virtual void unexecute(EntityPtr entity) override{
-		ActorComponentPtr actor = entity->getActorComponent();
+    virtual void unexecute(EntityPtr entity) override{
+        ActorComponentPtr actor = entity->getActorComponent();
 
-		actor->setMovingRight(false);
-	}
+        actor->setMovingRight(false);
+    }
 
 };
 

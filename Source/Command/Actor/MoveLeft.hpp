@@ -35,17 +35,17 @@ class MoveLeftCommand : public Command
 {
 public:
 
-	virtual void execute(EntityPtr entity) override{
-		ActorComponentPtr actor = entity->getActorComponent();
+    virtual void execute(EntityPtr entity) override{
+        ActorComponentPtr actor = entity->getActorComponent();
 
-		actor->setMovingLeft(true);
-	}
+        actor->setMovingLeft(true);
+    }
 
-	virtual void unexecute(EntityPtr entity) override{
-		ActorComponentPtr actor = entity->getActorComponent();
+    virtual void unexecute(EntityPtr entity) override{
+        ActorComponentPtr actor = entity->getActorComponent();
 
-		actor->setMovingLeft(false);
-	}
+        actor->setMovingLeft(false);
+    }
 
 };
 

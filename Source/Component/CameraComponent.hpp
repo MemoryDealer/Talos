@@ -33,38 +33,38 @@
 class CameraComponent : public Component
 {
 public:
-	// Sets name to "CameraComponent".
-	explicit CameraComponent(void);
+    // Sets name to "CameraComponent".
+    explicit CameraComponent(void);
 
-	// Empty destructor.
-	virtual ~CameraComponent(void) override;
+    // Empty destructor.
+    virtual ~CameraComponent(void) override;
 
-	// Creates Ogre::Camera object, sets its clip distance, sets the aspect
-	// ratio, wires up the camera to the viewport.
-	virtual void init(EntityPtr, World&) override;
+    // Creates Ogre::Camera object, sets its clip distance, sets the aspect
+    // ratio, wires up the camera to the viewport.
+    virtual void init(EntityPtr, World&) override;
 
-	// Destroys the Ogre::Camera object.
-	virtual void destroy(EntityPtr, World&) override;
+    // Destroys the Ogre::Camera object.
+    virtual void destroy(EntityPtr, World&) override;
 
-	// Empty.
-	virtual void update(EntityPtr, World&) override;
+    // Empty.
+    virtual void update(EntityPtr, World&) override;
 
-	// Empty.
-	virtual void message(const ComponentMessage&) override;
+    // Empty.
+    virtual void message(const ComponentMessage&) override;
 
-	// Getters: 
+    // Getters: 
 
-	// Returns pointer to internal Ogre::Camera.
-	Ogre::Camera* getCamera(void) const;
+    // Returns pointer to internal Ogre::Camera.
+    Ogre::Camera* getCamera(void) const;
 
 private:
-	Ogre::Camera* m_camera;
+    Ogre::Camera* m_camera;
 };
 
 // ========================================================================= //
 
 inline Ogre::Camera* CameraComponent::getCamera(void) const{
-	return m_camera;
+    return m_camera;
 }
 
 // ========================================================================= //

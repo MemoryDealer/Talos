@@ -40,23 +40,23 @@ typedef std::shared_ptr<LookCommand> LookCommandPtr;
 class LookCommand : public Command
 {
 public:
-	void setXY(const int relx, const int rely);
+    void setXY(const int relx, const int rely);
 
-	virtual void execute(EntityPtr entity) override{
-		ActorComponentPtr actor = entity->getActorComponent();
+    virtual void execute(EntityPtr entity) override{
+        ActorComponentPtr actor = entity->getActorComponent();
 
-		actor->look(m_relx, m_rely);
-	}
+        actor->look(m_relx, m_rely);
+    }
 
 private:
-	int m_relx, m_rely;
+    int m_relx, m_rely;
 };
 
 // ========================================================================= //
 
 inline void LookCommand::setXY(const int relx, const int rely){
-	m_relx = relx;
-	m_rely = rely;
+    m_relx = relx;
+    m_rely = rely;
 }
 
 // ========================================================================= //

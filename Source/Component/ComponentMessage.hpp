@@ -27,29 +27,29 @@
 // ========================================================================= //
 
 enum ComponentMessageType{
-	NIL = 0,
+    NIL = 0,
 
-	INPUT_MOUSE_MOTION,
+    INPUT_MOUSE_MOTION,
 
-	END
+    END
 };
 
 // ========================================================================= //
 
 struct ComponentMessage{
 
-	explicit ComponentMessage(void) : type(ComponentMessageType::NIL) { }
+    explicit ComponentMessage(void) : type(ComponentMessageType::NIL) { }
 
-	int type;
+    int type;
 
-	union{
-		struct{
-			int x;
-			int y;
-			int absx;
-			int absy;
-		} mouse;
-	};
+    union{
+        struct{
+            int x;
+            int y;
+            int absx;
+            int absy;
+        } mouse;
+    };
 };
 
 // ========================================================================= //

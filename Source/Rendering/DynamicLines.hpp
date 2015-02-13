@@ -33,75 +33,75 @@
 class DynamicLines final : public DynamicRenderable
 {
 public:
-	// Calls init, sets material to default white, flags as dirty.
-	explicit DynamicLines(const Ogre::RenderOperation::OperationType =
-						  Ogre::RenderOperation::OT_LINE_STRIP);
+    // Calls init, sets material to default white, flags as dirty.
+    explicit DynamicLines(const Ogre::RenderOperation::OperationType =
+                          Ogre::RenderOperation::OT_LINE_STRIP);
 
-	// Empty destructor.
-	virtual ~DynamicLines(void) override;
+    // Empty destructor.
+    virtual ~DynamicLines(void) override;
 
-	// Possible colours for lines.
-	enum Colour{
-		WHITE = 0,
-		RED
-	};
+    // Possible colours for lines.
+    enum Colour{
+        WHITE = 0,
+        RED
+    };
 
-	// Adds a point to the list.
-	void addPoint(const Ogre::Vector3&);
+    // Adds a point to the list.
+    void addPoint(const Ogre::Vector3&);
 
-	// Adds a point to the list.
-	void addPoint(const Ogre::Real, const Ogre::Real, const Ogre::Real);
+    // Adds a point to the list.
+    void addPoint(const Ogre::Real, const Ogre::Real, const Ogre::Real);
 
-	// Changes location of an existing point.
-	void setPoint(const unsigned short index, const Ogre::Vector3&);
+    // Changes location of an existing point.
+    void setPoint(const unsigned short index, const Ogre::Vector3&);
 
-	// Moves the entire list of points by specified offset.
-	void translate(const Ogre::Vector3&);
+    // Moves the entire list of points by specified offset.
+    void translate(const Ogre::Vector3&);
 
-	// Moves the entire list of points by specified offset.
-	void translate(const Ogre::Real, const Ogre::Real, const Ogre::Real);
+    // Moves the entire list of points by specified offset.
+    void translate(const Ogre::Real, const Ogre::Real, const Ogre::Real);
 
-	// Sets origin (where all points will be off-set from).
-	void setOrigin(const Ogre::Vector3&);
+    // Sets origin (where all points will be off-set from).
+    void setOrigin(const Ogre::Vector3&);
 
-	// Sets origin (where all points will be off-set from).
-	void setOrigin(const Ogre::Real, const Ogre::Real, const Ogre::Real);
+    // Sets origin (where all points will be off-set from).
+    void setOrigin(const Ogre::Real, const Ogre::Real, const Ogre::Real);
 
-	// Removes all points from the point list.
-	void clear(void);
+    // Removes all points from the point list.
+    void clear(void);
 
-	// Updates the hardware buffer after making changes.
-	void update(void);
+    // Updates the hardware buffer after making changes.
+    void update(void);
 
-	// Getters:
+    // Getters:
 
-	// Returns number of points in list.
-	const unsigned short getNumPoints(void) const;
+    // Returns number of points in list.
+    const unsigned short getNumPoints(void) const;
 
-	// Returns current operation type for drawing.
-	const Ogre::RenderOperation::OperationType getOperationType(void) const;
+    // Returns current operation type for drawing.
+    const Ogre::RenderOperation::OperationType getOperationType(void) const;
 
-	// Setters:
+    // Setters:
 
-	// Sets the type of operation to draw with.
-	void setOperationType(const Ogre::RenderOperation::OperationType);
+    // Sets the type of operation to draw with.
+    void setOperationType(const Ogre::RenderOperation::OperationType);
 
-	// Changes the colour of the lines being rendered.
-	void setColour(const Colour);
+    // Changes the colour of the lines being rendered.
+    void setColour(const Colour);
 
 protected:
-	// Implements DynamicRenderable's function, creates a simple vertex-only
-	// declaration.
-	virtual void createVertexDeclaration(void) override;
+    // Implements DynamicRenderable's function, creates a simple vertex-only
+    // declaration.
+    virtual void createVertexDeclaration(void) override;
 
-	// Implements DynamicRenderable's function, pushes point list out to 
-	// hardware memory.
-	virtual void fillHardwareBuffers(void) override;
+    // Implements DynamicRenderable's function, pushes point list out to 
+    // hardware memory.
+    virtual void fillHardwareBuffers(void) override;
 
 private:
-	std::vector<Ogre::Vector3> m_points;
-	Ogre::Vector3 m_origin;
-	bool m_dirty;
+    std::vector<Ogre::Vector3> m_points;
+    Ogre::Vector3 m_origin;
+    bool m_dirty;
 };
 
 // ========================================================================= //
@@ -109,19 +109,19 @@ private:
 // Getters:
 
 inline const unsigned short DynamicLines::getNumPoints(void) const{
-	return static_cast<unsigned short>(m_points.size());
+    return static_cast<unsigned short>(m_points.size());
 }
 
 inline const Ogre::RenderOperation::OperationType 
-	DynamicLines::getOperationType(void) const{
-	return mRenderOp.operationType;
+    DynamicLines::getOperationType(void) const{
+    return mRenderOp.operationType;
 }
 
 // Setters:
 
 inline void DynamicLines::setOperationType(
-	const Ogre::RenderOperation::OperationType type){
-	mRenderOp.operationType = type;
+    const Ogre::RenderOperation::OperationType type){
+    mRenderOp.operationType = type;
 }
 
 // ========================================================================= //

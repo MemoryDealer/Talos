@@ -39,24 +39,24 @@ typedef Entity* EntityPtr;
 class IntroState final : public EngineState
 {
 public:
-	// Calls EngineState constructor.
-	explicit IntroState(void);
+    // Calls EngineState constructor.
+    explicit IntroState(void);
 
-	// Empty destructor.
-	virtual ~IntroState(void) override;
+    // Empty destructor.
+    virtual ~IntroState(void) override;
 
-	// Set up basic stuff.
-	virtual void enter(void) override;
+    // Set up basic stuff.
+    virtual void enter(void) override;
 
-	// Free basic stuff.
-	virtual void exit(void) override;
+    // Free basic stuff.
+    virtual void exit(void) override;
 
-	// Test.
-	virtual void update(void) override;
+    // Test.
+    virtual void update(void) override;
 
 private:
-	EntityPtr m_player;
-	EntityPtr m_ogre;
+    EntityPtr m_player;
+    EntityPtr m_ogre;
 };
 
 // ========================================================================= //

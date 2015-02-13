@@ -34,18 +34,18 @@
 class SpectatorCommand : public Command
 {
 public:
-	
-	virtual void execute(EntityPtr entity) override{
-		ActorComponentPtr actor = entity->getActorComponent();
+    
+    virtual void execute(EntityPtr entity) override{
+        ActorComponentPtr actor = entity->getActorComponent();
 
-		actor->setMode(ActorComponent::Mode::SPECTATOR);
-	}
+        actor->setMode(ActorComponent::Mode::SPECTATOR);
+    }
 
-	virtual void unexecute(EntityPtr entity) override{
-		ActorComponentPtr actor = entity->getActorComponent();
+    virtual void unexecute(EntityPtr entity) override{
+        ActorComponentPtr actor = entity->getActorComponent();
 
-		actor->setMode(ActorComponent::Mode::PLAYER);
-	}
+        actor->setMode(ActorComponent::Mode::PLAYER);
+    }
 };
 
 // ========================================================================= //

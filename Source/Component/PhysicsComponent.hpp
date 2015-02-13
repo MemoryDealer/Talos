@@ -37,83 +37,83 @@ using namespace physx;
 class PhysicsComponent : public Component
 {
 public:
-	// Default initializes member data, stores mesh filename.
-	explicit PhysicsComponent(void);
+    // Default initializes member data, stores mesh filename.
+    explicit PhysicsComponent(void);
 
-	// Empty destructor.
-	virtual ~PhysicsComponent(void) override;
+    // Empty destructor.
+    virtual ~PhysicsComponent(void) override;
 
-	enum Type{
-		STATIC = 0,
-		DYNAMIC
-	};
+    enum Type{
+        STATIC = 0,
+        DYNAMIC
+    };
 
-	// Empty.
-	virtual void init(EntityPtr, World&) override;
+    // Empty.
+    virtual void init(EntityPtr, World&) override;
 
-	// Initializes PhysX actor, adds to World's PxScene.
-	virtual void init(World&, 
-					  EntityPtr,
-					  const Type,
-					  PxGeometry&,
-					  const PxReal staticFriction = 0.5f, 
-					  const PxReal dynamicFriction = 0.5f, 
-					  const PxReal restitution = 0.3f,
-					  const PxReal density = 10.f);
+    // Initializes PhysX actor, adds to World's PxScene.
+    virtual void init(World&, 
+                      EntityPtr,
+                      const Type,
+                      PxGeometry&,
+                      const PxReal staticFriction = 0.5f, 
+                      const PxReal dynamicFriction = 0.5f, 
+                      const PxReal restitution = 0.3f,
+                      const PxReal density = 10.f);
 
-	// Removes PhysX actor from World's PxScene.
-	virtual void destroy(EntityPtr, World&) override;
+    // Removes PhysX actor from World's PxScene.
+    virtual void destroy(EntityPtr, World&) override;
 
-	// Retrieves the actor's position and orientation, applies them to the
-	// attached SceneComponent for rendering.
-	virtual void update(EntityPtr, World&) override;
+    // Retrieves the actor's position and orientation, applies them to the
+    // attached SceneComponent for rendering.
+    virtual void update(EntityPtr, World&) override;
 
-	// Empty.
-	virtual void message(const ComponentMessage&) override;
+    // Empty.
+    virtual void message(const ComponentMessage&) override;
 
-	// Component functions:
+    // Component functions:
 
-	// Sets PhysX pose position to these coordinates.
-	void setPosition(const PxReal, const PxReal, const PxReal);
+    // Sets PhysX pose position to these coordinates.
+    void setPosition(const PxReal, const PxReal, const PxReal);
 
-	// Sets PhysX pose orientation to this quaternion.
-	void setOrientation(const PxReal, const PxReal, const PxReal, 
-						const PxReal);
+    // Sets PhysX pose orientation to this quaternion.
+    void setOrientation(const PxReal, const PxReal, const PxReal, 
+                        const PxReal);
 
-	// Translates the PhysX pose directly.
-	void translate(const PxReal, const PxReal, const PxReal);
+    // Translates the PhysX pose directly.
+    void translate(const PxReal, const PxReal, const PxReal);
 
-	// Rotates the PhysX pose by this vector.
-	void rotate(const PxReal, const PxReal, const PxReal);
+    // Rotates the PhysX pose by this vector.
+    void rotate(const PxReal, const PxReal, const PxReal);
 
-	// Getters:
+    // Getters:
 
-	PxRigidActor* getRigidActor(void) const;
-	PxRigidStatic* getStaticActor(void) const;
-	PxRigidDynamic* getDynamicActor(void) const;
+    PxRigidActor* getRigidActor(void) const;
+    PxRigidStatic* getStaticActor(void) const;
+    PxRigidDynamic* getDynamicActor(void) const;
 
 private:
-	union{
-		PxRigidStatic* m_sActor;
-		PxRigidDynamic* m_dActor;
-	};
+    union{
+        PxRigidStatic* m_sActor;
+        PxRigidDynamic* m_dActor;
+    };
 
-	PxRigidActor* m_actor;
-	PxMaterial* m_mat;
+    PxRigidActor* m_actor;
+    PxMaterial* m_mat;
 };
 
 // ========================================================================= //
 
 inline PxRigidActor* PhysicsComponent::getRigidActor(void) const{
-	return m_actor;
+    return m_actor;
 }
 
 inline PxRigidStatic* PhysicsComponent::getStaticActor(void) const{
-	return m_sActor;
+    return m_sActor;
 }
 
 inline PxRigidDynamic* PhysicsComponent::getDynamicActor(void) const{
-	return m_dActor;
+    return m_dActor;
 }
 
 // ========================================================================= //

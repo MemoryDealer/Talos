@@ -30,16 +30,16 @@ template<typename T>
 class Pool
 {
 public:
-	explicit Pool(const int size);
+    explicit Pool(const int size);
 
-	~Pool(void);
+    ~Pool(void);
 
-	T* create(void);
+    T* create(void);
 
 private:
-	T* m_pool;
-	int m_numActive;
-	int m_size;
+    T* m_pool;
+    int m_numActive;
+    int m_size;
 };
 
 // ========================================================================= //

@@ -47,36 +47,36 @@ typedef KeyMap::value_type KM_VT;
 class Input
 {
 public:
-	// Default initializes player and gui pointers to nullptr.
-	explicit Input(void);
+    // Default initializes player and gui pointers to nullptr.
+    explicit Input(void);
 
-	// Empty destructor.
-	~Input(void);
+    // Empty destructor.
+    ~Input(void);
 
-	// Processes SDL input events. Returns a StateEvent if needed.
-	const CommandPtr handle(const SDL_Event&);
+    // Processes SDL input events. Returns a StateEvent if needed.
+    const CommandPtr handle(const SDL_Event&);
 
-	enum Mode{
-		PLAYER = 0,
-		UI,
-		LOCKED
-	};
+    enum Mode{
+        PLAYER = 0,
+        UI,
+        LOCKED
+    };
 
-	// Getters:
+    // Getters:
 
-	// Returns current Input mode.
-	const Mode getMode(void) const;
+    // Returns current Input mode.
+    const Mode getMode(void) const;
 
-	// Setters:
+    // Setters:
 
-	// Sets the mode of the Input handler.
-	void setMode(const Mode);
+    // Sets the mode of the Input handler.
+    void setMode(const Mode);
 
 private:
-	std::shared_ptr<CommandRepository> m_commandRepo;
-	KeyMap m_keymap;
+    std::shared_ptr<CommandRepository> m_commandRepo;
+    KeyMap m_keymap;
 
-	Mode m_mode;
+    Mode m_mode;
 };
 
 // ========================================================================= //
@@ -84,19 +84,19 @@ private:
 // Getters:
 
 inline const Input::Mode Input::getMode(void) const{
-	return m_mode;
+    return m_mode;
 }
 
 // Setters:
 
 inline void Input::setMode(const Mode mode){
-	m_mode = mode;
-	if (m_mode == Mode::PLAYER){
-		SDL_SetRelativeMouseMode(SDL_TRUE);
-	}
-	else if (m_mode == Mode::UI){
-		SDL_SetRelativeMouseMode(SDL_FALSE);
-	}
+    m_mode = mode;
+    if (m_mode == Mode::PLAYER){
+        SDL_SetRelativeMouseMode(SDL_TRUE);
+    }
+    else if (m_mode == Mode::UI){
+        SDL_SetRelativeMouseMode(SDL_FALSE);
+    }
 }
 
 // ========================================================================= //

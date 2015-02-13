@@ -34,80 +34,80 @@
 class LightComponent : public Component
 {
 public:
-	enum Type{
-		POINT = 0,
-		SPOTLIGHT
-	};
+    enum Type{
+        POINT = 0,
+        SPOTLIGHT
+    };
 
-	// Sets type.
-	explicit LightComponent(void);
+    // Sets type.
+    explicit LightComponent(void);
 
-	// Empty destructor.
-	virtual ~LightComponent(void) override;
+    // Empty destructor.
+    virtual ~LightComponent(void) override;
 
-	// Empty.
-	virtual void init(EntityPtr, World&) override;
+    // Empty.
+    virtual void init(EntityPtr, World&) override;
 
-	// Creates Ogre::Light and sets its type.
-	virtual void init(World&, const Type);
+    // Creates Ogre::Light and sets its type.
+    virtual void init(World&, const Type);
 
-	// Destroys Ogre::Light using World's Ogre::SceneManager.
-	virtual void destroy(EntityPtr, World&) override;
+    // Destroys Ogre::Light using World's Ogre::SceneManager.
+    virtual void destroy(EntityPtr, World&) override;
 
-	// Empty.
-	virtual void update(EntityPtr, World&) override;
+    // Empty.
+    virtual void update(EntityPtr, World&) override;
 
-	// Empty.
-	virtual void message(const ComponentMessage&) override;
+    // Empty.
+    virtual void message(const ComponentMessage&) override;
 
-	// Light functions:
+    // Light functions:
 
-	// Sets colour of light.
-	void setColour(const Ogre::Real, const Ogre::Real, const Ogre::Real);
+    // Sets colour of light.
+    void setColour(const Ogre::Real, const Ogre::Real, const Ogre::Real);
 
-	// Sets range of light using linear and quadratic values internally.
-	void setRange(const Ogre::Real);
+    // Sets range of light using linear and quadratic values internally.
+    void setRange(const Ogre::Real);
 
-	
+    
 
-	// Getters:
+    // Getters:
 
-	// Returns pointer to internal Ogre::Light.
-	Ogre::Light* getLight(void) const;
+    // Returns pointer to internal Ogre::Light.
+    Ogre::Light* getLight(void) const;
 
 private:
-	Ogre::Light* m_light;
-	Ogre::Real m_intensity;
+    Ogre::Light* m_light;
+    Ogre::Real m_intensity;
 };
 
 // ========================================================================= //
 
 inline void LightComponent::setColour(const Ogre::Real r, 
-									  const Ogre::Real g, 
-									  const Ogre::Real b){
-	m_light->setDiffuseColour(r, g, b);
-	m_light->setSpecularColour(r, g, b);
+                                      const Ogre::Real g, 
+                                      const Ogre::Real b){
+    m_light->setDiffuseColour(r, g, b);
+    m_light->setSpecularColour(r, g, b);
 }
 
 inline void LightComponent::setRange(const Ogre::Real range){
-	if (m_light->getType() == Ogre::Light::LT_POINT){
-		m_light->setAttenuation(range,
-								1.f,
-								//4.5f / range,
-								//75.f / (range * range));
-								255.f / range,
-								0.f);
-	}
-	else{
-		m_light->setSpotlightRange(Ogre::Degree(range - 15),
-								   Ogre::Degree(range));
-	}
+    if (m_light->getType() == Ogre::Light::LT_POINT){
+        m_light->setAttenuation(range,
+                                1.f,
+                                //4.5f / range,
+                                //75.f / (range * range));
+                                255.f / range,
+                                0.f);
+    }
+    else{
+        m_light->setSpotlightRange(Ogre::Degree(range - 15),
+                                   Ogre::Degree(range));
+    }
 }
 
 // Getters:
 
 inline Ogre::Light* LightComponent::getLight(void) const{
-	return m_light;
+    return m_light;
 }
 
 // ========================================================================= //

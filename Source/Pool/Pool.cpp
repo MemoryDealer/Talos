@@ -52,15 +52,15 @@ m_size(size){
 template<typename T>
 Pool<T>::~Pool(void)
 {
-	delete[] m_pool;
+    delete[] m_pool;
 }
 
 template<typename T>
 T* Pool<T>::create(void)
 {
-	Assert(m_numActive < m_size, "Pool overflow!");
+    Assert(m_numActive < m_size, "Pool overflow!");
 
-	return &m_pool[m_numActive++];
+    return &m_pool[m_numActive++];
 }
 
 // ========================================================================= //

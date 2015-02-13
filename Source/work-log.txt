@@ -88,8 +88,8 @@
 * Got a basic CEGUI window setup inside the viewport.
 * Synced the CEGUI mouse position using GUIContext::injectMousePosition().
 * Removed window creation from Ogre and let SDL create the window. This way, I have more control over mouse behavior without having to resort to Win32 API. So I can now lock the mouse at the center for camera movement. It can be
-	disable for using the GUI. After the SDL_Window is created, Ogre calls Root::createRenderWindow() using a window handle parameter retrieved from the SDL_Window. 
-	The call to CEGUI::OgreRenderer::bootstrapSystem() also needs a dereferenced Root::getRenderTarget("window name") for initialization.
+    disable for using the GUI. After the SDL_Window is created, Ogre calls Root::createRenderWindow() using a window handle parameter retrieved from the SDL_Window. 
+    The call to CEGUI::OgreRenderer::bootstrapSystem() also needs a dereferenced Root::getRenderTarget("window name") for initialization.
 * Added Input class which takes SDL events and handles them, for player input and GUI input.
 * Removed InputComponent as the new Input class takes over. 
 
@@ -132,9 +132,9 @@
 * Added DynamicLines class for drawing debug lines or for any need of line drawing.
 * Added ability for DynamicLines to translate, each instance has an origin vector3 which specifies the starting offset of the points.
 * Created my own debug drawer for PhysX - PDebugDrawer. It takes PxRigidActor and PxGeometry as parameters and adds them to a list of debug nodes, each of which contain a DynamicLines instance 
-	representing the actor's geometry. It can be enabled by calling PScene::loadDebugDrawer().
+    representing the actor's geometry. It can be enabled by calling PScene::loadDebugDrawer().
 * I've changed the convention for Entities: instead of calling Entity::init() after all Components are attached, Component::init() should be called on every Component before it's attached. This prevents
-	any nullptrs when Components need each other's data. Then, World::checkEntities() is called after scene creation, which checks if every Component attached to every Entity has been initialized. 
+    any nullptrs when Components need each other's data. Then, World::checkEntities() is called after scene creation, which checks if every Component attached to every Entity has been initialized. 
 * Put in about 10 hours today.
 
 == 2/10/15 ==
@@ -154,6 +154,7 @@
 
 == 2/13/15 ==
 * Added World::setFog(). 
+* Replaced all tabs with 4 spaces. Changed visual studio to insert spaces for tabs.
 
 == TODO ==
 * Add a "clock speed" variable to the World, should affect physics etc.
@@ -167,6 +168,5 @@
 * Put an EntityRegistry in World which has an associative array of IDs to strings for Entity names.
 * Make sure Entities are destroyed properly when World is destroyed.
 * Alphabetize includes everywhere. Folder name is first if in a folder.
-* Change std::string id system for components to an enum int system to save memory and CPU cycles.
 * Implement config file loading for options in Engine::init() and others.
 * Refer to http://gameprogrammingpatterns.com/event-queue.html for Audio.

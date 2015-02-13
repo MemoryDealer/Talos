@@ -29,7 +29,7 @@
 LightComponent::LightComponent(void) :
 m_light(nullptr)
 {
-	this->setType(Component::Type::Light);
+    this->setType(Component::Type::Light);
 }
 
 // ========================================================================= //
@@ -50,18 +50,18 @@ void LightComponent::init(EntityPtr entity, World& world)
 
 void LightComponent::init(World& world, const Type type)
 {
-	m_light = world.getSceneManager()->createLight();
-	m_light->setType((type == Type::POINT) ? Ogre::Light::LT_POINT :
-					 Ogre::Light::LT_SPOTLIGHT);
+    m_light = world.getSceneManager()->createLight();
+    m_light->setType((type == Type::POINT) ? Ogre::Light::LT_POINT :
+                     Ogre::Light::LT_SPOTLIGHT);
 
-	this->setInitialized(true);
+    this->setInitialized(true);
 }
 
 // ========================================================================= //
 
 void LightComponent::destroy(EntityPtr entity, World& world)
 {
-	world.getSceneManager()->destroyLight(m_light);
+    world.getSceneManager()->destroyLight(m_light);
 }
 
 // ========================================================================= //

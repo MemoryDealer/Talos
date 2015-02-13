@@ -28,7 +28,7 @@
 Subject::Subject(void) :
 m_observers()
 {
-	m_observers.reserve(1);
+    m_observers.reserve(1);
 }
 
 // ========================================================================= //
@@ -42,11 +42,11 @@ Subject::~Subject(void)
 
 void Subject::notify(const unsigned int id)
 {
-	for (ObserverList::iterator itr = m_observers.begin();
-		 itr != m_observers.end();
-		 ++itr){
-		(*itr)->onNotify(id);
-	}
+    for (ObserverList::iterator itr = m_observers.begin();
+         itr != m_observers.end();
+         ++itr){
+        (*itr)->onNotify(id);
+    }
 }
 
 // ========================================================================= //
