@@ -56,9 +56,12 @@ IntroState::~IntroState(void)
 void IntroState::enter(void)
 {
 	m_world.init();
-	m_world.setLightColour(0.25f, 0.15f, 0.20f);
 	m_world.getInput()->setMode(Input::Mode::PLAYER);
 	m_world.getPScene()->loadDebugDrawer();
+
+	// Setup visual scene settings.
+	m_world.setLightColour(0.25f, 0.15f, 0.20f);
+	m_world.setFog(Ogre::FOG_EXP2, 0.f, 0.f, 0.f, 0.05f);
 
 	// Create scene manager.
 	Ogre::SceneManager* scene = m_world.getSceneManager();

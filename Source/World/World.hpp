@@ -102,6 +102,15 @@ public:
 	// Sets colour of world's ambient light.
 	void setAmbientLight(const Ogre::Real, const Ogre::Real, const Ogre::Real);
 
+	// Sets fog mode, colour, along with any parameters needed.
+	void setFog(const Ogre::FogMode mode, 
+				const Ogre::Real r, 
+				const Ogre::Real g, 
+				const Ogre::Real b,
+				const Ogre::Real expDensity,
+				const Ogre::Real linearStart,
+				const Ogre::Real linearEnd);
+
 	// === //
 
 	// Component factory functions:
@@ -194,6 +203,20 @@ inline void World::setAmbientLight(const Ogre::Real r,
 								   const Ogre::Real g,
 								   const Ogre::Real b){
 	m_scene->setAmbientLight(Ogre::ColourValue(r, g, b));
+}
+
+inline void World::setFog(const Ogre::FogMode mode,
+						  const Ogre::Real r,
+						  const Ogre::Real g,
+						  const Ogre::Real b,
+						  const Ogre::Real expDensity,
+						  const Ogre::Real linearStart = 50.f,
+						  const Ogre::Real linearEnd = 500.f){
+	m_scene->setFog(mode, 
+					Ogre::ColourValue(r, g, b),
+					expDensity,
+					linearStart,
+					linearEnd);
 }
 
 // Getters:

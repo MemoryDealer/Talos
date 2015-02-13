@@ -148,10 +148,15 @@
 * Replaced ComponentPool with Pool, which uses proper template instantiation in the cpp file, reducing compile times.
 * Added SpectatorCommand to switch player into spectator mode temporarily while holding down a key (space at the moment).
 
+== 2/12/15 ==
+* Unsuccessfully tried to integrate Havok physics, but could not compile with visual studio 2013 as the free binaries were only 2012. If I am to use Havok, I'll have to obtain a license...when I have 40k+.
+* Changed header of every file to GPL v3.0. Added LICENSE and README.md, uploaded to Github.
+
+== 2/13/15 ==
+* Added World::setFog(). 
+
 == TODO ==
-* Add fog.
 * Add a "clock speed" variable to the World, should affect physics etc.
-* Allow debug player mode, which can switch between spectating and playing.
 * Put character controller data into config file to speed up testing.
 * Make PScene optional when initializing World.
 * Make PhysX use software mode if NVIDIA card is not detected.
