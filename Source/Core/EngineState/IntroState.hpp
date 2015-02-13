@@ -47,7 +47,6 @@ public:
 private:
 	EntityPtr m_player;
 	EntityPtr m_ogre;
-	physx::PxRigidDynamic* dyn;
 };
 
 // ========================================================================= //
