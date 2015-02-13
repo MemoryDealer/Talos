@@ -26,6 +26,7 @@
 #include "CC/DCC.hpp"
 #include "CC/KCC.hpp"
 #include "ComponentMessage.hpp"
+#include "ModelComponent.hpp"
 #include "Physics/PScene.hpp"
 #include "World/World.hpp"
 
@@ -104,6 +105,8 @@ void ActorComponent::destroy(EntityPtr entity, World& world)
 
     world.getSceneManager()->destroySceneNode(m_yawNode);
     SceneComponent::destroy(entity, world);
+
+    this->setInitialized(false);
 }
 
 // ========================================================================= //
@@ -172,8 +175,19 @@ void ActorComponent::message(const ComponentMessage& msg)
 
 // ========================================================================= //
 
+void ActorComponent::attachModel(const ModelComponentPtr modelC)
+{
+    Assert(modelC != nullptr, "null ModelComponentPtr");
+
+    m_yawNode->attachObject(modelC->getOgreEntity());
+}
+
+// ========================================================================= //
+
 void ActorComponent::attachCamera(const CameraComponentPtr cameraC)
 {
+    Assert(cameraC != nullptr, "null CameraComponentPtr");
+
     m_camera = cameraC->getCamera();
     m_rollNode->attachObject(m_camera);
 }

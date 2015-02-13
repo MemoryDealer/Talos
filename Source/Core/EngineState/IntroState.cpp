@@ -61,7 +61,7 @@ void IntroState::enter(void)
 
     // Setup visual scene settings.
     m_world.setLightColour(0.25f, 0.15f, 0.20f);
-    m_world.setFog(Ogre::FOG_EXP2, 0.f, 0.f, 0.f, 0.05f);
+    //m_world.setFog(Ogre::FOG_EXP2, 0.f, 0.f, 0.f, 0.01f);
 	
     // Create scene manager.
     Ogre::SceneManager* scene = m_world.getSceneManager();
@@ -76,9 +76,9 @@ void IntroState::enter(void)
     CameraComponentPtr cameraComponent = m_world.createCameraComponent();
     cameraComponent->init(m_player, m_world);
     m_player->attachComponent(cameraComponent);
-
-    // Wire up camera component to actor component.
-    actorComponent->attachCamera(cameraComponent);
+    ModelComponentPtr modelC = m_world.createModelComponent();
+    modelC->init(m_world, "ogrehead.mesh");
+    m_player->attachComponent(modelC);
 
     // Create a dynamic object as an ogre mesh.
     m_ogre = m_world.createEntity();
@@ -102,16 +102,13 @@ void IntroState::enter(void)
     lightC->setColour(50.f, 0.f, 50.f);
     lightC->setRange(175.f);
     m_ogre->attachComponent(lightC);
-
-    //sceneComponent->attachModel(model);
-    sceneComponent->attachLight(lightC);
     
     // Plane.
     EntityPtr board = m_world.createEntity();
     SceneComponentPtr sceneC = m_world.createSceneComponent();
     sceneC->init(board, m_world);
     board->attachComponent(sceneC);
-    ModelComponentPtr modelC = m_world.createModelComponent();
+    modelC = m_world.createModelComponent();
     modelC->init(m_world, "Plane/Board", "Board");
     board->attachComponent(modelC);
     physicsC = m_world.createPhysicsComponent();
@@ -120,8 +117,6 @@ void IntroState::enter(void)
     physicsC->translate(0.f, -50.f, 0.f);
     //physicsC->rotate(45.f, 0.f, 0.f);
     board->attachComponent(physicsC);
-
-    sceneC->attachModel(modelC);
 
     // Setup GUI.
     /*CEGUI::WindowManager& wmgr = CEGUI::WindowManager::getSingleton();

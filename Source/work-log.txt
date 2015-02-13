@@ -155,6 +155,8 @@
 == 2/13/15 ==
 * Added World::setFog(). 
 * Replaced all tabs with 4 spaces. Changed visual studio to insert spaces for tabs.
+* Added Entity::linkComponents() which detects what components are attached, such as scene and model components, and then attaches the model component to the scene, for example. This reduces the
+    code needed to create an Entity. In World::checkEntities, every Entity's components will be linked if they are not in Entity::checkComponents().
 
 == TODO ==
 * Add a "clock speed" variable to the World, should affect physics etc.

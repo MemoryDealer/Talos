@@ -62,6 +62,8 @@ void LightComponent::init(World& world, const Type type)
 void LightComponent::destroy(EntityPtr entity, World& world)
 {
     world.getSceneManager()->destroyLight(m_light);
+
+    this->setInitialized(false);
 }
 
 // ========================================================================= //

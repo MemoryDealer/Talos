@@ -125,6 +125,8 @@ void PhysicsComponent::destroy(EntityPtr entity, World& world)
     Assert(m_actor != nullptr, "Null m_actor!");
 
     world.getPScene()->getScene()->removeActor(*m_actor);
+
+    this->setInitialized(false);
 }
 
 // ========================================================================= //

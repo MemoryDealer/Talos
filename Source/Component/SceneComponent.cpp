@@ -61,6 +61,8 @@ void SceneComponent::init(EntityPtr entity, World& world)
 void SceneComponent::destroy(EntityPtr entity, World& world)
 {
     world.getSceneManager()->destroySceneNode(m_node);
+
+    this->setInitialized(false);
 }
 
 // ========================================================================= //

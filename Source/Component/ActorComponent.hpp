@@ -30,10 +30,6 @@
 
 // ========================================================================= //
 
-using namespace physx;
-
-// ========================================================================= //
-
 class DCC;
 class KCC;
 
@@ -73,7 +69,8 @@ public:
         DYNAMIC
     };
 
-    // Component functions:
+    // Joins a ModelComponent to the roll node.
+    void attachModel(const ModelComponentPtr);
 
     // Attachs a camera to the roll node.
     void attachCamera(const CameraComponentPtr);

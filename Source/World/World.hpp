@@ -52,9 +52,10 @@ typedef PhysicsComponent* PhysicsComponentPtr;
 typedef SceneComponent* SceneComponentPtr;
 
 // ========================================================================= //
-// Represents everything in the physical game world. The World holds 
-// collections of Systems (which have collections of Components) and Entities
-// (which have pointers to the needed Components in the Systems).
+// Represents everything in the physical game world. The World holds a
+// collection of Entities (which have pointers to the needed Components).
+// Entities and Components are retrieved from pools in the World allocated
+// during World::init().
 class World final
 {
 public:
@@ -82,8 +83,9 @@ public:
     // Calls destroy on Entity and 
     void destroyEntity(EntityPtr);
 
-    // Checks if each Entity's Components have been initialized. Returns true
-    // if they all have. Should be called after initial scene setup.
+    // Checks if each Entity's Components have been initialized and linked. 
+    // Returns true if they all have. Should be called after initial scene 
+    // setup.
     const bool checkEntities(void) const;
 
     // Updates every active Entity in the game world.

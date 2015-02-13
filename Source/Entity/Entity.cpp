@@ -29,6 +29,7 @@
 
 Entity::Entity(void) :
 m_components(),
+m_componentsLinked(false),
 m_id(0),
 m_next(nullptr)
 {
@@ -80,6 +81,7 @@ void Entity::update(World& world)
 ComponentPtr Entity::attachComponent(const ComponentPtr component)
 {
     m_components.push_back(component);
+    m_componentsLinked = false;
     return component;
 }
 
@@ -100,8 +102,64 @@ void Entity::detachComponent(const ComponentPtr component)
 
 // ========================================================================= //
 
-const bool Entity::checkComponents(void) const
+void Entity::linkComponents(void)
 {
+    // Attach any needed components to the scene component.
+    SceneComponentPtr sceneC = nullptr;
+    if ((sceneC = static_cast<SceneComponentPtr>(
+        this->getComponentPtr(Component::Type::Scene))) != nullptr){
+        // Attach components to the scene component.
+        ComponentPtr c = nullptr;
+
+        // Test for model component.
+        c = this->getComponentPtr(Component::Type::Model);
+        if (c){
+            sceneC->attachModel(reinterpret_cast<ModelComponentPtr>(c));
+        }
+
+        // Test for light component.
+        c = this->getComponentPtr(Component::Type::Light);
+        if (c){
+            sceneC->attachLight(reinterpret_cast<LightComponentPtr>(c));
+        }
+    }
+
+    // Attach any needed components to the actor component.
+    ActorComponentPtr actorC = nullptr;
+    if ((actorC = this->getActorComponent()) != nullptr){
+        ComponentPtr c = nullptr;
+
+        // Test for camera component.
+        c = this->getComponentPtr(Component::Type::Camera);
+        if (c){
+            actorC->attachCamera(reinterpret_cast<CameraComponentPtr>(c));
+        }
+
+        // Test for model component.
+        c = this->getComponentPtr(Component::Type::Model);
+        if (c){
+            actorC->attachModel(reinterpret_cast<ModelComponentPtr>(c));
+        }
+
+        // Test for light component.
+        c = this->getComponentPtr(Component::Type::Light);
+        if (c){
+            actorC->attachLight(reinterpret_cast<LightComponentPtr>(c));
+        }
+    }
+
+    m_componentsLinked = true;
+}
+
+// ========================================================================= //
+
+const bool Entity::checkComponents(void)
+{
+    if (!this->componentsLinked()){
+        // Link all attached components.
+        this->linkComponents();
+    }
+
     for (ComponentList::const_iterator itr = m_components.begin();
          itr != m_components.end();
          ++itr){
