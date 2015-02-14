@@ -74,6 +74,7 @@ bool Engine::init(void)
     if (!(rs->getName() == "OpenGL Rendering Subsystem")){
         return false;
     }
+    
     m_root->setRenderSystem(rs);    
 
     // Initialize Ogre root with render system.

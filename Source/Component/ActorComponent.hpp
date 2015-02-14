@@ -105,7 +105,7 @@ public:
     // Sets translate vector to right if in spectator mode. 
     void setMovingRight(const bool);
 
-private:
+public:
     // Ogre3D.
     Ogre::Camera* m_camera;
     Ogre::SceneNode* m_cameraNode;

@@ -157,8 +157,18 @@
 * Replaced all tabs with 4 spaces. Changed visual studio to insert spaces for tabs.
 * Added Entity::linkComponents() which detects what components are attached, such as scene and model components, and then attaches the model component to the scene, for example. This reduces the
     code needed to create an Entity. In World::checkEntities, every Entity's components will be linked if they are not in Entity::checkComponents().
+* Compiled Hydrax plugin to work with Ogre 1.9. Note that several changes were required in the code (listed here http://www.ogre3d.org/addonforums/viewtopic.php?f=20&t=11089), and the debug build
+    must be linked to OgreMain_d.lib to be compatible with the debug build for Talos.
+* Had to set the shader mode for Hydrax to CG to work with OpenGL. GLSL is not implemented for it completely.
+* Hydrax runs absurdly slow in debug mode, so I've prepared the release build. Had to rebuild CEGUI into release, PhysX extended in release.
+* Physx threw a compile error about NDEBUG or _DEBUG being defined. Since NDEBUG has to do with asserts, I move my Assert.hpp include to the top of stdafx.hpp and defined NDEBUG after. 
+* Having a problem with the edges of Hydrax water being clipped when the camera turns, tried creating a new camera for Hydrax and updating its position directly from the player to no avail.
+* Turns out I had to use the cameras yaw and pitch nodes since the roll node wasn't being updated in ActorComponent::look().
 
 == TODO ==
+** Encapsulate Hydrax.
+* Get skybox back.
+* Hydrax underwater is sped up, fix. With a skybox, there are artifacts underwater (disable skybox when underwater).
 * Add a "clock speed" variable to the World, should affect physics etc.
 * Put character controller data into config file to speed up testing.
 * Make PScene optional when initializing World.
@@ -171,4 +181,5 @@
 * Make sure Entities are destroyed properly when World is destroyed.
 * Alphabetize includes everywhere. Folder name is first if in a folder.
 * Implement config file loading for options in Engine::init() and others.
+* Get Ogre3D working with D3D11.
 * Refer to http://gameprogrammingpatterns.com/event-queue.html for Audio.

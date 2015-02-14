@@ -57,6 +57,8 @@ public:
 private:
     EntityPtr m_player;
     EntityPtr m_ogre;
+    Hydrax::Hydrax* m_hydrax;
+    Ogre::Camera* m_hydraxCamera;
 };
 
 // ========================================================================= //

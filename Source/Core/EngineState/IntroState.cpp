@@ -78,7 +78,7 @@ void IntroState::enter(void)
     m_player->attachComponent(cameraComponent);
     ModelComponentPtr modelC = m_world.createModelComponent();
     modelC->init(m_world, "ogrehead.mesh");
-    m_player->attachComponent(modelC);
+    //m_player->attachComponent(modelC);
 
     // Create a dynamic object as an ogre mesh.
     m_ogre = m_world.createEntity();
@@ -138,6 +138,33 @@ void IntroState::enter(void)
     fwnd->addChild(quit);*/
     //quit->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&IntroState::quit, this));
 
+    scene->setShadowTechnique(Ogre::SHADOWTYPE_NONE);
+
+    // Hydrax test.
+    m_hydraxCamera = scene->createCamera("HydraxCamear");
+    m_hydraxCamera->setNearClipDistance(0.1f);
+    m_hydraxCamera->setFarClipDistance(99999.f);
+    m_hydraxCamera->setAspectRatio(Ogre::Real(m_world.getViewport()->getActualWidth()/* + 5000.f*/) /
+                                   Ogre::Real(m_world.getViewport()->getActualHeight()));
+    m_hydrax = new Hydrax::Hydrax(m_world.getSceneManager(), 
+                                  //cameraComponent->getCamera(),
+                                  m_hydraxCamera,
+                                  m_world.getViewport());
+
+    Hydrax::Module::ProjectedGrid *module =
+        new Hydrax::Module::ProjectedGrid(m_hydrax,
+        new Hydrax::Noise::Perlin(),
+        Ogre::Plane(Ogre::Vector3(0, 1, 0), Ogre::Vector3(0, 0, 0)),
+        Hydrax::MaterialManager::NM_VERTEX,
+        Hydrax::Module::ProjectedGrid::Options());
+
+    m_hydrax->setModule(static_cast<Hydrax::Module::Module*>(module));
+    m_hydrax->loadCfg("HydraxDemo.hdx");
+  
+    m_hydrax->create();
+
+    m_hydrax->setPosition(Ogre::Vector3(0.f, -100.f, 0.f));
+
     if (m_world.checkEntities() == false){
         throw std::exception("World::checkEntities() reported uninitialized Entity");
     }
@@ -156,9 +183,6 @@ void IntroState::exit(void)
 void IntroState::update(void)
 {
     if (m_active == true){
-        m_world.update();
-        m_world.getPScene()->simulate();
-
         // Poll SDL for events.
         SDL_Event e;
         while (SDL_PollEvent(&e)){
@@ -193,6 +217,17 @@ void IntroState::update(void)
                 break;
             }
         }
+
+        m_world.update();
+        m_world.getPScene()->simulate();
+
+        //m_hydraxCamera->getSceneManager()->getSceneNode("hc")->setPosition(m_player->getActorComponent()->getSceneNode()->getPosition());
+        //m_hydraxCamera->setOrientation(m_player->getActorComponent()->m_yawNode->getOrientation() * m_player->getActorComponent()->m_pitchNode->getOrientation());        
+        m_hydraxCamera->setPosition(m_player->getActorComponent()->m_rollNode->_getDerivedPosition());
+        m_hydraxCamera->setOrientation(m_player->getActorComponent()->m_yawNode->getOrientation() * m_player->getActorComponent()->m_pitchNode->getOrientation());
+        //m_hydraxCamera->_update(true, false);
+
+        m_hydrax->update(1.f / 16.f / 10.f);
     }
 }
 

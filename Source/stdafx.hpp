@@ -26,6 +26,12 @@
 
 // ========================================================================= //
 
+// My own files.
+#include "Core/HelperFunctions.hpp"
+#include "Core/Assert.hpp"
+
+#define NDEBUG
+
 // C++.
 #include <list>
 #include <map>
@@ -33,6 +39,11 @@
 
 // Ogre3D.
 #include <Ogre.h>
+
+// Ogre3D Hydrax plugin.
+#include <Hydrax/Hydrax.h>
+#include <Hydrax/Noise/Perlin/Perlin.h>
+#include <Hydrax/Modules/ProjectedGrid/ProjectedGrid.h>
 
 // SDL.
 #include <SDL.h>
@@ -43,12 +54,7 @@
 #include <CEGUI/RendererModules/Ogre/Renderer.h>
 
 // PhysX
-#define Physx physx
 #include <PxPhysicsAPI.h>
-
-// My own files.
-#include "Core/HelperFunctions.hpp"
-#include "Core/Assert.hpp"
 
 // ========================================================================= //
 
