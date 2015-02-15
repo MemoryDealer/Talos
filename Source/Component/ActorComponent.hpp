@@ -80,6 +80,10 @@ public:
 
     // Getters:
 
+    const Ogre::Vector3 getPosition(void) const;
+
+    const Ogre::Quaternion getOrientation(void) const;
+
     const bool isMovingForward(void) const;
 
     const bool isMovingBack(void) const;
@@ -131,6 +135,14 @@ public:
 // ========================================================================= //
 
 // Getters:
+
+inline const Ogre::Vector3 ActorComponent::getPosition(void) const{
+    return m_cameraNode->getPosition();
+}
+
+inline const Ogre::Quaternion ActorComponent::getOrientation(void) const{
+    return m_yawNode->getOrientation() * m_pitchNode->getOrientation();
+}
 
 inline const bool ActorComponent::isMovingForward(void) const{
     return m_movingForward;

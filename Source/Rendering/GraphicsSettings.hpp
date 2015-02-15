@@ -15,50 +15,42 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: stdafx.hpp
+// File: GraphicsSettings.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// A single point of access for needed headers.
+// Defines Graphics struct and enumerates graphics setting values.
 // ========================================================================= //
 
-#ifndef __STDAFX_HPP__
-#define __STDAFX_HPP__
+#ifndef __GRAPHICSSETTINGS_HPP__
+#define __GRAPHICSSETTINGS_HPP__
 
 // ========================================================================= //
+// Graphics settings for rendering engine.
+struct Graphics{
 
-// My own files.
-#include "Core/HelperFunctions.hpp"
-#include "Core/Assert.hpp"
-#include "Rendering/GraphicsSettings.hpp"
+    enum Setting{
+        Off = 0,
+        Abysmal,
+        Low,
+        Medium,
+        High
+    };
 
-// C++.
-#include <list>
-#include <map>
-#include <stack>
+    Setting meshes;
+    Setting textures;
+    Setting shadows;
+    Setting ocean;
+    Setting sky;
 
-// Ogre3D.
-#include <Ogre.h>
-
-// Ogre3D Hydrax plugin.
-#include <Hydrax/Hydrax.h>
-#include <Hydrax/Noise/Perlin/Perlin.h>
-#include <Hydrax/Modules/ProjectedGrid/ProjectedGrid.h>
-
-// SDL.
-#include <SDL.h>
-#include <SDL_syswm.h>
-
-// CEGUI.
-#include <CEGUI/CEGUI.h>
-#include <CEGUI/RendererModules/Ogre/Renderer.h>
-
-// Define NDEBUG for PhysX in release mode.
-#ifndef _DEBUG
-#define NDEBUG
-#endif
-
-// PhysX
-#include <PxPhysicsAPI.h>
+    // Default initialize setting values.
+    explicit Graphics(void) :
+        meshes(Setting::Off),
+        textures(Setting::Off),
+        shadows(Setting::Off),
+        ocean(Setting::Off),
+        sky(Setting::Off)
+    { }
+};
 
 // ========================================================================= //
 

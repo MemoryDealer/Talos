@@ -96,6 +96,9 @@ private:
     Ogre::Log* m_log;
     std::shared_ptr<Ogre::Timer> m_timer; // The core engine timer.
 
+    // Global graphics settings.
+    Graphics m_graphics;
+
     // SDL components.
     SDL_Window* m_sdlWindow;
 

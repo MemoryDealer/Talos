@@ -165,10 +165,15 @@
 * Having a problem with the edges of Hydrax water being clipped when the camera turns, tried creating a new camera for Hydrax and updating its position directly from the player to no avail.
 * Turns out I had to use the cameras yaw and pitch nodes since the roll node wasn't being updated in ActorComponent::look().
 
+== 2/14/15 ==
+* Accidently set the near clip distance on the hydrax camera to 0.01f during encapsulation which caused the ocean to flicker on movement.
+* Created Environment class, which is held in World. Environment holds functions for changing lighting and fog which were moved out of World. All visual properties of the scene should go here.
+* Environment also has the new Ocean class which encapsulates Hydrax as of now. Ocean is updated each frame from World::update() -> Environment::update() -> Ocean::update().
+* Created GraphicsSettings.hpp to store global graphics settings.
+
 == TODO ==
-** Encapsulate Hydrax.
-* Get skybox back.
-* Hydrax underwater is sped up, fix. With a skybox, there are artifacts underwater (disable skybox when underwater).
+** Hydrax underwater is sped up, fix. With a skybox, there are artifacts underwater (disable skybox when underwater).
+** Artifacts at edge of ocean with Hydrax.
 * Add a "clock speed" variable to the World, should affect physics etc.
 * Put character controller data into config file to speed up testing.
 * Make PScene optional when initializing World.

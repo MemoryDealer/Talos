@@ -36,6 +36,8 @@
     <ClCompile Include="Source\Pool\Pool.cpp" />
     <ClCompile Include="Source\Rendering\DynamicLines.cpp" />
     <ClCompile Include="Source\Rendering\DynamicRenderable.cpp" />
+    <ClCompile Include="Source\Rendering\Ocean\Ocean.cpp" />
+    <ClCompile Include="Source\World\Environment.cpp" />
     <ClCompile Include="Source\World\World.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -75,7 +77,10 @@
     <ClInclude Include="Source\Pool\Pool.hpp" />
     <ClInclude Include="Source\Rendering\DynamicLines.hpp" />
     <ClInclude Include="Source\Rendering\DynamicRenderable.hpp" />
+    <ClInclude Include="Source\Rendering\GraphicsSettings.hpp" />
+    <ClInclude Include="Source\Rendering\Ocean\Ocean.hpp" />
     <ClInclude Include="Source\stdafx.hpp" />
+    <ClInclude Include="Source\World\Environment.hpp" />
     <ClInclude Include="Source\World\World.hpp" />
   </ItemGroup>
   <ItemGroup>

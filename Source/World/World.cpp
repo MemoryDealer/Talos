@@ -26,6 +26,7 @@
 #include "Component/ModelComponent.hpp"
 #include "Component/SceneComponent.hpp"
 #include "Entity/EntityPool.hpp"
+#include "Environment.hpp"
 #include "Physics/PScene.hpp"
 #include "Pool/Pool.hpp"
 #include "World.hpp"
@@ -36,7 +37,8 @@ World::World(void) :
 m_root(nullptr),
 m_scene(nullptr),
 m_viewport(nullptr),
-m_dLight(nullptr),
+m_environment(nullptr),
+m_graphics(),
 m_physics(nullptr),
 m_PScene(nullptr),
 m_entityPool(nullptr),
@@ -63,16 +65,10 @@ void World::init(void)
     // Create Ogre scene for rendering.
     m_scene = m_root->createSceneManager(Ogre::ST_GENERIC);
 
-    // Set default ambient light to darkness.
-    m_scene->setAmbientLight(Ogre::ColourValue::Black);
-
-    // Create directional light and set it to nothing.
-    m_dLight = m_scene->createLight("dLight");
-    m_dLight->setType(Ogre::Light::LT_DIRECTIONAL);
-    m_dLight->setDiffuseColour(Ogre::ColourValue::Black);
-    m_dLight->setSpecularColour(Ogre::ColourValue::Black);
-    m_dLight->setDirection(Ogre::Vector3::NEGATIVE_UNIT_Y);
-
+    // Initialize environment.
+    m_environment.reset(new Environment(this, m_graphics));
+    m_environment->init();
+    
     // Create physics scene.
     m_PScene.reset(new PScene(m_physics));
     m_PScene->init();
@@ -130,9 +126,16 @@ const bool World::checkEntities(void) const
 
 void World::update(void)
 {
+    // Simulate physics first.
+   
+
     for (int i = 0; i < m_entityPool->m_poolSize; ++i){
         m_entityPool->m_pool[i].update(*this); // Dereference self.
     }
+
+    m_PScene->simulate();
+
+    m_environment->update();
 }
 
 // ========================================================================= //

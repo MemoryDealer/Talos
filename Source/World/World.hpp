@@ -34,6 +34,7 @@ class ActorComponent;
 class CameraComponent;
 class Entity;
 class EntityPool;
+class Environment;
 class Input;
 class LightComponent;
 class ModelComponent;
@@ -88,30 +89,8 @@ public:
     // setup.
     const bool checkEntities(void) const;
 
-    // Updates every active Entity in the game world.
+    // Updates every active Entity in the game world, updates environment.
     void update(void);
-
-    // === //
-
-    // Ogre3D scene functions:
-
-    // Sets direction of the world's directional light.
-    void setLightDirection(const Ogre::Real, const Ogre::Real, const Ogre::Real);
-
-    // Sets colour of world's directional light.
-    void setLightColour(const Ogre::Real, const Ogre::Real, const Ogre::Real);
-
-    // Sets colour of world's ambient light.
-    void setAmbientLight(const Ogre::Real, const Ogre::Real, const Ogre::Real);
-
-    // Sets fog mode, colour, along with any parameters needed.
-    void setFog(const Ogre::FogMode mode, 
-                const Ogre::Real r, 
-                const Ogre::Real g, 
-                const Ogre::Real b,
-                const Ogre::Real expDensity,
-                const Ogre::Real linearStart,
-                const Ogre::Real linearEnd);
 
     // === //
 
@@ -134,6 +113,12 @@ public:
     // Returns pointer to the Ogre::Viewport for this world.
     Ogre::Viewport* getViewport(void) const;
 
+    // Returns pointer to internal Environment.
+    std::shared_ptr<Environment> getEnvironment(void) const;
+
+    // Returns graphics settings data.
+    const Graphics& getGraphics(void) const;
+
     // Returns pointer to PScene (physics scene).
     std::shared_ptr<PScene> getPScene(void) const;
 
@@ -147,14 +132,20 @@ public:
         Ogre::Viewport* viewport;
         std::shared_ptr<Physics> physics;
         Input* input;
+        Graphics graphics;
     };
 
 private:
     // Ogre3D.
     Ogre::Root* m_root;
     Ogre::SceneManager* m_scene;
-    Ogre::Viewport*    m_viewport;
-    Ogre::Light* m_dLight; // Directional light.
+    Ogre::Viewport* m_viewport;
+    
+    // Environment control.
+    std::shared_ptr<Environment> m_environment;
+
+    // Graphics settings.
+    Graphics m_graphics;
 
     // PhysX.
     std::shared_ptr<Physics> m_physics;
@@ -184,41 +175,7 @@ inline void World::injectDependencies(const Dependencies& deps){
     m_viewport = deps.viewport;
     m_physics = deps.physics;
     m_input = deps.input;
-}
-
-// Ogre3D scene functions:
-
-inline void World::setLightDirection(const Ogre::Real x,
-                                     const Ogre::Real y,
-                                     const Ogre::Real z){
-    m_dLight->setDirection(x, y, z);
-}
-
-inline void World::setLightColour(const Ogre::Real r,
-                                  const Ogre::Real g,
-                                  const Ogre::Real b){
-    m_dLight->setDiffuseColour(r, g, b);
-    m_dLight->setSpecularColour(r, g, b);
-}
-
-inline void World::setAmbientLight(const Ogre::Real r,
-                                   const Ogre::Real g,
-                                   const Ogre::Real b){
-    m_scene->setAmbientLight(Ogre::ColourValue(r, g, b));
-}
-
-inline void World::setFog(const Ogre::FogMode mode,
-                          const Ogre::Real r,
-                          const Ogre::Real g,
-                          const Ogre::Real b,
-                          const Ogre::Real expDensity,
-                          const Ogre::Real linearStart = 50.f,
-                          const Ogre::Real linearEnd = 500.f){
-    m_scene->setFog(mode, 
-                    Ogre::ColourValue(r, g, b),
-                    expDensity,
-                    linearStart,
-                    linearEnd);
+    m_graphics = deps.graphics;
 }
 
 // Getters:
@@ -229,6 +186,14 @@ inline Ogre::SceneManager* World::getSceneManager(void) const{
 
 inline Ogre::Viewport* World::getViewport(void) const{
     return m_viewport;
+}
+
+inline std::shared_ptr<Environment> World::getEnvironment(void) const{
+    return m_environment;
+}
+
+inline const Graphics& World::getGraphics(void) const{
+    return m_graphics;
 }
 
 inline std::shared_ptr<PScene> World::getPScene(void) const{

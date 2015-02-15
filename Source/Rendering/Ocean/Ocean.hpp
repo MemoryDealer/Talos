@@ -15,49 +15,78 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: IntroState.hpp
+// File: Ocean.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines IntroState class.
+// Defines Ocean class.
 // ========================================================================= //
 
-#ifndef __INTROSTATE_HPP__
-#define __INTROSTATE_HPP__
-
-// ========================================================================= //
-
-#include "EngineState.hpp"
+#ifndef __OCEAN_HPP__
+#define __OCEAN_HPP__
 
 // ========================================================================= //
 
-class Entity;
-
-typedef Entity* EntityPtr;
+#include "stdafx.hpp"
 
 // ========================================================================= //
-// A test state for now.
-class IntroState final : public EngineState
+
+class ActorComponent;
+class World;
+
+typedef ActorComponent* ActorComponentPtr;
+
+// ========================================================================= //
+
+class Ocean final
 {
 public:
-    // Calls EngineState constructor.
-    explicit IntroState(void);
+    explicit Ocean(World&, 
+                   const Graphics::Setting, 
+                   const std::string&, 
+                   ActorComponentPtr = nullptr);
 
-    // Empty destructor.
-    virtual ~IntroState(void) override;
+    ~Ocean(void);
 
-    // Set up basic stuff.
-    virtual void enter(void) override;
+    void update(void);
 
-    // Free basic stuff.
-    virtual void exit(void) override;
+    // Setters:
 
-    // Test.
-    virtual void update(void) override;
+    void setPosition(const Ogre::Real, const Ogre::Real, const Ogre::Real);
 
 private:
-    EntityPtr m_player;
-    EntityPtr m_ogre;
+    union{
+        // Low graphics.
+        struct{
+
+        };
+        // High graphics.
+        struct{
+            Hydrax::Hydrax* m_hydrax;
+            Ogre::Camera* m_hydraxCamera;
+        };
+    };
+
+    // The actor which controls the camera.
+    ActorComponentPtr m_actorC;
+    Graphics::Setting m_graphicsSetting;
 };
+
+// ========================================================================= //
+
+// Setters:
+
+inline void Ocean::setPosition(const Ogre::Real x, 
+                               const Ogre::Real y, 
+                               const Ogre::Real z){
+    switch (m_graphicsSetting){
+    default:
+        break;
+
+    case Graphics::Setting::High:
+        m_hydrax->setPosition(Ogre::Vector3(x, y, z));
+        break;
+    }
+}
 
 // ========================================================================= //
 

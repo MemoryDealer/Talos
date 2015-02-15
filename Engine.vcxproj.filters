@@ -94,6 +94,12 @@
     <Filter Include="Header Files\Command\Actor\Debug">
       <UniqueIdentifier>{e35d73ed-8b96-456e-ab25-8e4211eb7d16}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Rendering\Ocean">
+      <UniqueIdentifier>{05ef3751-637d-4b1a-a95f-b4f0a0239b60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering\Ocean">
+      <UniqueIdentifier>{ee8bda5c-9e8e-4cb0-8074-43ca70b80ca4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\main.cpp">
@@ -173,6 +179,12 @@
     </ClCompile>
     <ClCompile Include="Source\Pool\Pool.cpp">
       <Filter>Source Files\Pool</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\Ocean\Ocean.cpp">
+      <Filter>Source Files\Rendering\Ocean</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\World\Environment.cpp">
+      <Filter>Source Files\World</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -289,6 +301,15 @@
     </ClInclude>
     <ClInclude Include="Source\Command\Actor\Debug\Spectator.hpp">
       <Filter>Header Files\Command\Actor\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Ocean\Ocean.hpp">
+      <Filter>Header Files\Rendering\Ocean</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\World\Environment.hpp">
+      <Filter>Header Files\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\GraphicsSettings.hpp">
+      <Filter>Header Files\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

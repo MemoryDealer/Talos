@@ -74,8 +74,7 @@ bool Engine::init(void)
     if (!(rs->getName() == "OpenGL Rendering Subsystem")){
         return false;
     }
-    
-    m_root->setRenderSystem(rs);    
+    m_root->setRenderSystem(rs);
 
     // Initialize Ogre root with render system.
     m_root->initialise(false);
@@ -118,6 +117,7 @@ bool Engine::init(void)
     Ogre::NameValuePairList params;
     params["externalWindowHandle"] = wHandle;
     params["vsync"] = "true";
+    params["FSAA"] = "16";
     m_renderWindow = m_root->createRenderWindow("Engine",
                                                 width,
                                                 height,
@@ -138,6 +138,18 @@ bool Engine::init(void)
     // Allocate the main Ogre timer.
     m_timer.reset(new Ogre::Timer());
     m_timer->reset(); // Activate timer.
+
+    // Load graphics settings.
+    // @TODO: Load from config file.
+    m_graphics.meshes = Graphics::Setting::High;
+    m_graphics.textures = Graphics::Setting::High;
+    m_graphics.shadows = Graphics::Setting::Off;
+#ifdef _DEBUG
+    m_graphics.ocean = Graphics::Setting::Low;
+#else
+    m_graphics.ocean = Graphics::Setting::High;
+#endif
+    m_graphics.sky = Graphics::Setting::High;
 
     // === //
 
@@ -260,12 +272,13 @@ void Engine::registerState(const EngineStateID id)
 
     Assert(state != nullptr, "Test");
 
-    // Add dependencies.
+    // Inject dependencies from Engine into World.
     World::Dependencies deps;
     deps.root = m_root;
     deps.viewport = m_viewport;
     deps.physics = m_physics;
     deps.input = m_input.get();
+    deps.graphics = m_graphics;
     state->getWorld().injectDependencies(deps);
 
     // Add self as an Observer to listen for events.
