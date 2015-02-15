@@ -170,10 +170,10 @@
 * Created Environment class, which is held in World. Environment holds functions for changing lighting and fog which were moved out of World. All visual properties of the scene should go here.
 * Environment also has the new Ocean class which encapsulates Hydrax as of now. Ocean is updated each frame from World::update() -> Environment::update() -> Ocean::update().
 * Created GraphicsSettings.hpp to store global graphics settings.
+* Artifacts at edge of water was caused by lack of anti-aliasing. I've enabled 16x FSAA and it's gone.
 
 == TODO ==
-** Hydrax underwater is sped up, fix. With a skybox, there are artifacts underwater (disable skybox when underwater).
-** Artifacts at edge of ocean with Hydrax.
+** Hydrax underwater is sped up, fix. With a skybox, there are artifacts underwater (disable skybox when underwater). Objects viewed from underwater (which are above water) are very strange (maybe a camera glitch?).
 * Add a "clock speed" variable to the World, should affect physics etc.
 * Put character controller data into config file to speed up testing.
 * Make PScene optional when initializing World.
