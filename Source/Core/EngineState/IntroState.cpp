@@ -58,10 +58,10 @@ void IntroState::enter(void)
 {
     m_world.init();
     m_world.getInput()->setMode(Input::Mode::PLAYER);
-    m_world.getPScene()->loadDebugDrawer();
+    //m_world.getPScene()->loadDebugDrawer();
 
     // Setup visual scene settings.
-    //m_world.getEnvironment()->setAmbientLight(25.f, 15.f, 25.f);
+    m_world.getEnvironment()->setAmbientLight(255.f, 255.f, 255.f);
     m_world.getEnvironment()->setSunColour(200.f, 175.f, 189.f);
     m_world.getEnvironment()->setMoonColour(.50f, .50f, 255.f);
     //m_world.setFog(Ogre::FOG_EXP2, 0.f, 0.f, 0.f, 0.01f);
@@ -74,8 +74,7 @@ void IntroState::enter(void)
     CameraComponentPtr cameraComponent = m_world.createCameraComponent();
     cameraComponent->init(m_player, m_world);
     m_player->attachComponent(cameraComponent);
-    ModelComponentPtr modelC = m_world.createModelComponent();
-    modelC->init(m_world, "ogrehead.mesh");
+    ModelComponentPtr modelC;
 
     m_world.setPlayer(m_player);
 
@@ -99,6 +98,7 @@ void IntroState::enter(void)
     ModelComponent* model = m_world.createModelComponent();
     model->init(m_world, "ogrehead.mesh");
     m_ogre->attachComponent(model);
+    //PhysicsComponentPtr physicsC;
     PhysicsComponentPtr physicsC = m_world.createPhysicsComponent();
     physicsC->init(m_world, m_ogre, PhysicsComponent::Type::DYNAMIC, 
                   // PxBoxGeometry(1.f, 1.f, 1.f), 

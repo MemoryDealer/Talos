@@ -27,6 +27,63 @@
 
 // ========================================================================= //
 
+class HydraxRttListener : public Hydrax::RttManager::RttListener
+{
+public:
+    void preRenderTargetUpdate(const Hydrax::RttManager::RttType& Rtt)
+    {
+        // If needed in any case...
+        //bool underwater = mHydrax->_isCurrentFrameUnderwater();
+
+        switch (Rtt)
+        {
+        case Hydrax::RttManager::RTT_REFLECTION:
+        {
+                                                   
+        }
+            break;
+
+        case Hydrax::RttManager::RTT_REFRACTION:
+        {
+        }
+            break;
+
+        case Hydrax::RttManager::RTT_DEPTH: case Hydrax::RttManager::RTT_DEPTH_REFLECTION:
+        {
+              
+        }
+            break;
+        }
+    }
+
+    void postRenderTargetUpdate(const Hydrax::RttManager::RttType& Rtt)
+    {
+        //bool underwater = mHydrax->_isCurrentFrameUnderwater();
+
+        switch (Rtt)
+        {
+        case Hydrax::RttManager::RTT_REFLECTION:
+        {
+                                                   
+        }
+            break;
+
+        case Hydrax::RttManager::RTT_REFRACTION:
+        {
+        }
+            break;
+
+        case Hydrax::RttManager::RTT_DEPTH: case Hydrax::RttManager::RTT_DEPTH_REFLECTION:
+        {
+                 
+        }
+            break;
+        }
+    }
+};
+
+// ========================================================================= //
+
 Ocean::Ocean(World& world, 
              const Graphics::Setting graphicsSetting,
              const std::string& cfg,
@@ -60,7 +117,7 @@ m_graphicsSetting(graphicsSetting)
             Hydrax::Module::ProjectedGrid* module =
                 new Hydrax::Module::ProjectedGrid(m_hydrax,
                 new Hydrax::Noise::Perlin(),
-                Ogre::Plane(Ogre::Vector3(0, 1, 0), Ogre::Vector3(0, 0, 0)),
+                Ogre::Plane(Ogre::Vector3(0.0f, 1.f, 0.f), Ogre::Vector3(0.f, 0.f, 0.f)),
                 Hydrax::MaterialManager::NM_VERTEX,
                 Hydrax::Module::ProjectedGrid::Options());
             m_hydrax->setModule(static_cast<Hydrax::Module::Module*>(module));
@@ -70,6 +127,8 @@ m_graphicsSetting(graphicsSetting)
 
             // Create the ocean.
             m_hydrax->create();
+
+            m_hydrax->getRttManager()->addRttListener(new HydraxRttListener());
         }
         break;
     }

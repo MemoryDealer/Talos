@@ -4,8 +4,6 @@ material BaseRedNoLighting
 	{
 		pass
 		{
-			lighting off
-			
 			texture_unit
 			{
 				colour_op_ex source1 src_manual src_current 1 0 0

@@ -180,10 +180,16 @@
 * Was caused by setting the colour of hydrax's sun directly from getting Environment::m_sun's diffuse colour. I've just removed it.
 * Have a basic day/night cycle.
 * Added an EntityPtr to World which points to the player's entity. This is useful for the Ocean setup and will be useful in the future. 
+* (Officially 2/16, but whatever) Rebuilding Ogre to support D3D9 because D3D11 support is utter garbage.
+* Rebuilt latest Ogre with D3D9 support, I may have to rebuild CEGUI and Hydrax/SkyX with the rebuilt version of Ogre, not sure.
+* Using D3D9 fixed the underwater issues, except the underwater compositor still ticks way faster than it should.
+* Still no above water reflections even though everything is setup as it should be.
 
 == TODO ==
-** Hydrax underwater is sped up, fix. With a skybox, there are artifacts underwater (disable skybox when underwater). Objects viewed from underwater (which are above water) are very strange (maybe a camera glitch?).
+** Recompile latest community Hydrax https://bitbucket.org/ogreaddons/hydrax/src
+** Hydrax underwater is sped up, fix. With a skybox, there are artifacts underwater (disable skybox when underwater). 
 * Consider making Sky and Ocean interfaces and derive Low/High graphics for each.
+* Artifacts in SkyX - random black speckles in sky when moving the camera or character.
 * Add a "clock speed" variable to the World, should affect physics etc.
 * Put character controller data into config file to speed up testing.
 * Make PScene optional when initializing World.

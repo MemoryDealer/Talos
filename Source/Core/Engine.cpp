@@ -70,8 +70,8 @@ bool Engine::init(void)
     m_root = new Ogre::Root();
 
     // Set render system.
-    Ogre::RenderSystem* rs = m_root->getRenderSystemByName("OpenGL Rendering Subsystem");
-    if (!(rs->getName() == "OpenGL Rendering Subsystem")){
+    Ogre::RenderSystem* rs = m_root->getRenderSystemByName("Direct3D9 Rendering Subsystem");
+    if (!(rs->getName() == "Direct3D9 Rendering Subsystem")){
         return false;
     }
     m_root->setRenderSystem(rs);

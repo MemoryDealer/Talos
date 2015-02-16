@@ -126,8 +126,10 @@ void Environment::update(void)
             }
             if (m_sun->isVisible() == true){
                 m_sun->setVisible(false);
-                m_ocean->setSunEnabled(false);
-                m_ocean->setSunPosition(Ogre::Vector3::ZERO);
+                if (m_renderOcean){
+                    m_ocean->setSunEnabled(false);
+                    m_ocean->setSunPosition(Ogre::Vector3::ZERO);
+                }
             }
             m_moon->setDirection(-m_sky->getMoonDirection());
         }
