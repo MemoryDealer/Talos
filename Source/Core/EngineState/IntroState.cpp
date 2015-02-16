@@ -78,17 +78,19 @@ void IntroState::enter(void)
 
     m_world.setPlayer(m_player);
 
+    // Create sky.
+    m_world.getEnvironment()->loadSky();
+
     // Create Ocean.
     m_world.getEnvironment()->loadOcean("HydraxDemo.hdx");
     m_world.getEnvironment()->setOceanPosition(0.f, -100.f, 0.f);
 
-    // Create sky.
-    m_world.getEnvironment()->loadSky();
+    
 	
     // Create scene manager.
     
 
-    //scene->setSkyDome(true, "Clouds");
+    //m_world.getSceneManager()->setSkyDome(true, "Clouds");
 
     // Create a dynamic object as an ogre mesh.
     m_ogre = m_world.createEntity();

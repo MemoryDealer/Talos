@@ -26,61 +26,61 @@
 #include "World/World.hpp"
 
 // ========================================================================= //
-
-class HydraxRttListener : public Hydrax::RttManager::RttListener
-{
-public:
-    void preRenderTargetUpdate(const Hydrax::RttManager::RttType& Rtt)
-    {
-        // If needed in any case...
-        //bool underwater = mHydrax->_isCurrentFrameUnderwater();
-
-        switch (Rtt)
-        {
-        case Hydrax::RttManager::RTT_REFLECTION:
-        {
-                                                   
-        }
-            break;
-
-        case Hydrax::RttManager::RTT_REFRACTION:
-        {
-        }
-            break;
-
-        case Hydrax::RttManager::RTT_DEPTH: case Hydrax::RttManager::RTT_DEPTH_REFLECTION:
-        {
-              
-        }
-            break;
-        }
-    }
-
-    void postRenderTargetUpdate(const Hydrax::RttManager::RttType& Rtt)
-    {
-        //bool underwater = mHydrax->_isCurrentFrameUnderwater();
-
-        switch (Rtt)
-        {
-        case Hydrax::RttManager::RTT_REFLECTION:
-        {
-                                                   
-        }
-            break;
-
-        case Hydrax::RttManager::RTT_REFRACTION:
-        {
-        }
-            break;
-
-        case Hydrax::RttManager::RTT_DEPTH: case Hydrax::RttManager::RTT_DEPTH_REFLECTION:
-        {
-                 
-        }
-            break;
-        }
-    }
-};
+//
+//class HydraxRttListener : public Hydrax::RttManager::RttListener
+//{
+//public:
+//    void preRenderTargetUpdate(const Hydrax::RttManager::RttType& Rtt)
+//    {
+//        // If needed in any case...
+//        //bool underwater = mHydrax->_isCurrentFrameUnderwater();
+//
+//        switch (Rtt)
+//        {
+//        case Hydrax::RttManager::RTT_REFLECTION:
+//        {
+//                                                   
+//        }
+//            break;
+//
+//        case Hydrax::RttManager::RTT_REFRACTION:
+//        {
+//        }
+//            break;
+//
+//        case Hydrax::RttManager::RTT_DEPTH: case Hydrax::RttManager::RTT_DEPTH_REFLECTION:
+//        {
+//              
+//        }
+//            break;
+//        }
+//    }
+//
+//    void postRenderTargetUpdate(const Hydrax::RttManager::RttType& Rtt)
+//    {
+//        //bool underwater = mHydrax->_isCurrentFrameUnderwater();
+//
+//        switch (Rtt)
+//        {
+//        case Hydrax::RttManager::RTT_REFLECTION:
+//        {
+//                                                   
+//        }
+//            break;
+//
+//        case Hydrax::RttManager::RTT_REFRACTION:
+//        {
+//        }
+//            break;
+//
+//        case Hydrax::RttManager::RTT_DEPTH: case Hydrax::RttManager::RTT_DEPTH_REFLECTION:
+//        {
+//                 
+//        }
+//            break;
+//        }
+//    }
+//};
 
 // ========================================================================= //
 
@@ -105,6 +105,7 @@ m_graphicsSetting(graphicsSetting)
             m_hydraxCamera = world.getSceneManager()->createCamera("HydraxCamera");
             m_hydraxCamera->setNearClipDistance(0.1f);
             m_hydraxCamera->setFarClipDistance(9999.f);
+            //m_hydraxCamera->enableReflection(Ogre::MovablePlane(Ogre::Vector3(0.f, 1.f, 0.f), Ogre::Vector3(0.f, 0.f, 0.f)));
             m_hydraxCamera->setAspectRatio(Ogre::Real(world.getViewport()->getActualWidth()) /
                                            Ogre::Real(world.getViewport()->getActualHeight()));
 
@@ -117,10 +118,11 @@ m_graphicsSetting(graphicsSetting)
             Hydrax::Module::ProjectedGrid* module =
                 new Hydrax::Module::ProjectedGrid(m_hydrax,
                 new Hydrax::Noise::Perlin(),
-                Ogre::Plane(Ogre::Vector3(0.0f, 1.f, 0.f), Ogre::Vector3(0.f, 0.f, 0.f)),
-                Hydrax::MaterialManager::NM_VERTEX,
+                Ogre::Plane(Ogre::Vector3(0.f, 1.f, 0.f), Ogre::Vector3(0.f, 0.f, 0.f)),
+                Hydrax::MaterialManager::NM_RTT,
                 Hydrax::Module::ProjectedGrid::Options());
             m_hydrax->setModule(static_cast<Hydrax::Module::Module*>(module));
+            //m_hydrax->setComponents(static_cast<Hydrax::HydraxComponent>(m_hydrax->getComponents() | Hydrax::HYDRAX_COMPONENT_UNDERWATER));
 
             // Load settings from Hydrax config file.
             m_hydrax->loadCfg(cfg);
@@ -128,7 +130,7 @@ m_graphicsSetting(graphicsSetting)
             // Create the ocean.
             m_hydrax->create();
 
-            m_hydrax->getRttManager()->addRttListener(new HydraxRttListener());
+            //m_hydrax->getRttManager()->addRttListener(new HydraxRttListener());
         }
         break;
     }

@@ -185,6 +185,12 @@
 * Using D3D9 fixed the underwater issues, except the underwater compositor still ticks way faster than it should.
 * Still no above water reflections even though everything is setup as it should be.
 
+== 2/16/15 ==
+* By not loading the Hydrax config file, reflections are enabled. So something in the .hdx file is disabling them.
+* Compiled latest community Hydrax source, testing.
+* It seems setting <float>GlobalTransparency=0.5 enabled reflection along with everything else working fine.
+* Reflections are working but SkyX doesn't seem to support full sky reflection, as seen in the demo.
+
 == TODO ==
 ** Recompile latest community Hydrax https://bitbucket.org/ogreaddons/hydrax/src
 ** Hydrax underwater is sped up, fix. With a skybox, there are artifacts underwater (disable skybox when underwater). 
