@@ -44,6 +44,9 @@
 #include <Hydrax/Noise/Perlin/Perlin.h>
 #include <Hydrax/Modules/ProjectedGrid/ProjectedGrid.h>
 
+// Ogre3D SkyX plugin.
+#include <SkyX/SkyX.h>
+
 // SDL.
 #include <SDL.h>
 #include <SDL_syswm.h>

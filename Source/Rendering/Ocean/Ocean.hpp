@@ -53,6 +53,12 @@ public:
 
     void setPosition(const Ogre::Real, const Ogre::Real, const Ogre::Real);
 
+    void setSunPosition(const Ogre::Vector3&);
+
+    void setSunColour(const Ogre::Vector3&);
+
+    void setSunEnabled(const bool);
+
 private:
     union{
         // Low graphics.
@@ -86,6 +92,28 @@ inline void Ocean::setPosition(const Ogre::Real x,
         m_hydrax->setPosition(Ogre::Vector3(x, y, z));
         break;
     }
+}
+
+inline void Ocean::setSunPosition(const Ogre::Vector3& pos){
+    Assert(m_hydrax != nullptr, "Hydrax is null!");
+
+    m_hydrax->setSunPosition(pos);
+}
+
+inline void Ocean::setSunColour(const Ogre::Vector3& colour){
+    Assert(m_hydrax != nullptr, "Hydrax is null!");
+
+    m_hydrax->setSunColor(colour);
+}
+
+inline void Ocean::setSunEnabled(const bool enabled){
+    /*m_hydrax->setComponents((enabled == true) 
+        ? 
+        static_cast<Hydrax::HydraxComponent>(m_hydrax->getComponents() | 
+        Hydrax::HYDRAX_COMPONENT_SUN) 
+        : 
+        static_cast<Hydrax::HydraxComponent>(m_hydrax->getComponents() & 
+        ~Hydrax::HYDRAX_COMPONENT_SUN));*/
 }
 
 // ========================================================================= //

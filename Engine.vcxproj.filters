@@ -100,6 +100,12 @@
     <Filter Include="Source Files\Rendering\Ocean">
       <UniqueIdentifier>{ee8bda5c-9e8e-4cb0-8074-43ca70b80ca4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Rendering\Sky">
+      <UniqueIdentifier>{84faa262-c7a3-446a-92a9-7b67162008fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering\Sky">
+      <UniqueIdentifier>{8e273ed0-e7e0-4131-90ee-309c7831ef15}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\main.cpp">
@@ -185,6 +191,9 @@
     </ClCompile>
     <ClCompile Include="Source\World\Environment.cpp">
       <Filter>Source Files\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\Sky\Sky.cpp">
+      <Filter>Source Files\Rendering\Sky</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -310,6 +319,9 @@
     </ClInclude>
     <ClInclude Include="Source\Rendering\GraphicsSettings.hpp">
       <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Sky\Sky.hpp">
+      <Filter>Header Files\Rendering\Sky</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

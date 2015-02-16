@@ -15,76 +15,79 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: Physics.cpp
+// File: Sky.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements Physics class.
+// Defines Sky class.
 // ========================================================================= //
 
-#include "Physics.hpp"
+#ifndef __SKY_HPP__
+#define __SKY_HPP__
 
 // ========================================================================= //
 
-Physics::Physics(void) :
-m_foundation(nullptr),
-m_physx(nullptr),
-m_defaultAllocator(),
-m_defaultErrorCallback(),
-m_debuggerConnection(nullptr)
+#include "stdafx.hpp"
+
+// ========================================================================= //
+
+class Ocean;
+class World;
+
+// ========================================================================= //
+
+class Sky final
 {
-    
+public:
+    explicit Sky(World& world,
+                 const Graphics::Setting,
+                 const std::string&);
+
+    ~Sky(void);
+
+    void update(void);
+
+    // Getters:
+
+    const Ogre::Real getTime(void) const;
+
+    const Ogre::Vector3 getSunDirection(void) const;
+
+    const Ogre::Vector3 getMoonDirection(void) const;
+
+    const Ogre::Real calcSkydomeRadius(Ogre::Camera*) const;
+
+private:
+    union{
+        // Low graphics.
+        struct{
+
+        };
+        // High graphics.
+        struct{
+            SkyX::SkyX* m_skyX;
+            SkyX::BasicController* m_basicController;            
+        };
+    };
+
+    Graphics::Setting m_graphicsSetting;
+};
+
+// ========================================================================= //
+
+inline const Ogre::Real Sky::getTime(void) const{
+    return m_basicController->getTime().x;
+}
+
+inline const Ogre::Vector3 Sky::getSunDirection(void) const{
+    return m_basicController->getSunDirection();
+}
+
+inline const Ogre::Vector3 Sky::getMoonDirection(void) const{
+    return m_basicController->getMoonDirection();
 }
 
 // ========================================================================= //
 
-Physics::~Physics(void)
-{
-
-}
-
-// ========================================================================= //
-
-const bool Physics::init(void)
-{
-    m_foundation = PxCreateFoundation(PX_PHYSICS_VERSION,
-                                      m_defaultAllocator,
-                                      m_defaultErrorCallback);
-
-    bool recordMemoryAllocations = true;
-    m_physx = PxCreatePhysics(PX_PHYSICS_VERSION,
-                                *m_foundation,
-                                PxTolerancesScale(),
-                                recordMemoryAllocations,
-                                nullptr);
-    if (m_physx == nullptr){
-        return false;
-    }
-
-    /*const char* host = "127.0.0.1";
-    const int port = 5425;
-    const unsigned int timeout = 100;
-
-    PxVisualDebuggerConnectionFlags connectionFlags = 
-        PxVisualDebuggerExt::getAllConnectionFlags();
-
-    m_debuggerConnection = PxVisualDebuggerExt::createConnection(
-        m_physx->getPvdConnectionManager(),
-        host,
-        port,
-        timeout,
-        connectionFlags);*/
-
-    return true;
-}
-
-// ========================================================================= //
-
-void Physics::destroy(void)
-{
-    /*m_debuggerConnection->release();*/
-
-    m_physx->release();
-    m_foundation->release();
-}
+#endif
 
 // ========================================================================= //

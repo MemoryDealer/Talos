@@ -90,9 +90,9 @@ public:
 
 private:
     // Ogre3D components.
-    Ogre::Root*    m_root;
+    Ogre::Root* m_root;
     Ogre::RenderWindow* m_renderWindow;
-    Ogre::Viewport*    m_viewport;
+    Ogre::Viewport* m_viewport;
     Ogre::Log* m_log;
     std::shared_ptr<Ogre::Timer> m_timer; // The core engine timer.
 

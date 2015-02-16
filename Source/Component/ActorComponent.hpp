@@ -84,6 +84,8 @@ public:
 
     const Ogre::Quaternion getOrientation(void) const;
 
+    Ogre::Camera* getCamera(void) const;
+
     const bool isMovingForward(void) const;
 
     const bool isMovingBack(void) const;
@@ -109,7 +111,7 @@ public:
     // Sets translate vector to right if in spectator mode. 
     void setMovingRight(const bool);
 
-public:
+private:
     // Ogre3D.
     Ogre::Camera* m_camera;
     Ogre::SceneNode* m_cameraNode;
@@ -142,6 +144,10 @@ inline const Ogre::Vector3 ActorComponent::getPosition(void) const{
 
 inline const Ogre::Quaternion ActorComponent::getOrientation(void) const{
     return m_yawNode->getOrientation() * m_pitchNode->getOrientation();
+}
+
+inline Ogre::Camera* ActorComponent::getCamera(void) const{
+    return m_camera;
 }
 
 inline const bool ActorComponent::isMovingForward(void) const{

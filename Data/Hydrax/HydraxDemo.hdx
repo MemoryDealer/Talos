@@ -4,14 +4,13 @@
 HydraxVersion=0.5.1
 
 #Main options field
-<vector3>Position=-5000x100x-5000
-# was 10.5
+<vector3>Position=1500x100x1500
 <float>PlanesError=10.5
 #Shader mode: 0=HLSL, 1=CG, 2=GLSL
 <int>ShaderMode=1
 <float>FullReflectionDistance=1e+011
 <float>GlobalTransparency=0
-<float>NormalDistortion=0.075
+<float>NormalDistortion=0.00
 <vector3>WaterColor=0.139765x0.359464x0.425373
 
 #Components field
@@ -30,11 +29,9 @@ Components=Sun|Foam|Depth|Smooth|Caustics|Underwater|UnderwaterReflections|Under
 <float>FoamTransparency=1
 
 #Depth parameters
-<float>DepthLimit=990
-#<float>DistLimit=90
+<float>DepthLimit=900
 
 #Smooth transitions parameters
-# was 5
 <float>SmoothPower=5
 
 #Caustics parameters
@@ -60,10 +57,10 @@ Components=Sun|Foam|Depth|Smooth|Caustics|Underwater|UnderwaterReflections|Under
 #Module options
 Module=ProjectedGridVertex
 
-<float>PG_ChoppyStrength=3.75
+<float>PG_ChoopyStrength=3.75
 <bool>PG_ChoppyWaves=true
 <int>PG_Complexity=264
-<float>PG_Elevation=150
+<float>PG_Elevation=50
 <bool>PG_ForceRecalculateGeometry=false
 <bool>PG_Smooth=false
 <float>PG_Strength=35

@@ -47,7 +47,7 @@ Entity::~Entity(void)
 
 void Entity::init(World& world)
 {
-    for (ComponentList::iterator itr = m_components.begin();
+    for (auto itr = m_components.begin();
          itr != m_components.end();
          ++itr){
         (*itr)->init(this, world);
@@ -58,7 +58,7 @@ void Entity::init(World& world)
 
 void Entity::destroy(World& world)
 {
-    for (ComponentList::iterator itr = m_components.begin();
+    for (auto itr = m_components.begin();
          itr != m_components.end();
          ++itr){
         (*itr)->destroy(this, world);
@@ -69,7 +69,7 @@ void Entity::destroy(World& world)
 
 void Entity::update(World& world)
 {
-    for (ComponentList::iterator itr = m_components.begin();
+    for (auto itr = m_components.begin();
          itr != m_components.end();
          ++itr){
         (*itr)->update(this, world);
@@ -89,7 +89,7 @@ ComponentPtr Entity::attachComponent(const ComponentPtr component)
 
 void Entity::detachComponent(const ComponentPtr component)
 {
-    for (ComponentList::iterator itr = m_components.begin();
+    for (auto itr = m_components.begin();
          itr != m_components.end();){
         if (*itr == component){
             itr = m_components.erase(itr);
@@ -160,7 +160,7 @@ const bool Entity::checkComponents(void)
         this->linkComponents();
     }
 
-    for (ComponentList::const_iterator itr = m_components.begin();
+    for (auto itr = m_components.begin();
          itr != m_components.end();
          ++itr){
         if ((*itr)->isInitialized() == false){
@@ -178,7 +178,7 @@ void Entity::message(const ComponentMessage& msg)
     Assert(msg.type != ComponentMessageType::NIL, "NIL Entity message!");
 
     // Broadcast to all attached components.
-    for (ComponentList::iterator itr = m_components.begin();
+    for (auto itr = m_components.begin();
          itr != m_components.end();
          ++itr){
         (*itr)->message(msg);
@@ -190,7 +190,7 @@ void Entity::message(const ComponentMessage& msg)
 ComponentPtr Entity::getComponentPtr(const unsigned int type) const
 {
     // Must use a const_iterator since this function is bitwise constant.
-    for (ComponentList::const_iterator itr = m_components.begin();
+    for (auto itr = m_components.begin();
          itr != m_components.end();
          ++itr){
         // Determine if Component's name matches. This is considerably more

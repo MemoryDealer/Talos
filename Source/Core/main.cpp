@@ -38,6 +38,14 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR args, INT)
 int main(int argc, char** argv)
 #endif
 {
+#ifndef _DEBUG
+    // Allocate debug console for testing in release mode.
+    AllocConsole();
+    freopen("CONOUT$", "w", stdout);
+    SetConsoleTitle("Talos Engine Release Debug Console");
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREEN);
+#endif
+
     Engine engine;
 
     try{

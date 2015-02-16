@@ -61,7 +61,9 @@ void IntroState::enter(void)
     m_world.getPScene()->loadDebugDrawer();
 
     // Setup visual scene settings.
-    m_world.getEnvironment()->setLightColour(255.f, 150.f, 255.f);
+    //m_world.getEnvironment()->setAmbientLight(25.f, 15.f, 25.f);
+    m_world.getEnvironment()->setSunColour(200.f, 175.f, 189.f);
+    m_world.getEnvironment()->setMoonColour(.50f, .50f, 255.f);
     //m_world.setFog(Ogre::FOG_EXP2, 0.f, 0.f, 0.f, 0.01f);
 
     // Create player entity.
@@ -75,21 +77,19 @@ void IntroState::enter(void)
     ModelComponentPtr modelC = m_world.createModelComponent();
     modelC->init(m_world, "ogrehead.mesh");
 
-    Ogre::SceneManager* scene = m_world.getSceneManager();
+    m_world.setPlayer(m_player);
 
     // Create Ocean.
-    scene->setShadowTechnique(Ogre::SHADOWTYPE_NONE);
-
-    m_world.getEnvironment()->loadOcean("HydraxDemo.hdx", actorComponent);
+    m_world.getEnvironment()->loadOcean("HydraxDemo.hdx");
     m_world.getEnvironment()->setOceanPosition(0.f, -100.f, 0.f);
+
+    // Create sky.
+    m_world.getEnvironment()->loadSky();
 	
     // Create scene manager.
     
 
     //scene->setSkyDome(true, "Clouds");
-	
-    
-    //m_player->attachComponent(modelC);
 
     // Create a dynamic object as an ogre mesh.
     m_ogre = m_world.createEntity();

@@ -172,8 +172,18 @@
 * Created GraphicsSettings.hpp to store global graphics settings.
 * Artifacts at edge of water was caused by lack of anti-aliasing. I've enabled 16x FSAA and it's gone.
 
+== 2/15/15 ==
+* Messed with some per-pixel lighting attempts, but I'll save that for later optimization after networking is in place.
+* Created Sky class which is held in Environment, compiled SkyX Ogre plugin, added it to the Sky class.
+* Got SkyX crudely working.
+* Experiencing a bug where the entire viewport is white underwater.
+* Was caused by setting the colour of hydrax's sun directly from getting Environment::m_sun's diffuse colour. I've just removed it.
+* Have a basic day/night cycle.
+* Added an EntityPtr to World which points to the player's entity. This is useful for the Ocean setup and will be useful in the future. 
+
 == TODO ==
 ** Hydrax underwater is sped up, fix. With a skybox, there are artifacts underwater (disable skybox when underwater). Objects viewed from underwater (which are above water) are very strange (maybe a camera glitch?).
+* Consider making Sky and Ocean interfaces and derive Low/High graphics for each.
 * Add a "clock speed" variable to the World, should affect physics etc.
 * Put character controller data into config file to speed up testing.
 * Make PScene optional when initializing World.

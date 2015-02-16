@@ -107,6 +107,9 @@ public:
 
     // Getters:
 
+    // Returns pointer to Ogre::Root object.
+    Ogre::Root* getRoot(void) const;
+
     // Returns pointer to Ogre::SceneManager for this world.
     Ogre::SceneManager* getSceneManager(void) const;
 
@@ -119,11 +122,19 @@ public:
     // Returns graphics settings data.
     const Graphics& getGraphics(void) const;
 
+    // Returns pointer to player-controlled Entity.
+    EntityPtr getPlayer(void) const;
+
     // Returns pointer to PScene (physics scene).
     std::shared_ptr<PScene> getPScene(void) const;
 
     // Returns reference to internal Input instance.
     Input* getInput(void) const;
+
+    // Setters:
+
+    // Sets pointer to Entity controlled by player.
+    void setPlayer(const EntityPtr);
 
     // === // 
 
@@ -154,6 +165,9 @@ private:
     // Entity pool.
     std::shared_ptr<EntityPool> m_entityPool;
 
+    // The Entity the player controls.
+    EntityPtr m_player;
+
     // Component pools. The idea here is to avoid dynamic allocation of 
     // any Components during the game state. They are allocated during the
     // World's intialization and retrieved from a memory pool as needed.
@@ -180,6 +194,10 @@ inline void World::injectDependencies(const Dependencies& deps){
 
 // Getters:
 
+inline Ogre::Root* World::getRoot(void) const{
+    return m_root;
+}
+
 inline Ogre::SceneManager* World::getSceneManager(void) const{
     return m_scene;
 }
@@ -196,12 +214,22 @@ inline const Graphics& World::getGraphics(void) const{
     return m_graphics;
 }
 
+inline EntityPtr World::getPlayer(void) const{
+    return m_player;
+}
+
 inline std::shared_ptr<PScene> World::getPScene(void) const{
     return m_PScene;
 }
 
 inline Input* World::getInput(void) const{
     return m_input;
+}
+
+// Setters:
+
+inline void World::setPlayer(const EntityPtr player){
+    m_player = player;
 }
 
 // ========================================================================= //

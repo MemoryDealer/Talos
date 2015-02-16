@@ -79,7 +79,15 @@ m_graphicsSetting(graphicsSetting)
 
 Ocean::~Ocean(void)
 {
+    switch (m_graphicsSetting){
+    default:
+        break;
 
+    case Graphics::Setting::High:
+        m_hydrax->remove();
+        delete m_hydrax;
+        break;
+    }
 }
 
 // ========================================================================= //
@@ -96,10 +104,11 @@ void Ocean::update(void)
 
     case Graphics::Setting::High:
         // Update Hydrax camera.
-        m_hydraxCamera->setPosition(m_actorC->m_rollNode->_getDerivedPosition());
-        m_hydraxCamera->setOrientation(m_actorC->m_yawNode->getOrientation() * m_actorC->m_pitchNode->getOrientation());
+        m_hydraxCamera->setPosition(m_actorC->getPosition());
+        m_hydraxCamera->setOrientation(m_actorC->getOrientation());
 
-        m_hydrax->update(1.f / 16.f);
+        m_hydrax->update(1.f / 16.f);               
+        
         break;
     }
 }

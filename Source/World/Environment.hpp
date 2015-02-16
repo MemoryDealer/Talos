@@ -48,7 +48,7 @@ public:
     // Empty destructor.
     ~Environment(void);
 
-    // Sets ambient light to darkness and sets up default directional light to
+    // Sets ambient light to darkness and sets up default sun/moon lights to
     // darkness and pointing straight down.
     void init(void);
 
@@ -59,20 +59,29 @@ public:
     void update(void);
 
     // Allocates Ocean object according to graphics settings.
-    void loadOcean(const std::string&, ActorComponentPtr = nullptr);
+    void loadOcean(const std::string&);
+
+    // Allocates Sky object, uses config file passed in for settings.
+    void loadSky(const std::string& = "");
 
     // Getters:
 
     // Setters:
 
-    // Sets direction of the world's directional light.
-    void setLightDirection(const Ogre::Real, const Ogre::Real, const Ogre::Real);
-
-    // Sets colour of world's directional light.
-    void setLightColour(const Ogre::Real, const Ogre::Real, const Ogre::Real);
-
     // Sets colour of world's ambient light.
     void setAmbientLight(const Ogre::Real, const Ogre::Real, const Ogre::Real);
+
+    // Sets direction of the world's sun light.
+    void setSunDirection(const Ogre::Real, const Ogre::Real, const Ogre::Real);
+
+    // Sets colour of world's sun light.
+    void setSunColour(const Ogre::Real, const Ogre::Real, const Ogre::Real);    
+
+    // Sets direction of the world's moon light.
+    void setMoonDirection(const Ogre::Real, const Ogre::Real, const Ogre::Real);
+
+    // Sets colour of world's moon light.
+    void setMoonColour(const Ogre::Real, const Ogre::Real, const Ogre::Real);
 
     // Sets fog mode, colour, along with any parameters needed.
     void setFog(const Ogre::FogMode mode,
@@ -87,8 +96,9 @@ public:
     void setOceanPosition(const Ogre::Real, const Ogre::Real, const Ogre::Real);
 
 private:
-    Ogre::SceneManager* m_scene;
-    Ogre::Light* m_dLight; // Directional light.
+    // Directional lights.
+    Ogre::Light* m_sun; 
+    Ogre::Light* m_moon;
 
     World* m_world;
     Graphics m_graphics;
@@ -99,21 +109,6 @@ private:
     std::shared_ptr<Sky> m_sky;
     bool m_renderSky;
 };
-
-// ========================================================================= //
-
-inline void Environment::setLightDirection(const Ogre::Real x,
-                                           const Ogre::Real y,
-                                           const Ogre::Real z){
-    m_dLight->setDirection(x, y, z);
-}
-
-inline void Environment::setLightColour(const Ogre::Real r,
-                                        const Ogre::Real g,
-                                        const Ogre::Real b){
-    m_dLight->setDiffuseColour(r, g, b);
-    m_dLight->setSpecularColour(r, g, b);
-}
 
 // ========================================================================= //
 
