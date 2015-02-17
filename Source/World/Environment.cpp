@@ -24,7 +24,7 @@
 #include "Component/ActorComponent.hpp"
 #include "Entity/Entity.hpp"
 #include "Environment.hpp"
-#include "Rendering/Ocean/Ocean.hpp"
+#include "Rendering/Ocean/OceanHighGraphics.hpp"
 #include "Rendering/Sky/Sky.hpp"
 #include "World.hpp"
 
@@ -80,6 +80,10 @@ void Environment::init(void)
 
 void Environment::destroy(void)
 {
+    if (m_ocean != nullptr){
+        m_ocean->destroy();
+    }
+
     m_world->getSceneManager()->destroyLight(m_sun);
     m_world->getSceneManager()->destroyLight(m_moon);
 }
@@ -139,10 +143,20 @@ void Environment::update(void)
 
 void Environment::loadOcean(const std::string& cfg)
 {
-    m_ocean.reset(new Ocean(*m_world, 
-        m_graphics.ocean, 
-        cfg, 
-        m_world->getPlayer()->getActorComponent()));
+    switch (m_graphics.ocean){
+    default:
+    case Graphics::Setting::Low:
+
+        break;
+
+    case Graphics::Setting::High:
+        m_ocean.reset(new OceanHighGraphics());
+        static_cast<OceanHighGraphics*>(m_ocean.get())->init(*m_world, 
+                                                             cfg, 
+                                                             m_graphics.ocean);
+        break;
+    }
+
     m_renderOcean = true;
 }
 

@@ -18,103 +18,37 @@
 // File: Ocean.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines Ocean class.
+// Defines Ocean interface.
 // ========================================================================= //
 
 #ifndef __OCEAN_HPP__
 #define __OCEAN_HPP__
 
 // ========================================================================= //
-
-#include "stdafx.hpp"
-
-// ========================================================================= //
-
-class ActorComponent;
-class World;
-
-typedef ActorComponent* ActorComponentPtr;
-
-// ========================================================================= //
-
-class Ocean final
+// Interface for rendering a large (visually infinite) body of water.
+class Ocean
 {
 public:
-    explicit Ocean(World&, 
-                   const Graphics::Setting, 
-                   const std::string&, 
-                   ActorComponentPtr = nullptr);
+    explicit Ocean(void) { }
 
-    ~Ocean(void);
+    virtual ~Ocean(void) = 0 { }
 
-    void update(void);
+    virtual void destroy(void) = 0;
+
+    virtual void update(void) = 0;
 
     // Setters:
 
-    void setPosition(const Ogre::Real, const Ogre::Real, const Ogre::Real);
+    virtual void setPosition(const Ogre::Real, 
+                             const Ogre::Real, 
+                             const Ogre::Real) { }
 
-    void setSunPosition(const Ogre::Vector3&);
+    virtual void setSunPosition(const Ogre::Vector3&) { }
 
-    void setSunColour(const Ogre::Vector3&);
+    virtual void setSunColour(const Ogre::Vector3&) { }
 
-    void setSunEnabled(const bool);
-
-private:
-    union{
-        // Low graphics.
-        struct{
-
-        };
-        // High graphics.
-        struct{
-            Hydrax::Hydrax* m_hydrax;
-            Ogre::Camera* m_hydraxCamera;
-        };
-    };
-
-    // The actor which controls the camera.
-    ActorComponentPtr m_actorC;
-    Graphics::Setting m_graphicsSetting;
+    virtual void setSunEnabled(const bool) { }
 };
-
-// ========================================================================= //
-
-// Setters:
-
-inline void Ocean::setPosition(const Ogre::Real x, 
-                               const Ogre::Real y, 
-                               const Ogre::Real z){
-    switch (m_graphicsSetting){
-    default:
-        break;
-
-    case Graphics::Setting::High:
-        m_hydrax->setPosition(Ogre::Vector3(x, y, z));
-        break;
-    }
-}
-
-inline void Ocean::setSunPosition(const Ogre::Vector3& pos){
-    Assert(m_hydrax != nullptr, "Hydrax is null!");
-
-    m_hydrax->setSunPosition(pos);
-}
-
-inline void Ocean::setSunColour(const Ogre::Vector3& colour){
-    Assert(m_hydrax != nullptr, "Hydrax is null!");
-
-    m_hydrax->setSunColor(colour);
-}
-
-inline void Ocean::setSunEnabled(const bool enabled){
-    /*m_hydrax->setComponents((enabled == true) 
-        ? 
-        static_cast<Hydrax::HydraxComponent>(m_hydrax->getComponents() | 
-        Hydrax::HYDRAX_COMPONENT_SUN) 
-        : 
-        static_cast<Hydrax::HydraxComponent>(m_hydrax->getComponents() & 
-        ~Hydrax::HYDRAX_COMPONENT_SUN));*/
-}
 
 // ========================================================================= //
 

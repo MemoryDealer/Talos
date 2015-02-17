@@ -66,6 +66,15 @@ public:
 
     // Getters:
 
+    // Returns pointer to the World that created it.
+    World* getWorld(void) const;
+
+    // Returns pointer to active Ocean object.
+    std::shared_ptr<Ocean> getOcean(void) const;
+
+    // Returns pointer to active Sky object.
+    std::shared_ptr<Sky> getSky(void) const;
+
     // Setters:
 
     // Sets colour of world's ambient light.
@@ -109,6 +118,24 @@ private:
     std::shared_ptr<Sky> m_sky;
     bool m_renderSky;
 };
+
+// ========================================================================= //
+
+// Getters:
+
+inline World* Environment::getWorld(void) const{
+    return m_world;
+}
+
+
+inline std::shared_ptr<Ocean> Environment::getOcean(void) const{
+    return m_ocean;
+}
+
+
+inline std::shared_ptr<Sky> Environment::getSky(void) const{
+    return m_sky;
+}
 
 // ========================================================================= //
 
