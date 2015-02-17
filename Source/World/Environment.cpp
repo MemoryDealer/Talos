@@ -34,7 +34,9 @@ Environment::Environment(World* world,
                          Graphics& graphics) :
 m_world(world),
 m_sun(nullptr),
+m_sunColour(Ogre::ColourValue::Black),
 m_moon(nullptr),
+m_moonColour(Ogre::ColourValue::Black),
 //m_world(nullptr), // Compiler complains 'm_world' : already initialized
 m_graphics(graphics),
 m_ocean(nullptr),
@@ -96,45 +98,10 @@ void Environment::update(void)
     if (m_renderOcean){
         m_ocean->update();        
     }
+
     // Update Sky.
     if (m_renderSky){
         m_sky->update();
-        Ogre::Real time = m_sky->getTime();
-        // If it's daytime.
-        if (time > 7.50f && time < 20.50f){
-            if (m_sun->isVisible() == false){
-                m_sun->setVisible(true);
-                m_ocean->setSunEnabled(true);
-            }
-            if (m_moon->isVisible() == true){
-                m_moon->setVisible(false);
-            }
-            m_sun->setDirection(-m_sky->getSunDirection());
-
-            // Update sky-dependent Ocean properties.
-            if (m_renderOcean){
-
-                Ogre::Vector3 sunPosition =
-                    m_world->getPlayer()->getActorComponent()->getPosition() +
-                    m_sun->getDirection() *
-                    m_sky->calcSkydomeRadius();
-                m_ocean->setSunPosition(-sunPosition);
-            }
-        }
-        // Otherwise nighttime.
-        else{
-            if (m_moon->isVisible() == false){
-                m_moon->setVisible(true);
-            }
-            if (m_sun->isVisible() == true){
-                m_sun->setVisible(false);
-                if (m_renderOcean){
-                    m_ocean->setSunEnabled(false);
-                    m_ocean->setSunPosition(Ogre::Vector3::ZERO);
-                }
-            }
-            m_moon->setDirection(-m_sky->getMoonDirection());
-        }
     }
 }
 
@@ -146,11 +113,11 @@ void Environment::loadOcean(const std::string& cfg)
     default:
     case Graphics::Setting::Low:
 
-        break;
+        return;
 
     case Graphics::Setting::High:
         m_ocean.reset(new OceanHighGraphics());
-        static_cast<OceanHighGraphics*>(m_ocean.get())->init(*m_world, 
+        static_cast<OceanHighGraphics*>(m_ocean.get())->init(m_world, 
                                                              cfg, 
                                                              m_graphics.ocean);
         break;
@@ -167,11 +134,11 @@ void Environment::loadSky(const std::string& cfg)
     default:
     case Graphics::Setting::Low:
 
-        break;
+        return;
 
     case Graphics::Setting::High:
         m_sky.reset(new SkyHighGraphics());
-        static_cast<SkyHighGraphics*>(m_sky.get())->init(*m_world,
+        static_cast<SkyHighGraphics*>(m_sky.get())->init(m_world,
                                                          m_graphics.sky,
                                                          cfg);
         break;
@@ -195,11 +162,26 @@ void Environment::setAmbientLight(const Ogre::Real r,
 
 // ========================================================================= //
 
+void Environment::setSunDirection(const Ogre::Vector3& dir)
+{
+    m_sun->setDirection(dir);
+
+    if (m_renderOcean){
+        // Set the Ocean's sun position relative to player.
+        m_ocean->setSunPosition(
+            m_world->getPlayer()->getActorComponent()->getPosition() -
+            dir *
+            m_sky->calcSkydomeRadius());
+    }
+}
+
+// ========================================================================= //
+
 void Environment::setSunDirection(const Ogre::Real x,
                                   const Ogre::Real y,
                                   const Ogre::Real z)
 {
-    m_sun->setDirection(x, y, z);
+    this->setSunDirection(Ogre::Vector3(x, y, z));
 }
 
 // ========================================================================= //
@@ -208,11 +190,37 @@ void Environment::setSunColour(const Ogre::Real r,
                                const Ogre::Real g,
                                const Ogre::Real b)
 {
-    m_sun->setDiffuseColour(r, g, b);
-    m_sun->setSpecularColour(r, g, b);
+    m_sunColour = Ogre::ColourValue(r, g, b);
+    m_sun->setDiffuseColour(m_sunColour);
+    m_sun->setSpecularColour(m_sunColour);
+
+    // Set Ocean's sun colour if activated.
     if (m_renderOcean){
         m_ocean->setSunColour(Ogre::Vector3(r, g, b));
     }
+}
+
+// ========================================================================= //
+
+void Environment::setSunEnabled(const bool enabled)
+{
+    /*m_sun->setDiffuseColour((enabled == true) ? m_sunColour :
+                            Ogre::ColourValue::Black);
+    m_sun->setSpecularColour((enabled == true) ? m_sunColour :
+                             Ogre::ColourValue::Black);*/
+    m_sun->setVisible(enabled);
+
+    // Update Ocean's sun colour.
+    if (m_renderOcean){
+        m_ocean->setSunEnabled(enabled);
+    }
+}
+
+// ========================================================================= //
+
+void Environment::setMoonDirection(const Ogre::Vector3& dir)
+{
+    m_moon->setDirection(dir);
 }
 
 // ========================================================================= //
@@ -221,7 +229,7 @@ void Environment::setMoonDirection(const Ogre::Real x,
                                    const Ogre::Real y,
                                    const Ogre::Real z)
 {
-    m_moon->setDirection(x, y, z);
+    this->setMoonDirection(Ogre::Vector3(x, y, z));
 }
 
 // ========================================================================= //
@@ -230,8 +238,20 @@ void Environment::setMoonColour(const Ogre::Real r,
                                 const Ogre::Real g,
                                 const Ogre::Real b)
 {
-    m_moon->setDiffuseColour(r, g, b);
-    m_moon->setSpecularColour(r, g, b);
+    m_moonColour = Ogre::ColourValue(r, g, b);
+    m_moon->setDiffuseColour(m_moonColour);
+    m_moon->setSpecularColour(m_moonColour);
+}
+
+// ========================================================================= //
+
+void Environment::setMoonEnabled(const bool enabled)
+{
+    /*m_moon->setDiffuseColour((enabled == true) ? m_moonColour :
+                             Ogre::ColourValue::Black);
+    m_moon->setSpecularColour((enabled == true) ? m_moonColour :
+                              Ogre::ColourValue::Black);*/
+    m_moon->setVisible(enabled);
 }
 
 // ========================================================================= //
@@ -257,8 +277,6 @@ void Environment::setOceanPosition(const Ogre::Real x,
                                    const Ogre::Real y,
                                    const Ogre::Real z)
 {
-    Assert(m_ocean != nullptr, "null Ocean");
-
     m_ocean->setPosition(x, y, z);
 }
 

@@ -249,7 +249,7 @@ void Engine::start(const EngineStateID id)
             CEGUI::System::getSingleton().
                 injectTimePulse(static_cast<float>(lag / MS_PER_UPDATE));
 
-            // Render the updated frame.
+            // Render the updated frame, compensating for lag.
             m_root->renderOneFrame(Ogre::Real(lag / MS_PER_UPDATE));
         }
     }

@@ -196,10 +196,13 @@
 * Only remaining Hydrax bugs: Underwater compositor is too fast, the edges underwater have a gap that can be seen through.
 * Made Ocean an interface, created OceanHighGraphics which uses the Ocean interface. This vastly reduce the conditional branching in its functions.
 * Made Sky an interface, created SkyHighGraphics for SkyX. Same idea as Ocean and OceanHighGraphics. Interfaces are nice.
+* Moved day/night lighting logic out of Environment::update() into SkyHighGraphics::update().
+* As of now I use a hack to hide the sun underwater for Hydrax, but eventually the "sun" could be changed to the moon's colour and corresponding light strength for more realism.
 
 == TODO ==
 ** Hydrax underwater is sped up, fix. (E:\Engine\Ogre3D\Hydrax-v0.5.1\Hydrax\Hydrax.vcproj to recompile).
 * Add a "clock speed" variable to the World, should affect physics etc.
+* Put 16.f somewhere as a constant that every file can access (MS per update).
 * Put character controller data into config file to speed up testing.
 * Make PScene optional when initializing World.
 * Make PhysX use software mode if NVIDIA card is not detected.

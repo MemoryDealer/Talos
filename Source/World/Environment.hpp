@@ -78,19 +78,43 @@ public:
     // Setters:
 
     // Sets colour of world's ambient light.
-    void setAmbientLight(const Ogre::Real, const Ogre::Real, const Ogre::Real);
+    void setAmbientLight(const Ogre::Real, 
+                         const Ogre::Real, 
+                         const Ogre::Real);
 
     // Sets direction of the world's sun light.
-    void setSunDirection(const Ogre::Real, const Ogre::Real, const Ogre::Real);
+    void setSunDirection(const Ogre::Vector3&);
+
+    // Sets direction of the world's sun light.
+    void setSunDirection(const Ogre::Real, 
+                         const Ogre::Real, 
+                         const Ogre::Real);
 
     // Sets colour of world's sun light.
-    void setSunColour(const Ogre::Real, const Ogre::Real, const Ogre::Real);    
+    void setSunColour(const Ogre::Real, 
+                      const Ogre::Real, 
+                      const Ogre::Real);
+
+    // Enables the sun directional light to light the world if true, set to
+    // darkness if false.
+    void setSunEnabled(const bool);
 
     // Sets direction of the world's moon light.
-    void setMoonDirection(const Ogre::Real, const Ogre::Real, const Ogre::Real);
+    void setMoonDirection(const Ogre::Vector3&);
+
+    // Sets direction of the world's moon light.
+    void setMoonDirection(const Ogre::Real, 
+                          const Ogre::Real, 
+                          const Ogre::Real);
 
     // Sets colour of world's moon light.
-    void setMoonColour(const Ogre::Real, const Ogre::Real, const Ogre::Real);
+    void setMoonColour(const Ogre::Real, 
+                       const Ogre::Real, 
+                       const Ogre::Real);
+
+    // Enables the moon directional light to light the world if true, set to
+    // darkness if false.
+    void setMoonEnabled(const bool);
 
     // Sets fog mode, colour, along with any parameters needed.
     void setFog(const Ogre::FogMode mode,
@@ -102,12 +126,16 @@ public:
                 const Ogre::Real linearEnd);
 
     // Sets origin of Ocean.
-    void setOceanPosition(const Ogre::Real, const Ogre::Real, const Ogre::Real);
+    void setOceanPosition(const Ogre::Real, 
+                          const Ogre::Real, 
+                          const Ogre::Real);
 
 private:
     // Directional lights.
     Ogre::Light* m_sun; 
+    Ogre::ColourValue m_sunColour;
     Ogre::Light* m_moon;
+    Ogre::ColourValue m_moonColour;
 
     World* m_world;
     Graphics m_graphics;

@@ -15,10 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: SkyHighGrahpics.hpp
+// File: SkyHighGraphics.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines SkyHighGrahpics class.
+// Defines SkyHighGraphics class.
 // ========================================================================= //
 
 #ifndef __SKYHIGHGRAPHICS_HPP__
@@ -45,13 +45,14 @@ public:
     virtual ~SkyHighGraphics(void) override;
 
     // Creates SkyX object with default settings.
-    void init(World& world,
+    void init(World* world,
               const Graphics::Setting,
               const std::string&);
 
     // Removes SkyX and frees the allocated memory.
     virtual void destroy(void) override;
 
+    // Update SkyX animation state and day/night cycle lighting.
     virtual void update(void) override;
 
     // Getters:
@@ -73,7 +74,10 @@ private:
     SkyX::SkyX* m_skyX;
     SkyX::BasicController* m_basicController;
     Ogre::Camera* m_camera;
-
+    bool m_day;
+    Ogre::Real m_sunrise, m_sunset;
+    
+    World* m_world;
     Graphics::Setting m_graphicsSetting;
 };
 

@@ -47,6 +47,8 @@ public:
 
     virtual void setSunColour(const Ogre::Vector3&) { }
 
+    virtual void setSunColour(const Ogre::ColourValue&) { }
+
     virtual void setSunEnabled(const bool) { }
 };
 

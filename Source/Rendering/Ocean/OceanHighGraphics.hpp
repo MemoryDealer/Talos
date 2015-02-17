@@ -45,7 +45,7 @@ public:
     virtual ~OceanHighGraphics(void) override;
 
     // Create Hydrax
-    void init(World&, const std::string&, const Graphics::Setting);
+    void init(World*, const std::string&, const Graphics::Setting);
 
     // Removes Hydrax and clears the memory it allocated.
     virtual void destroy(void) override;
@@ -66,6 +66,9 @@ public:
 
     // Sets colour of sun as seen in water reflection and underwater.
     virtual void setSunColour(const Ogre::Vector3&) override;
+
+    // Sets colour of sun as seen in water reflection and underwater.
+    virtual void setSunColour(const Ogre::ColourValue&) override;
 
     // Sets sun effects to visible if true.
     virtual void setSunEnabled(const bool) override;
@@ -95,6 +98,10 @@ inline void OceanHighGraphics::setSunPosition(const Ogre::Vector3& pos){
 
 inline void OceanHighGraphics::setSunColour(const Ogre::Vector3& colour){
     m_hydrax->setSunColor(colour);
+}
+
+inline void OceanHighGraphics::setSunColour(const Ogre::ColourValue& colour){
+    m_hydrax->setSunColor(Ogre::Vector3(colour.r, colour.g, colour.b));
 }
 
 inline void OceanHighGraphics::setSunEnabled(const bool enabled){

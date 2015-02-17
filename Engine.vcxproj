@@ -137,7 +137,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OgreMain_d.lib;OgreOverlay_d.lib;OgreProperty_d.lib;OgreRTShaderSystem_d.lib;OgreVolume_d.lib;RenderSystem_Direct3D9_d.lib;RenderSystem_GL_d.lib;cg.lib;FreeImage_d.lib;freetype_d.lib;zlib_d.lib;zziplib_d.lib;OIS_d.lib;OgrePaging_d.lib;Plugin_OctreeSceneManager_d.lib;Plugin_CgProgramManager_d.lib;Plugin_ParticleFX_d.lib;Hydrax_d.lib;SkyX_d.lib;SDL2.lib;SDL2main.lib;CEGUIBase-0_d.lib;CEGUIOgreRenderer-0_d.lib;PhysX3DEBUG_x86.lib;PhysX3CommonDEBUG_x86.lib;PhysX3ExtensionsDEBUG.lib;PhysX3CharacterKinematicDEBUG_x86.lib;PhysXVisualDebuggerSDKDEBUG.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OgreMain_d.lib;RenderSystem_Direct3D9_d.lib;RenderSystem_GL_d.lib;Plugin_OctreeSceneManager_d.lib;Plugin_CgProgramManager_d.lib;Hydrax_d.lib;SkyX_d.lib;SDL2.lib;SDL2main.lib;CEGUIBase-0_d.lib;CEGUIOgreRenderer-0_d.lib;PhysX3DEBUG_x86.lib;PhysX3CommonDEBUG_x86.lib;PhysX3ExtensionsDEBUG.lib;PhysX3CharacterKinematicDEBUG_x86.lib;PhysXVisualDebuggerSDKDEBUG.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <Bscmake>

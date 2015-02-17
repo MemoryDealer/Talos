@@ -46,28 +46,28 @@ OceanHighGraphics::~OceanHighGraphics(void)
 
 // ========================================================================= //
 
-void OceanHighGraphics::init(World& world,
+void OceanHighGraphics::init(World* world,
                              const std::string& cfg,
                              const Graphics::Setting graphicsSetting)
 {
     // Assign ActorComponentPtr for update procedure.
-    m_actorC = world.getPlayer()->getActorComponent();
+    m_actorC = world->getPlayer()->getActorComponent();
 
     m_graphicsSetting = graphicsSetting;
 
     // Create an Ogre::Camera for Hydrax. Hydrax cannot operate correctly with
     // a camera that's attached to a scene node, so we must create a new one.
-    m_hydraxCamera = world.getSceneManager()->createCamera("HydraxCamera");
+    m_hydraxCamera = world->getSceneManager()->createCamera("HydraxCamera");
     m_hydraxCamera->setNearClipDistance(0.1f);
     m_hydraxCamera->setFarClipDistance(99999.f * 6.f);
     m_hydraxCamera->setAspectRatio(
-        Ogre::Real(world.getViewport()->getActualWidth()) /
-        Ogre::Real(world.getViewport()->getActualHeight()));
+        Ogre::Real(world->getViewport()->getActualWidth()) /
+        Ogre::Real(world->getViewport()->getActualHeight()));
 
     // Initialize Hydrax object.
-    m_hydrax = new Hydrax::Hydrax(world.getSceneManager(),
+    m_hydrax = new Hydrax::Hydrax(world->getSceneManager(),
                                   m_hydraxCamera,
-                                  world.getViewport());
+                                  world->getViewport());
 
     // Initialize Hydrax module.
     Hydrax::Module::ProjectedGrid* module =
@@ -75,7 +75,7 @@ void OceanHighGraphics::init(World& world,
         new Hydrax::Noise::Perlin(),
         Ogre::Plane(Ogre::Vector3(0.f, 1.f, 0.f), 
             Ogre::Vector3(0.f, 0.f, 0.f)),
-        Hydrax::MaterialManager::NM_RTT,
+        Hydrax::MaterialManager::NM_VERTEX,
         Hydrax::Module::ProjectedGrid::Options());
     m_hydrax->setModule(static_cast<Hydrax::Module::Module*>(module));
 
