@@ -65,7 +65,8 @@ private:
         // High graphics.
         struct{
             SkyX::SkyX* m_skyX;
-            SkyX::BasicController* m_basicController;            
+            SkyX::BasicController* m_basicController;    
+            Ogre::Camera* m_camera;
         };
     };
 

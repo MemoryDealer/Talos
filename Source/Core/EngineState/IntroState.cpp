@@ -58,7 +58,7 @@ void IntroState::enter(void)
 {
     m_world.init();
     m_world.getInput()->setMode(Input::Mode::PLAYER);
-    //m_world.getPScene()->loadDebugDrawer();
+    m_world.getPScene()->loadDebugDrawer();
 
     // Setup visual scene settings.
     m_world.getEnvironment()->setAmbientLight(255.f, 255.f, 255.f);
@@ -78,14 +78,12 @@ void IntroState::enter(void)
 
     m_world.setPlayer(m_player);
 
-    // Create sky.
-    m_world.getEnvironment()->loadSky();
-
     // Create Ocean.
     m_world.getEnvironment()->loadOcean("HydraxDemo.hdx");
     m_world.getEnvironment()->setOceanPosition(0.f, -100.f, 0.f);
 
-    
+    // Create sky.
+    m_world.getEnvironment()->loadSky();
 	
     // Create scene manager.
     
@@ -160,7 +158,6 @@ void IntroState::enter(void)
 
 void IntroState::exit(void)
 {
-    m_player->destroy(m_world);
     m_world.destroy();
 }
 

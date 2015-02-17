@@ -190,12 +190,14 @@
 * Compiled latest community Hydrax source, testing.
 * It seems setting <float>GlobalTransparency=0.5 enabled reflection along with everything else working fine.
 * Reflections are working but SkyX doesn't seem to support full sky reflection, as seen in the demo.
+* Removing the frame listener for SkyX and instead calling SkyX::notifyCameraRender() now renders SkyX reflections in the ocean!
+* Fixed artifacts in sky by explicitly setting the Player camera's clipping distance to 0.f -- infinite.
+* Hydrax reflections in NM_VERTEX may be reversed, NM_RTT is probably the best way to go.
+* Only remaining Hydrax bugs: Underwater compositor is too fast, the edges underwater have a gap that can be seen through.
 
 == TODO ==
-** Recompile latest community Hydrax https://bitbucket.org/ogreaddons/hydrax/src
-** Hydrax underwater is sped up, fix. With a skybox, there are artifacts underwater (disable skybox when underwater). 
+** Hydrax underwater is sped up, fix. (E:\Engine\Ogre3D\Hydrax-v0.5.1\Hydrax\Hydrax.vcproj to recompile).
 * Consider making Sky and Ocean interfaces and derive Low/High graphics for each.
-* Artifacts in SkyX - random black speckles in sky when moving the camera or character.
 * Add a "clock speed" variable to the World, should affect physics etc.
 * Put character controller data into config file to speed up testing.
 * Make PScene optional when initializing World.

@@ -21,7 +21,8 @@
 // Implements Sky class.
 // ========================================================================= //
 
-#include "Rendering/Ocean/Ocean.hpp"
+#include "Component/CameraComponent.hpp"
+#include "Entity/Entity.hpp"
 #include "Sky.hpp"
 #include "World/World.hpp"
 
@@ -32,6 +33,7 @@ Sky::Sky(World& world,
          const std::string& cfg) :
 m_skyX(nullptr),
 m_basicController(nullptr),
+m_camera(nullptr),
 m_graphicsSetting(graphicsSetting)
 {
     switch (m_graphicsSetting){
@@ -48,10 +50,11 @@ m_graphicsSetting(graphicsSetting)
         m_skyX = new SkyX::SkyX(world.getSceneManager(), m_basicController);
         m_skyX->create();
         m_skyX->getCloudsManager()->add(SkyX::CloudLayer::Options());
-        world.getRoot()->addFrameListener(m_skyX);
-        static_cast<Ogre::RenderWindow*>(world.getRoot()->getRenderTarget("Engine"))->addListener(m_skyX);
-        //m_basicController->setTime(Ogre::Vector3(13.f, 7.f, 18.5f));
-        m_skyX->setTimeMultiplier(0.005f);
+        m_skyX->setTimeMultiplier(0.1f);
+        m_camera = static_cast<CameraComponentPtr>(
+            world.getPlayer()->getComponentPtr(
+            Component::Type::Camera))->getCamera();
+        Assert(m_camera != nullptr, "SkyX initialized with invalid Player");
         break;
     }
 }
@@ -89,9 +92,8 @@ void Sky::update(void)
         break;
 
     case Graphics::Setting::High:
-        /*m_basicController->update(1.f / 16.f);
-        m_skyX->update(1.f / 16.f);*/
-        
+        m_skyX->update(1.f / 16.f);        
+        m_skyX->notifyCameraRender(m_camera);
         break;
     }
 }

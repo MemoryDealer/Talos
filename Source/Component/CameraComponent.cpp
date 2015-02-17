@@ -50,7 +50,7 @@ void CameraComponent::init(EntityPtr entity, World& world)
     // Create the camera object.
     m_camera = world.getSceneManager()->createCamera("PlayerCam");
     m_camera->setNearClipDistance(0.1f);
-    m_camera->setFarClipDistance(99999.f);
+    m_camera->setFarClipDistance(0.f);
 
     // Setup viewport aspect ratio and assign camera to viewport.
     Ogre::Viewport* viewport = world.getViewport();

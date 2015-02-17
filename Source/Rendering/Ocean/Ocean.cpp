@@ -26,63 +26,6 @@
 #include "World/World.hpp"
 
 // ========================================================================= //
-//
-//class HydraxRttListener : public Hydrax::RttManager::RttListener
-//{
-//public:
-//    void preRenderTargetUpdate(const Hydrax::RttManager::RttType& Rtt)
-//    {
-//        // If needed in any case...
-//        //bool underwater = mHydrax->_isCurrentFrameUnderwater();
-//
-//        switch (Rtt)
-//        {
-//        case Hydrax::RttManager::RTT_REFLECTION:
-//        {
-//                                                   
-//        }
-//            break;
-//
-//        case Hydrax::RttManager::RTT_REFRACTION:
-//        {
-//        }
-//            break;
-//
-//        case Hydrax::RttManager::RTT_DEPTH: case Hydrax::RttManager::RTT_DEPTH_REFLECTION:
-//        {
-//              
-//        }
-//            break;
-//        }
-//    }
-//
-//    void postRenderTargetUpdate(const Hydrax::RttManager::RttType& Rtt)
-//    {
-//        //bool underwater = mHydrax->_isCurrentFrameUnderwater();
-//
-//        switch (Rtt)
-//        {
-//        case Hydrax::RttManager::RTT_REFLECTION:
-//        {
-//                                                   
-//        }
-//            break;
-//
-//        case Hydrax::RttManager::RTT_REFRACTION:
-//        {
-//        }
-//            break;
-//
-//        case Hydrax::RttManager::RTT_DEPTH: case Hydrax::RttManager::RTT_DEPTH_REFLECTION:
-//        {
-//                 
-//        }
-//            break;
-//        }
-//    }
-//};
-
-// ========================================================================= //
 
 Ocean::Ocean(World& world, 
              const Graphics::Setting graphicsSetting,
@@ -104,8 +47,7 @@ m_graphicsSetting(graphicsSetting)
             // Create an Ogre::Camera for Hydrax.
             m_hydraxCamera = world.getSceneManager()->createCamera("HydraxCamera");
             m_hydraxCamera->setNearClipDistance(0.1f);
-            m_hydraxCamera->setFarClipDistance(9999.f);
-            //m_hydraxCamera->enableReflection(Ogre::MovablePlane(Ogre::Vector3(0.f, 1.f, 0.f), Ogre::Vector3(0.f, 0.f, 0.f)));
+            m_hydraxCamera->setFarClipDistance(99999.f * 6.f);
             m_hydraxCamera->setAspectRatio(Ogre::Real(world.getViewport()->getActualWidth()) /
                                            Ogre::Real(world.getViewport()->getActualHeight()));
 
@@ -119,18 +61,15 @@ m_graphicsSetting(graphicsSetting)
                 new Hydrax::Module::ProjectedGrid(m_hydrax,
                 new Hydrax::Noise::Perlin(),
                 Ogre::Plane(Ogre::Vector3(0.f, 1.f, 0.f), Ogre::Vector3(0.f, 0.f, 0.f)),
-                Hydrax::MaterialManager::NM_RTT,
+                Hydrax::MaterialManager::NM_VERTEX,
                 Hydrax::Module::ProjectedGrid::Options());
             m_hydrax->setModule(static_cast<Hydrax::Module::Module*>(module));
-            //m_hydrax->setComponents(static_cast<Hydrax::HydraxComponent>(m_hydrax->getComponents() | Hydrax::HYDRAX_COMPONENT_UNDERWATER));
 
             // Load settings from Hydrax config file.
             m_hydrax->loadCfg(cfg);
 
             // Create the ocean.
             m_hydrax->create();
-
-            //m_hydrax->getRttManager()->addRttListener(new HydraxRttListener());
         }
         break;
     }

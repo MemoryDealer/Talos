@@ -9,12 +9,12 @@ HydraxVersion=0.5.1
 
 #Main options field
 #<vector3>Position=-5000x100x-5000
-<float>PlanesError=0.25
+<float>PlanesError=100.025
 #Shader mode: 0=HLSL, 1=CG, 2=GLSL
 <int>ShaderMode=0
-<float>FullReflectionDistance=10
-<float>GlobalTransparency=0.5
-<float>NormalDistortion=0.075
+<float>FullReflectionDistance=0
+<float>GlobalTransparency=0.15
+<float>NormalDistortion=0.095
 <vector3>WaterColor=0.158209x0.435822x0.679105
 
 #Components field
@@ -76,8 +76,8 @@ Noise=Perlin
 <int>Perlin_Octaves=8
 <float>Perlin_Scale=0.085
 <float>Perlin_Falloff=0.49
-<float>Perlin_Animspeed=1.4
-<float>Perlin_Timemulti=1.27
+<float>Perlin_Animspeed=1.0
+<float>Perlin_Timemulti=1.0
 <float>Perlin_GPU_Strength=2
 <vector3>Perlin_GPU_LODParameters=0.5x50x150000
 

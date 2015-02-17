@@ -96,7 +96,6 @@ void Environment::update(void)
     if (m_renderSky){
         m_sky->update();
         Ogre::Real time = m_sky->getTime();
-        printf("Time: %.2f\n", time);
         // If it's daytime.
         if (time > 7.50f && time < 20.50f){
             if (m_sun->isVisible() == false){
