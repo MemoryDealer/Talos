@@ -25,7 +25,7 @@
 #include "Entity/Entity.hpp"
 #include "Environment.hpp"
 #include "Rendering/Ocean/OceanHighGraphics.hpp"
-#include "Rendering/Sky/Sky.hpp"
+#include "Rendering/Sky/SkyHighGraphics.hpp"
 #include "World.hpp"
 
 // ========================================================================= //
@@ -117,8 +117,7 @@ void Environment::update(void)
                 Ogre::Vector3 sunPosition =
                     m_world->getPlayer()->getActorComponent()->getPosition() +
                     m_sun->getDirection() *
-                    m_sky->calcSkydomeRadius(
-                    m_world->getPlayer()->getActorComponent()->getCamera());
+                    m_sky->calcSkydomeRadius();
                 m_ocean->setSunPosition(-sunPosition);
             }
         }
@@ -164,7 +163,20 @@ void Environment::loadOcean(const std::string& cfg)
 
 void Environment::loadSky(const std::string& cfg)
 {
-    m_sky.reset(new Sky(*m_world, m_graphics.sky, cfg));
+    switch (m_graphics.sky){
+    default:
+    case Graphics::Setting::Low:
+
+        break;
+
+    case Graphics::Setting::High:
+        m_sky.reset(new SkyHighGraphics());
+        static_cast<SkyHighGraphics*>(m_sky.get())->init(*m_world,
+                                                         m_graphics.sky,
+                                                         cfg);
+        break;
+    }
+
     m_renderSky = true;
 }
 

@@ -18,7 +18,7 @@
 // File: Observer.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines Observer class.
+// Defines Observer interface.
 // ========================================================================= //
 
 #ifndef __OBSERVER_HPP__

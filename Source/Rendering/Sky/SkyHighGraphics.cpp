@@ -23,87 +23,76 @@
 
 #include "Component/CameraComponent.hpp"
 #include "Entity/Entity.hpp"
-#include "Sky.hpp"
+#include "SkyHighGraphics.hpp"
 #include "World/World.hpp"
 
 // ========================================================================= //
 
-Sky::Sky(World& world, 
-         const Graphics::Setting graphicsSetting,
-         const std::string& cfg) :
+SkyHighGraphics::SkyHighGraphics(void) :
 m_skyX(nullptr),
 m_basicController(nullptr),
 m_camera(nullptr),
-m_graphicsSetting(graphicsSetting)
+m_graphicsSetting(Graphics::Setting::High)
 {
-    switch (m_graphicsSetting){
-    default:
-        break;
-
-    case Graphics::Setting::Low:
-
-        break;
-
-    case Graphics::Setting::High:
-        // Setup SkyX.
-        m_basicController = new SkyX::BasicController();
-        m_skyX = new SkyX::SkyX(world.getSceneManager(), m_basicController);
-        m_skyX->create();
-        m_skyX->getCloudsManager()->add(SkyX::CloudLayer::Options());
-        m_skyX->setTimeMultiplier(0.1f);
-        m_camera = static_cast<CameraComponentPtr>(
-            world.getPlayer()->getComponentPtr(
-            Component::Type::Camera))->getCamera();
-        Assert(m_camera != nullptr, "SkyX initialized with invalid Player");
-        break;
-    }
+    
 }
 
 // ========================================================================= //
 
-Sky::~Sky(void)
+SkyHighGraphics::~SkyHighGraphics(void)
 {
-    switch (m_graphicsSetting){
-    default:
-        break;
-
-    case Graphics::Setting::Low:
-
-        break;
-
-    case Graphics::Setting::High:
-        m_skyX->remove();
-        delete m_skyX;
-        delete m_basicController;
-        break;
-    }
+    
 }
 
 // ========================================================================= //
 
-void Sky::update(void)
+void SkyHighGraphics::init(World& world,
+                           const Graphics::Setting,
+                           const std::string&)
 {
-    switch (m_graphicsSetting){
-    default:
-        break;
+    // Create SkyX controller.
+    m_basicController = new SkyX::BasicController();
 
-    case Graphics::Setting::Low:
+    // Create SkyX system.
+    m_skyX = new SkyX::SkyX(world.getSceneManager(), m_basicController);
+    m_skyX->create();
 
-        break;
+    // Add a layer of clouds.
+    m_skyX->getCloudsManager()->add(SkyX::CloudLayer::Options());
 
-    case Graphics::Setting::High:
-        m_skyX->update(1.f / 16.f);        
-        m_skyX->notifyCameraRender(m_camera);
-        break;
-    }
+    // Slow down the day/night cycle.
+    m_skyX->setTimeMultiplier(0.1f);
+
+    // Assign the Ogre::Camera pointer for updating.
+    Assert(world.getPlayer() != nullptr, "Invalid Player object");
+    m_camera = static_cast<CameraComponentPtr>(
+        world.getPlayer()->getComponentPtr(
+        Component::Type::Camera))->getCamera();
+    Assert(m_camera != nullptr, "SkyX initialized with invalid Player Camera");
 }
 
 // ========================================================================= //
 
-const Ogre::Real Sky::calcSkydomeRadius(Ogre::Camera* camera) const
+void SkyHighGraphics::destroy(void)
 {
-    return m_skyX->getMeshManager()->getSkydomeRadius(camera)
-        * 0.5f;
+    m_skyX->remove();
+    delete m_skyX;
+    delete m_basicController;
+}
+
+// ========================================================================= //
+
+void SkyHighGraphics::update(void)
+{
+    m_skyX->update(1.f / 16.f);
+    m_skyX->notifyCameraRender(m_camera);
+}
+
+// ========================================================================= //
+
+const Ogre::Real SkyHighGraphics::calcSkydomeRadius(void) const
+{
+    return m_skyX->getMeshManager()->getSkydomeRadius(m_camera) * 0.5f;
 }
 
 // ========================================================================= //

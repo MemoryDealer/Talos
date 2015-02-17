@@ -189,11 +189,11 @@
     <ClCompile Include="Source\World\Environment.cpp">
       <Filter>Source Files\World</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Rendering\Sky\Sky.cpp">
-      <Filter>Source Files\Rendering\Sky</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Rendering\Ocean\OceanHighGraphics.cpp">
       <Filter>Source Files\Rendering\Ocean</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\Sky\SkyHighGraphics.cpp">
+      <Filter>Source Files\Rendering\Sky</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -317,14 +317,17 @@
     <ClInclude Include="Source\Rendering\GraphicsSettings.hpp">
       <Filter>Header Files\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Rendering\Sky\Sky.hpp">
-      <Filter>Header Files\Rendering\Sky</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Rendering\Ocean\OceanHighGraphics.hpp">
       <Filter>Header Files\Rendering\Ocean</Filter>
     </ClInclude>
     <ClInclude Include="Source\Rendering\Ocean\Ocean.hpp">
       <Filter>Header Files\Rendering\Ocean</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Sky\SkyHighGraphics.hpp">
+      <Filter>Header Files\Rendering\Sky</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Sky\Sky.hpp">
+      <Filter>Header Files\Rendering\Sky</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -194,10 +194,11 @@
 * Fixed artifacts in sky by explicitly setting the Player camera's clipping distance to 0.f -- infinite.
 * Hydrax reflections in NM_VERTEX may be reversed, NM_RTT is probably the best way to go.
 * Only remaining Hydrax bugs: Underwater compositor is too fast, the edges underwater have a gap that can be seen through.
+* Made Ocean an interface, created OceanHighGraphics which uses the Ocean interface. This vastly reduce the conditional branching in its functions.
+* Made Sky an interface, created SkyHighGraphics for SkyX. Same idea as Ocean and OceanHighGraphics. Interfaces are nice.
 
 == TODO ==
 ** Hydrax underwater is sped up, fix. (E:\Engine\Ogre3D\Hydrax-v0.5.1\Hydrax\Hydrax.vcproj to recompile).
-* Consider making Sky and Ocean interfaces and derive Low/High graphics for each.
 * Add a "clock speed" variable to the World, should affect physics etc.
 * Put character controller data into config file to speed up testing.
 * Make PScene optional when initializing World.

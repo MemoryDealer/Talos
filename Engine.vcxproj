@@ -37,7 +37,7 @@
     <ClCompile Include="Source\Rendering\DynamicLines.cpp" />
     <ClCompile Include="Source\Rendering\DynamicRenderable.cpp" />
     <ClCompile Include="Source\Rendering\Ocean\OceanHighGraphics.cpp" />
-    <ClCompile Include="Source\Rendering\Sky\Sky.cpp" />
+    <ClCompile Include="Source\Rendering\Sky\SkyHighGraphics.cpp" />
     <ClCompile Include="Source\World\Environment.cpp" />
     <ClCompile Include="Source\World\World.cpp" />
   </ItemGroup>
@@ -82,6 +82,7 @@
     <ClInclude Include="Source\Rendering\Ocean\Ocean.hpp" />
     <ClInclude Include="Source\Rendering\Ocean\OceanHighGraphics.hpp" />
     <ClInclude Include="Source\Rendering\Sky\Sky.hpp" />
+    <ClInclude Include="Source\Rendering\Sky\SkyHighGraphics.hpp" />
     <ClInclude Include="Source\stdafx.hpp" />
     <ClInclude Include="Source\World\Environment.hpp" />
     <ClInclude Include="Source\World\World.hpp" />

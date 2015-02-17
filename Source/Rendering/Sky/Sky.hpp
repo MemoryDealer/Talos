@@ -18,7 +18,7 @@
 // File: Sky.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines Sky class.
+// Defines Sky interface.
 // ========================================================================= //
 
 #ifndef __SKY_HPP__
@@ -29,63 +29,36 @@
 #include "stdafx.hpp"
 
 // ========================================================================= //
-
-class Ocean;
-class World;
-
-// ========================================================================= //
-
-class Sky final
+// Interface for rendering a sky in the game world.
+class Sky
 {
 public:
-    explicit Sky(World& world,
-                 const Graphics::Setting,
-                 const std::string&);
+    explicit Sky(void) { }
 
-    ~Sky(void);
+    virtual ~Sky(void) = 0 { }
 
-    void update(void);
+    virtual void destroy(void) = 0;
+
+    virtual void update(void) = 0;
 
     // Getters:
 
-    const Ogre::Real getTime(void) const;
+    virtual const Ogre::Real getTime(void) const { 
+        return 0.f;
+    }
 
-    const Ogre::Vector3 getSunDirection(void) const;
+    virtual const Ogre::Vector3 getSunDirection(void) const { 
+        return Ogre::Vector3::ZERO;
+    }
 
-    const Ogre::Vector3 getMoonDirection(void) const;
+    virtual const Ogre::Vector3 getMoonDirection(void) const { 
+        return Ogre::Vector3::ZERO;
+    }
 
-    const Ogre::Real calcSkydomeRadius(Ogre::Camera*) const;
-
-private:
-    union{
-        // Low graphics.
-        struct{
-
-        };
-        // High graphics.
-        struct{
-            SkyX::SkyX* m_skyX;
-            SkyX::BasicController* m_basicController;    
-            Ogre::Camera* m_camera;
-        };
-    };
-
-    Graphics::Setting m_graphicsSetting;
+    virtual const Ogre::Real calcSkydomeRadius(void) const { 
+        return 0.f;
+    }
 };
-
-// ========================================================================= //
-
-inline const Ogre::Real Sky::getTime(void) const{
-    return m_basicController->getTime().x;
-}
-
-inline const Ogre::Vector3 Sky::getSunDirection(void) const{
-    return m_basicController->getSunDirection();
-}
-
-inline const Ogre::Vector3 Sky::getMoonDirection(void) const{
-    return m_basicController->getMoonDirection();
-}
 
 // ========================================================================= //
 

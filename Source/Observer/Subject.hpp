@@ -57,7 +57,7 @@ inline void Subject::addObserver(const ObserverPtr obs){
 }
 
 inline void Subject::removeObserver(const ObserverPtr obs){
-    for (ObserverList::iterator itr = m_observers.begin();
+    for (auto itr = m_observers.begin();
          itr != m_observers.end();){
         if (*itr == obs){
             itr = m_observers.erase(itr);
