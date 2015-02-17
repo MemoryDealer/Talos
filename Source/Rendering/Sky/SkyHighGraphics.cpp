@@ -21,9 +21,12 @@
 // Implements SkyHighGraphics class.
 // ========================================================================= //
 
+#include "Component/ActorComponent.hpp"
 #include "Component/CameraComponent.hpp"
 #include "Entity/Entity.hpp"
+#include "Rendering/Ocean/OceanHighGraphics.hpp"
 #include "SkyHighGraphics.hpp"
+#include "SkyPresets.hpp"
 #include "World/Environment.hpp"
 #include "World/World.hpp"
 
@@ -66,6 +69,9 @@ void SkyHighGraphics::init(World* world,
     m_skyX = new SkyX::SkyX(world->getSceneManager(), m_basicController);
     m_skyX->create();
 
+    m_skyX->getVCloudsManager()->getVClouds()->setDistanceFallingParams(
+        Ogre::Vector2(2.f, -1.f));    
+
     // Add a layer of clouds.
     m_skyX->getCloudsManager()->add(SkyX::CloudLayer::Options());
 
@@ -76,14 +82,97 @@ void SkyHighGraphics::init(World* world,
     world->getEnvironment()->setMoonEnabled(false);
 
     // Slow down the day/night cycle.
-    m_skyX->setTimeMultiplier(0.1f);
+    m_skyX->setTimeMultiplier(0.01f);
 
+    // Create a camera for SkyX updates. This is needed for lightning to
+    // render in the right places.
+   /* m_camera = m_world->getSceneManager()->createCamera("SkyXCamera");
+    m_camera->setNearClipDistance(0.1f);
+    m_camera->setFarClipDistance(99999.f * 6.f);
+    m_camera->setAspectRatio(
+        Ogre::Real(world->getViewport()->getActualWidth()) /
+        Ogre::Real(world->getViewport()->getActualHeight()));*/
     // Assign the Ogre::Camera pointer for updating.
     Assert(world->getPlayer() != nullptr, "Invalid Player object");
     m_camera = static_cast<CameraComponentPtr>(
         world->getPlayer()->getComponentPtr(
         Component::Type::Camera))->getCamera();
     Assert(m_camera != nullptr, "SkyX initialized with invalid Player Camera");
+    //m_camera = static_cast<OceanHighGraphics*>(m_world->getEnvironment()->getOcean().get())->m_hydraxCamera;
+
+    m_skyX->getVCloudsManager()->getVClouds()->registerCamera(m_camera);
+
+    this->loadPreset(SkyPresets[SkyPreset::Desert]);
+}
+
+// ========================================================================= //
+
+void SkyHighGraphics::loadPreset(const SkyPreset& preset)
+{
+    m_skyX->setTimeMultiplier(preset.timeMultiplier);
+    m_basicController->setTime(preset.time);
+    m_basicController->setMoonPhase(preset.moonPhase);
+    m_skyX->getAtmosphereManager()->setOptions(preset.atmosphereOpt);
+
+    // Process layered clouds.
+    if (preset.layeredClouds)
+    {
+        // Create layer cloud.
+        if (m_skyX->getCloudsManager()->getCloudLayers().empty())
+        {
+            m_skyX->getCloudsManager()->add(SkyX::CloudLayer::Options());
+        }
+    }
+    else
+    {
+        // Remove layer cloud.
+        if (!m_skyX->getCloudsManager()->getCloudLayers().empty())
+        {
+            m_skyX->getCloudsManager()->removeAll();
+        }
+    }
+
+    m_skyX->getVCloudsManager()->setWindSpeed(preset.vcWindSpeed);
+    m_skyX->getVCloudsManager()->setAutoupdate(preset.vcAutoupdate);
+
+    SkyX::VClouds::VClouds* vclouds = m_skyX->getVCloudsManager()->getVClouds();
+
+    vclouds->setWindDirection(preset.vcWindDir);
+    vclouds->setAmbientColor(preset.vcAmbientColor);
+    vclouds->setLightResponse(preset.vcLightResponse);
+    vclouds->setAmbientFactors(preset.vcAmbientFactors);
+    vclouds->setWheater(preset.vcWheater.x, preset.vcWheater.y, false);
+
+    if (preset.volumetricClouds)
+    {
+        // Create VClouds.
+        if (!m_skyX->getVCloudsManager()->isCreated())
+        {
+            // SkyX::MeshManager::getSkydomeRadius(...) works for both finite 
+            // and infinite(=0) camera far clip distances.
+            m_skyX->getVCloudsManager()->create(m_skyX->getMeshManager()->
+                                               getSkydomeRadius(m_camera));
+        }
+    }
+    else
+    {
+        // Remove VClouds.
+        if (m_skyX->getVCloudsManager()->isCreated())
+        {
+            m_skyX->getVCloudsManager()->remove();
+        }
+    }
+
+    vclouds->getLightningManager()->setEnabled(
+        preset.vcLightnings);
+    vclouds->getLightningManager()->setAverageLightningApparitionTime(
+        preset.vcLightningsAT);
+    vclouds->getLightningManager()->setLightningColor(
+        preset.vcLightningsColor);
+    vclouds->getLightningManager()->setLightningTimeMultiplier(
+        preset.vcLightningsTM);
+
+    m_skyX->update(0.f);
 }
 
 // ========================================================================= //
@@ -100,6 +189,9 @@ void SkyHighGraphics::destroy(void)
 void SkyHighGraphics::update(void)
 {
     // Update SkyX animation state.
+   /* m_camera->setPosition(m_world->getPlayer()->getActorComponent()->getPosition());
+    m_camera->setOrientation(m_world->getPlayer()->getActorComponent()->getOrientation());*/
+
     m_skyX->update(1.f / 16.f);
     m_skyX->notifyCameraRender(m_camera);
 

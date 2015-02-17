@@ -83,6 +83,7 @@
     <ClInclude Include="Source\Rendering\Ocean\OceanHighGraphics.hpp" />
     <ClInclude Include="Source\Rendering\Sky\Sky.hpp" />
     <ClInclude Include="Source\Rendering\Sky\SkyHighGraphics.hpp" />
+    <ClInclude Include="Source\Rendering\Sky\SkyPresets.hpp" />
     <ClInclude Include="Source\stdafx.hpp" />
     <ClInclude Include="Source\World\Environment.hpp" />
     <ClInclude Include="Source\World\World.hpp" />

@@ -329,6 +329,9 @@
     <ClInclude Include="Source\Rendering\Sky\Sky.hpp">
       <Filter>Header Files\Rendering\Sky</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Rendering\Sky\SkyPresets.hpp">
+      <Filter>Header Files\Rendering\Sky</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Source\work-log.txt">

@@ -30,6 +30,7 @@
 
 // ========================================================================= //
 
+struct SkyPreset;
 class World;
 
 // ========================================================================= //
@@ -48,6 +49,9 @@ public:
     void init(World* world,
               const Graphics::Setting,
               const std::string&);
+
+    // Applies a SkyPreset's data to SkyX.
+    void loadPreset(const SkyPreset&);
 
     // Removes SkyX and frees the allocated memory.
     virtual void destroy(void) override;

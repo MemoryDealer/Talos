@@ -194,13 +194,21 @@
 * Fixed artifacts in sky by explicitly setting the Player camera's clipping distance to 0.f -- infinite.
 * Hydrax reflections in NM_VERTEX may be reversed, NM_RTT is probably the best way to go.
 * Only remaining Hydrax bugs: Underwater compositor is too fast, the edges underwater have a gap that can be seen through.
-* Made Ocean an interface, created OceanHighGraphics which uses the Ocean interface. This vastly reduce the conditional branching in its functions.
+* Made Ocean an interface, created OceanHighGraphics which uses the Ocean interface. This vastly reduces the conditional branching in its functions.
 * Made Sky an interface, created SkyHighGraphics for SkyX. Same idea as Ocean and OceanHighGraphics. Interfaces are nice.
 * Moved day/night lighting logic out of Environment::update() into SkyHighGraphics::update().
 * As of now I use a hack to hide the sun underwater for Hydrax, but eventually the "sun" could be changed to the moon's colour and corresponding light strength for more realism.
+* Added SkyPreset struct, and SkyHighGraphics can now load some presets for thunderstorms etc.
+* SkyX lightning seems to have a bug; it only appears directly above the camera (which is very bad looking). A hack is to add 100 to the position in the vertex shader (SkyX_Lightning.hlsl), 
+    which makes the lightning appear above the clouds, but no more lightning bolts.
+* So nevermind that hack. SkyX also has problems with cameras attached to scene nodes like HydraX. I've created a camera just for SkyX updates in SkyHighGraphics, and lightning is as it should be!
+* Using two cameras caused reflection issues with Hydrax. So if I want to use lightning Hydrax will be out of the question unless I find a way to fix it. 
+    One workaround would be to add another cloud layer below the player and above Hydrax, and change the preset to not use lightning and reassign the camera pointer when Hydrax is seen.
 
 == TODO ==
 ** Hydrax underwater is sped up, fix. (E:\Engine\Ogre3D\Hydrax-v0.5.1\Hydrax\Hydrax.vcproj to recompile).
+* Create a SkyX config file.
+* Add OceanLowGraphics for debug mode.
 * Add a "clock speed" variable to the World, should affect physics etc.
 * Put 16.f somewhere as a constant that every file can access (MS per update).
 * Put character controller data into config file to speed up testing.
