@@ -15,28 +15,39 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: Component.cpp
+// File: NullComponent.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements Component class.
+// Defines NullComponent class.
+// ========================================================================= //
+
+#ifndef __NULLCOMPONENT_HPP__
+#define __NULLCOMPONENT_HPP__
+
 // ========================================================================= //
 
 #include "Component.hpp"
 
 // ========================================================================= //
-
-Component::Component(void) :
-m_type(Type::Null),
-m_initialized(false)
+// A Null object with empty methods.
+class NullComponent : public Component
 {
+public:
+    explicit NullComponent(void) { }
 
-}
+    virtual ~NullComponent(void) override { }
+
+    virtual void init(EntityPtr, World&) override { }
+
+    virtual void destroy(EntityPtr, World&) override { }
+
+    virtual void update(EntityPtr, World&) override { }
+
+    virtual void message(const ComponentMessage&) override { }
+};
 
 // ========================================================================= //
 
-Component::~Component(void)
-{
-
-}
+#endif
 
 // ========================================================================= //

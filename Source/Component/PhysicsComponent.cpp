@@ -135,8 +135,7 @@ void PhysicsComponent::update(EntityPtr entity, World& world)
 {
     PxTransform transform = m_actor->getGlobalPose();
 
-    SceneComponentPtr sceneC = static_cast<SceneComponentPtr>
-        (entity->getComponentPtr(Component::Type::Scene));
+    SceneComponentPtr sceneC = entity->getSceneComponent();
 
     Assert(sceneC != nullptr, 
            "PhysicsComponent without corresponding SceneComponent");

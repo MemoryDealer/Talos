@@ -449,6 +449,12 @@
     <ClInclude Include="Source\Rendering\Sky\SkyX\VClouds\VClouds.h">
       <Filter>Header Files\Rendering\Sky\SkyX</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Component\ComponentDecls.hpp">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\NullComponent.hpp">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Source\work-log.txt">

@@ -26,20 +26,15 @@
 
 // ========================================================================= //
 
+#include "Component/ComponentDecls.hpp"
 #include "stdafx.hpp"
 
 // ========================================================================= //
 
-class ActorComponent;
-class Component;
-struct ComponentMessage;
-class Entity;
 class World;
 
-typedef ActorComponent* ActorComponentPtr;
-typedef Component* ComponentPtr;
 typedef unsigned int EntityID;
-typedef Entity* EntityPtr;
+typedef std::vector<ComponentPtr> ComponentRegistry;
 typedef std::list<ComponentPtr> ComponentList;
 
 // ========================================================================= //
@@ -56,13 +51,13 @@ public:
     ~Entity(void);
 
     // Calls init() on all attached components.
-    virtual void init(World& world);
+    void init(World& world);
 
     // Calls destroy() on all attached components.
-    virtual void destroy(World& world);
+    void destroy(World& world);
 
     // Calls update() on all attached components.
-    virtual void update(World& world);
+    void update(World& world);
 
     // Registers Component with the entity. Returns a pointer to the newly
     // attached Component for convenience.
@@ -70,6 +65,9 @@ public:
 
     // Unregisters component from the entity.
     void detachComponent(const ComponentPtr);
+
+    // Unregisters component with specified ID from the entity.
+    void detachComponent(const int);
 
     // Tests for the existence of certain Components, and if data should be
     // shared between them by default, calls the functions needed to share
@@ -88,14 +86,23 @@ public:
     // Returns entity's ID.
     const EntityID getID(void) const;
 
-    // Returns pointer to component of named type. Returns a nullptr if
-    // it doesn't exist.
-    // @TODO: Add component-specific getter functions? This would avoid 
-    // having to cast the ComponentPtr everytime it's retrieved.
-    ComponentPtr getComponentPtr(const unsigned int) const;
-
     // Returns a direct pointer to the internal actor component if it exists.
     ActorComponentPtr getActorComponent(void) const;
+
+    // Returns a direct pointer to the internal camera component if it exists.
+    CameraComponentPtr getCameraComponent(void) const;
+
+    // Returns a direct pointer to the internal light component if it exists.
+    LightComponentPtr getLightComponent(void) const;
+
+    // Returns a direct pointer to the internal model component if it exists.
+    ModelComponentPtr getModelComponent(void) const;
+
+    // Returns a direct pointer to the internal physics component if it exists.
+    PhysicsComponentPtr getPhysicsComponent(void) const;
+
+    // Returns a direct pointer to the internal scene component if it exists.
+    SceneComponentPtr getSceneComponent(void) const;
 
     // Returns next EntityPtr as part of the EntityPool.
     EntityPtr getNext(void) const;
@@ -112,7 +119,8 @@ public:
     void setNext(const EntityPtr);
 
 private:
-    ComponentList m_components;
+    ComponentRegistry m_componentRegistry; // Contains a slot of each type.
+    ComponentList m_activeComponents; // Only attached components live here.
     bool m_componentsLinked;
 
     // Save memory for the EntityPool (see EntityPool.cpp).

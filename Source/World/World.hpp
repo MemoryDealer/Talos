@@ -26,31 +26,17 @@
 
 // ========================================================================= //
 
+#include "Component/ComponentDecls.hpp"
 #include "stdafx.hpp"
 
 // ========================================================================= //
 
-class ActorComponent;
-class CameraComponent;
-class Entity;
 class EntityPool;
 class Environment;
 class Input;
-class LightComponent;
-class ModelComponent;
 class Physics;
-class PhysicsComponent;
 template<typename T> class Pool;
 class PScene;
-class SceneComponent;
-
-typedef ActorComponent* ActorComponentPtr;
-typedef CameraComponent* CameraComponentPtr;
-typedef Entity* EntityPtr;
-typedef LightComponent* LightComponentPtr;
-typedef ModelComponent* ModelComponentPtr;
-typedef PhysicsComponent* PhysicsComponentPtr;
-typedef SceneComponent* SceneComponentPtr;
 
 // ========================================================================= //
 // Represents everything in the physical game world. The World holds a

@@ -26,31 +26,12 @@
 
 // ========================================================================= //
 
+#include "ComponentDecls.hpp"
 #include "stdafx.hpp"
 
 // ========================================================================= //
 
-// Forward declare all components here to avoid repeating elsewhere.
-class Component;
-class ActorComponent;
-class CameraComponent;
-class LightComponent;
-class ModelComponent;
-class PhysicsComponent;
-class SceneComponent;
-// Other forward declarations.
-struct ComponentMessage;
-class Entity;
 class World;
-
-typedef Component* ComponentPtr;
-typedef ActorComponent* ActorComponentPtr;
-typedef CameraComponent* CameraComponentPtr;
-typedef LightComponent* LightComponentPtr;
-typedef ModelComponent* ModelComponentPtr;
-typedef PhysicsComponent* PhysicsComponentPtr;
-typedef SceneComponent* SceneComponentPtr;
-typedef Entity* EntityPtr;
 
 // ========================================================================= //
 // Holds data & behavior(if necessary) for specific Entity needs.
@@ -58,13 +39,15 @@ class Component
 {
 public:
     enum Type{
-        Nil = 0,
+        Null = 0,
         Actor,
         Camera,
         Light,
         Model,
         Physics,
-        Scene
+        Scene,
+
+        NumTypes // Total number of types for use in Entity.
     };
 
     // Initializes m_name to "nil".

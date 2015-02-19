@@ -79,8 +79,8 @@ void IntroState::enter(void)
     m_world.setPlayer(m_player);
 
     // Create Ocean.
-    m_world.getEnvironment()->loadOcean("HydraxDemo.hdx");
-    m_world.getEnvironment()->setOceanPosition(0.f, -100.f, 0.f);
+    /*m_world.getEnvironment()->loadOcean("HydraxDemo.hdx");
+    m_world.getEnvironment()->setOceanPosition(0.f, -100.f, 0.f);*/
 
     // Create sky.
     m_world.getEnvironment()->loadSky();
@@ -124,7 +124,7 @@ void IntroState::enter(void)
     board->attachComponent(modelC);
     physicsC = m_world.createPhysicsComponent();
     physicsC->init(m_world, board, PhysicsComponent::Type::STATIC, physx::PxBoxGeometry(75.f, 5.f, 75.f));
-    //physicsC->setOrientation(0.9238795325112867f, -0.3826834323650897f, 0.f, 0.f);
+    physicsC->setOrientation(0.9238795325112867f, -0.3826834323650897f, 0.f, 0.f);
     physicsC->translate(0.f, -50.f, 0.f);
     //physicsC->rotate(45.f, 0.f, 0.f);
     board->attachComponent(physicsC);

@@ -84,25 +84,14 @@ void SkyHighGraphics::init(World* world,
     // Slow down the day/night cycle.
     m_skyX->setTimeMultiplier(0.01f);
 
-    // Create a camera for SkyX updates. This is needed for lightning to
-    // render in the right places.
-   /* m_camera = m_world->getSceneManager()->createCamera("SkyXCamera");
-    m_camera->setNearClipDistance(0.1f);
-    m_camera->setFarClipDistance(99999.f * 6.f);
-    m_camera->setAspectRatio(
-        Ogre::Real(world->getViewport()->getActualWidth()) /
-        Ogre::Real(world->getViewport()->getActualHeight()));*/
     // Assign the Ogre::Camera pointer for updating.
     Assert(world->getPlayer() != nullptr, "Invalid Player object");
-    m_camera = static_cast<CameraComponentPtr>(
-        world->getPlayer()->getComponentPtr(
-        Component::Type::Camera))->getCamera();
+    m_camera = world->getPlayer()->getCameraComponent()->getCamera();
     Assert(m_camera != nullptr, "SkyX initialized with invalid Player Camera");
-    //m_camera = static_cast<OceanHighGraphics*>(m_world->getEnvironment()->getOcean().get())->m_hydraxCamera;
 
     m_skyX->getVCloudsManager()->getVClouds()->registerCamera(m_camera);
 
-    this->loadPreset(SkyPresets[SkyPreset::Thunderstorm1]);
+    this->loadPreset(SkyPresets[SkyPreset::Thunderstorm2]);
 }
 
 // ========================================================================= //
@@ -189,9 +178,6 @@ void SkyHighGraphics::destroy(void)
 void SkyHighGraphics::update(void)
 {
     // Update SkyX animation state.
-   /* m_camera->setPosition(m_world->getPlayer()->getActorComponent()->getPosition());
-    m_camera->setOrientation(m_world->getPlayer()->getActorComponent()->getOrientation());*/
-
     m_skyX->notifyCameraRender(m_camera);
     m_skyX->update(1.f / 16.f);
     

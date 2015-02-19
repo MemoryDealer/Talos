@@ -74,9 +74,11 @@
     <ClInclude Include="Source\Component\ActorComponent.hpp" />
     <ClInclude Include="Source\Component\CameraComponent.hpp" />
     <ClInclude Include="Source\Component\Component.hpp" />
+    <ClInclude Include="Source\Component\ComponentDecls.hpp" />
     <ClInclude Include="Source\Component\ComponentMessage.hpp" />
     <ClInclude Include="Source\Component\LightComponent.hpp" />
     <ClInclude Include="Source\Component\ModelComponent.hpp" />
+    <ClInclude Include="Source\Component\NullComponent.hpp" />
     <ClInclude Include="Source\Component\PhysicsComponent.hpp" />
     <ClInclude Include="Source\Component\SceneComponent.hpp" />
     <ClInclude Include="Source\Core\Assert.hpp" />
@@ -170,12 +172,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>Source;Source\Core</AdditionalIncludeDirectories>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <TreatWarningAsError>false</TreatWarningAsError>
       <BrowseInformation>false</BrowseInformation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OgreMain_d.lib;RenderSystem_Direct3D9_d.lib;RenderSystem_GL_d.lib;Plugin_OctreeSceneManager_d.lib;Plugin_CgProgramManager_d.lib;Hydrax_d.lib;SkyX_d.lib;SDL2.lib;SDL2main.lib;CEGUIBase-0_d.lib;CEGUIOgreRenderer-0_d.lib;PhysX3DEBUG_x86.lib;PhysX3CommonDEBUG_x86.lib;PhysX3ExtensionsDEBUG.lib;PhysX3CharacterKinematicDEBUG_x86.lib;PhysXVisualDebuggerSDKDEBUG.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OgreMain_d.lib;RenderSystem_Direct3D9_d.lib;RenderSystem_GL_d.lib;Plugin_OctreeSceneManager_d.lib;Plugin_CgProgramManager_d.lib;Hydrax_d.lib;SDL2.lib;SDL2main.lib;CEGUIBase-0_d.lib;CEGUIOgreRenderer-0_d.lib;PhysX3DEBUG_x86.lib;PhysX3CommonDEBUG_x86.lib;PhysX3ExtensionsDEBUG.lib;PhysX3CharacterKinematicDEBUG_x86.lib;PhysXVisualDebuggerSDKDEBUG.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <Bscmake>

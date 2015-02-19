@@ -269,12 +269,20 @@
 				}
 
 * I've temporarily added SkyX source directly into my project for debugging, it'll be removed for any production build.
+* Added LightningManager.cpp to the repo for record keeping.
+* Modified Entity system for more efficiency. Before it had getComponentPtr() which was slow and searched through the linked list of attached components. 
+    Now there is an array based list (STL vector) of components which I call the component registry; it allocated enough space for all possible components. When a component is attached,
+    its corresponding slot for its ID is set to point to the newly attached component, and additionally the new component pointer is added to the linked list I call "m_activeComponents".
+    This changes retrieving a component pointer from an entity from O(n) to O(1) complexity at little cost of additional code.
+* Component-specific getter functions have been added to Entity for each component(e.g., Entity::getCameraComponent(), Entity::getModelComponent(), etc.).
+* Added ComponentDecls.hpp which forward declares all the Component types and the typedefs for pointers to them. This reduces repetition in header files.
 
 == TODO ==
 ** Hydrax underwater is sped up, fix. (E:\Engine\Ogre3D\Hydrax-v0.5.1\Hydrax\Hydrax.vcproj to recompile).
 * Create a SkyX config file.
 * Add OceanLowGraphics for debug mode.
 * Add a "clock speed" variable to the World, should affect physics etc.
+* ActorComponent could use some redesign - CameraComponent is completely unnecessary, and AIComponent will be redundant.
 * Put 16.f somewhere as a constant that every file can access (MS per update).
 * Put character controller data into config file to speed up testing.
 * Make PScene optional when initializing World.
@@ -287,5 +295,4 @@
 * Make sure Entities are destroyed properly when World is destroyed.
 * Alphabetize includes everywhere. Folder name is first if in a folder.
 * Implement config file loading for options in Engine::init() and others.
-* Get Ogre3D working with D3D11.
 * Refer to http://gameprogrammingpatterns.com/event-queue.html for Audio.

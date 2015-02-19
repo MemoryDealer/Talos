@@ -15,28 +15,41 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: Component.cpp
+// File: ComponentDecls.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements Component class.
+// Forward declares classes for each type of Component and the typedefs for
+// pointers to them.
 // ========================================================================= //
 
-#include "Component.hpp"
-
-// ========================================================================= //
-
-Component::Component(void) :
-m_type(Type::Null),
-m_initialized(false)
-{
-
-}
+#ifndef __COMPONENTDECLS_HPP__
+#define __COMPONENTDECLS_HPP__
 
 // ========================================================================= //
 
-Component::~Component(void)
-{
+class Component;
+class ActorComponent;
+class CameraComponent;
+class LightComponent;
+class ModelComponent;
+class PhysicsComponent;
+class SceneComponent;
+// Other forward declarations.
+struct ComponentMessage;
+class Entity;
 
-}
+typedef Component* ComponentPtr;
+typedef ActorComponent* ActorComponentPtr;
+typedef CameraComponent* CameraComponentPtr;
+typedef LightComponent* LightComponentPtr;
+typedef ModelComponent* ModelComponentPtr;
+typedef PhysicsComponent* PhysicsComponentPtr;
+typedef SceneComponent* SceneComponentPtr;
+
+typedef Entity* EntityPtr;
+
+// ========================================================================= //
+
+#endif
 
 // ========================================================================= //
