@@ -25,6 +25,7 @@
 #include "Entity/Entity.hpp"
 #include "Environment.hpp"
 #include "Rendering/Ocean/OceanHighGraphics.hpp"
+#include "Rendering/Ocean/OceanLowGraphics.hpp"
 #include "Rendering/Sky/SkyHighGraphics.hpp"
 #include "World.hpp"
 
@@ -115,7 +116,9 @@ void Environment::loadOcean(const std::string& cfg)
     switch (m_graphics.ocean){
     default:
     case Graphics::Setting::Low:
-
+        m_ocean.reset(new OceanLowGraphics());
+        static_cast<OceanLowGraphics*>(m_ocean.get())->init(m_world,
+                                                            cfg);
         return;
 
     case Graphics::Setting::High:

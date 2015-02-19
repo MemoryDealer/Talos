@@ -38,7 +38,6 @@ class World;
 class OceanHighGraphics final : public Ocean
 {
 public:
-    friend class SkyHighGraphics;
     // Default initializes member data.
     explicit OceanHighGraphics(void);
 

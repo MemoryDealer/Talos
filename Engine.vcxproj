@@ -37,6 +37,7 @@
     <ClCompile Include="Source\Rendering\DynamicLines.cpp" />
     <ClCompile Include="Source\Rendering\DynamicRenderable.cpp" />
     <ClCompile Include="Source\Rendering\Ocean\OceanHighGraphics.cpp" />
+    <ClCompile Include="Source\Rendering\Ocean\OceanLowGraphics.cpp" />
     <ClCompile Include="Source\Rendering\Sky\SkyHighGraphics.cpp" />
     <ClCompile Include="Source\Rendering\Sky\SkyX\AtmosphereManager.cpp" />
     <ClCompile Include="Source\Rendering\Sky\SkyX\BasicController.cpp" />
@@ -101,6 +102,7 @@
     <ClInclude Include="Source\Rendering\GraphicsSettings.hpp" />
     <ClInclude Include="Source\Rendering\Ocean\Ocean.hpp" />
     <ClInclude Include="Source\Rendering\Ocean\OceanHighGraphics.hpp" />
+    <ClInclude Include="Source\Rendering\Ocean\OceanLowGraphics.hpp" />
     <ClInclude Include="Source\Rendering\Sky\Sky.hpp" />
     <ClInclude Include="Source\Rendering\Sky\SkyHighGraphics.hpp" />
     <ClInclude Include="Source\Rendering\Sky\SkyPresets.hpp" />

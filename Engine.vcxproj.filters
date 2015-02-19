@@ -255,6 +255,9 @@
     <ClCompile Include="Source\Rendering\Sky\SkyX\VClouds\VClouds.cpp">
       <Filter>Source Files\Rendering\Sky\SkyX</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Rendering\Ocean\OceanLowGraphics.cpp">
+      <Filter>Source Files\Rendering\Ocean</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\Engine.hpp">
@@ -454,6 +457,9 @@
     </ClInclude>
     <ClInclude Include="Source\Component\NullComponent.hpp">
       <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Ocean\OceanLowGraphics.hpp">
+      <Filter>Header Files\Rendering\Ocean</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

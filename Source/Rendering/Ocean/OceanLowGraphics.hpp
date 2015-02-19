@@ -15,45 +15,52 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: Ocean.hpp
+// File: OceanLowGraphics.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines Ocean interface.
+// Defines OceanLowGraphics class.
 // ========================================================================= //
 
-#ifndef __OCEAN_HPP__
-#define __OCEAN_HPP__
+#ifndef __OCEANLOWGRAPHICS_HPP__
+#define __OCEANLOWGRAPHICS_HPP__
 
 // ========================================================================= //
 
+#include "Ocean.hpp"
 #include "stdafx.hpp"
 
 // ========================================================================= //
-// Interface for rendering a large (visually infinite) body of water.
-class Ocean
+
+class World;
+
+// ========================================================================= //
+// Renders Ocean texture to a plane with some shading.
+class OceanLowGraphics : public Ocean
 {
 public:
-    explicit Ocean(void) { }
+    explicit OceanLowGraphics(void);
 
-    virtual ~Ocean(void) = 0 { }
+    virtual ~OceanLowGraphics(void) override;
 
-    virtual void destroy(void) = 0;
+    void init(World*, const std::string&);
 
-    virtual void update(void) = 0;
+    virtual void destroy(void) override;
+
+    virtual void update(void) override;
 
     // Setters:
 
-    virtual void setPosition(const Ogre::Real, 
-                             const Ogre::Real, 
-                             const Ogre::Real) { }
+    // Sets origin of plane.
+    virtual void setPosition(const Ogre::Real,
+                             const Ogre::Real,
+                             const Ogre::Real) override;
 
-    virtual void setSunPosition(const Ogre::Vector3&) { }
+private:
+    Ogre::SceneNode* m_node;
+    Ogre::Entity* m_entity;
+    Ogre::Plane m_plane;
 
-    virtual void setSunColour(const Ogre::Vector3&) { }
-
-    virtual void setSunColour(const Ogre::ColourValue&) { }
-
-    virtual void setSunEnabled(const bool) { }
+    World* m_world;
 };
 
 // ========================================================================= //

@@ -276,6 +276,7 @@
     This changes retrieving a component pointer from an entity from O(n) to O(1) complexity at little cost of additional code.
 * Component-specific getter functions have been added to Entity for each component(e.g., Entity::getCameraComponent(), Entity::getModelComponent(), etc.).
 * Added ComponentDecls.hpp which forward declares all the Component types and the typedefs for pointers to them. This reduces repetition in header files.
+* Added LowGraphicsOcean using ocean shader from the Ogre samples, tested in debug mode.
 
 == TODO ==
 ** Hydrax underwater is sped up, fix. (E:\Engine\Ogre3D\Hydrax-v0.5.1\Hydrax\Hydrax.vcproj to recompile).
