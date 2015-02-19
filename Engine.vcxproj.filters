@@ -106,6 +106,12 @@
     <Filter Include="Source Files\Rendering\Sky">
       <UniqueIdentifier>{8e273ed0-e7e0-4131-90ee-309c7831ef15}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Rendering\Sky\SkyX">
+      <UniqueIdentifier>{76dd5e09-62fb-4424-8a8b-f7d4aea394ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering\Sky\SkyX">
+      <UniqueIdentifier>{b27099a7-bc18-439c-8815-c2b614232bcc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\main.cpp">
@@ -194,6 +200,60 @@
     </ClCompile>
     <ClCompile Include="Source\Rendering\Sky\SkyHighGraphics.cpp">
       <Filter>Source Files\Rendering\Sky</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\Sky\SkyX\AtmosphereManager.cpp">
+      <Filter>Source Files\Rendering\Sky\SkyX</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\Sky\SkyX\BasicController.cpp">
+      <Filter>Source Files\Rendering\Sky\SkyX</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\Sky\SkyX\CloudsManager.cpp">
+      <Filter>Source Files\Rendering\Sky\SkyX</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\Sky\SkyX\ColorGradient.cpp">
+      <Filter>Source Files\Rendering\Sky\SkyX</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\Sky\SkyX\GPUManager.cpp">
+      <Filter>Source Files\Rendering\Sky\SkyX</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\Sky\SkyX\MeshManager.cpp">
+      <Filter>Source Files\Rendering\Sky\SkyX</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\Sky\SkyX\MoonManager.cpp">
+      <Filter>Source Files\Rendering\Sky\SkyX</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\Sky\SkyX\Prerequisites.cpp">
+      <Filter>Source Files\Rendering\Sky\SkyX</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\Sky\SkyX\SkyX.cpp">
+      <Filter>Source Files\Rendering\Sky\SkyX</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\Sky\SkyX\VCloudsManager.cpp">
+      <Filter>Source Files\Rendering\Sky\SkyX</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\Sky\SkyX\VClouds\DataManager.cpp">
+      <Filter>Source Files\Rendering\Sky\SkyX</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\Sky\SkyX\VClouds\Ellipsoid.cpp">
+      <Filter>Source Files\Rendering\Sky\SkyX</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\Sky\SkyX\VClouds\FastFakeRandom.cpp">
+      <Filter>Source Files\Rendering\Sky\SkyX</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\Sky\SkyX\VClouds\GeometryBlock.cpp">
+      <Filter>Source Files\Rendering\Sky\SkyX</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\Sky\SkyX\VClouds\GeometryManager.cpp">
+      <Filter>Source Files\Rendering\Sky\SkyX</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\Sky\SkyX\VClouds\Lightning.cpp">
+      <Filter>Source Files\Rendering\Sky\SkyX</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\Sky\SkyX\VClouds\LightningManager.cpp">
+      <Filter>Source Files\Rendering\Sky\SkyX</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\Sky\SkyX\VClouds\VClouds.cpp">
+      <Filter>Source Files\Rendering\Sky\SkyX</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -331,6 +391,63 @@
     </ClInclude>
     <ClInclude Include="Source\Rendering\Sky\SkyPresets.hpp">
       <Filter>Header Files\Rendering\Sky</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Sky\SkyX\AtmosphereManager.h">
+      <Filter>Header Files\Rendering\Sky\SkyX</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Sky\SkyX\BasicController.h">
+      <Filter>Header Files\Rendering\Sky\SkyX</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Sky\SkyX\CloudsManager.h">
+      <Filter>Header Files\Rendering\Sky\SkyX</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Sky\SkyX\ColorGradient.h">
+      <Filter>Header Files\Rendering\Sky\SkyX</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Sky\SkyX\Controller.h">
+      <Filter>Header Files\Rendering\Sky\SkyX</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Sky\SkyX\GPUManager.h">
+      <Filter>Header Files\Rendering\Sky\SkyX</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Sky\SkyX\MeshManager.h">
+      <Filter>Header Files\Rendering\Sky\SkyX</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Sky\SkyX\MoonManager.h">
+      <Filter>Header Files\Rendering\Sky\SkyX</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Sky\SkyX\Prerequisites.h">
+      <Filter>Header Files\Rendering\Sky\SkyX</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Sky\SkyX\SkyX.h">
+      <Filter>Header Files\Rendering\Sky\SkyX</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Sky\SkyX\VCloudsManager.h">
+      <Filter>Header Files\Rendering\Sky\SkyX</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Sky\SkyX\VClouds\DataManager.h">
+      <Filter>Header Files\Rendering\Sky\SkyX</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Sky\SkyX\VClouds\Ellipsoid.h">
+      <Filter>Header Files\Rendering\Sky\SkyX</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Sky\SkyX\VClouds\FastFakeRandom.h">
+      <Filter>Header Files\Rendering\Sky\SkyX</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Sky\SkyX\VClouds\GeometryBlock.h">
+      <Filter>Header Files\Rendering\Sky\SkyX</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Sky\SkyX\VClouds\GeometryManager.h">
+      <Filter>Header Files\Rendering\Sky\SkyX</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Sky\SkyX\VClouds\Lightning.h">
+      <Filter>Header Files\Rendering\Sky\SkyX</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Sky\SkyX\VClouds\LightningManager.h">
+      <Filter>Header Files\Rendering\Sky\SkyX</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Sky\SkyX\VClouds\VClouds.h">
+      <Filter>Header Files\Rendering\Sky\SkyX</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

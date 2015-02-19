@@ -45,7 +45,8 @@
 #include <Hydrax/Modules/ProjectedGrid/ProjectedGrid.h>
 
 // Ogre3D SkyX plugin.
-#include <SkyX/SkyX.h>
+//#include <SkyX/SkyX.h>
+#include "Rendering/Sky/SkyX/SkyX.h"
 
 // SDL.
 #include <SDL.h>

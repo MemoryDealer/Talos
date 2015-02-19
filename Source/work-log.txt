@@ -208,6 +208,67 @@
 
 == 2/18/15 ==
 * Added proper cleanup code to Environment::destroy() for sky.
+* Fixed the lightning position bug in SkyX. The calculation for where to place the lightning was using the camera's position plus its far clip distance, which in my case is 0.f, so it was 
+    always positioned directly above the camera.
+    The fix is simple, change the section of code in LightningManager.cpp that adds lightning to this (line 119 to 174):
+                // Select a random camera to place the lightning
+				if (!mVClouds->_getCamerasData().empty())
+				{
+					Ogre::Camera* c = mVClouds->_getCamerasData().at(mVClouds->_getCamerasData().size()*0.999).camera;
+                    Ogre::Real farClipDist = c->getFarClipDistance();
+                    if (farClipDist == 0.f){
+                        // Infinite far clip distance, assign a random value.
+                        farClipDist = Ogre::Math::RangeRandom(1.f, 99999.f * 6.f);
+                    }
+
+					Ogre::Real prob = Ogre::Math::RangeRandom(0,1);
+                   
+					// Cloud-to-ground
+					if (prob < 0.5)
+					{
+						addLightning(
+							// Ray position
+                            Ogre::Vector3(c->getDerivedPosition().x + Ogre::Math::RangeRandom(-farClipDist*0.5, farClipDist*0.5) / Ogre::Math::RangeRandom(1, 5), mVClouds->getGeometrySettings().Height.x + 0.2*mVClouds->getGeometrySettings().Height.y, c->getDerivedPosition().z + Ogre::Math::RangeRandom(-farClipDist*0.5, farClipDist*0.5) / Ogre::Math::RangeRandom(1, 5)),
+							// Ray direction
+							Ogre::Vector3(0,-1,0), 
+							// Ray length
+							mVClouds->getGeometrySettings().Height.x + 0.1*mVClouds->getGeometrySettings().Height.y);
+					}
+					// Cloud-to-cloud
+					else if (prob < 0.7)
+					{
+						addLightning(
+							// Ray position
+                            Ogre::Vector3(c->getDerivedPosition().x + Ogre::Math::RangeRandom(-farClipDist*0.5, farClipDist*0.5) / Ogre::Math::RangeRandom(1, 5), mVClouds->getGeometrySettings().Height.x + 0.2*mVClouds->getGeometrySettings().Height.y, c->getDerivedPosition().z + Ogre::Math::RangeRandom(-farClipDist*0.5, farClipDist*0.5) / Ogre::Math::RangeRandom(1, 5)),
+							// Ray direction
+							Ogre::Vector3(Ogre::Math::RangeRandom(-1,1),Ogre::Math::RangeRandom(-0.1,0.1),Ogre::Math::RangeRandom(-1,1)).normalisedCopy(), 
+							// Ray length
+							Ogre::Math::RangeRandom(0.5,1.5f)*0.2*mVClouds->getGeometrySettings().Height.y);
+					}
+					// Cloud-to-ground + cloud-to-cloud
+					else
+					{
+						addLightning(
+							// Ray position
+                            Ogre::Vector3(c->getDerivedPosition().x + Ogre::Math::RangeRandom(-farClipDist*0.5, farClipDist*0.5) / Ogre::Math::RangeRandom(1, 5), mVClouds->getGeometrySettings().Height.x + 0.2*mVClouds->getGeometrySettings().Height.y, c->getDerivedPosition().z + Ogre::Math::RangeRandom(-farClipDist*0.5, farClipDist*0.5) / Ogre::Math::RangeRandom(1, 5)),
+							// Ray direction
+							Ogre::Vector3(0,-1,0), 
+							// Ray length
+							mVClouds->getGeometrySettings().Height.x + 0.1*mVClouds->getGeometrySettings().Height.y);
+
+						addLightning(
+							// Ray position
+                            Ogre::Vector3(c->getDerivedPosition().x + Ogre::Math::RangeRandom(-farClipDist*0.5, farClipDist*0.5) / Ogre::Math::RangeRandom(1, 5), mVClouds->getGeometrySettings().Height.x + 0.2*mVClouds->getGeometrySettings().Height.y, c->getDerivedPosition().z + Ogre::Math::RangeRandom(-farClipDist*0.5, farClipDist*0.5) / Ogre::Math::RangeRandom(1, 5)),
+							// Ray direction
+							Ogre::Vector3(Ogre::Math::RangeRandom(-1,1),Ogre::Math::RangeRandom(-0.1,0.1),Ogre::Math::RangeRandom(-1,1)).normalisedCopy(), 
+							// Ray length
+							Ogre::Math::RangeRandom(0.5,1.5f)*0.2*mVClouds->getGeometrySettings().Height.y);
+					}
+
+					updateMaterial();
+				}
+
+* I've temporarily added SkyX source directly into my project for debugging, it'll be removed for any production build.
 
 == TODO ==
 ** Hydrax underwater is sped up, fix. (E:\Engine\Ogre3D\Hydrax-v0.5.1\Hydrax\Hydrax.vcproj to recompile).

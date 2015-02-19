@@ -102,7 +102,7 @@ void SkyHighGraphics::init(World* world,
 
     m_skyX->getVCloudsManager()->getVClouds()->registerCamera(m_camera);
 
-    this->loadPreset(SkyPresets[SkyPreset::Desert]);
+    this->loadPreset(SkyPresets[SkyPreset::Thunderstorm1]);
 }
 
 // ========================================================================= //
@@ -192,9 +192,9 @@ void SkyHighGraphics::update(void)
    /* m_camera->setPosition(m_world->getPlayer()->getActorComponent()->getPosition());
     m_camera->setOrientation(m_world->getPlayer()->getActorComponent()->getOrientation());*/
 
-    m_skyX->update(1.f / 16.f);
     m_skyX->notifyCameraRender(m_camera);
-
+    m_skyX->update(1.f / 16.f);
+    
     // Process day/night cycle lighting.
     Ogre::Real time = this->getTime();
     if (m_day){

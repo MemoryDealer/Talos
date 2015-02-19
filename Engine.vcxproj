@@ -38,6 +38,24 @@
     <ClCompile Include="Source\Rendering\DynamicRenderable.cpp" />
     <ClCompile Include="Source\Rendering\Ocean\OceanHighGraphics.cpp" />
     <ClCompile Include="Source\Rendering\Sky\SkyHighGraphics.cpp" />
+    <ClCompile Include="Source\Rendering\Sky\SkyX\AtmosphereManager.cpp" />
+    <ClCompile Include="Source\Rendering\Sky\SkyX\BasicController.cpp" />
+    <ClCompile Include="Source\Rendering\Sky\SkyX\CloudsManager.cpp" />
+    <ClCompile Include="Source\Rendering\Sky\SkyX\ColorGradient.cpp" />
+    <ClCompile Include="Source\Rendering\Sky\SkyX\GPUManager.cpp" />
+    <ClCompile Include="Source\Rendering\Sky\SkyX\MeshManager.cpp" />
+    <ClCompile Include="Source\Rendering\Sky\SkyX\MoonManager.cpp" />
+    <ClCompile Include="Source\Rendering\Sky\SkyX\Prerequisites.cpp" />
+    <ClCompile Include="Source\Rendering\Sky\SkyX\SkyX.cpp" />
+    <ClCompile Include="Source\Rendering\Sky\SkyX\VCloudsManager.cpp" />
+    <ClCompile Include="Source\Rendering\Sky\SkyX\VClouds\DataManager.cpp" />
+    <ClCompile Include="Source\Rendering\Sky\SkyX\VClouds\Ellipsoid.cpp" />
+    <ClCompile Include="Source\Rendering\Sky\SkyX\VClouds\FastFakeRandom.cpp" />
+    <ClCompile Include="Source\Rendering\Sky\SkyX\VClouds\GeometryBlock.cpp" />
+    <ClCompile Include="Source\Rendering\Sky\SkyX\VClouds\GeometryManager.cpp" />
+    <ClCompile Include="Source\Rendering\Sky\SkyX\VClouds\Lightning.cpp" />
+    <ClCompile Include="Source\Rendering\Sky\SkyX\VClouds\LightningManager.cpp" />
+    <ClCompile Include="Source\Rendering\Sky\SkyX\VClouds\VClouds.cpp" />
     <ClCompile Include="Source\World\Environment.cpp" />
     <ClCompile Include="Source\World\World.cpp" />
   </ItemGroup>
@@ -84,6 +102,25 @@
     <ClInclude Include="Source\Rendering\Sky\Sky.hpp" />
     <ClInclude Include="Source\Rendering\Sky\SkyHighGraphics.hpp" />
     <ClInclude Include="Source\Rendering\Sky\SkyPresets.hpp" />
+    <ClInclude Include="Source\Rendering\Sky\SkyX\AtmosphereManager.h" />
+    <ClInclude Include="Source\Rendering\Sky\SkyX\BasicController.h" />
+    <ClInclude Include="Source\Rendering\Sky\SkyX\CloudsManager.h" />
+    <ClInclude Include="Source\Rendering\Sky\SkyX\ColorGradient.h" />
+    <ClInclude Include="Source\Rendering\Sky\SkyX\Controller.h" />
+    <ClInclude Include="Source\Rendering\Sky\SkyX\GPUManager.h" />
+    <ClInclude Include="Source\Rendering\Sky\SkyX\MeshManager.h" />
+    <ClInclude Include="Source\Rendering\Sky\SkyX\MoonManager.h" />
+    <ClInclude Include="Source\Rendering\Sky\SkyX\Prerequisites.h" />
+    <ClInclude Include="Source\Rendering\Sky\SkyX\SkyX.h" />
+    <ClInclude Include="Source\Rendering\Sky\SkyX\VCloudsManager.h" />
+    <ClInclude Include="Source\Rendering\Sky\SkyX\VClouds\DataManager.h" />
+    <ClInclude Include="Source\Rendering\Sky\SkyX\VClouds\Ellipsoid.h" />
+    <ClInclude Include="Source\Rendering\Sky\SkyX\VClouds\FastFakeRandom.h" />
+    <ClInclude Include="Source\Rendering\Sky\SkyX\VClouds\GeometryBlock.h" />
+    <ClInclude Include="Source\Rendering\Sky\SkyX\VClouds\GeometryManager.h" />
+    <ClInclude Include="Source\Rendering\Sky\SkyX\VClouds\Lightning.h" />
+    <ClInclude Include="Source\Rendering\Sky\SkyX\VClouds\LightningManager.h" />
+    <ClInclude Include="Source\Rendering\Sky\SkyX\VClouds\VClouds.h" />
     <ClInclude Include="Source\stdafx.hpp" />
     <ClInclude Include="Source\World\Environment.hpp" />
     <ClInclude Include="Source\World\World.hpp" />
@@ -120,11 +157,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(OGREX_HEADER);$(BOOST_ROOT);$(SDL)\include;E:\Engine\cegui\cegui\include;$(CEGUI_HEADER)\include;$(PHYSX_HEADER);$(IncludePath)</IncludePath>
+    <IncludePath>$(OGREX_HEADER);$(BOOST_ROOT);$(SDL)\include;E:\Engine\cegui\cegui\include;$(CEGUI_HEADER)\include;$(PHYSX_HEADER);E:\Engine\Solution\Source\Rendering\Sky\SkyX;$(IncludePath)</IncludePath>
     <LibraryPath>$(OGREX_LIB)\$(configuration);$(BOOST_LIB);$(SDL)\lib\x86;$(CEGUI_LIB);$(PHYSX_LIB);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(OGREX_HEADER);$(BOOST_ROOT);$(SDL)\include;E:\Engine\cegui\cegui\include;$(CEGUI_HEADER)\include;$(PHYSX_HEADER);$(IncludePath)</IncludePath>
+    <IncludePath>$(OGREX_HEADER);$(BOOST_ROOT);$(SDL)\include;E:\Engine\cegui\cegui\include;$(CEGUI_HEADER)\include;$(PHYSX_HEADER);E:\Engine\Solution\Source\Rendering\Sky\SkyX;$(IncludePath)</IncludePath>
     <LibraryPath>$(OGREX_LIB)\$(configuration);$(BOOST_LIB);$(SDL)\lib\x86;$(CEGUI_LIB);$(PHYSX_LIB);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -153,7 +190,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>Source;Source\Core</AdditionalIncludeDirectories>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <TreatWarningAsError>false</TreatWarningAsError>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -161,7 +198,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>OgreMain.lib;RenderSystem_Direct3D9.lib;RenderSystem_GL.lib;Plugin_OctreeSceneManager.lib;Hydrax.lib;SkyX.lib;SDL2.lib;CEGUIBase-0.lib;CEGUIOgreRenderer-0.lib;PhysX3_x86.lib;PhysX3Common_x86.lib;PhysX3Extensions.lib;PhysX3CharacterKinematic_x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OgreMain.lib;RenderSystem_Direct3D9.lib;RenderSystem_GL.lib;Plugin_OctreeSceneManager.lib;Hydrax.lib;SDL2.lib;CEGUIBase-0.lib;CEGUIOgreRenderer-0.lib;PhysX3_x86.lib;PhysX3Common_x86.lib;PhysX3Extensions.lib;PhysX3CharacterKinematic_x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
