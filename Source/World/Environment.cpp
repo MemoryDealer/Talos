@@ -85,6 +85,9 @@ void Environment::destroy(void)
     if (m_ocean != nullptr){
         m_ocean->destroy();
     }
+    if (m_sky != nullptr){
+        m_sky->destroy();
+    }
 
     m_world->getSceneManager()->destroyLight(m_sun);
     m_world->getSceneManager()->destroyLight(m_moon);
