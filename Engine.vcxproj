@@ -20,6 +20,7 @@
     <ClCompile Include="Source\Component\ModelComponent.cpp" />
     <ClCompile Include="Source\Component\PhysicsComponent.cpp" />
     <ClCompile Include="Source\Component\SceneComponent.cpp" />
+    <ClCompile Include="Source\Config\Config.cpp" />
     <ClCompile Include="Source\Core\Assert.cpp" />
     <ClCompile Include="Source\Core\Engine.cpp" />
     <ClCompile Include="Source\Core\EngineState\EngineState.cpp" />
@@ -29,6 +30,7 @@
     <ClCompile Include="Source\Entity\Entity.cpp" />
     <ClCompile Include="Source\Entity\EntityPool.cpp" />
     <ClCompile Include="Source\Input\Input.cpp" />
+    <ClCompile Include="Source\Network\Server\Server.cpp" />
     <ClCompile Include="Source\Observer\Subject.cpp" />
     <ClCompile Include="Source\Physics\PDebugDrawer.cpp" />
     <ClCompile Include="Source\Physics\Physics.cpp" />
@@ -82,6 +84,7 @@
     <ClInclude Include="Source\Component\NullComponent.hpp" />
     <ClInclude Include="Source\Component\PhysicsComponent.hpp" />
     <ClInclude Include="Source\Component\SceneComponent.hpp" />
+    <ClInclude Include="Source\Config\Config.hpp" />
     <ClInclude Include="Source\Core\Assert.hpp" />
     <ClInclude Include="Source\Core\Engine.hpp" />
     <ClInclude Include="Source\Core\EngineState\EngineState.hpp" />
@@ -91,6 +94,7 @@
     <ClInclude Include="Source\Entity\Entity.hpp" />
     <ClInclude Include="Source\Entity\EntityPool.hpp" />
     <ClInclude Include="Source\Input\Input.hpp" />
+    <ClInclude Include="Source\Network\Server\Server.hpp" />
     <ClInclude Include="Source\Observer\Observer.hpp" />
     <ClInclude Include="Source\Observer\Subject.hpp" />
     <ClInclude Include="Source\Physics\PDebugDrawer.hpp" />
@@ -161,12 +165,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(OGREX_HEADER);$(BOOST_ROOT);$(SDL)\include;E:\Engine\cegui\cegui\include;$(CEGUI_HEADER)\include;$(PHYSX_HEADER);E:\Engine\Solution\Source\Rendering\Sky\SkyX;$(IncludePath)</IncludePath>
-    <LibraryPath>$(OGREX_LIB)\$(configuration);$(BOOST_LIB);$(SDL)\lib\x86;$(CEGUI_LIB);$(PHYSX_LIB);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(OGREX_HEADER);$(BOOST_ROOT);$(SDL)\include;E:\Engine\cegui\cegui\include;$(CEGUI_HEADER)\include;$(PHYSX_HEADER);$(RAKNET)\Source;E:\Engine\Solution\Source\Rendering\Sky\SkyX;$(IncludePath)</IncludePath>
+    <LibraryPath>$(OGREX_LIB)\$(configuration);$(BOOST_LIB);$(SDL)\lib\x86;$(CEGUI_LIB);$(PHYSX_LIB);$(RAKNET)\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(OGREX_HEADER);$(BOOST_ROOT);$(SDL)\include;E:\Engine\cegui\cegui\include;$(CEGUI_HEADER)\include;$(PHYSX_HEADER);E:\Engine\Solution\Source\Rendering\Sky\SkyX;$(IncludePath)</IncludePath>
-    <LibraryPath>$(OGREX_LIB)\$(configuration);$(BOOST_LIB);$(SDL)\lib\x86;$(CEGUI_LIB);$(PHYSX_LIB);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(OGREX_HEADER);$(BOOST_ROOT);$(SDL)\include;E:\Engine\cegui\cegui\include;$(CEGUI_HEADER)\include;$(PHYSX_HEADER);$(RAKNET)\Source;E:\Engine\Solution\Source\Rendering\Sky\SkyX;$(IncludePath)</IncludePath>
+    <LibraryPath>$(OGREX_LIB)\$(configuration);$(BOOST_LIB);$(SDL)\lib\x86;$(CEGUI_LIB);$(PHYSX_LIB);$(RAKNET)\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -179,7 +183,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OgreMain_d.lib;RenderSystem_Direct3D9_d.lib;RenderSystem_GL_d.lib;Plugin_OctreeSceneManager_d.lib;Plugin_CgProgramManager_d.lib;Hydrax_d.lib;SDL2.lib;SDL2main.lib;CEGUIBase-0_d.lib;CEGUIOgreRenderer-0_d.lib;PhysX3DEBUG_x86.lib;PhysX3CommonDEBUG_x86.lib;PhysX3ExtensionsDEBUG.lib;PhysX3CharacterKinematicDEBUG_x86.lib;PhysXVisualDebuggerSDKDEBUG.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;RakNet_VS2008_DLL_Debug_Win32.lib;OgreMain_d.lib;RenderSystem_Direct3D9_d.lib;RenderSystem_GL_d.lib;Plugin_OctreeSceneManager_d.lib;Plugin_CgProgramManager_d.lib;Hydrax_d.lib;SDL2.lib;SDL2main.lib;CEGUIBase-0_d.lib;CEGUIOgreRenderer-0_d.lib;PhysX3DEBUG_x86.lib;PhysX3CommonDEBUG_x86.lib;PhysX3ExtensionsDEBUG.lib;PhysX3CharacterKinematicDEBUG_x86.lib;PhysXVisualDebuggerSDKDEBUG.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <Bscmake>
@@ -202,7 +206,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>OgreMain.lib;RenderSystem_Direct3D9.lib;RenderSystem_GL.lib;Plugin_OctreeSceneManager.lib;Hydrax.lib;SDL2.lib;CEGUIBase-0.lib;CEGUIOgreRenderer-0.lib;PhysX3_x86.lib;PhysX3Common_x86.lib;PhysX3Extensions.lib;PhysX3CharacterKinematic_x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;OgreMain.lib;RenderSystem_Direct3D9.lib;RenderSystem_GL.lib;Plugin_OctreeSceneManager.lib;Hydrax.lib;SDL2.lib;CEGUIBase-0.lib;CEGUIOgreRenderer-0.lib;PhysX3_x86.lib;PhysX3Common_x86.lib;PhysX3Extensions.lib;PhysX3CharacterKinematic_x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

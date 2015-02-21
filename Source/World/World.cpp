@@ -27,6 +27,7 @@
 #include "Component/SceneComponent.hpp"
 #include "Entity/EntityPool.hpp"
 #include "Environment.hpp"
+#include "Network/Server/Server.hpp"
 #include "Physics/PScene.hpp"
 #include "Pool/Pool.hpp"
 #include "World.hpp"
@@ -41,6 +42,11 @@ m_environment(nullptr),
 m_graphics(),
 m_physics(nullptr),
 m_PScene(nullptr),
+m_usePhysics(false),
+m_server(nullptr),
+m_client(nullptr),
+m_useServer(false),
+m_useClient(false),
 m_entityPool(nullptr),
 m_player(nullptr),
 m_actorComponentPool(nullptr),
@@ -61,6 +67,19 @@ World::~World(void)
 
 // ========================================================================= //
 
+void World::injectDependencies(const Dependencies& deps)
+{
+    m_root = deps.root;
+    m_viewport = deps.viewport;
+    m_physics = deps.physics;
+    m_input = deps.input;
+    m_graphics = deps.graphics;
+    m_server = deps.server;
+    m_client = deps.client;
+}
+
+// ========================================================================= //
+
 void World::init(void)
 {
     // Create Ogre scene for rendering.
@@ -73,6 +92,7 @@ void World::init(void)
     // Create physics scene.
     m_PScene.reset(new PScene(m_physics));
     m_PScene->init();
+    m_usePhysics = true;
 
     // Allocate Entity pool.
     // @TODO: Read pool size from config file.
@@ -92,6 +112,18 @@ void World::init(void)
 
 void World::destroy(void)
 {
+    if (m_useServer){
+        this->destroyServer();
+    }
+    if (m_useClient){
+        this->destroyClient();
+    }
+    if (m_usePhysics){
+        m_PScene->destroy();
+    }
+
+    m_environment->destroy();
+
     m_root->destroySceneManager(m_scene);
 }
 
@@ -127,21 +159,69 @@ const bool World::checkEntities(void) const
 
 void World::update(void)
 {
-    // Simulate physics first.
-   
+    // Network.
+    if (m_useServer){
+        m_server->update();
+    }
+    else if (m_useClient){
+        // ...
+    }
 
     for (int i = 0; i < m_entityPool->m_poolSize; ++i){
         m_entityPool->m_pool[i].update(*this); // Dereference self.
     }
 
-    m_PScene->simulate();
+    if (m_usePhysics){
+        m_PScene->simulate();
+    }
 
     m_environment->update();
 }
 
 // ========================================================================= //
 
+// Network functions:
+
+// ========================================================================= //
+
+void World::initServer(void)
+{
+    Assert(m_useClient == false, "Trying to init Server with Client active");
+
+    m_server->init();
+    m_useServer = true;
+}
+
+// ========================================================================= //
+
+void World::destroyServer(void)
+{
+    m_server->destroy();
+    m_useServer = false;
+}
+
+// ========================================================================= //
+
+void World::initClient(void)
+{
+    Assert(m_useServer == false, "Trying to init Client with Server active");
+
+    m_useClient = true;
+}
+
+// ========================================================================= //
+
+void World::destroyClient(void)
+{
+
+    m_useClient = false;
+}
+
+// ========================================================================= //
+
 // Component factory functions:
+
+// ========================================================================= //
 
 ActorComponentPtr World::createActorComponent(void){
     return m_actorComponentPool->create();

@@ -112,6 +112,24 @@
     <Filter Include="Source Files\Rendering\Sky\SkyX">
       <UniqueIdentifier>{b27099a7-bc18-439c-8815-c2b614232bcc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Network">
+      <UniqueIdentifier>{a998df35-8bd0-4492-ac4d-616259662f54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Network\Server">
+      <UniqueIdentifier>{aceda149-8e41-469e-89ee-d04a5d691b55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Network">
+      <UniqueIdentifier>{6d174570-1c2c-4cea-adf8-a64f63378493}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Network\Server">
+      <UniqueIdentifier>{5ad19cb9-8c56-4f2e-9dc6-b55f7aef8d8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Config">
+      <UniqueIdentifier>{721543cb-cbc5-450e-a501-2ced73078b23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Config">
+      <UniqueIdentifier>{2dcbdeb3-1e06-4fe3-a8d7-cc4d95e22a64}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\main.cpp">
@@ -257,6 +275,12 @@
     </ClCompile>
     <ClCompile Include="Source\Rendering\Ocean\OceanLowGraphics.cpp">
       <Filter>Source Files\Rendering\Ocean</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Network\Server\Server.cpp">
+      <Filter>Source Files\Network\Server</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Config\Config.cpp">
+      <Filter>Source Files\Config</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -460,6 +484,12 @@
     </ClInclude>
     <ClInclude Include="Source\Rendering\Ocean\OceanLowGraphics.hpp">
       <Filter>Header Files\Rendering\Ocean</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\Server\Server.hpp">
+      <Filter>Header Files\Network\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Config\Config.hpp">
+      <Filter>Header Files\Config</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

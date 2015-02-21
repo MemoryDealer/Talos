@@ -31,12 +31,14 @@
 
 // ========================================================================= //
 
+class Client;
 class EntityPool;
 class Environment;
 class Input;
 class Physics;
 template<typename T> class Pool;
 class PScene;
+class Server;
 
 // ========================================================================= //
 // Represents everything in the physical game world. The World holds a
@@ -77,6 +79,22 @@ public:
 
     // Updates every active Entity in the game world, updates environment.
     void update(void);
+
+    // === //
+    
+    // Network functions:
+
+    // Initializes Server, update will process Server updates.
+    void initServer(void);
+
+    // Destroys Server.
+    void destroyServer(void);
+
+    // Initializes Client, update will process Client updates.
+    void initClient(void);
+
+    // Destroys Client.
+    void destroyClient(void);
 
     // === //
 
@@ -130,6 +148,8 @@ public:
         std::shared_ptr<Physics> physics;
         Input* input;
         Graphics graphics;
+        std::shared_ptr<Server> server;
+        std::shared_ptr<Client> client;
     };
 
 private:
@@ -144,9 +164,16 @@ private:
     // Graphics settings.
     Graphics m_graphics;
 
-    // PhysX.
+    // PhysX.    
     std::shared_ptr<Physics> m_physics;
     std::shared_ptr<PScene> m_PScene;
+    bool m_usePhysics;
+
+    // Network.
+    std::shared_ptr<Server> m_server;
+    std::shared_ptr<Client> m_client;
+    bool m_useServer;
+    bool m_useClient;
 
     // Entity pool.
     std::shared_ptr<EntityPool> m_entityPool;
@@ -169,14 +196,6 @@ private:
 };
 
 // ========================================================================= //
-
-inline void World::injectDependencies(const Dependencies& deps){
-    m_root = deps.root;
-    m_viewport = deps.viewport;
-    m_physics = deps.physics;
-    m_input = deps.input;
-    m_graphics = deps.graphics;
-}
 
 // Getters:
 

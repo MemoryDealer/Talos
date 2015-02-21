@@ -154,6 +154,9 @@ void IntroState::enter(void)
     fwnd->addChild(quit);*/
     //quit->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&IntroState::quit, this));
 
+    // Network:
+    m_world.initServer();
+
     if (m_world.checkEntities() == false){
         throw std::exception("World::checkEntities() reported uninitialized Entity");
     }

@@ -15,56 +15,39 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: stdafx.hpp
+// File: Server.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// A single point of access for needed headers.
+// Defines Server class.
 // ========================================================================= //
 
-#ifndef __STDAFX_HPP__
-#define __STDAFX_HPP__
+#ifndef __SERVER_HPP__
+#define __SERVER_HPP__
 
 // ========================================================================= //
 
-// My own files.
-#include "Core/HelperFunctions.hpp"
-#include "Core/Assert.hpp"
-#include "Rendering/GraphicsSettings.hpp"
+#include "stdafx.hpp"
 
-// C++.
-#include <list>
-#include <map>
-#include <stack>
+// ========================================================================= //
+// Operates network functionality for running a server with multiple clients.
+class Server final
+{
+public:
+    explicit Server(void);
 
-// Ogre3D.
-#include <Ogre.h>
+    ~Server(void);
 
-// SDL.
-#include <SDL.h>
-#include <SDL_syswm.h>
+    void init(void);
 
-// CEGUI.
-#include <CEGUI/CEGUI.h>
-#include <CEGUI/RendererModules/Ogre/Renderer.h>
+    void destroy(void);
 
-// Define NDEBUG for PhysX in release mode.
-#ifndef _DEBUG
-#define NDEBUG
-#endif
+    void update(void);
 
-// PhysX.
-#include <PxPhysicsAPI.h>
-
-// RakNet.
-#include <RakPeerInterface.h>
-#include <MessageIdentifiers.h>
-#include <RakNetTypes.h>
-#include <BitStream.h>
-#include <GetTime.h>
-
-#ifdef WIN32
-#define _WINSOCKAPI_ // Prevent automatic inclusion of winsock.h.
-#endif
+private:
+    RakNet::RakPeerInterface* m_peer;
+    RakNet::Packet* m_packet;
+    unsigned int m_tickRate;
+};
 
 // ========================================================================= //
 

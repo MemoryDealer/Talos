@@ -276,12 +276,20 @@
     This changes retrieving a component pointer from an entity from O(n) to O(1) complexity at little cost of additional code.
 * Component-specific getter functions have been added to Entity for each component(e.g., Entity::getCameraComponent(), Entity::getModelComponent(), etc.).
 * Added ComponentDecls.hpp which forward declares all the Component types and the typedefs for pointers to them. This reduces repetition in header files.
-* Added LowGraphicsOcean using ocean shader from the Ogre samples, tested in debug mode.
+* Added OceanLowGraphics using ocean shader from the Ogre samples, tested in debug mode.
+
+== 2/20/15 ==
+* Added Talos::Config class for basic ini parsing.
+* Created Server class (compiled latest RakNet as well).
+* Experienced a really strange bug where World::getPlayer() returned nullptr even after the player pointer was set(clearly seen within debugger). This occurred after adding Server and Client to
+    the World::Dependencies struct, but forgetting to apply the pointers in World::injectDependencies(). After applying them in World.hpp the bug no longer occurred. Moved World::injectDependences()
+    into World.cpp, then commented out the code that assigns the server and client pointers, and the bug still didn't occur. I don't know what caused this so for the record it's an unsolved bug.
+* I fear the World class is slowly becoming a god object.
 
 == TODO ==
 ** Hydrax underwater is sped up, fix. (E:\Engine\Ogre3D\Hydrax-v0.5.1\Hydrax\Hydrax.vcproj to recompile).
+* Shift input for sprint.
 * Create a SkyX config file.
-* Add OceanLowGraphics for debug mode.
 * Add a "clock speed" variable to the World, should affect physics etc.
 * ActorComponent could use some redesign - CameraComponent is completely unnecessary, and AIComponent will be redundant.
 * Put 16.f somewhere as a constant that every file can access (MS per update).

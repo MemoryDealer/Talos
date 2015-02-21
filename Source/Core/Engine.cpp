@@ -24,6 +24,7 @@
 #include "Engine.hpp"
 #include "EngineState/IntroState.hpp"
 #include "Input/Input.hpp"
+#include "Network/Server/Server.hpp"
 #include "Physics/Physics.hpp"
 #include "Resources.hpp"
 #include "World/World.hpp"
@@ -39,6 +40,8 @@ m_timer(nullptr),
 m_sdlWindow(nullptr),
 m_ceguiRenderer(nullptr),
 m_physics(nullptr),
+m_server(nullptr),
+m_client(nullptr),
 m_input(nullptr),
 m_states(),
 m_stateStack(),
@@ -187,6 +190,12 @@ bool Engine::init(void)
 
     // === //
 
+    // Network:
+
+    m_server.reset(new Server());
+
+    // === //
+
     // Engine:
 
     // Allocate input handler.
@@ -279,6 +288,8 @@ void Engine::registerState(const EngineStateID id)
     deps.physics = m_physics;
     deps.input = m_input.get();
     deps.graphics = m_graphics;
+    deps.server = m_server;
+    deps.client = m_client;
     state->getWorld().injectDependencies(deps);
 
     // Add self as an Observer to listen for events.

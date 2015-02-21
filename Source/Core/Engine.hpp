@@ -32,8 +32,10 @@
 
 // ========================================================================= //
 
+class Client;
 class Input;
 class Physics;
+class Server;
 
 typedef std::stack<EngineStatePtr> EngineStateStack;
 typedef std::vector<EngineStatePtr> EngineStateList;
@@ -107,6 +109,11 @@ private:
 
     // Physics.
     std::shared_ptr<Physics> m_physics;
+
+    // Network.
+    // Store these in Engine so they can be shared across game states.
+    std::shared_ptr<Server> m_server;
+    std::shared_ptr<Client> m_client;
 
     // Input handler.
     std::shared_ptr<Input> m_input;
