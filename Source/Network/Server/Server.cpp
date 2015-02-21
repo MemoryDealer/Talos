@@ -22,6 +22,8 @@
 // ========================================================================= //
 
 #include "Config/Config.hpp"
+#include "Network/Client/Client.hpp"
+#include "Network/NetMessage.hpp"
 #include "Server.hpp"
 
 // ========================================================================= //
@@ -58,7 +60,7 @@ void Server::init(void)
         port = c.parseInt("core", "port");
         maxClients = c.parseInt("core", "maxClients");
 
-        simulate = static_cast<bool>(c.parseInt("simulator", "simulate"));
+        simulate = c.parseBool("simulator", "active");
         if (simulate){
             packetLoss = c.parseReal("simulator", "packetLoss");
             delay = c.parseInt("simulator", "delay");
@@ -101,11 +103,36 @@ void Server::update(void)
         default:
             break;
 
+        case ID_REMOTE_NEW_INCOMING_CONNECTION:
+            printf("Connection request received from: %s\n", m_packet->systemAddress.ToString());
+            break;
+
         case ID_DISCONNECTION_NOTIFICATION:
 
             break;
+
+        case NetMessage::Register:
+            this->registerNewClient();
+            break;
         }
     }
+}
+
+// ========================================================================= //
+
+// Private methods:
+
+// ========================================================================= //
+
+void Server::registerNewClient(void)
+{
+    Client::Info info;
+    RakNet::BitStream bit(m_packet->data, m_packet->length, false);
+    bit.IgnoreBytes(sizeof(RakNet::MessageID));
+    //bit.Read(info.username);
+    info.Serialize(false, &bit);
+
+    printf("New client %s connected!\n", info.username.C_String());
 }
 
 // ========================================================================= //

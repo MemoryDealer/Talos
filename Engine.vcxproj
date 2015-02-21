@@ -30,6 +30,7 @@
     <ClCompile Include="Source\Entity\Entity.cpp" />
     <ClCompile Include="Source\Entity\EntityPool.cpp" />
     <ClCompile Include="Source\Input\Input.cpp" />
+    <ClCompile Include="Source\Network\Client\Client.cpp" />
     <ClCompile Include="Source\Network\Server\Server.cpp" />
     <ClCompile Include="Source\Observer\Subject.cpp" />
     <ClCompile Include="Source\Physics\PDebugDrawer.cpp" />
@@ -94,6 +95,8 @@
     <ClInclude Include="Source\Entity\Entity.hpp" />
     <ClInclude Include="Source\Entity\EntityPool.hpp" />
     <ClInclude Include="Source\Input\Input.hpp" />
+    <ClInclude Include="Source\Network\Client\Client.hpp" />
+    <ClInclude Include="Source\Network\NetMessage.hpp" />
     <ClInclude Include="Source\Network\Server\Server.hpp" />
     <ClInclude Include="Source\Observer\Observer.hpp" />
     <ClInclude Include="Source\Observer\Subject.hpp" />
@@ -206,7 +209,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>ws2_32.lib;OgreMain.lib;RenderSystem_Direct3D9.lib;RenderSystem_GL.lib;Plugin_OctreeSceneManager.lib;Hydrax.lib;SDL2.lib;CEGUIBase-0.lib;CEGUIOgreRenderer-0.lib;PhysX3_x86.lib;PhysX3Common_x86.lib;PhysX3Extensions.lib;PhysX3CharacterKinematic_x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;RakNet_VS2008_DLL_Release_Win32.lib;OgreMain.lib;RenderSystem_Direct3D9.lib;RenderSystem_GL.lib;Plugin_OctreeSceneManager.lib;Hydrax.lib;SDL2.lib;CEGUIBase-0.lib;CEGUIOgreRenderer-0.lib;PhysX3_x86.lib;PhysX3Common_x86.lib;PhysX3Extensions.lib;PhysX3CharacterKinematic_x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -15,46 +15,20 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: Server.hpp
+// File: NetMessage.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines Server class.
+// Enumerates custom network messages.
 // ========================================================================= //
 
-#ifndef __SERVER_HPP__
-#define __SERVER_HPP__
+#ifndef __NETMESSAGE_HPP__
+#define __NETMESSAGE_HPP__
 
 // ========================================================================= //
 
-#include "stdafx.hpp"
-
-// ========================================================================= //
-// Operates network functionality for running a server with multiple clients.
-class Server final
-{
-public:
-    // Default initializes member data.
-    explicit Server(void);
-
-    // Empty destructor.
-    ~Server(void);
-
-    // Loads server settings from config file and sets up server connection.
-    void init(void);
-
-    // Destroys server connection.
-    void destroy(void);
-
-    // Receives and handles incoming packets on server port.
-    void update(void);
-
-private:
-    // Processes new client registration.
-    void registerNewClient(void);
-
-    RakNet::RakPeerInterface* m_peer;
-    RakNet::Packet* m_packet;
-    unsigned int m_tickRate;
+enum NetMessage{
+    Null = ID_USER_PACKET_ENUM + 1,
+    Register
 };
 
 // ========================================================================= //

@@ -27,6 +27,7 @@
 #include "Component/SceneComponent.hpp"
 #include "Entity/EntityPool.hpp"
 #include "Environment.hpp"
+#include "Network/Client/Client.hpp"
 #include "Network/Server/Server.hpp"
 #include "Physics/PScene.hpp"
 #include "Pool/Pool.hpp"
@@ -164,7 +165,7 @@ void World::update(void)
         m_server->update();
     }
     else if (m_useClient){
-        // ...
+        m_client->update();
     }
 
     for (int i = 0; i < m_entityPool->m_poolSize; ++i){
@@ -206,6 +207,7 @@ void World::initClient(void)
 {
     Assert(m_useServer == false, "Trying to init Client with Server active");
 
+    m_client->init();
     m_useClient = true;
 }
 
@@ -213,7 +215,7 @@ void World::initClient(void)
 
 void World::destroyClient(void)
 {
-
+    m_client->destroy();
     m_useClient = false;
 }
 

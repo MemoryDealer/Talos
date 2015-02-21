@@ -24,6 +24,7 @@
 #include "Engine.hpp"
 #include "EngineState/IntroState.hpp"
 #include "Input/Input.hpp"
+#include "Network/Client/Client.hpp"
 #include "Network/Server/Server.hpp"
 #include "Physics/Physics.hpp"
 #include "Resources.hpp"
@@ -193,6 +194,7 @@ bool Engine::init(void)
     // Network:
 
     m_server.reset(new Server());
+    m_client.reset(new Client());
 
     // === //
 

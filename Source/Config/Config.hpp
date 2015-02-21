@@ -62,6 +62,10 @@ public:
     virtual const int parseInt(const std::string& section,
                                const std::string& key);
 
+    // Parses value in section, returns bool containing value.
+    virtual const bool parseBool(const std::string& section,
+                                 const std::string& key);
+
     // Getters:
 
     // Returns true if file is loaded.

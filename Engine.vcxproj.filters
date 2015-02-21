@@ -130,6 +130,12 @@
     <Filter Include="Source Files\Config">
       <UniqueIdentifier>{2dcbdeb3-1e06-4fe3-a8d7-cc4d95e22a64}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Network\Client">
+      <UniqueIdentifier>{5cf983d3-7e06-4bb2-acaf-7ad0b6f1d187}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Network\Client">
+      <UniqueIdentifier>{e0869ccf-d816-4233-9c59-68d54f3c99c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\main.cpp">
@@ -281,6 +287,9 @@
     </ClCompile>
     <ClCompile Include="Source\Config\Config.cpp">
       <Filter>Source Files\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Network\Client\Client.cpp">
+      <Filter>Source Files\Network\Client</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -490,6 +499,12 @@
     </ClInclude>
     <ClInclude Include="Source\Config\Config.hpp">
       <Filter>Header Files\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\Client\Client.hpp">
+      <Filter>Header Files\Network\Client</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\NetMessage.hpp">
+      <Filter>Header Files\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

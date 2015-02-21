@@ -285,8 +285,16 @@
     the World::Dependencies struct, but forgetting to apply the pointers in World::injectDependencies(). After applying them in World.hpp the bug no longer occurred. Moved World::injectDependences()
     into World.cpp, then commented out the code that assigns the server and client pointers, and the bug still didn't occur. I don't know what caused this so for the record it's an unsolved bug.
 * I fear the World class is slowly becoming a god object.
+* Created Client class. Tested basic connection to server successfully.
+* Engine holds a shared_ptr to both a Server and Client object. These are injected into the World of each engine state, so that each state can access them as needed.
+* Server and Client are initialized using World::initServer() and World::initClient(). World::update() calls update on the Server or Client if one is registered.
+* In using the RakNet::BitStream I accidently used and std::string which gets corrupted over the wire, you must use RakNet::RakString. 
+* Created a Serialize() function for a test struct in Client for sending from the client to the server. All network data structures will need to be placed in one file.
 
 == TODO ==
+* Create header to define all data structures for network and declare their overloaded << and >> operators within the RakNet namespace.
+* Create EventQueue system to deal with network and UI.
+* Get rid of temporary server/client creation method and replace with GUI.
 ** Hydrax underwater is sped up, fix. (E:\Engine\Ogre3D\Hydrax-v0.5.1\Hydrax\Hydrax.vcproj to recompile).
 * Shift input for sprint.
 * Create a SkyX config file.

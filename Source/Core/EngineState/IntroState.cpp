@@ -29,9 +29,11 @@
 #include "Component/ModelComponent.hpp"
 #include "Component/PhysicsComponent.hpp"
 #include "Component/SceneComponent.hpp"
+#include "Config/Config.hpp"
 #include "Entity/Entity.hpp"
 #include "Input/Input.hpp"
 #include "IntroState.hpp"
+#include "Network/Client/Client.hpp"
 #include "Physics/PScene.hpp"
 #include "Rendering/DynamicLines.hpp"
 #include "World/Environment.hpp"
@@ -155,7 +157,15 @@ void IntroState::enter(void)
     //quit->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&IntroState::quit, this));
 
     // Network:
-    m_world.initServer();
+    Talos::Config c("Data/Network/net.cfg");
+    bool server = c.parseBool("core", "server");
+    if (server){
+        m_world.initServer();
+    }
+    else{
+        m_world.initClient();
+        m_world.getClient()->connect("127.0.0.1", 7042, "unixunited");
+    }
 
     if (m_world.checkEntities() == false){
         throw std::exception("World::checkEntities() reported uninitialized Entity");

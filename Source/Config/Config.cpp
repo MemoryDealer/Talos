@@ -142,6 +142,8 @@ const Ogre::Real Config::parseReal(const std::string& section,
     if (!str.empty()){
         return std::stof(str);
     }
+
+    return 0.f;
 }
 
 // ========================================================================= //
@@ -155,6 +157,19 @@ const int Config::parseInt(const std::string& section,
     }
 
     return 0;
+}
+
+// ========================================================================= //
+
+const bool Config::parseBool(const std::string& section,
+                             const std::string& key)
+{
+    std::string str = this->parseValue(section, key);
+    if (!str.empty()){
+        return (std::stoi(str) >= 1);
+    }
+
+    return false;
 }
 
 // ========================================================================= //

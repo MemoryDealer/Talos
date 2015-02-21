@@ -15,46 +15,76 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: Server.hpp
+// File: Client.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines Server class.
+// Defines Client class.
 // ========================================================================= //
 
-#ifndef __SERVER_HPP__
-#define __SERVER_HPP__
+#ifndef __CLIENT_HPP__
+#define __CLIENT_HPP__
 
 // ========================================================================= //
 
 #include "stdafx.hpp"
 
 // ========================================================================= //
-// Operates network functionality for running a server with multiple clients.
-class Server final
+// Operates network functionality for connecting to remote server.
+class Client final
 {
 public:
     // Default initializes member data.
-    explicit Server(void);
+    explicit Client(void);
 
     // Empty destructor.
-    ~Server(void);
+    ~Client(void);
 
-    // Loads server settings from config file and sets up server connection.
+    // Loads client settings from config file and connects to server on 
+    // specified address and port
     void init(void);
 
-    // Destroys server connection.
+    // Closes client connection to server.
     void destroy(void);
 
-    // Receives and handles incoming packets on server port.
+    // Receives incoming packets from server and handles them.
     void update(void);
 
+    // Sends connection request to server. A response will be received in 
+    // the update loop.
+    void connect(const std::string& addr, 
+                 const int port, 
+                 const std::string& username);
+
+    // Sends a connection request to server using current server data.
+    void reconnect(void);
+
+    // Disconnects from currently connected server.
+    void disconnect(void);
+
+    uint32_t send(const RakNet::BitStream& bit, 
+                  const PacketPriority priority, 
+                  const PacketReliability reliability);
+
+    // Client info for registration.
+    struct Info{
+        RakNet::RakString username;
+
+        void Serialize(const bool write, RakNet::BitStream* bs){
+            bs->Serialize(write, username);
+        }
+    };
+
 private:
-    // Processes new client registration.
-    void registerNewClient(void);
+    // Sends registration info to server.
+    void registerUserInfo(void);
 
     RakNet::RakPeerInterface* m_peer;
     RakNet::Packet* m_packet;
-    unsigned int m_tickRate;
+    RakNet::SystemAddress m_serverSystemAddr;
+    std::string m_serverIP;
+    int m_port;
+    bool m_connected;
+    Info m_info;
 };
 
 // ========================================================================= //

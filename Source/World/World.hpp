@@ -132,6 +132,12 @@ public:
     // Returns pointer to PScene (physics scene).
     std::shared_ptr<PScene> getPScene(void) const;
 
+    // Returns pointer to Server.
+    std::shared_ptr<Server> getServer(void) const;
+
+    // Returns pointer to Client.
+    std::shared_ptr<Client> getClient(void) const;
+
     // Returns reference to internal Input instance.
     Input* getInput(void) const;
 
@@ -225,6 +231,14 @@ inline EntityPtr World::getPlayer(void) const{
 
 inline std::shared_ptr<PScene> World::getPScene(void) const{
     return m_PScene;
+}
+
+inline std::shared_ptr<Server> World::getServer(void) const{
+    return m_server;
+}
+
+inline std::shared_ptr<Client> World::getClient(void) const{
+    return m_client;
 }
 
 inline Input* World::getInput(void) const{
