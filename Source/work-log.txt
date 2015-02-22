@@ -291,10 +291,19 @@
 * In using the RakNet::BitStream I accidently used and std::string which gets corrupted over the wire, you must use RakNet::RakString. 
 * Created a Serialize() function for a test struct in Client for sending from the client to the server. All network data structures will need to be placed in one file.
 
+== 2/21/15 ==
+* Added EngineNotifications.hpp and EngineStateID.hpp to allow non-coupled access to engine states and notification enumerations from game states.
+* Added StartupState which creates a thread to load resources, it checks a bool to determine if all resources have been loaded and then notifies the engine to pop its state and push 
+    the main menu state.
+* Experiencing a total freeze during StartupState after loadMeshes(), also before it. I think this is a race condition within the Ogre/CEGUI systems, since in Engine::start() their rendering
+    systems are being updated and at the same time resources are being loaded. A threaded approach may be more trouble than it's worth here.
+   Note that this freeze bug is difficult to reproduce; it takes several runs at the very least to see it again.
+   CEGUI::..injectTimePulse() could be the cause.
+
 == TODO ==
-* Create header to define all data structures for network and declare their overloaded << and >> operators within the RakNet namespace.
 * Create EventQueue system to deal with network and UI.
 * Get rid of temporary server/client creation method and replace with GUI.
+* Consider creating a function in World to handle input for Client so it can be sent to the server.
 ** Hydrax underwater is sped up, fix. (E:\Engine\Ogre3D\Hydrax-v0.5.1\Hydrax\Hydrax.vcproj to recompile).
 * Shift input for sprint.
 * Create a SkyX config file.

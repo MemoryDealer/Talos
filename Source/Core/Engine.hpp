@@ -27,6 +27,7 @@
 // ========================================================================= //
 
 #include "EngineState/EngineState.hpp"
+#include "EngineState/EngineStateID.hpp"
 #include "Observer/Observer.hpp"
 #include "stdafx.hpp"
 
@@ -72,23 +73,12 @@ public:
     // If the stack is empty, the engine is shut down.
     void popState(void);
 
+    // Pops the active state off the active state stack and pushes a new state on
+    // the active state stack, activating and entering it.
+    void popAndPushState(const EngineStateID);
+
     // Receive notifications from Subjects (EngineStates).
-    virtual void onNotify(const unsigned int) override;
-
-    // Enumerations:
-
-    enum StateID{
-        STATE_INTRO = 0,
-        STATE_MAIN_MENU,
-        STATE_GAME,
-        STATE_PAUSED,
-
-        NUM_STATES
-    };
-
-    enum Notification{
-        POP = 1
-    };
+    virtual void onNotify(const unsigned int, const unsigned int arg = 0) override;
 
 private:
     // Ogre3D components.

@@ -23,7 +23,7 @@
 
 #include "Client.hpp"
 #include "Config/Config.hpp"
-#include "Network/NetMessage.hpp"
+#include "Network/NetData.hpp"
 
 // ========================================================================= //
 
@@ -33,8 +33,7 @@ m_packet(nullptr),
 m_serverSystemAddr(),
 m_serverIP(),
 m_port(0),
-m_connected(false),
-m_info()
+m_connected(false)
 {
 
 }
@@ -97,7 +96,7 @@ void Client::update(void)
             printf("Connected to server! %d\n", m_serverSystemAddr.GetPort());
 
             // Register user info with server.            
-            this->registerUserInfo();
+            this->registerWithServer();
             break;
         }
     }
@@ -112,7 +111,7 @@ void Client::connect(const std::string& addr,
     if (m_connected == false){
         m_serverIP = addr;
         m_port = port;
-        m_info.username = username.c_str();
+        m_username = username.c_str();
 
         m_peer->Connect(m_serverIP.c_str(), m_port, nullptr, 0);
     }
@@ -144,11 +143,11 @@ void Client::disconnect(void)
 
 // ========================================================================= //
 
-uint32_t Client::send(const RakNet::BitStream& bit,
+uint32_t Client::send(const RakNet::BitStream& bs,
                       const PacketPriority priority,
                       const PacketReliability reliability)
 {
-    return m_peer->Send(&bit, 
+    return m_peer->Send(&bs, 
                         priority, 
                         reliability, 
                         0, 
@@ -162,14 +161,15 @@ uint32_t Client::send(const RakNet::BitStream& bit,
 
 // ========================================================================= //
 
-void Client::registerUserInfo(void)
+void Client::registerWithServer(void)
 {
-    RakNet::BitStream bit;
-    bit.Write(static_cast<RakNet::MessageID>(NetMessage::Register));
-    //bit.Write(m_info.username);
-    m_info.Serialize(true, &bit);
+    RakNet::BitStream bs;
+    bs.Write(static_cast<RakNet::MessageID>(NetMessage::Register));
+    NetData::ClientRegistration reg;
+    reg.username = m_username;
+    reg.Serialize(true, &bs);
 
-    this->send(bit, HIGH_PRIORITY, RELIABLE);
+    this->send(bs, HIGH_PRIORITY, RELIABLE);
 }
 
 // ========================================================================= //

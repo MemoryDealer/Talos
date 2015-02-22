@@ -44,7 +44,7 @@ public:
     void removeObserver(const ObserverPtr);
 
     // Notifies all attached Observers.
-    void notify(const unsigned int);
+    void notify(const unsigned int, const unsigned int arg = 0);
 
 private:
     ObserverList m_observers;

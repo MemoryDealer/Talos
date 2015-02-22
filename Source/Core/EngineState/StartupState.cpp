@@ -15,40 +15,82 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: Observer.hpp
+// File: StartupState.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines Observer interface.
+// Implements StartupState class.
 // ========================================================================= //
 
-#ifndef __OBSERVER_HPP__
-#define __OBSERVER_HPP__
-
-// ========================================================================= //
-
-#include "stdafx.hpp"
-
-// ========================================================================= //
-
-class Observer;
-
-typedef Observer* ObserverPtr;
-typedef std::vector<ObserverPtr> ObserverList;
+#include "Core/EngineNotifications.hpp"
+#include "Core/EngineState/EngineStateID.hpp"
+#include "Core/Resources.hpp"
+#include "StartupState.hpp"
 
 // ========================================================================= //
 
-class Observer
+StartupState::StartupState(void) :
+m_loaded(false)
 {
-public:
-    explicit Observer(void) { }
 
-    virtual ~Observer(void) = 0 { }
-
-    virtual void onNotify(const unsigned int, const unsigned int arg = 0) = 0;
-};
+}
 
 // ========================================================================= //
 
-#endif
+StartupState::~StartupState(void)
+{
+
+}
+
+// ========================================================================= //
+
+void StartupState::enter(void)
+{
+    // Create thread for loading engine resources.
+    std::thread t(&StartupState::loadResources, this);
+    t.detach();
+}
+
+// ========================================================================= //
+
+void StartupState::exit(void)
+{
+
+}
+
+// ========================================================================= //
+
+void StartupState::update(void)
+{
+    if (m_active == true){
+
+        // Render something simple...
+        // ...
+
+        if (m_loaded == true){
+            printf("Startup done...\n");
+            // Done loading, notify engine to start main menu.
+            m_subject.notify(EngineNotification::PopAndPush, 
+                             EngineStateID::MainMenu);
+            printf("Notified engine\n");
+        }
+    }
+}
+
+// ========================================================================= //
+
+void StartupState::loadResources(void)
+{
+    // Load resources for Ogre (from Resources.hpp).
+    printf("Loading Ogre resources...\n");
+    loadOgreResources();
+    printf("Loading meshes...\n");
+    loadMeshes();
+    printf("Loading CEGUI resources...\n");
+    loadCEGUIResources();
+    printf("Done loading...\n");
+
+    m_loaded = true;
+    printf("loaded = true\n");
+}
 
 // ========================================================================= //

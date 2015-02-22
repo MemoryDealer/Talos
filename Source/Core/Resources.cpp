@@ -91,6 +91,24 @@ void loadCEGUIResources(void)
     CEGUI::Scheme::setDefaultResourceGroup("Schemes");
     CEGUI::WidgetLookManager::setDefaultResourceGroup("LookNFeel");
     CEGUI::WindowManager::setDefaultResourceGroup("Layouts");
+
+    // Setup default CEGUI skins.
+    // @TODO: Load from config file.
+    CEGUI::SchemeManager::getSingleton().createFromFile(
+        "AlfiskoSkin.scheme");
+    /*CEGUI::SchemeManager::getSingleton().createFromFile(
+    "GameMenu.scheme");
+    CEGUI::SchemeManager::getSingleton().createFromFile(
+    "Generic.scheme");
+    CEGUI::SchemeManager::getSingleton().createFromFile(
+    "VanillaSkin.scheme");
+    CEGUI::SchemeManager::getSingleton().createFromFile(
+    "TaharezLook.scheme");*/
+    CEGUI::FontManager::getSingleton().createFromFile("DejaVuSans-10.font");
+    CEGUI::System::getSingleton().getDefaultGUIContext().
+        setDefaultFont("DejaVuSans-10");
+    CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().
+        setDefaultImage("AlfiskoSkin/MouseArrow");
 }
 
 // ========================================================================= //

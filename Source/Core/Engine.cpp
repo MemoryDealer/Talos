@@ -22,7 +22,9 @@
 // ========================================================================= //
 
 #include "Engine.hpp"
+#include "EngineNotifications.hpp"
 #include "EngineState/IntroState.hpp"
+#include "EngineState/StartupState.hpp"
 #include "Input/Input.hpp"
 #include "Network/Client/Client.hpp"
 #include "Network/Server/Server.hpp"
@@ -48,7 +50,7 @@ m_states(),
 m_stateStack(),
 m_active(false)
 {
-    m_states.reserve(5);
+    m_states.reserve(EngineStateID::NumStates);
 }
 
 // ========================================================================= //
@@ -135,10 +137,6 @@ bool Engine::init(void)
     // Activate the  Ogre render window.
     m_renderWindow->setActive(true);
 
-    // Load resources for Ogre (from Resources.hpp).
-    loadOgreResources();
-    loadMeshes();
-
     // Allocate the main Ogre timer.
     m_timer.reset(new Ogre::Timer());
     m_timer->reset(); // Activate timer.
@@ -160,25 +158,7 @@ bool Engine::init(void)
     // CEGUI:
 
     // Bootstrap the rendering system.
-    m_ceguiRenderer = &CEGUI::OgreRenderer::bootstrapSystem(*(m_root->getRenderTarget("Engine")));
-
-    // Setup default CEGUI skins.
-    // @TODO: Load from config file.
-    CEGUI::SchemeManager::getSingleton().createFromFile(
-        "AlfiskoSkin.scheme");
-    /*CEGUI::SchemeManager::getSingleton().createFromFile(
-        "GameMenu.scheme");
-    CEGUI::SchemeManager::getSingleton().createFromFile(
-        "Generic.scheme");
-    CEGUI::SchemeManager::getSingleton().createFromFile(
-        "VanillaSkin.scheme");
-    CEGUI::SchemeManager::getSingleton().createFromFile(
-        "TaharezLook.scheme");*/
-    CEGUI::FontManager::getSingleton().createFromFile("DejaVuSans-10.font");
-    CEGUI::System::getSingleton().getDefaultGUIContext().
-        setDefaultFont("DejaVuSans-10");
-    CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().
-        setDefaultImage("AlfiskoSkin/MouseArrow");
+    m_ceguiRenderer = &CEGUI::OgreRenderer::bootstrapSystem(*(m_root->getRenderTarget("Engine"))); 
 
     // === //
 
@@ -205,7 +185,8 @@ bool Engine::init(void)
 
     // Register all needed game states.
     // @TODO: Define these in data.
-    this->registerState(Engine::StateID::STATE_INTRO);
+    this->registerState(EngineStateID::Startup);
+    this->registerState(EngineStateID::MainMenu);
 
     // === //
 
@@ -240,7 +221,7 @@ void Engine::start(const EngineStateID id)
             m_active = false;
         }
 
-        Ogre::WindowEventUtilities::messagePump();
+        //Ogre::WindowEventUtilities::messagePump();
 
         // Update the engine if the render window is active.
         if (m_renderWindow->isActive()){
@@ -257,8 +238,8 @@ void Engine::start(const EngineStateID id)
             }
 
             // Update CEGUI.
-            CEGUI::System::getSingleton().
-                injectTimePulse(static_cast<float>(lag / MS_PER_UPDATE));
+            /*CEGUI::System::getSingleton().
+                injectTimePulse(static_cast<float>(lag / MS_PER_UPDATE));*/
 
             // Render the updated frame, compensating for lag.
             m_root->renderOneFrame(Ogre::Real(lag / MS_PER_UPDATE));
@@ -276,7 +257,12 @@ void Engine::registerState(const EngineStateID id)
     default:
         return;
 
-    case Engine::StateID::STATE_INTRO:
+    case EngineStateID::Startup:
+        state.reset(new StartupState());
+        break;
+
+    case EngineStateID::MainMenu:
+        // @temp:
         state.reset(new IntroState());
         break;
     }
@@ -305,14 +291,13 @@ void Engine::registerState(const EngineStateID id)
 
 void Engine::pushState(const EngineStateID id)
 {
-    Assert(id < Engine::StateID::NUM_STATES, "Invalid EngineStateID");
+    Assert(id < EngineStateID::NumStates, "Invalid EngineStateID");
 
-    // Get a pointer to the specified state.
+    // Get a pointer to the specified state and push it into active state stack.
     EngineStatePtr state = m_states[id];
-
     m_stateStack.push(state);
 
-    // Initialize the state.    
+    // Initialize the state.
     state->setActive(true);
     state->enter();
 }
@@ -326,6 +311,7 @@ void Engine::popState(void)
     state->exit();
 
     m_stateStack.pop();
+    // If there are no more states awaiting execution, shutdown the engine.
     if (m_stateStack.empty() == true){
         m_active = false;
     }
@@ -333,14 +319,37 @@ void Engine::popState(void)
 
 // ========================================================================= //
 
-void Engine::onNotify(const unsigned int id)
+void Engine::popAndPushState(const EngineStateID id)
+{
+    // Pop current state.
+    EngineStatePtr state = m_stateStack.top();
+    state->setActive(false);
+    state->exit();
+    m_stateStack.pop();
+
+    // Push new state.
+    state = m_states[id];
+    m_stateStack.push(state);
+
+    // Initialize.
+    state->setActive(true);
+    state->enter();
+}
+
+// ========================================================================= //
+
+void Engine::onNotify(const unsigned int id, const unsigned int arg)
 {
     switch (id){
     default:
         break;
 
-    case Engine::Notification::POP:
+    case EngineNotification::Pop:
         this->popState();
+        break;
+
+    case EngineNotification::PopAndPush:
+        this->popAndPushState(static_cast<EngineStateID>(arg));
         break;
     }
 }

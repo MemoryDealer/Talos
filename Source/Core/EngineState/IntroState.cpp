@@ -30,6 +30,7 @@
 #include "Component/PhysicsComponent.hpp"
 #include "Component/SceneComponent.hpp"
 #include "Config/Config.hpp"
+#include "Core/EngineNotifications.hpp"
 #include "Entity/Entity.hpp"
 #include "Input/Input.hpp"
 #include "IntroState.hpp"
@@ -196,6 +197,12 @@ void IntroState::update(void)
             case SDL_MOUSEMOTION:
             case SDL_KEYDOWN:
                 {
+                    // Temporary exit handling.
+                    if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE){
+                        m_subject.notify(EngineNotification::Pop);
+                        return;
+                    }
+
                     // Send input commands to the player.
                     CommandPtr command = m_world.getInput()->handle(e);
                     if (command != nullptr){
@@ -214,7 +221,7 @@ void IntroState::update(void)
                 break;
 
             case SDL_QUIT:
-                m_subject.notify(1);
+                m_subject.notify(EngineNotification::Pop);
                 break;
             }
         }

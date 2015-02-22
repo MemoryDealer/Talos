@@ -25,6 +25,7 @@
     <ClCompile Include="Source\Core\Engine.cpp" />
     <ClCompile Include="Source\Core\EngineState\EngineState.cpp" />
     <ClCompile Include="Source\Core\EngineState\IntroState.cpp" />
+    <ClCompile Include="Source\Core\EngineState\StartupState.cpp" />
     <ClCompile Include="Source\Core\main.cpp" />
     <ClCompile Include="Source\Core\Resources.cpp" />
     <ClCompile Include="Source\Entity\Entity.cpp" />
@@ -88,14 +89,18 @@
     <ClInclude Include="Source\Config\Config.hpp" />
     <ClInclude Include="Source\Core\Assert.hpp" />
     <ClInclude Include="Source\Core\Engine.hpp" />
+    <ClInclude Include="Source\Core\EngineNotifications.hpp" />
     <ClInclude Include="Source\Core\EngineState\EngineState.hpp" />
+    <ClInclude Include="Source\Core\EngineState\EngineStateID.hpp" />
     <ClInclude Include="Source\Core\EngineState\IntroState.hpp" />
+    <ClInclude Include="Source\Core\EngineState\StartupState.hpp" />
     <ClInclude Include="Source\Core\HelperFunctions.hpp" />
     <ClInclude Include="Source\Core\Resources.hpp" />
     <ClInclude Include="Source\Entity\Entity.hpp" />
     <ClInclude Include="Source\Entity\EntityPool.hpp" />
     <ClInclude Include="Source\Input\Input.hpp" />
     <ClInclude Include="Source\Network\Client\Client.hpp" />
+    <ClInclude Include="Source\Network\NetData.hpp" />
     <ClInclude Include="Source\Network\NetMessage.hpp" />
     <ClInclude Include="Source\Network\Server\Server.hpp" />
     <ClInclude Include="Source\Observer\Observer.hpp" />

@@ -40,12 +40,12 @@ Subject::~Subject(void)
 
 // ========================================================================= //
 
-void Subject::notify(const unsigned int id)
+void Subject::notify(const unsigned int id, const unsigned int arg)
 {
-    for (ObserverList::iterator itr = m_observers.begin();
+    for (auto itr = m_observers.begin();
          itr != m_observers.end();
          ++itr){
-        (*itr)->onNotify(id);
+        (*itr)->onNotify(id, arg);
     }
 }
 

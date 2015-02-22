@@ -61,22 +61,13 @@ public:
     // Disconnects from currently connected server.
     void disconnect(void);
 
-    uint32_t send(const RakNet::BitStream& bit, 
+    uint32_t send(const RakNet::BitStream& bs, 
                   const PacketPriority priority, 
                   const PacketReliability reliability);
 
-    // Client info for registration.
-    struct Info{
-        RakNet::RakString username;
-
-        void Serialize(const bool write, RakNet::BitStream* bs){
-            bs->Serialize(write, username);
-        }
-    };
-
 private:
     // Sends registration info to server.
-    void registerUserInfo(void);
+    void registerWithServer(void);
 
     RakNet::RakPeerInterface* m_peer;
     RakNet::Packet* m_packet;
@@ -84,7 +75,7 @@ private:
     std::string m_serverIP;
     int m_port;
     bool m_connected;
-    Info m_info;
+    RakNet::RakString m_username;
 };
 
 // ========================================================================= //

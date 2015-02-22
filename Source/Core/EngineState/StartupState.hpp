@@ -15,57 +15,45 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: stdafx.hpp
+// File: StartupState.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// A single point of access for needed headers.
+// Defines StartupState class.
 // ========================================================================= //
 
-#ifndef __STDAFX_HPP__
-#define __STDAFX_HPP__
+#ifndef __STARTUPSTATE_HPP__
+#define __STARTUPSTATE_HPP__
 
 // ========================================================================= //
 
-// My own files.
-#include "Core/HelperFunctions.hpp"
-#include "Core/Assert.hpp"
-#include "Rendering/GraphicsSettings.hpp"
+#include "EngineState.hpp"
 
-// C++.
-#include <list>
-#include <map>
-#include <stack>
-#include <thread>
+// ========================================================================= //
 
-// Ogre3D.
-#include <Ogre.h>
+class StartupState final : public EngineState
+{
+public:
+    // Calls EngineState constructor.
+    explicit StartupState(void);
 
-// SDL.
-#include <SDL.h>
-#include <SDL_syswm.h>
+    // Empty destructor.
+    virtual ~StartupState(void) override;
 
-// CEGUI.
-#include <CEGUI/CEGUI.h>
-#include <CEGUI/RendererModules/Ogre/Renderer.h>
+    // Set up basic stuff.
+    virtual void enter(void) override;
 
-// Define NDEBUG for PhysX in release mode.
-#ifndef _DEBUG
-#define NDEBUG
-#endif
+    // Free basic stuff.
+    virtual void exit(void) override;
 
-// PhysX.
-#include <PxPhysicsAPI.h>
+    // Test.
+    virtual void update(void) override;
 
-// RakNet.
-#include <RakPeerInterface.h>
-#include <MessageIdentifiers.h>
-#include <RakNetTypes.h>
-#include <BitStream.h>
-#include <GetTime.h>
+    // Thread to load engine resources.
+    void loadResources(void);
 
-#ifdef WIN32
-#define _WINSOCKAPI_ // Prevent automatic inclusion of winsock.h.
-#endif
+private:
+    bool m_loaded;
+};
 
 // ========================================================================= //
 

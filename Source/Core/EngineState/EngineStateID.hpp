@@ -15,57 +15,25 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: stdafx.hpp
+// File: EngineStateID.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// A single point of access for needed headers.
+// Enumerates all engine state IDs.
 // ========================================================================= //
 
-#ifndef __STDAFX_HPP__
-#define __STDAFX_HPP__
+#ifndef __ENGINESTATEID_HPP__
+#define __ENGINESTATEID_HPP__
 
 // ========================================================================= //
 
-// My own files.
-#include "Core/HelperFunctions.hpp"
-#include "Core/Assert.hpp"
-#include "Rendering/GraphicsSettings.hpp"
+enum EngineStateID{
+    Startup = 0,
+    MainMenu,
+    Game,
+    Paused,
 
-// C++.
-#include <list>
-#include <map>
-#include <stack>
-#include <thread>
-
-// Ogre3D.
-#include <Ogre.h>
-
-// SDL.
-#include <SDL.h>
-#include <SDL_syswm.h>
-
-// CEGUI.
-#include <CEGUI/CEGUI.h>
-#include <CEGUI/RendererModules/Ogre/Renderer.h>
-
-// Define NDEBUG for PhysX in release mode.
-#ifndef _DEBUG
-#define NDEBUG
-#endif
-
-// PhysX.
-#include <PxPhysicsAPI.h>
-
-// RakNet.
-#include <RakPeerInterface.h>
-#include <MessageIdentifiers.h>
-#include <RakNetTypes.h>
-#include <BitStream.h>
-#include <GetTime.h>
-
-#ifdef WIN32
-#define _WINSOCKAPI_ // Prevent automatic inclusion of winsock.h.
-#endif
+    NumStates
+};
 
 // ========================================================================= //
 

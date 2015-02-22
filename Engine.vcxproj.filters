@@ -291,6 +291,9 @@
     <ClCompile Include="Source\Network\Client\Client.cpp">
       <Filter>Source Files\Network\Client</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Core\EngineState\StartupState.cpp">
+      <Filter>Source Files\Core\EngineState</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\Engine.hpp">
@@ -505,6 +508,18 @@
     </ClInclude>
     <ClInclude Include="Source\Network\NetMessage.hpp">
       <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\NetData.hpp">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\EngineState\EngineStateID.hpp">
+      <Filter>Header Files\Core\EngineState</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\EngineState\StartupState.hpp">
+      <Filter>Header Files\Core\EngineState</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\EngineNotifications.hpp">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

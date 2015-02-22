@@ -15,57 +15,21 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: stdafx.hpp
+// File: EngineNotifications.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// A single point of access for needed headers.
+// Enumerates engine notifications that can be sent from engine states.
 // ========================================================================= //
 
-#ifndef __STDAFX_HPP__
-#define __STDAFX_HPP__
+#ifndef __ENGINENOTIFICATIONS_HPP__
+#define __ENGINENOTIFICATIONS_HPP__
 
 // ========================================================================= //
 
-// My own files.
-#include "Core/HelperFunctions.hpp"
-#include "Core/Assert.hpp"
-#include "Rendering/GraphicsSettings.hpp"
-
-// C++.
-#include <list>
-#include <map>
-#include <stack>
-#include <thread>
-
-// Ogre3D.
-#include <Ogre.h>
-
-// SDL.
-#include <SDL.h>
-#include <SDL_syswm.h>
-
-// CEGUI.
-#include <CEGUI/CEGUI.h>
-#include <CEGUI/RendererModules/Ogre/Renderer.h>
-
-// Define NDEBUG for PhysX in release mode.
-#ifndef _DEBUG
-#define NDEBUG
-#endif
-
-// PhysX.
-#include <PxPhysicsAPI.h>
-
-// RakNet.
-#include <RakPeerInterface.h>
-#include <MessageIdentifiers.h>
-#include <RakNetTypes.h>
-#include <BitStream.h>
-#include <GetTime.h>
-
-#ifdef WIN32
-#define _WINSOCKAPI_ // Prevent automatic inclusion of winsock.h.
-#endif
+enum EngineNotification{
+    Pop = 0,
+    PopAndPush
+};
 
 // ========================================================================= //
 

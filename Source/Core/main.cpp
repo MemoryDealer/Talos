@@ -54,7 +54,7 @@ int main(int argc, char** argv)
         }
 
         // Start the engine!
-        engine.start(Engine::StateID::STATE_INTRO);
+        engine.start(EngineStateID::Startup);
     }
     catch (std::exception& e){
         // Report any exceptions.

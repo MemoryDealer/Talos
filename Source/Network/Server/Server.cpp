@@ -23,7 +23,7 @@
 
 #include "Config/Config.hpp"
 #include "Network/Client/Client.hpp"
-#include "Network/NetMessage.hpp"
+#include "Network/NetData.hpp"
 #include "Server.hpp"
 
 // ========================================================================= //
@@ -126,13 +126,12 @@ void Server::update(void)
 
 void Server::registerNewClient(void)
 {
-    Client::Info info;
-    RakNet::BitStream bit(m_packet->data, m_packet->length, false);
-    bit.IgnoreBytes(sizeof(RakNet::MessageID));
-    //bit.Read(info.username);
-    info.Serialize(false, &bit);
+    NetData::ClientRegistration reg;
+    RakNet::BitStream bs(m_packet->data, m_packet->length, false);
+    bs.IgnoreBytes(sizeof(RakNet::MessageID));
+    reg.Serialize(false, &bs);
 
-    printf("New client %s connected!\n", info.username.C_String());
+    printf("New client %s connected!\n", reg.username.C_String());
 }
 
 // ========================================================================= //

@@ -168,9 +168,7 @@ void SkyHighGraphics::loadPreset(const SkyPreset& preset)
 
 void SkyHighGraphics::destroy(void)
 {
-    m_skyX->remove();
     delete m_skyX;
-    delete m_basicController;
 }
 
 // ========================================================================= //
