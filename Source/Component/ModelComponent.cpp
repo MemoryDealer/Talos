@@ -31,7 +31,7 @@ ModelComponent::ModelComponent(void) :
 Component(),
 m_entity(nullptr)
 {
-    this->setType(Component::Type::Model);
+    
 }
 
 // ========================================================================= //

@@ -66,14 +66,6 @@ public:
     // Unregisters component from the entity.
     void detachComponent(const ComponentPtr);
 
-    // Unregisters component with specified ID from the entity.
-    void detachComponent(const int);
-
-    // Tests for the existence of certain Components, and if data should be
-    // shared between them by default, calls the functions needed to share
-    // that data.
-    void linkComponents(void);
-
     // Checks if all attached Components have been initialized. Returns true
     // if so.
     const bool checkComponents(void);
@@ -100,9 +92,6 @@ public:
     // Returns next EntityPtr as part of the EntityPool.
     EntityPtr getNext(void) const;
 
-    // Returns true if all attached components are linked.
-    const bool componentsLinked(void) const;
-
     // Setters:
 
     // Sets a new ID for the entity.
@@ -113,7 +102,6 @@ public:
 
 private:
     ComponentHashTable m_components;
-    bool m_componentsLinked;
 
     // Save memory for the EntityPool (see EntityPool.cpp).
     union{
@@ -132,10 +120,6 @@ inline const EntityID Entity::getID(void) const{
 
 inline EntityPtr Entity::getNext(void) const{
     return m_next;
-}
-
-inline const bool Entity::componentsLinked(void) const{
-    return m_componentsLinked;
 }
 
 // Setters:

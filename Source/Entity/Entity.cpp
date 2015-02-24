@@ -34,7 +34,6 @@
 
 Entity::Entity(void) :
 m_components(),
-m_componentsLinked(false),
 m_id(0),
 m_next(nullptr)
 {
@@ -77,15 +76,14 @@ void Entity::update(World& world)
 
 ComponentPtr Entity::attachComponent(const ComponentPtr component)
 {
-    Assert(component->getType() > 0 &&
-           component->getType() < Component::Type::NumTypes,
-           "Invalid component type added to entity");
-
     // Insert new ComponentPtr into hash table.
     m_components[&typeid(*component)] = component;
 
-    // Set this Entity's linked flag to false.
-    m_componentsLinked = false;
+    // Notify all attached components of newly attached component.
+    for (auto& itr : m_components){
+        itr.second->onComponentAttached(component);
+    }
+
     return component;
 }
 
@@ -99,69 +97,8 @@ void Entity::detachComponent(const ComponentPtr component)
 
 // ========================================================================= //
 
-void Entity::detachComponent(const int type)
-{
-    Assert(type > 0 && type < Component::Type::NumTypes,
-           "Invalid component type removed from entity");
-
-    
-}
-
-// ========================================================================= //
-
-void Entity::linkComponents(void)
-{
-    // Attach any needed components to the scene component.
-    SceneComponentPtr sceneC = nullptr;
-    if ((sceneC = this->getComponent<SceneComponent>()) != nullptr){
-        // Attach components to the scene component.
-        // Test for model component.
-        ModelComponentPtr modelC = this->getComponent<ModelComponent>();
-        if (modelC){
-            sceneC->attachModel(modelC);
-        }
-
-        // Test for light component.
-        LightComponentPtr lightC = this->getComponent<LightComponent>();
-        if (lightC){
-            sceneC->attachLight(lightC);
-        }
-    }
-
-    // Attach any needed components to the actor component.
-    ActorComponentPtr actorC = nullptr;
-    if ((actorC = this->getComponent<ActorComponent>()) != nullptr){
-        // Test for camera component.
-        CameraComponentPtr cameraC = this->getComponent<CameraComponent>();
-        if (cameraC){
-            actorC->attachCamera(cameraC);
-        }
-
-        // Test for model component.
-        ModelComponentPtr modelC = this->getComponent<ModelComponent>();
-        if (modelC){
-            actorC->attachModel(modelC);
-        }
-
-        // Test for light component.
-        LightComponentPtr lightC = this->getComponent<LightComponent>();
-        if (lightC){
-            actorC->attachLight(lightC);
-        }
-    }
-
-    m_componentsLinked = true;
-}
-
-// ========================================================================= //
-
 const bool Entity::checkComponents(void)
 {
-    if (!m_componentsLinked){
-        // Link all attached components.
-        this->linkComponents();
-    }
-
     for (auto& itr : m_components){
         if (itr.second->isInitialized() == false){
             return false;

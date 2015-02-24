@@ -38,18 +38,6 @@ class World;
 class Component
 {
 public:
-    enum Type{
-        Null = 0,
-        Actor,
-        Camera,
-        Light,
-        Model,
-        Physics,
-        Scene,
-
-        NumTypes // Total number of types for use in Entity.
-    };
-
     // Initializes m_name to "nil".
     explicit Component(void);
 
@@ -77,9 +65,6 @@ public:
     virtual void onComponentDetached(ComponentPtr) { }
 
     // Getters:
-
-    // Returns the name of the component type.
-    const Type getType(void) const;
 
     // Returns true if Component has been initialized.
     const bool isInitialized(void) const;
@@ -112,13 +97,7 @@ public:
                                 const Ogre::Real,
                                 const Ogre::Real) { }
 
-protected:
-
-    // Sets type of Component, called by derived Component constructor.
-    void setType(const Type);
-
 private:
-    Type m_type;
     bool m_initialized;
 };
 
@@ -126,19 +105,11 @@ private:
 
 // Getters:
 
-inline const Component::Type Component::getType(void) const{
-    return m_type;
-}
-
 inline const bool Component::isInitialized(void) const{
     return m_initialized;
 }
 
 // Setters:
-
-inline void Component::setType(const Type type){
-    m_type = type;
-}
 
 inline void Component::setInitialized(const bool initialized){
     m_initialized = initialized;

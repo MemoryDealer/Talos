@@ -49,7 +49,7 @@ m_movingBack(false),
 m_movingLeft(false),
 m_movingRight(false)
 {
-    this->setType(Component::Type::Actor);
+    
 }
 
 // ========================================================================= //
@@ -175,21 +175,15 @@ void ActorComponent::message(const ComponentMessage& msg)
 
 // ========================================================================= //
 
-void ActorComponent::attachModel(const ModelComponentPtr modelC)
+void ActorComponent::onComponentAttached(ComponentPtr component)
 {
-    Assert(modelC != nullptr, "null ModelComponentPtr");
+    SceneComponent::onComponentAttached(component);
 
-    m_yawNode->attachObject(modelC->getOgreEntity());
-}
-
-// ========================================================================= //
-
-void ActorComponent::attachCamera(const CameraComponentPtr cameraC)
-{
-    Assert(cameraC != nullptr, "null CameraComponentPtr");
-
-    m_camera = cameraC->getCamera();
-    m_rollNode->attachObject(m_camera);
+    if (typeid(*component) == typeid(CameraComponent)){
+        CameraComponentPtr cameraC = static_cast<CameraComponentPtr>(component);
+        m_rollNode->attachObject(cameraC->getCamera());
+        m_camera = cameraC->getCamera();
+    }
 }
 
 // ========================================================================= //

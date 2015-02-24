@@ -21,6 +21,7 @@
 // Implements PositionComponent class.
 // ========================================================================= //
 
+#include "Component/CameraComponent.hpp"
 #include "Component/LightComponent.hpp"
 #include "Component/ModelComponent.hpp"
 #include "ComponentMessage.hpp"
@@ -34,7 +35,7 @@ SceneComponent::SceneComponent(void) :
 Component(),
 m_node(nullptr)
 {
-    this->setType(Component::Type::Scene);
+    
 }
 
 // ========================================================================= //
@@ -81,20 +82,16 @@ void SceneComponent::message(const ComponentMessage& msg)
 
 // ========================================================================= //
 
-void SceneComponent::attachModel(const ModelComponentPtr modelC)
+void SceneComponent::onComponentAttached(ComponentPtr component)
 {
-    Assert(modelC != nullptr, "null ModelComponentPtr");
-
-    m_node->attachObject(modelC->getOgreEntity());
-}
-
-// ========================================================================= //
-
-void SceneComponent::attachLight(const LightComponentPtr lightC)
-{
-    Assert(lightC != nullptr, "null LightComponentPtr");
-
-    m_node->attachObject(lightC->getLight());
+    if (typeid(*component) == typeid(ModelComponent)){
+        m_node->attachObject(
+            static_cast<ModelComponentPtr>(component)->getOgreEntity());
+    }
+    else if (typeid(*component) == typeid(LightComponent)){
+        m_node->attachObject(
+            static_cast<LightComponentPtr>(component)->getLight());
+    }
 }
 
 // ========================================================================= //

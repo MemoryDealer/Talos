@@ -26,7 +26,6 @@
 // ========================================================================= //
 
 Component::Component(void) :
-m_type(Type::Null),
 m_initialized(false)
 {
 

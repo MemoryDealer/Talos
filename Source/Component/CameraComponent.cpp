@@ -33,7 +33,7 @@ CameraComponent::CameraComponent(void) :
 Component(),
 m_camera(nullptr)
 {
-    this->setType(Component::Type::Camera);
+    
 }
 
 // ========================================================================= //

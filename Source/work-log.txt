@@ -303,6 +303,9 @@
 == 2/23/15 ==
 * Re-designed Entity-component layout yet again. Now Entity holds a hash table of Components, and it uses RTTI (typeid) to statically determine Component types when retrieving them using a
     template function.
+* Added Component::onComponentAttached() which is called for every attached component on an entity if a new component is attached. This functions as a listener in which components can
+    wire up needed data between each other, such as SceneComponent's scene node to ModelComponent's Ogre::Entity.
+* Prior two changes remove the need for Component::Type and Entity::linkComponents().
 
 == TODO ==
 * Create EventQueue system to deal with network and UI.

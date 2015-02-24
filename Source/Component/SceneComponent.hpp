@@ -51,13 +51,15 @@ public:
     // Empty.
     virtual void message(const ComponentMessage&) override;
 
-    // Component functions:
+    // Wires up needed Components with itself.
+    virtual void onComponentAttached(ComponentPtr) override;
+    
+    // Getters:
 
-    // Joins a ModelComponent to itself.
-    void attachModel(const ModelComponentPtr);
+    // Returns pointer to internal Ogre::SceneNode.
+    Ogre::SceneNode* getSceneNode(void) const;
 
-    // Joins a LightComponent to itself.
-    void attachLight(const LightComponentPtr);
+    // Setters:
 
     // Sets position of Ogre::SceneNode. 
     // Note: This may be overriden by a PhysicsComponent attached to the
@@ -67,11 +69,6 @@ public:
     // Sets orientation of Ogre::SceneNode.
     void setOrientation(const Ogre::Real, const Ogre::Real, const Ogre::Real,
                         const Ogre::Real);
-
-    // Getters:
-
-    // Returns pointer to internal Ogre::SceneNode.
-    Ogre::SceneNode* getSceneNode(void) const;
 
 private:
     Ogre::SceneNode* m_node;

@@ -57,6 +57,10 @@ public:
     // Handles input messages.
     virtual void message(const ComponentMessage&) override;
 
+    // Calls SceneComponent::onComponentAttached() and links camera if the
+    // type is CameraComponent.
+    virtual void onComponentAttached(ComponentPtr) override;
+
     // Modes the actor can be in.
     enum Mode{
         SPECTATOR = 0,
@@ -68,12 +72,6 @@ public:
         KINEMATIC = 0,
         DYNAMIC
     };
-
-    // Joins a ModelComponent to the roll node.
-    void attachModel(const ModelComponentPtr);
-
-    // Attachs a camera to the roll node.
-    void attachCamera(const CameraComponentPtr);
 
     // Changes the actor's orientation based on relative x/y looking.
     void look(const int, const int);

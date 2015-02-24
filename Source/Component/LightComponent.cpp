@@ -29,7 +29,7 @@
 LightComponent::LightComponent(void) :
 m_light(nullptr)
 {
-    this->setType(Component::Type::Light);
+    
 }
 
 // ========================================================================= //

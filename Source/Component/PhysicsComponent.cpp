@@ -36,7 +36,7 @@ m_dActor(nullptr),
 m_actor(nullptr),
 m_mat(nullptr)
 {
-    this->setType(Component::Type::Physics);
+    
 }
 
 // ========================================================================= //
