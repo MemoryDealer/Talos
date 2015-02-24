@@ -43,7 +43,7 @@ public:
     void setXY(const int relx, const int rely);
 
     virtual void execute(EntityPtr entity) override{
-        ActorComponentPtr actor = entity->getActorComponent();
+        ActorComponentPtr actor = entity->getComponent<ActorComponent>();
 
         actor->look(m_relx, m_rely);
     }

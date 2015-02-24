@@ -51,7 +51,7 @@ void OceanHighGraphics::init(World* world,
                              const Graphics::Setting graphicsSetting)
 {
     // Assign ActorComponentPtr for update procedure.
-    m_actorC = world->getPlayer()->getActorComponent();
+    m_actorC = world->getPlayer()->getComponent<ActorComponent>();
 
     m_graphicsSetting = graphicsSetting;
 

@@ -291,7 +291,7 @@
 * In using the RakNet::BitStream I accidently used and std::string which gets corrupted over the wire, you must use RakNet::RakString. 
 * Created a Serialize() function for a test struct in Client for sending from the client to the server. All network data structures will need to be placed in one file.
 
-== 2/21/15 ==
+== 2/22/15 ==
 * Added EngineNotifications.hpp and EngineStateID.hpp to allow non-coupled access to engine states and notification enumerations from game states.
 * Added StartupState which creates a thread to load resources, it checks a bool to determine if all resources have been loaded and then notifies the engine to pop its state and push 
     the main menu state.
@@ -299,6 +299,10 @@
     systems are being updated and at the same time resources are being loaded. A threaded approach may be more trouble than it's worth here.
    Note that this freeze bug is difficult to reproduce; it takes several runs at the very least to see it again.
    CEGUI::..injectTimePulse() could be the cause.
+
+== 2/23/15 ==
+* Re-designed Entity-component layout yet again. Now Entity holds a hash table of Components, and it uses RTTI (typeid) to statically determine Component types when retrieving them using a
+    template function.
 
 == TODO ==
 * Create EventQueue system to deal with network and UI.

@@ -34,8 +34,8 @@
 class World;
 
 typedef unsigned int EntityID;
-typedef std::vector<ComponentPtr> ComponentRegistry;
-typedef std::list<ComponentPtr> ComponentList;
+typedef std::unordered_map<const std::type_info*, 
+    ComponentPtr> ComponentHashTable;
 
 // ========================================================================= //
 // Class for anything in the game world, such as players, boxes,
@@ -86,23 +86,16 @@ public:
     // Returns entity's ID.
     const EntityID getID(void) const;
 
-    // Returns a direct pointer to the internal actor component if it exists.
-    ActorComponentPtr getActorComponent(void) const;
-
-    // Returns a direct pointer to the internal camera component if it exists.
-    CameraComponentPtr getCameraComponent(void) const;
-
-    // Returns a direct pointer to the internal light component if it exists.
-    LightComponentPtr getLightComponent(void) const;
-
-    // Returns a direct pointer to the internal model component if it exists.
-    ModelComponentPtr getModelComponent(void) const;
-
-    // Returns a direct pointer to the internal physics component if it exists.
-    PhysicsComponentPtr getPhysicsComponent(void) const;
-
-    // Returns a direct pointer to the internal scene component if it exists.
-    SceneComponentPtr getSceneComponent(void) const;
+    // Returns ComponentPtr to specified type from internal hash table.
+    template<typename T>
+    T* getComponent(void){
+        if (m_components.count(&typeid(T)) != 0){
+            return static_cast<T*>(m_components[&typeid(T)]);
+        }
+        else{
+            return nullptr;
+        }
+    }
 
     // Returns next EntityPtr as part of the EntityPool.
     EntityPtr getNext(void) const;
@@ -119,8 +112,7 @@ public:
     void setNext(const EntityPtr);
 
 private:
-    ComponentRegistry m_componentRegistry; // Contains a slot of each type.
-    ComponentList m_activeComponents; // Only attached components live here.
+    ComponentHashTable m_components;
     bool m_componentsLinked;
 
     // Save memory for the EntityPool (see EntityPool.cpp).

@@ -95,7 +95,7 @@ void PDebugDrawer::add(PxRigidActor* actor, PxGeometry& geometry)
         // Get EntityPtr from actor's user data.
         EntityPtr entity = static_cast<EntityPtr>(node.actor->userData);
         // Get the Ogre::SceneNode and attach the DynamicLines to it.
-        SceneComponentPtr sceneC = entity->getSceneComponent();
+        SceneComponentPtr sceneC = entity->getComponent<SceneComponent>();
         Ogre::SceneNode* lnode = sceneC->getSceneNode();
         lnode->attachObject(node.lines.get());
 

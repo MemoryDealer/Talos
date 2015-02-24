@@ -36,13 +36,13 @@ class MoveForwardCommand : public Command
 public:
 
     virtual void execute(EntityPtr entity) override{
-        ActorComponentPtr actor = entity->getActorComponent();
+        ActorComponentPtr actor = entity->getComponent<ActorComponent>();
 
         actor->setMovingForward(true);
     }
 
     virtual void unexecute(EntityPtr entity) override{
-        ActorComponentPtr actor = entity->getActorComponent();
+        ActorComponentPtr actor = entity->getComponent<ActorComponent>();
 
         actor->setMovingForward(false);
     }

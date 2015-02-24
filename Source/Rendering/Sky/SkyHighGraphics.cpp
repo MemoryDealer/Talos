@@ -86,7 +86,8 @@ void SkyHighGraphics::init(World* world,
 
     // Assign the Ogre::Camera pointer for updating.
     Assert(world->getPlayer() != nullptr, "Invalid Player object");
-    m_camera = world->getPlayer()->getCameraComponent()->getCamera();
+    m_camera = world->getPlayer()->getComponent<CameraComponent>()->
+        getCamera();
     Assert(m_camera != nullptr, "SkyX initialized with invalid Player Camera");
 
     m_skyX->getVCloudsManager()->getVClouds()->registerCamera(m_camera);

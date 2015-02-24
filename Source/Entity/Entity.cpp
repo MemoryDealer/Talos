@@ -33,15 +33,12 @@
 // ========================================================================= //
 
 Entity::Entity(void) :
-m_componentRegistry(),
-m_activeComponents(),
+m_components(),
 m_componentsLinked(false),
 m_id(0),
 m_next(nullptr)
 {
-    // Allocate array of total possible components.
-    m_componentRegistry.resize(Component::Type::NumTypes);
-    std::fill(m_componentRegistry.begin(), m_componentRegistry.end(), nullptr);
+    
 }
 
 // ========================================================================= //
@@ -55,21 +52,15 @@ Entity::~Entity(void)
 
 void Entity::init(World& world)
 {
-    for (auto itr = m_activeComponents.begin();
-         itr != m_activeComponents.end();
-         ++itr){
-        (*itr)->init(this, world);
-    }
+    
 }
 
 // ========================================================================= //
 
 void Entity::destroy(World& world)
 {
-    for (auto itr = m_activeComponents.begin();
-         itr != m_activeComponents.end();
-         ++itr){
-        (*itr)->destroy(this, world);
+    for (auto& itr : m_components){
+        itr.second->destroy(this, world);
     }
 }
 
@@ -77,10 +68,8 @@ void Entity::destroy(World& world)
 
 void Entity::update(World& world)
 {
-    for (auto itr = m_activeComponents.begin();
-         itr != m_activeComponents.end();
-         ++itr){
-        (*itr)->update(this, world);
+    for (auto& itr : m_components){
+        itr.second->update(this, world);
     }
 }
 
@@ -92,11 +81,8 @@ ComponentPtr Entity::attachComponent(const ComponentPtr component)
            component->getType() < Component::Type::NumTypes,
            "Invalid component type added to entity");
 
-    // Add to active component list.
-    m_activeComponents.push_back(component);
-
-    // Add Component to its registry slot.
-    m_componentRegistry[component->getType()] = component;
+    // Insert new ComponentPtr into hash table.
+    m_components[&typeid(*component)] = component;
 
     // Set this Entity's linked flag to false.
     m_componentsLinked = false;
@@ -107,18 +93,8 @@ ComponentPtr Entity::attachComponent(const ComponentPtr component)
 
 void Entity::detachComponent(const ComponentPtr component)
 {
-    for (auto itr = m_activeComponents.begin();
-         itr != m_activeComponents.end();){
-        if (*itr == component){
-            itr = m_activeComponents.erase(itr);
-        }
-        else{
-            ++itr;
-        }
-    }
-
-    // Remove link from component registry.
-    m_componentRegistry[component->getType()] = nullptr;
+    m_components.erase(&typeid(*component));
+    m_components[&typeid(*component)] = nullptr;
 }
 
 // ========================================================================= //
@@ -128,17 +104,7 @@ void Entity::detachComponent(const int type)
     Assert(type > 0 && type < Component::Type::NumTypes,
            "Invalid component type removed from entity");
 
-    for (auto itr = m_activeComponents.begin();
-         itr != m_activeComponents.end();){
-        if ((*itr)->getType() == type){
-            itr = m_activeComponents.erase(itr);
-        }
-        else{
-            ++itr;
-        }
-    }
-
-    m_componentRegistry[type] = nullptr;
+    
 }
 
 // ========================================================================= //
@@ -147,16 +113,16 @@ void Entity::linkComponents(void)
 {
     // Attach any needed components to the scene component.
     SceneComponentPtr sceneC = nullptr;
-    if ((sceneC = getSceneComponent()) != nullptr){
+    if ((sceneC = this->getComponent<SceneComponent>()) != nullptr){
         // Attach components to the scene component.
         // Test for model component.
-        ModelComponentPtr modelC = this->getModelComponent();
+        ModelComponentPtr modelC = this->getComponent<ModelComponent>();
         if (modelC){
             sceneC->attachModel(modelC);
         }
 
         // Test for light component.
-        LightComponentPtr lightC = this->getLightComponent();
+        LightComponentPtr lightC = this->getComponent<LightComponent>();
         if (lightC){
             sceneC->attachLight(lightC);
         }
@@ -164,21 +130,21 @@ void Entity::linkComponents(void)
 
     // Attach any needed components to the actor component.
     ActorComponentPtr actorC = nullptr;
-    if ((actorC = this->getActorComponent()) != nullptr){
+    if ((actorC = this->getComponent<ActorComponent>()) != nullptr){
         // Test for camera component.
-        CameraComponentPtr cameraC = this->getCameraComponent();
+        CameraComponentPtr cameraC = this->getComponent<CameraComponent>();
         if (cameraC){
             actorC->attachCamera(cameraC);
         }
 
         // Test for model component.
-        ModelComponentPtr modelC = this->getModelComponent();
+        ModelComponentPtr modelC = this->getComponent<ModelComponent>();
         if (modelC){
             actorC->attachModel(modelC);
         }
 
         // Test for light component.
-        LightComponentPtr lightC = this->getLightComponent();
+        LightComponentPtr lightC = this->getComponent<LightComponent>();
         if (lightC){
             actorC->attachLight(lightC);
         }
@@ -196,10 +162,8 @@ const bool Entity::checkComponents(void)
         this->linkComponents();
     }
 
-    for (auto itr = m_activeComponents.begin();
-         itr != m_activeComponents.end();
-         ++itr){
-        if ((*itr)->isInitialized() == false){
+    for (auto& itr : m_components){
+        if (itr.second->isInitialized() == false){
             return false;
         }
     }
@@ -214,59 +178,9 @@ void Entity::message(const ComponentMessage& msg)
     Assert(msg.type != ComponentMessageType::NIL, "NIL Entity message!");
 
     // Broadcast to all attached components.
-    for (auto itr = m_activeComponents.begin();
-         itr != m_activeComponents.end();
-         ++itr){
-        (*itr)->message(msg);
+    for (auto& itr : m_components){
+        itr.second->message(msg);
     }
-}
-
-// ========================================================================= //
-
-ActorComponentPtr Entity::getActorComponent(void) const
-{
-    return static_cast<ActorComponentPtr>(
-        m_componentRegistry[Component::Type::Actor]);
-}
-
-// ========================================================================= //
-
-CameraComponentPtr Entity::getCameraComponent(void) const
-{
-    return static_cast<CameraComponentPtr>(
-        m_componentRegistry[Component::Type::Camera]);
-}
-
-// ========================================================================= //
-
-LightComponentPtr Entity::getLightComponent(void) const
-{
-    return static_cast<LightComponentPtr>(
-        m_componentRegistry[Component::Type::Light]);
-}
-
-// ========================================================================= //
-
-ModelComponentPtr Entity::getModelComponent(void) const
-{
-    return static_cast<ModelComponentPtr>(
-        m_componentRegistry[Component::Type::Model]);
-}
-
-// ========================================================================= //
-
-PhysicsComponentPtr Entity::getPhysicsComponent(void) const
-{
-    return static_cast<PhysicsComponentPtr>(
-        m_componentRegistry[Component::Type::Physics]);
-}
-
-// ========================================================================= //
-
-SceneComponentPtr Entity::getSceneComponent(void) const
-{
-    return static_cast<SceneComponentPtr>(
-        m_componentRegistry[Component::Type::Scene]);
 }
 
 // ========================================================================= //

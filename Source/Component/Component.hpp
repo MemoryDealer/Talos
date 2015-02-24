@@ -68,6 +68,14 @@ public:
     // Handles a message received from parent Entity.
     virtual void message(const ComponentMessage&) = 0;
 
+    // Triggered for all attached components when a new component is 
+    // attached to an Entity.
+    virtual void onComponentAttached(ComponentPtr) { }
+
+    // Triggered for all attached components when a component is 
+    // detached from an Entity.
+    virtual void onComponentDetached(ComponentPtr) { }
+
     // Getters:
 
     // Returns the name of the component type.
@@ -76,10 +84,33 @@ public:
     // Returns true if Component has been initialized.
     const bool isInitialized(void) const;
 
+    // Interface getters:
+    virtual Ogre::SceneNode* getSceneNode(void) const {
+        return nullptr;
+    }
+    virtual const Ogre::Vector3& getPosition(void) const { 
+        return Ogre::Vector3::ZERO;
+    }
+    virtual const Ogre::Quaternion& getOrientation(void) const { 
+        return Ogre::Quaternion::IDENTITY;
+    }
+    virtual Ogre::Camera* getCamera(void) const { 
+        return nullptr;
+    }
+
     // Setters:
 
     // Sets initialization state of Component.
     void setInitialized(const bool);
+
+    // Interface setters:
+    virtual void setPosition(const Ogre::Real, 
+                             const Ogre::Real, 
+                             const Ogre::Real) { }
+    virtual void setOrientation(const Ogre::Real, 
+                                const Ogre::Real, 
+                                const Ogre::Real,
+                                const Ogre::Real) { }
 
 protected:
 

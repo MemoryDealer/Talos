@@ -80,9 +80,9 @@ public:
 
     // Getters:
 
-    const Ogre::Vector3 getPosition(void) const;
+    const Ogre::Vector3& getPosition(void) const;
 
-    const Ogre::Quaternion getOrientation(void) const;
+    const Ogre::Quaternion& getOrientation(void) const;
 
     Ogre::Camera* getCamera(void) const;
 
@@ -138,11 +138,11 @@ private:
 
 // Getters:
 
-inline const Ogre::Vector3 ActorComponent::getPosition(void) const{
+inline const Ogre::Vector3& ActorComponent::getPosition(void) const{
     return m_cameraNode->getPosition();
 }
 
-inline const Ogre::Quaternion ActorComponent::getOrientation(void) const{
+inline const Ogre::Quaternion& ActorComponent::getOrientation(void) const{
     return m_yawNode->getOrientation() * m_pitchNode->getOrientation();
 }
 
