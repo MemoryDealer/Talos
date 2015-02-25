@@ -15,81 +15,93 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: StartupState.cpp
+// File: MainMenuUI.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements StartupState class.
+// Implements MainMenuUI class.
 // ========================================================================= //
 
-#include "Core/EngineNotifications.hpp"
-#include "Core/EngineState/EngineStateID.hpp"
-#include "Core/Resources.hpp"
-#include "StartupState.hpp"
+#include "MainMenuUI.hpp"
 
 // ========================================================================= //
 
-StartupState::StartupState(void) :
-m_loaded(false)
+MainMenuUI::MainMenuUI(void)
 {
 
 }
 
 // ========================================================================= //
 
-StartupState::~StartupState(void)
+MainMenuUI::~MainMenuUI(void)
 {
 
 }
 
 // ========================================================================= //
 
-void StartupState::enter(void)
+void MainMenuUI::init(void)
 {
-    // Create thread for loading engine resources.
-    // @TODO: Thread causes random hanging.
-    /*std::thread t(&StartupState::loadResources, this);
-    t.detach();*/
-    this->loadResources();
-}
+    CEGUI::WindowManager& wmgr = CEGUI::WindowManager::getSingleton();
 
-// ========================================================================= //
+    // Load each corresponding layer and link their events.
+    m_layers[Layer::Root] = wmgr.loadLayoutFromFile("MainMenu/root.layout");
+    m_layers[Layer::Root]->getChild("Campaign")->subscribeEvent(
+        CEGUI::PushButton::EventClicked,
+        CEGUI::Event::Subscriber(&MainMenuUI::root_CampaignPressed, this));
 
-void StartupState::exit(void)
-{
+    // Add each layer to root window.
+    for (int i = 0; i < 1; ++i){
+        CEGUI::System::getSingleton().getDefaultGUIContext().
+            getRootWindow()->addChild(m_layers[i]);
 
-}
-
-// ========================================================================= //
-
-void StartupState::update(void)
-{
-    if (m_active == true){
-
-        // Render something simple...
-        // ...
-
-        if (m_loaded == true){
-            // Done loading, notify engine to start main menu.
-            m_subject.notify(EngineNotification::PopAndPush, 
-                             EngineStateID::MainMenu);
+        if (i > Layer::Root){
+            m_layers[i]->setVisible(false);
         }
     }
 }
 
 // ========================================================================= //
 
-void StartupState::loadResources(void)
+void MainMenuUI::destroy(void)
 {
-    // Load resources for Ogre (from Resources.hpp).
-    printf("Loading Ogre resources...\n");
-    loadOgreResources();
-    printf("Loading meshes...\n");
-    loadMeshes();
-    printf("Loading CEGUI resources...\n");
-    loadCEGUIResources();
-    printf("Done loading.\n");
 
-    m_loaded = true;
+}
+
+// ========================================================================= //
+
+void MainMenuUI::update(void)
+{
+    CEGUI::System::getSingleton().
+        injectTimePulse(1.f / 16.f);
+}
+
+// ========================================================================= //
+
+// Event handlers:
+
+// ========================================================================= //
+
+bool MainMenuUI::root_CampaignPressed(const CEGUI::EventArgs& e)
+{
+    printf("Campaign pressed!");
+
+    return true;
+}
+
+// ========================================================================= //
+
+bool MainMenuUI::root_MultiplayerPressed(const CEGUI::EventArgs& e)
+{
+
+    return true;
+}
+
+// ========================================================================= //
+
+bool MainMenuUI::root_ExitPressed(const CEGUI::EventArgs& e)
+{
+
+    return true;
 }
 
 // ========================================================================= //

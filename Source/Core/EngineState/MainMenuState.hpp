@@ -15,30 +15,42 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: EngineState.cpp
+// File: MainMenuState.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements EngineState class.
+// Defines MainMenuState class.
+// ========================================================================= //
+
+#ifndef __MAINMENUSTATE_HPP__
+#define __MAINMENUSTATE_HPP__
+
 // ========================================================================= //
 
 #include "EngineState.hpp"
 
 // ========================================================================= //
-
-EngineState::EngineState(void) :
-m_subject(),
-m_world(),
-m_ui(nullptr),
-m_active(false)
+// Main menu of engine, provides access to other engine states.
+class MainMenuState : public EngineState
 {
+public:
+    // Empty constructor.
+    explicit MainMenuState(void);
 
-}
+    // Empty destructor.
+    virtual ~MainMenuState(void) override;
+
+    // Creates world, UI.
+    virtual void enter(void) override;
+
+    // Destroys world.
+    virtual void exit(void) override;
+
+    // Processes UI interaction.
+    virtual void update(void) override;
+};
 
 // ========================================================================= //
 
-EngineState::~EngineState(void)
-{
-
-}
+#endif
 
 // ========================================================================= //

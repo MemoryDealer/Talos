@@ -23,7 +23,7 @@
 
 #include "Engine.hpp"
 #include "EngineNotifications.hpp"
-#include "EngineState/IntroState.hpp"
+#include "EngineState/MainMenuState.hpp"
 #include "EngineState/StartupState.hpp"
 #include "Input/Input.hpp"
 #include "Network/Client/Client.hpp"
@@ -91,8 +91,10 @@ bool Engine::init(void)
     }
 
     // Create the main window with SDL.
-    const int width = 1024;
-    const int height = 768;
+    //const int width = 1024;
+    //const int height = 768;
+    const int width = 1920;
+    const int height = 1080;
     m_sdlWindow = SDL_CreateWindow(
         "Engine",
         SDL_WINDOWPOS_CENTERED,
@@ -237,10 +239,6 @@ void Engine::start(const EngineStateID id)
                 lag -= MS_PER_UPDATE;
             }
 
-            // Update CEGUI.
-            /*CEGUI::System::getSingleton().
-                injectTimePulse(static_cast<float>(lag / MS_PER_UPDATE));*/
-
             // Render the updated frame, compensating for lag.
             m_root->renderOneFrame(Ogre::Real(lag / MS_PER_UPDATE));
         }
@@ -262,8 +260,7 @@ void Engine::registerState(const EngineStateID id)
         break;
 
     case EngineStateID::MainMenu:
-        // @temp:
-        state.reset(new IntroState());
+        state.reset(new MainMenuState());
         break;
     }
 

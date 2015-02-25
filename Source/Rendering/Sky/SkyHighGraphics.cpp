@@ -84,15 +84,13 @@ void SkyHighGraphics::init(World* world,
     // Slow down the day/night cycle.
     m_skyX->setTimeMultiplier(0.01f);
 
-    // Assign the Ogre::Camera pointer for updating.
-    Assert(world->getPlayer() != nullptr, "Invalid Player object");
-    m_camera = world->getPlayer()->getComponent<CameraComponent>()->
-        getCamera();
-    Assert(m_camera != nullptr, "SkyX initialized with invalid Player Camera");
+    // Assign the Ogre::Camera pointer for updating.    
+    m_camera = world->getMainCamera();
+    Assert(m_camera != nullptr, "SkyX initialized with invalid Main Camera");
 
     m_skyX->getVCloudsManager()->getVClouds()->registerCamera(m_camera);
 
-    this->loadPreset(SkyPresets[SkyPreset::Thunderstorm2]);
+    //this->loadPreset(SkyPresets[SkyPreset::Thunderstorm2]);
 }
 
 // ========================================================================= //

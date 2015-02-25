@@ -149,7 +149,7 @@ const CommandPtr Input::handle(const SDL_Event& e)
         break;
     }
 
-    return 0;
+    return nullptr;
 }
 
 // ========================================================================= //

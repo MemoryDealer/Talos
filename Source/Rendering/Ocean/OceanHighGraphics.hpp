@@ -80,8 +80,8 @@ private:
     Hydrax::Hydrax* m_hydrax;
     Ogre::Camera* m_hydraxCamera;
 
-    // The actor which controls the camera. Needed for updating Hydrax camera.
-    ActorComponent* m_actorC;
+    // Main camera needed for updating Hydrax camera.
+    Ogre::Camera* m_mainCamera;
     Graphics::Setting m_graphicsSetting;
 };
 

@@ -50,6 +50,8 @@ m_useServer(false),
 m_useClient(false),
 m_entityPool(nullptr),
 m_player(nullptr),
+m_hasPlayer(false),
+m_mainCamera(nullptr),
 m_actorComponentPool(nullptr),
 m_cameraComponentPool(nullptr),
 m_modelComponentPool(nullptr),
@@ -81,7 +83,7 @@ void World::injectDependencies(const Dependencies& deps)
 
 // ========================================================================= //
 
-void World::init(void)
+void World::init(const bool usePhysics)
 {
     // Create Ogre scene for rendering.
     m_scene = m_root->createSceneManager(Ogre::ST_GENERIC);
@@ -90,10 +92,9 @@ void World::init(void)
     m_environment.reset(new Environment(this, m_graphics));
     m_environment->init();
     
-    // Create physics scene.
-    m_PScene.reset(new PScene(m_physics));
-    m_PScene->init();
-    m_usePhysics = true;
+    if (usePhysics == true){
+        this->initPhysics();
+    }
 
     // Allocate Entity pool.
     // @TODO: Read pool size from config file.
@@ -181,6 +182,19 @@ void World::update(void)
 
 // ========================================================================= //
 
+// Physics functions:
+
+// ========================================================================= //
+
+void World::initPhysics(void)
+{
+    m_PScene.reset(new PScene(m_physics));
+    m_PScene->init();
+    m_usePhysics = true;
+}
+
+// ========================================================================= //
+
 // Network functions:
 
 // ========================================================================= //
@@ -225,38 +239,53 @@ void World::destroyClient(void)
 
 // ========================================================================= //
 
-ActorComponentPtr World::createActorComponent(void){
+ActorComponentPtr World::createActorComponent(void)
+{
     return m_actorComponentPool->create();
 }
 
 // ========================================================================= //
 
-CameraComponentPtr World::createCameraComponent(void){
+CameraComponentPtr World::createCameraComponent(void)
+{
     return m_cameraComponentPool->create();
 }
 
 // ========================================================================= //
 
-LightComponentPtr World::createLightComponent(void){
+LightComponentPtr World::createLightComponent(void)
+{
     return m_lightComponentPool->create();
 }
 
 // ========================================================================= //
 
-ModelComponentPtr World::createModelComponent(void){
+ModelComponentPtr World::createModelComponent(void)
+{
     return m_modelComponentPool->create();
 }
 
 // ========================================================================= //
 
-PhysicsComponentPtr World::createPhysicsComponent(void){
+PhysicsComponentPtr World::createPhysicsComponent(void)
+{
     return m_physicsComponentPool->create();
 }
 
 // ========================================================================= //
 
-SceneComponentPtr World::createSceneComponent(void){
+SceneComponentPtr World::createSceneComponent(void)
+{
     return m_sceneComponentPool->create();
+}
+
+// ========================================================================= //
+
+void World::setPlayer(const EntityPtr player)
+{
+    m_player = player;
+    m_mainCamera = m_player->getComponent<ActorComponent>()->getCamera();
+    m_hasPlayer = true;
 }
 
 // ========================================================================= //

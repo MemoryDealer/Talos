@@ -59,7 +59,7 @@ public:
     void injectDependencies(const Dependencies&);
 
     // Allocates the Ogre::SceneManager.
-    void init(void);
+    void init(const bool usePhysics = false);
 
     // De-allocates all data.
     void destroy(void);
@@ -69,7 +69,7 @@ public:
     // Get the next free Entity from the internal pool and return a pointer.
     EntityPtr createEntity(void);
 
-    // Calls destroy on Entity and 
+    // Calls destroy on Entity.
     void destroyEntity(EntityPtr);
 
     // Checks if each Entity's Components have been initialized and linked. 
@@ -79,6 +79,13 @@ public:
 
     // Updates every active Entity in the game world, updates environment.
     void update(void);
+
+    // === //
+
+    // Physics functions:
+
+    // Creates physics scene (PScene).
+    void initPhysics(void);
 
     // === //
     
@@ -129,6 +136,9 @@ public:
     // Returns pointer to player-controlled Entity.
     EntityPtr getPlayer(void) const;
 
+    // Returns pointer to camera which views the game world.
+    Ogre::Camera* getMainCamera(void) const;
+
     // Returns pointer to PScene (physics scene).
     std::shared_ptr<PScene> getPScene(void) const;
 
@@ -145,6 +155,9 @@ public:
 
     // Sets pointer to Entity controlled by player.
     void setPlayer(const EntityPtr);
+
+    // Sets pointer to main camera which views the game world.
+    void setMainCamera(Ogre::Camera*);
 
     // === // 
 
@@ -186,6 +199,10 @@ private:
 
     // The Entity the player controls.
     EntityPtr m_player;
+    bool m_hasPlayer;
+
+    // Main camera which renders to viewport.
+    Ogre::Camera* m_mainCamera;
 
     // Component pools. The idea here is to avoid dynamic allocation of 
     // any Components during the game state. They are allocated during the
@@ -229,6 +246,10 @@ inline EntityPtr World::getPlayer(void) const{
     return m_player;
 }
 
+inline Ogre::Camera* World::getMainCamera(void) const{
+    return m_mainCamera;
+}
+
 inline std::shared_ptr<PScene> World::getPScene(void) const{
     return m_PScene;
 }
@@ -247,8 +268,8 @@ inline Input* World::getInput(void) const{
 
 // Setters:
 
-inline void World::setPlayer(const EntityPtr player){
-    m_player = player;
+inline void World::setMainCamera(Ogre::Camera* camera){
+    m_mainCamera = camera;
 }
 
 // ========================================================================= //

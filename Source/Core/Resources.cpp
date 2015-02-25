@@ -109,6 +109,11 @@ void loadCEGUIResources(void)
         setDefaultFont("DejaVuSans-10");
     CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().
         setDefaultImage("AlfiskoSkin/MouseArrow");
+
+    // Create root window.
+    CEGUI::WindowManager& wmgr = CEGUI::WindowManager::getSingleton();
+    CEGUI::Window* root = wmgr.createWindow("DefaultWindow", "root");
+    CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(root);
 }
 
 // ========================================================================= //

@@ -15,30 +15,62 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: EngineState.cpp
+// File: MainMenuUI.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements EngineState class.
+// Defines MainMenuUI class.
 // ========================================================================= //
 
-#include "EngineState.hpp"
+#ifndef __MAINMENUUI_HPP__
+#define __MAINMENUUI_HPP__
 
 // ========================================================================= //
 
-EngineState::EngineState(void) :
-m_subject(),
-m_world(),
-m_ui(nullptr),
-m_active(false)
+#include "UI.hpp"
+
+// ========================================================================= //
+// UI handler for MainMenuState.
+class MainMenuUI : public UI
 {
+public:
+    // Default initializes member data.
+    explicit MainMenuUI(void);
 
-}
+    // Empty destructor.
+    virtual ~MainMenuUI(void) override;
+
+    // Creates layouts for main menu.
+    virtual void init(void) override;
+
+    // Destroys layouts for main menu.
+    virtual void destroy(void) override;
+
+    // Steps CEGUI system.
+    virtual void update(void) override;
+
+    // Event handlers:
+
+    bool root_CampaignPressed(const CEGUI::EventArgs& e);
+    bool root_MultiplayerPressed(const CEGUI::EventArgs& e);
+    bool root_ExitPressed(const CEGUI::EventArgs& e);
+
+    // Window layers.
+    enum Layer{
+        Root,
+        Campaign,
+        Multiplayer,
+        Options,
+
+        NumLayers
+    };
+
+private:
+    // All layers (windows loaded from a layout).
+    CEGUI::Window* m_layers[Layer::NumLayers];
+};
 
 // ========================================================================= //
 
-EngineState::~EngineState(void)
-{
-
-}
+#endif
 
 // ========================================================================= //

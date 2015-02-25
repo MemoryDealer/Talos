@@ -15,48 +15,34 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: IntroState.hpp
+// File: UI.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines IntroState class.
+// Defines UI interface.
 // ========================================================================= //
 
-#ifndef __INTROSTATE_HPP__
-#define __INTROSTATE_HPP__
-
-// ========================================================================= //
-
-#include "EngineState.hpp"
+#ifndef __UI_HPP__
+#define __UI_HPP__
 
 // ========================================================================= //
 
-class Entity;
-
-typedef Entity* EntityPtr;
+#include "stdafx.hpp"
 
 // ========================================================================= //
-// A test state for now.
-class IntroState final : public EngineState
+// Handles CEGUI creation and events.
+class UI
 {
 public:
-    // Calls EngineState constructor.
-    explicit IntroState(void);
+    // Empty constructor.
+    explicit UI(void) { }
 
-    // Empty destructor.
-    virtual ~IntroState(void) override;
+    virtual ~UI(void) = 0 { }
 
-    // Set up basic stuff.
-    virtual void enter(void) override;
+    virtual void init(void) = 0;
 
-    // Free basic stuff.
-    virtual void exit(void) override;
+    virtual void destroy(void) = 0;
 
-    // Test.
-    virtual void update(void) override;
-
-private:
-    EntityPtr m_player;
-    EntityPtr m_ogre;
+    virtual void update(void) = 0;
 };
 
 // ========================================================================= //

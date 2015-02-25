@@ -136,6 +136,9 @@
     <Filter Include="Source Files\Network\Client">
       <UniqueIdentifier>{e0869ccf-d816-4233-9c59-68d54f3c99c0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\UI">
+      <UniqueIdentifier>{b62e2ebf-c826-471c-929d-836eeb14cd33}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\main.cpp">
@@ -143,12 +146,6 @@
     </ClCompile>
     <ClCompile Include="Source\Core\Engine.cpp">
       <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Core\EngineState\EngineState.cpp">
-      <Filter>Source Files\Core\EngineState</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Core\EngineState\IntroState.cpp">
-      <Filter>Source Files\Core\EngineState</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\Assert.cpp">
       <Filter>Source Files\Core</Filter>
@@ -294,6 +291,15 @@
     <ClCompile Include="Source\Core\EngineState\StartupState.cpp">
       <Filter>Source Files\Core\EngineState</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Core\EngineState\MainMenuState.cpp">
+      <Filter>Source Files\Core\EngineState</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\EngineState\EngineState.cpp">
+      <Filter>Source Files\Core\EngineState</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\MainMenuUI.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\Engine.hpp">
@@ -303,9 +309,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Core\EngineState\EngineState.hpp">
-      <Filter>Header Files\Core\EngineState</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\EngineState\IntroState.hpp">
       <Filter>Header Files\Core\EngineState</Filter>
     </ClInclude>
     <ClInclude Include="Source\Core\Assert.hpp">
@@ -520,6 +523,15 @@
     </ClInclude>
     <ClInclude Include="Source\Core\EngineNotifications.hpp">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\EngineState\MainMenuState.hpp">
+      <Filter>Header Files\Core\EngineState</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\UI.hpp">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\MainMenuUI.hpp">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

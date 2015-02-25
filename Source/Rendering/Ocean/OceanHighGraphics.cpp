@@ -31,7 +31,7 @@
 OceanHighGraphics::OceanHighGraphics(void) :
 m_hydrax(nullptr),
 m_hydraxCamera(nullptr),
-m_actorC(nullptr),
+m_mainCamera(nullptr),
 m_graphicsSetting(Graphics::Setting::High)
 {
     
@@ -50,8 +50,8 @@ void OceanHighGraphics::init(World* world,
                              const std::string& cfg,
                              const Graphics::Setting graphicsSetting)
 {
-    // Assign ActorComponentPtr for update procedure.
-    m_actorC = world->getPlayer()->getComponent<ActorComponent>();
+    // Assign main camera pointer.
+    m_mainCamera = world->getMainCamera();
 
     m_graphicsSetting = graphicsSetting;
 
@@ -99,8 +99,8 @@ void OceanHighGraphics::destroy(void)
 void OceanHighGraphics::update(void)
 {
     // Update Hydrax camera.
-    m_hydraxCamera->setPosition(m_actorC->getPosition());
-    m_hydraxCamera->setOrientation(m_actorC->getOrientation());
+    m_hydraxCamera->setPosition(m_mainCamera->getDerivedPosition());
+    m_hydraxCamera->setOrientation(m_mainCamera->getDerivedOrientation());
 
     // Update Hydrax animation.
     m_hydrax->update(1.f / 16.f);

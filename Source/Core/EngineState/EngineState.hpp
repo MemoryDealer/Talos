@@ -33,6 +33,7 @@
 // ========================================================================= //
 
 class EngineState;
+class UI;
 
 typedef std::shared_ptr<EngineState> EngineStatePtr;
 
@@ -77,6 +78,7 @@ protected:
 
     // State data.
     World m_world;
+    std::shared_ptr<UI> m_ui;
     bool m_active;
 };
 

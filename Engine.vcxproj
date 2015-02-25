@@ -24,7 +24,7 @@
     <ClCompile Include="Source\Core\Assert.cpp" />
     <ClCompile Include="Source\Core\Engine.cpp" />
     <ClCompile Include="Source\Core\EngineState\EngineState.cpp" />
-    <ClCompile Include="Source\Core\EngineState\IntroState.cpp" />
+    <ClCompile Include="Source\Core\EngineState\MainMenuState.cpp" />
     <ClCompile Include="Source\Core\EngineState\StartupState.cpp" />
     <ClCompile Include="Source\Core\main.cpp" />
     <ClCompile Include="Source\Core\Resources.cpp" />
@@ -61,6 +61,7 @@
     <ClCompile Include="Source\Rendering\Sky\SkyX\VClouds\Lightning.cpp" />
     <ClCompile Include="Source\Rendering\Sky\SkyX\VClouds\LightningManager.cpp" />
     <ClCompile Include="Source\Rendering\Sky\SkyX\VClouds\VClouds.cpp" />
+    <ClCompile Include="Source\UI\MainMenuUI.cpp" />
     <ClCompile Include="Source\World\Environment.cpp" />
     <ClCompile Include="Source\World\World.cpp" />
   </ItemGroup>
@@ -92,7 +93,7 @@
     <ClInclude Include="Source\Core\EngineNotifications.hpp" />
     <ClInclude Include="Source\Core\EngineState\EngineState.hpp" />
     <ClInclude Include="Source\Core\EngineState\EngineStateID.hpp" />
-    <ClInclude Include="Source\Core\EngineState\IntroState.hpp" />
+    <ClInclude Include="Source\Core\EngineState\MainMenuState.hpp" />
     <ClInclude Include="Source\Core\EngineState\StartupState.hpp" />
     <ClInclude Include="Source\Core\HelperFunctions.hpp" />
     <ClInclude Include="Source\Core\Resources.hpp" />
@@ -138,6 +139,8 @@
     <ClInclude Include="Source\Rendering\Sky\SkyX\VClouds\LightningManager.h" />
     <ClInclude Include="Source\Rendering\Sky\SkyX\VClouds\VClouds.h" />
     <ClInclude Include="Source\stdafx.hpp" />
+    <ClInclude Include="Source\UI\MainMenuUI.hpp" />
+    <ClInclude Include="Source\UI\UI.hpp" />
     <ClInclude Include="Source\World\Environment.hpp" />
     <ClInclude Include="Source\World\World.hpp" />
   </ItemGroup>
