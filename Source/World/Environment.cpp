@@ -175,7 +175,7 @@ void Environment::setSunDirection(const Ogre::Vector3& dir)
     if (m_renderOcean){
         // Set the Ocean's sun position relative to player.
         m_ocean->setSunPosition(
-            m_world->getPlayer()->getComponent<ActorComponent>()->getPosition() -
+            m_world->getMainCamera()->getDerivedPosition() -
             dir *
             m_sky->calcSkydomeRadius());
     }
