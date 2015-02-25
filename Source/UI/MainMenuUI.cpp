@@ -27,7 +27,7 @@
 
 MainMenuUI::MainMenuUI(void)
 {
-
+    m_layers.resize(Layer::NumLayers);
 }
 
 // ========================================================================= //
@@ -41,8 +41,10 @@ MainMenuUI::~MainMenuUI(void)
 
 void MainMenuUI::init(void)
 {
+    // Load each layer from layout files.
     CEGUI::WindowManager& wmgr = CEGUI::WindowManager::getSingleton();
 
+    // Root layer.
     m_layers[Layer::Root] = wmgr.loadLayoutFromFile("MainMenu/root.layout");
     m_layers[Layer::Root]->getChild("ButtonCampaign")->subscribeEvent(
         CEGUI::PushButton::EventClicked,
@@ -54,22 +56,30 @@ void MainMenuUI::init(void)
         CEGUI::PushButton::EventClicked,
         CEGUI::Event::Subscriber(&MainMenuUI::root_ExitPressed, this));
 
+    // Multiplayer layer.
+    m_layers[Layer::Multiplayer] = wmgr.loadLayoutFromFile(
+        "MainMenu/multiplayer.layout");
+    m_layers[Layer::Multiplayer]->getChild("ButtonBack")->subscribeEvent(
+        CEGUI::PushButton::EventClicked,
+        CEGUI::Event::Subscriber(&MainMenuUI::multiplayer_BackPressed, this));
+
+
     // Add each layer to root window.
-    for (int i = 0; i < 1; ++i){
+    for (int i = 0; i < 2; ++i){
         CEGUI::System::getSingleton().getDefaultGUIContext().
             getRootWindow()->addChild(m_layers[i]);
-
-        if (i > Layer::Root){
-            m_layers[i]->setVisible(false);
-        }
+             m_layers[i]->setVisible(false);
     }  
+
+    // Push first layer onto stack.
+    this->pushLayer(Layer::Root);
 }
 
 // ========================================================================= //
 
 void MainMenuUI::destroy(void)
 {
-
+    
 }
 
 // ========================================================================= //
@@ -97,7 +107,7 @@ bool MainMenuUI::root_CampaignPressed(const CEGUI::EventArgs& e)
 
 bool MainMenuUI::root_MultiplayerPressed(const CEGUI::EventArgs& e)
 {
-
+    this->pushLayer(Layer::Multiplayer);
     return true;
 }
 
@@ -105,6 +115,15 @@ bool MainMenuUI::root_MultiplayerPressed(const CEGUI::EventArgs& e)
 
 bool MainMenuUI::root_ExitPressed(const CEGUI::EventArgs& e)
 {
+
+    return true;
+}
+
+// ========================================================================= //
+
+bool MainMenuUI::multiplayer_BackPressed(const CEGUI::EventArgs& e)
+{
+    this->popLayer();
 
     return true;
 }

@@ -54,10 +54,12 @@ public:
     bool root_MultiplayerPressed(const CEGUI::EventArgs& e);
     bool root_ExitPressed(const CEGUI::EventArgs& e);
 
+    bool multiplayer_BackPressed(const CEGUI::EventArgs& e);
+
     // Window layers.
     enum Layer{
         Root,
-        Campaign,
+        //Campaign,
         Multiplayer,
         Options,
 
@@ -65,8 +67,7 @@ public:
     };
 
 private:
-    // All layers (windows loaded from a layout).
-    CEGUI::Window* m_layers[Layer::NumLayers];
+   
 };
 
 // ========================================================================= //
