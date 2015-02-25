@@ -43,11 +43,16 @@ void MainMenuUI::init(void)
 {
     CEGUI::WindowManager& wmgr = CEGUI::WindowManager::getSingleton();
 
-    // Load each corresponding layer and link their events.
     m_layers[Layer::Root] = wmgr.loadLayoutFromFile("MainMenu/root.layout");
-    m_layers[Layer::Root]->getChild("Campaign")->subscribeEvent(
+    m_layers[Layer::Root]->getChild("ButtonCampaign")->subscribeEvent(
         CEGUI::PushButton::EventClicked,
         CEGUI::Event::Subscriber(&MainMenuUI::root_CampaignPressed, this));
+    m_layers[Layer::Root]->getChild("ButtonMultiplayer")->subscribeEvent(
+        CEGUI::PushButton::EventClicked,
+        CEGUI::Event::Subscriber(&MainMenuUI::root_MultiplayerPressed, this));
+    m_layers[Layer::Root]->getChild("ButtonExit")->subscribeEvent(
+        CEGUI::PushButton::EventClicked,
+        CEGUI::Event::Subscriber(&MainMenuUI::root_ExitPressed, this));
 
     // Add each layer to root window.
     for (int i = 0; i < 1; ++i){
@@ -57,7 +62,7 @@ void MainMenuUI::init(void)
         if (i > Layer::Root){
             m_layers[i]->setVisible(false);
         }
-    }
+    }  
 }
 
 // ========================================================================= //

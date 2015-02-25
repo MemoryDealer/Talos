@@ -308,12 +308,15 @@
 * Prior two changes remove the need for Component::Type and Entity::linkComponents().
 
 == 2/24/15 ==
-* Created MainMenuState.
+* Created MainMenuState, removed IntroState.
+* Made basic main menu CEGUI layout file. It is not resolution-independent however.
+* Changed World to hold an Ogre::Camera rather than Entity for Ocean/Sky's needs.
+* Added UI interface class, created MainMenuUI. EngineState holds a smart pointer to UI, which must be allocated and initialized within the derived states as needed.
+* Manually editing the .layout file is easier than using the CEED editor. I've got unified dimensions working well; the GUI looks fine on multiple resolutions.
 
 == TODO ==
 * Create EventQueue system to deal with network and UI. Pass World into network classes and have something like World::handleNetworkEvent().
 * SkyLowGraphics.
-* Get rid of temporary server/client creation method and replace with GUI.
 * Consider creating a function in World to handle input for Client so it can be sent to the server.
 ** Hydrax underwater is sped up, fix. (E:\Engine\Ogre3D\Hydrax-v0.5.1\Hydrax\Hydrax.vcproj to recompile).
 * Shift input for sprint.

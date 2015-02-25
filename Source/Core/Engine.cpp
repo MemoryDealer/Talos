@@ -91,10 +91,8 @@ bool Engine::init(void)
     }
 
     // Create the main window with SDL.
-    //const int width = 1024;
-    //const int height = 768;
-    const int width = 1920;
-    const int height = 1080;
+    const int width = 1024;
+    const int height = 768;
     m_sdlWindow = SDL_CreateWindow(
         "Engine",
         SDL_WINDOWPOS_CENTERED,
