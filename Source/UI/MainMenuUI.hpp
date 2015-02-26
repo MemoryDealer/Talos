@@ -46,7 +46,7 @@ public:
     virtual void destroy(void) override;
 
     // Steps CEGUI system.
-    virtual void update(void) override;
+    virtual bool update(void) override;
 
     // Event handlers:
 
@@ -54,16 +54,27 @@ public:
     bool root_MultiplayerPressed(const CEGUI::EventArgs& e);
     bool root_ExitPressed(const CEGUI::EventArgs& e);
 
-    bool multiplayer_BackPressed(const CEGUI::EventArgs& e);
+    bool multiplayer_HostPressed(const CEGUI::EventArgs& e);
+
+    bool host_HostPressed(const CEGUI::EventArgs& e);
+
+    bool BackPressed(const CEGUI::EventArgs& e);
 
     // Window layers.
     enum Layer{
-        Root,
-        //Campaign,
-        Multiplayer,
-        Options,
+        Root = 0,
+            Campaign,
+            Multiplayer,
+                Host,
+                Join,
+            Options,
 
         NumLayers
+    };
+
+    enum Event{
+        Exit = 1,
+        HostGame
     };
 
 private:

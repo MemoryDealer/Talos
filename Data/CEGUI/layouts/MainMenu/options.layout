@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <GUILayout version="4" >
-    <Window type="AlfiskoSkin/FrameWindow" name="multiplayer_FrameWindow" >
+    <Window type="AlfiskoSkin/FrameWindow" name="options_FrameWindow" >
         <Property name="Size" value="{{0.50, 0}, {0.75, 0}}" />
         <Property name="Position" value="{{0.25, 0}, {0.125, 0}}" />        
         <Property name="Alpha" value="0.75" />
@@ -11,18 +11,25 @@
         <Property name="DragMovingEnabled" value="false" />
         <Property name="CloseButtonEnabled" value="false" />
         
-        <Window type="AlfiskoSkin/Button" name="ButtonHost" >
+        <Window type="AlfiskoSkin/Label" name="LabelPort" >
             <Property name="Size" value="{{0.40, 0}, {0.10, 0}}" />
-            <Property name="Position" value="{{0.30, 0}, {0.05, 0}}" />
+            <Property name="Position" value="{{0.10, 0}, {0.05, 0}}" />
             <Property name="Font" value="DejaVuSans-12" />
-            <Property name="Text" value="Host Game" />
+            <Property name="Text" value="Port:" />
         </Window>
         
-        <Window type="AlfiskoSkin/Button" name="ButtonJoin" >
+        <Window type="AlfiskoSkin/Editbox" name="EditPort" >
+            <Property name="Size" value="{{0.40, 0}, {0.10, 0}}" />
+            <Property name="Position" value="{{0.40, 0}, {0.05, 0}}" />
+            <Property name="Font" value="DejaVuSans-12" />
+            <Property name="Text" value="7042" />
+        </Window>
+        
+        <Window type="AlfiskoSkin/Button" name="ButtonHost" >
             <Property name="Size" value="{{0.40, 0}, {0.10, 0}}" />
             <Property name="Position" value="{{0.30, 0}, {0.20, 0}}" />
             <Property name="Font" value="DejaVuSans-12" />
-            <Property name="Text" value="Join Game" />
+            <Property name="Text" value="Host Game" />
         </Window>
         
         <Window type="AlfiskoSkin/Button" name="ButtonBack" >

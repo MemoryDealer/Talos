@@ -314,6 +314,9 @@
 * Added UI interface class, created MainMenuUI. EngineState holds a smart pointer to UI, which must be allocated and initialized within the derived states as needed.
 * Manually editing the .layout file is easier than using the CEED editor. I've got unified dimensions working well; the GUI looks fine on multiple resolutions.
 
+== 2/25/15 ==
+* Added UI layer stack system to UI class.
+
 == TODO ==
 * Create EventQueue system to deal with network and UI. Pass World into network classes and have something like World::handleNetworkEvent().
 * SkyLowGraphics.

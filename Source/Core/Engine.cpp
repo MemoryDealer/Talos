@@ -88,7 +88,7 @@ bool Engine::init(void)
     // Initialize SDL.
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) != 0){
         return false;
-    }
+    }   
 
     // Create the main window with SDL.
     const int width = 1024;

@@ -25,6 +25,7 @@
 #include "Component/ComponentMessage.hpp"
 #include "Entity/Entity.hpp"
 #include "Input.hpp"
+#include "UI/UI.hpp"
 
 // ========================================================================= //
 
@@ -117,9 +118,11 @@ const CommandPtr Input::handle(const SDL_Event& e)
 
     case SDL_KEYDOWN:
         if (m_mode == Mode::UI){
-            
+            CEGUI::Key::Scan kc = SDLKeyToCEGUIKey(e.key.keysym.sym);
             CEGUI::System::getSingleton().getDefaultGUIContext().
-                injectKeyDown((CEGUI::Key::Scan)e.key.keysym.scancode);
+                injectKeyDown(kc);
+            
+            
         }
         else{
             switch (e.key.keysym.sym){
@@ -132,10 +135,18 @@ const CommandPtr Input::handle(const SDL_Event& e)
         }
         break;
 
-    case SDL_KEYUP:
+    case SDL_TEXTINPUT:
         if (m_mode == Mode::UI){
             CEGUI::System::getSingleton().getDefaultGUIContext().
-                injectKeyUp((CEGUI::Key::Scan)e.key.keysym.scancode);
+                injectChar(e.text.text[0]);
+        }
+        break;
+
+    case SDL_KEYUP:
+        if (m_mode == Mode::UI){
+            CEGUI::Key::Scan kc = SDLKeyToCEGUIKey(e.key.keysym.sym);
+            CEGUI::System::getSingleton().getDefaultGUIContext().
+                injectKeyUp(kc);
         }
         else{
             switch (e.key.keysym.sym){

@@ -112,6 +112,7 @@ void MainMenuState::update(void)
             case SDL_MOUSEBUTTONUP:
             case SDL_MOUSEMOTION:
             case SDL_KEYDOWN:
+            case SDL_TEXTINPUT:
                 {
                     // Temporary exit handling.
                     if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE){
@@ -137,7 +138,20 @@ void MainMenuState::update(void)
         }
 
         m_world.update();
-        m_ui->update();
+        if (m_ui->update() == true){
+            // Process UI events.
+            int uiEvent = 0;
+            while ((uiEvent = m_ui->getNextEvent())){
+                switch (uiEvent){
+                default:
+                    break;
+
+                case MainMenuUI::Event::Exit:
+                    m_subject.notify(EngineNotification::Pop);
+                    return;
+                }
+            }
+        } // if(m_ui->update() == true)        
     }
 }
 

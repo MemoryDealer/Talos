@@ -42,21 +42,24 @@ public:
 
     virtual void destroy(void) = 0;
 
-    virtual void update(void) = 0;
+    virtual bool update(void) = 0;
 
     virtual void pushLayer(const unsigned int n);
 
     virtual void popLayer(void);
 
+    virtual int getNextEvent(void);
+
 protected:
     // All layers (windows loaded from a layout).
     std::vector<CEGUI::Window*> m_layers;
     std::stack<int> m_layerStack;
+    std::queue<int> m_events;
 };
 
 // ========================================================================= //
 // Convert SDL Key to CEGUI key.
-inline CEGUI::uint SDLKeyToCEGUIKey(SDL_Keycode key)
+inline CEGUI::Key::Scan SDLKeyToCEGUIKey(SDL_Keycode key)
 {
     using namespace CEGUI;
     switch (key)
@@ -168,10 +171,10 @@ inline CEGUI::uint SDLKeyToCEGUIKey(SDL_Keycode key)
     case SDLK_SYSREQ:       return Key::SysRq;
     case SDLK_MENU:         return Key::AppMenu;
     case SDLK_POWER:        return Key::Power;
-    default:                return 0;
+    default:                break;
     }
 
-    return 0;
+    return CEGUI::Key::Scan::LeftAlt;
 }
 
 // ========================================================================= //
