@@ -15,50 +15,44 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: StartupState.hpp
+// File: LobbyState.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines StartupState class.
+// Defines LobbyState class.
 // ========================================================================= //
 
-#ifndef __STARTUPSTATE_HPP__
-#define __STARTUPSTATE_HPP__
+#ifndef __LOBBYSTATE_HPP__
+#define __LOBBYSTATE_HPP__
 
 // ========================================================================= //
 
 #include "EngineState.hpp"
 
 // ========================================================================= //
-// The first state of the engine. Loads resources and displays intros.
-class StartupState final : public EngineState
+// Lobby for pre-game settings in online games.
+class LobbyState : public EngineState
 {
 public:
-    // Calls EngineState constructor.
-    explicit StartupState(void);
+    // Empty constructor.
+    explicit LobbyState(void);
 
     // Empty destructor.
-    virtual ~StartupState(void) override;
+    virtual ~LobbyState(void) override;
 
-    // Set up basic stuff.
+    // Creates world, UI.
     virtual void enter(void) override;
 
-    // Free basic stuff.
+    // Destroys world.
     virtual void exit(void) override;
 
-    // Loads resources.
-    virtual void update(void) override;
-
-    // Empty.
+    // Pauses state.
     virtual void pause(void) override;
 
-    // Empty.
+    // Resumes state.
     virtual void resume(void) override;
 
-    // Thread to load engine resources.
-    void loadResources(void);
-
-private:
-    bool m_loaded;
+    // Processes UI interaction.
+    virtual void update(void) override;
 };
 
 // ========================================================================= //

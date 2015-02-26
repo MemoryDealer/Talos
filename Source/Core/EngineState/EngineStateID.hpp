@@ -29,6 +29,7 @@
 enum EngineStateID{
     Startup = 0,
     MainMenu,
+    Lobby,
     Game,
     Paused,
 

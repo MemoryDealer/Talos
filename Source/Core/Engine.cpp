@@ -23,6 +23,7 @@
 
 #include "Engine.hpp"
 #include "EngineNotifications.hpp"
+#include "EngineState/LobbyState.hpp"
 #include "EngineState/MainMenuState.hpp"
 #include "EngineState/StartupState.hpp"
 #include "Input/Input.hpp"
@@ -187,6 +188,7 @@ bool Engine::init(void)
     // @TODO: Define these in data.
     this->registerState(EngineStateID::Startup);
     this->registerState(EngineStateID::MainMenu);
+    this->registerState(EngineStateID::Lobby);
 
     // === //
 
@@ -260,6 +262,10 @@ void Engine::registerState(const EngineStateID id)
     case EngineStateID::MainMenu:
         state.reset(new MainMenuState());
         break;
+
+    case EngineStateID::Lobby:
+        state.reset(new LobbyState());
+        break;
     }
 
     Assert(state != nullptr, "Test");
@@ -288,6 +294,12 @@ void Engine::pushState(const EngineStateID id)
 {
     Assert(id < EngineStateID::NumStates, "Invalid EngineStateID");
 
+    // Pause current state.
+    if (m_stateStack.empty() == false){
+        m_stateStack.top()->setActive(false);
+        m_stateStack.top()->pause();
+    }
+
     // Get a pointer to the specified state and push it into active state stack.
     EngineStatePtr state = m_states[id];
     m_stateStack.push(state);
@@ -309,6 +321,11 @@ void Engine::popState(void)
     // If there are no more states awaiting execution, shutdown the engine.
     if (m_stateStack.empty() == true){
         m_active = false;
+    }
+    else{
+        // Resume last state.
+        m_stateStack.top()->setActive(true);
+        m_stateStack.top()->resume();
     }
 }
 
@@ -341,6 +358,10 @@ void Engine::onNotify(const unsigned int id, const unsigned int arg)
 
     case EngineNotification::Pop:
         this->popState();
+        break;
+
+    case EngineNotification::Push:
+        this->pushState(static_cast<EngineStateID>(arg));
         break;
 
     case EngineNotification::PopAndPush:

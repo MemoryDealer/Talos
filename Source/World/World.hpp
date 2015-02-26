@@ -117,6 +117,8 @@ public:
     PhysicsComponentPtr createPhysicsComponent(void);
     SceneComponentPtr createSceneComponent(void);
 
+    // Creates component from pool, initializes it, and attaches it 
+    // to the entity.
     template<typename T>
     void attachComponent(EntityPtr entity);
 

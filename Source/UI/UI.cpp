@@ -15,95 +15,98 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: StartupState.cpp
+// File: UI.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements StartupState class.
+// Implements UI class.
 // ========================================================================= //
 
-#include "Core/EngineNotifications.hpp"
-#include "Core/EngineState/EngineStateID.hpp"
-#include "Core/Resources.hpp"
-#include "StartupState.hpp"
+#include "UI.hpp"
 
 // ========================================================================= //
 
-StartupState::StartupState(void) :
-m_loaded(false)
+UI::UI(void) :
+m_layers(),
+m_layerStack(),
+m_events()
 {
 
 }
 
 // ========================================================================= //
 
-StartupState::~StartupState(void)
+UI::~UI(void)
 {
 
 }
 
 // ========================================================================= //
 
-void StartupState::enter(void)
+void UI::pushLayer(const unsigned int n)
 {
-    // Create thread for loading engine resources.
-    // @TODO: Thread causes random hanging.
-    /*std::thread t(&StartupState::loadResources, this);
-    t.detach();*/
-    this->loadResources();
+    Assert(n < m_layers.size(), "Invalid layer");
+
+    // Hide current active layer.
+    if (m_layerStack.empty() == false){
+        CEGUI::Window* current = m_layers[m_layerStack.top()];
+        current->setVisible(false);
+        current->deactivate();
+    }
+
+    // Activate new layer.
+    m_layerStack.push(n);
+    m_layers[n]->setVisible(true);
+    m_layers[n]->activate();
 }
 
 // ========================================================================= //
 
-void StartupState::exit(void)
+void UI::popLayer(void)
 {
+    // Hide and deactivate active layer and pop index.
+    CEGUI::Window* current = m_layers[m_layerStack.top()];
+    current->setVisible(false);
+    current->deactivate();
 
-}
+    m_layerStack.pop();
 
-// ========================================================================= //
+    // Get next layer and activate it.
+    if (m_layerStack.empty() == false){
+        current = m_layers[m_layerStack.top()];
+        current->setVisible(true);
+        current->activate();
+    }
+    else{
 
-void StartupState::update(void)
-{
-    if (m_active == true){
-
-        // Render something simple...
-        // ...
-
-        if (m_loaded == true){
-            // Done loading, notify engine to start main menu.
-            m_subject.notify(EngineNotification::PopAndPush, 
-                             EngineStateID::MainMenu);
-        }
     }
 }
 
 // ========================================================================= //
 
-void StartupState::pause(void)
+void UI::setVisible(const bool visible)
 {
+    CEGUI::Window* currentLayer = m_layers[m_layerStack.top()];
+    currentLayer->setVisible(visible);
 
+    if (visible == true){
+        currentLayer->activate();
+    }
+    else{
+        currentLayer->deactivate();
+    }
 }
 
 // ========================================================================= //
 
-void StartupState::resume(void)
+int UI::getNextEvent(void)
 {
+    if (m_events.empty() == true){
+        return 0;
+    }
 
-}
-
-// ========================================================================= //
-
-void StartupState::loadResources(void)
-{
-    // Load resources for Ogre (from Resources.hpp).
-    printf("Loading Ogre resources...\n");
-    loadOgreResources();
-    printf("Loading meshes...\n");
-    loadMeshes();
-    printf("Loading CEGUI resources...\n");
-    loadCEGUIResources();
-    printf("Done loading.\n");
-
-    m_loaded = true;
+    int e = m_events.front();
+    m_events.pop();
+    return e;
 }
 
 // ========================================================================= //

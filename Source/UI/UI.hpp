@@ -56,6 +56,9 @@ public:
     // Deactivates and pops current layer off stack.
     virtual void popLayer(void);
 
+    // Shows top layer if true, hides top layer if false.
+    virtual void setVisible(const bool visible);
+
     // Get the ID of the next event in the event queue.
     virtual int getNextEvent(void);
 

@@ -15,10 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: MainMenuState.cpp
+// File: LobbyState.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements MainMenuState class.
+// Implements LobbyState class.
 // ========================================================================= //
 
 #include "Command/Command.hpp"
@@ -26,31 +26,28 @@
 #include "Component/LightComponent.hpp"
 #include "Component/SceneComponent.hpp"
 #include "Core/EngineNotifications.hpp"
-#include "Core/EngineState/EngineStateID.hpp"
 #include "Input/Input.hpp"
-#include "MainMenuState.hpp"
-#include "Network/Client/Client.hpp"
-#include "Network/Server/Server.hpp"
-#include "UI/MainMenuUI.hpp"
+#include "LobbyState.hpp"
+
 #include "World/Environment.hpp"
 
 // ========================================================================= //
 
-MainMenuState::MainMenuState(void)
+LobbyState::LobbyState(void)
 {
 
 }
 
 // ========================================================================= //
 
-MainMenuState::~MainMenuState(void)
+LobbyState::~LobbyState(void)
 {
 
 }
 
 // ========================================================================= //
 
-void MainMenuState::enter(void)
+void LobbyState::enter(void)
 {
     m_world.init();
     m_world.getInput()->setMode(Input::Mode::UI);
@@ -67,39 +64,24 @@ void MainMenuState::enter(void)
 
     m_world.setMainCamera(camera->getComponent<CameraComponent>());
 
-    // Create Ocean.
-#ifdef _DEBUG
-    m_world.getEnvironment()->loadOcean("Ocean2_HLSL_GLSL");
-#else
-    m_world.getEnvironment()->loadOcean("HydraxDemo.hdx");
-#endif
-
-    m_world.getEnvironment()->setOceanPosition(0.f, -100.f, 0.f);
-
-
     // Create sky.
     m_world.getEnvironment()->loadSky();
 
-    // Load GUI.
-    m_ui.reset(new MainMenuUI());
-    m_ui->init();
-
     if (m_world.checkEntities() == false){
-        throw std::exception("MainMenu entities reported uninitialized");
+        throw std::exception("LobbyState entities reported uninitialized");
     }
 }
 
 // ========================================================================= //
 
-void MainMenuState::exit(void)
+void LobbyState::exit(void)
 {
-    m_ui->destroy(); // m_ui deallocated automatically.
     m_world.destroy();
 }
 
 // ========================================================================= //
 
-void MainMenuState::update(void)
+void LobbyState::update(void)
 {
     if (m_active){
         SDL_Event e;
@@ -138,48 +120,24 @@ void MainMenuState::update(void)
         }
 
         m_world.update();
-        if (m_ui->update() == true){
+        /*if (m_ui->update() == true){
             this->handleUIEvents();
-        }   
+        }     */
     }
 }
 
 // ========================================================================= //
 
-void MainMenuState::pause(void)
+void LobbyState::pause(void)
 {
-    m_ui->setVisible(false);
+
 }
 
 // ========================================================================= //
 
-void MainMenuState::resume(void)
+void LobbyState::resume(void)
 {
-    m_ui->setVisible(true);
-}
 
-// ========================================================================= //
-
-void MainMenuState::handleUIEvents(void)
-{
-    int uiEvent = 0;
-    while ((uiEvent = m_ui->getNextEvent())){
-        switch (uiEvent){
-        default:
-            break;
-
-        case MainMenuUI::Event::Exit:
-            m_subject.notify(EngineNotification::Pop);
-            break;
-
-        case MainMenuUI::Event::HostGame:
-            // Setup server.
-            m_world.initServer();
-
-            m_subject.notify(EngineNotification::Push, EngineStateID::Lobby);
-            break;
-        }
-    }
 }
 
 // ========================================================================= //

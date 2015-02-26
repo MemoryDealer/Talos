@@ -318,8 +318,11 @@
 * Added UI layer stack system to UI class.
 * Added World::attachComponent<T>(), which is specialized for each type of component. This reduces component initialization and attaching to one line for basic setup. Any additional settings
     will require getting the component pointer until I can figure out how to return the T* pointer for each type (would require substantial redesign of component pools).
+* Added pause() and resume() to EngineState.
+* Created LobbyState which is pushed when the user hosts a game (in the future joining a game will do the same).
 
 == TODO ==
+* CEGUI rendering acting crazy when popping LobbyState back to main menu.
 * Create EventQueue system to deal with network and UI. Pass World into network classes and have something like World::handleNetworkEvent().
 * SkyLowGraphics.
 * Consider creating a function in World to handle input for Client so it can be sent to the server.

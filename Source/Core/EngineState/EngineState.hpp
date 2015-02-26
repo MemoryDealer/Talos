@@ -55,6 +55,12 @@ public:
     // Cleans up any state-specific data on exit.
     virtual void exit(void) = 0;
 
+    // Pauses state of all components.
+    virtual void pause(void) = 0;
+
+    // Resumes last state of all components.
+    virtual void resume(void) = 0;
+
     // Updates the state, should be called each frame when active.
     virtual void update(void) = 0;
 
