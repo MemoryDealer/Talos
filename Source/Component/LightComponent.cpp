@@ -43,17 +43,9 @@ LightComponent::~LightComponent(void)
 
 void LightComponent::init(EntityPtr entity, World& world)
 {
-
-}
-
-// ========================================================================= //
-
-void LightComponent::init(World& world, const Type type)
-{
     m_light = world.getSceneManager()->createLight();
-    m_light->setType((type == Type::POINT) ? Ogre::Light::LT_POINT :
-                     Ogre::Light::LT_SPOTLIGHT);
-
+    // Set to point light by default.
+    m_light->setType(Ogre::Light::LT_POINT);
     this->setInitialized(true);
 }
 
@@ -78,6 +70,42 @@ void LightComponent::update(EntityPtr entity, World& world)
 void LightComponent::message(const ComponentMessage&)
 {
 
+}
+
+// ========================================================================= //
+
+void LightComponent::setType(const Type type)
+{
+    m_light->setType((type == Type::POINT) ? Ogre::Light::LT_POINT :
+                     Ogre::Light::LT_SPOTLIGHT);
+}
+
+// ========================================================================= //
+
+void LightComponent::setColour(const Ogre::Real r,
+                               const Ogre::Real g,
+                               const Ogre::Real b)
+{
+    m_light->setDiffuseColour(r, g, b);
+    m_light->setSpecularColour(r, g, b);
+}
+
+// ========================================================================= //
+
+void LightComponent::setRange(const Ogre::Real range)
+{
+    if (m_light->getType() == Ogre::Light::LT_POINT){
+        m_light->setAttenuation(range,
+                                1.f,
+                                //4.5f / range,
+                                //75.f / (range * range));
+                                255.f / range,
+                                0.f);
+    }
+    else{
+        m_light->setSpotlightRange(Ogre::Degree(range - 15),
+                                   Ogre::Degree(range));
+    }
 }
 
 // ========================================================================= //

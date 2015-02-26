@@ -30,7 +30,7 @@
 
 // ========================================================================= //
 // Main menu of engine, provides access to other engine states.
-class MainMenuState : public EngineState
+class MainMenuState final : public EngineState
 {
 public:
     // Empty constructor.
@@ -47,6 +47,9 @@ public:
 
     // Processes UI interaction.
     virtual void update(void) override;
+
+    // Processes UI events.
+    void handleUIEvents(void);
 };
 
 // ========================================================================= //

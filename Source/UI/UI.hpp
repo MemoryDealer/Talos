@@ -29,31 +29,42 @@
 #include "stdafx.hpp"
 
 // ========================================================================= //
-// Handles CEGUI creation and events.
+// Handles CEGUI creation and events. Uses a stack to manage GUI layers, 
+// allowing users to traverse menu systems.
 class UI
 {
 public:
     // Empty constructor.
     explicit UI(void);
 
+    // Empty destructor.
     virtual ~UI(void) = 0;
 
+    // Initializes all CEGUI data.
     virtual void init(void) = 0;
 
+    // Frees all CEGUI data that was initialized.
     virtual void destroy(void) = 0;
 
+    // Updates CEGUI system, returns true if there are events that need 
+    // processing.
     virtual bool update(void) = 0;
 
+    // Pushes layer at index n onto layer stack, activating it.
     virtual void pushLayer(const unsigned int n);
 
+    // Deactivates and pops current layer off stack.
     virtual void popLayer(void);
 
+    // Get the ID of the next event in the event queue.
     virtual int getNextEvent(void);
 
 protected:
     // All layers (windows loaded from a layout).
     std::vector<CEGUI::Window*> m_layers;
+    // Active layers, with the top being the currently visible layer.
     std::stack<int> m_layerStack;
+    // Event queue for passing events from inside UI class to the outside.
     std::queue<int> m_events;
 };
 

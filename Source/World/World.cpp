@@ -23,7 +23,9 @@
 
 #include "Component/ActorComponent.hpp"
 #include "Component/CameraComponent.hpp"
+#include "Component/LightComponent.hpp"
 #include "Component/ModelComponent.hpp"
+#include "Component/PhysicsComponent.hpp"
 #include "Component/SceneComponent.hpp"
 #include "Entity/EntityPool.hpp"
 #include "Environment.hpp"
@@ -51,7 +53,7 @@ m_useClient(false),
 m_entityPool(nullptr),
 m_player(nullptr),
 m_hasPlayer(false),
-m_mainCamera(nullptr),
+m_mainCameraC(nullptr),
 m_actorComponentPool(nullptr),
 m_cameraComponentPool(nullptr),
 m_modelComponentPool(nullptr),
@@ -281,10 +283,73 @@ SceneComponentPtr World::createSceneComponent(void)
 
 // ========================================================================= //
 
+template<typename T>
+void World::attachComponent(EntityPtr entity){ }
+
+// ========================================================================= //
+
+// Template specializations for attachComponent():
+
+// ========================================================================= //
+
+template<> void World::attachComponent<ActorComponent>(EntityPtr entity)
+{
+    ActorComponentPtr c = this->createActorComponent();
+    c->init(entity, *this);
+    entity->attachComponent(c);
+}
+
+// ========================================================================= //
+
+template<> void World::attachComponent<CameraComponent>(EntityPtr entity)
+{
+    CameraComponentPtr c = this->createCameraComponent();
+    c->init(entity, *this);
+    entity->attachComponent(c);
+}
+
+// ========================================================================= //
+
+template<> void World::attachComponent<LightComponent>(EntityPtr entity)
+{
+    LightComponentPtr c = this->createLightComponent();
+    c->init(entity, *this);
+    entity->attachComponent(c);
+}
+
+// ========================================================================= //
+
+template<> void World::attachComponent<ModelComponent>(EntityPtr entity)
+{
+    ModelComponentPtr c = this->createModelComponent();
+    c->init(entity, *this);
+    entity->attachComponent(c);
+}
+
+// ========================================================================= //
+
+template<> void World::attachComponent<PhysicsComponent>(EntityPtr entity)
+{
+    PhysicsComponentPtr c = this->createPhysicsComponent();
+    c->init(entity, *this);
+    entity->attachComponent(c);
+}
+
+// ========================================================================= //
+
+template<> void World::attachComponent<SceneComponent>(EntityPtr entity)
+{
+    SceneComponentPtr c = this->createSceneComponent();
+    c->init(entity, *this);
+    entity->attachComponent(c);
+}
+
+// ========================================================================= //
+
 void World::setPlayer(const EntityPtr player)
 {
     m_player = player;
-    m_mainCamera = m_player->getComponent<ActorComponent>()->getCamera();
+    m_mainCameraC = m_player->getComponent<CameraComponent>();
     m_hasPlayer = true;
 }
 

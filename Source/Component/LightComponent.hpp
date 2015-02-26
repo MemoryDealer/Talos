@@ -48,9 +48,6 @@ public:
     // Empty.
     virtual void init(EntityPtr, World&) override;
 
-    // Creates Ogre::Light and sets its type.
-    virtual void init(World&, const Type);
-
     // Destroys Ogre::Light using World's Ogre::SceneManager.
     virtual void destroy(EntityPtr, World&) override;
 
@@ -61,6 +58,9 @@ public:
     virtual void message(const ComponentMessage&) override;
 
     // Light functions:
+
+    // Sets type of the light.
+    void setType(const Type);
 
     // Sets colour of light.
     void setColour(const Ogre::Real, const Ogre::Real, const Ogre::Real);
@@ -81,28 +81,6 @@ private:
 };
 
 // ========================================================================= //
-
-inline void LightComponent::setColour(const Ogre::Real r, 
-                                      const Ogre::Real g, 
-                                      const Ogre::Real b){
-    m_light->setDiffuseColour(r, g, b);
-    m_light->setSpecularColour(r, g, b);
-}
-
-inline void LightComponent::setRange(const Ogre::Real range){
-    if (m_light->getType() == Ogre::Light::LT_POINT){
-        m_light->setAttenuation(range,
-                                1.f,
-                                //4.5f / range,
-                                //75.f / (range * range));
-                                255.f / range,
-                                0.f);
-    }
-    else{
-        m_light->setSpotlightRange(Ogre::Degree(range - 15),
-                                   Ogre::Degree(range));
-    }
-}
 
 // Getters:
 

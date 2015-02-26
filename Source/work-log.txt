@@ -316,6 +316,8 @@
 
 == 2/25/15 ==
 * Added UI layer stack system to UI class.
+* Added World::attachComponent<T>(), which is specialized for each type of component. This reduces component initialization and attaching to one line for basic setup. Any additional settings
+    will require getting the component pointer until I can figure out how to return the T* pointer for each type (would require substantial redesign of component pools).
 
 == TODO ==
 * Create EventQueue system to deal with network and UI. Pass World into network classes and have something like World::handleNetworkEvent().

@@ -22,6 +22,7 @@
 // ========================================================================= //
 
 #include "Component/ActorComponent.hpp"
+#include "Component/CameraComponent.hpp"
 #include "Entity/Entity.hpp"
 #include "OceanHighGraphics.hpp"
 #include "World/World.hpp"
@@ -51,7 +52,7 @@ void OceanHighGraphics::init(World* world,
                              const Graphics::Setting graphicsSetting)
 {
     // Assign main camera pointer.
-    m_mainCamera = world->getMainCamera();
+    m_mainCamera = world->getMainCamera()->getCamera();
 
     m_graphicsSetting = graphicsSetting;
 

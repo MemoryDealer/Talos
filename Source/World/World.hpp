@@ -39,6 +39,9 @@ class Physics;
 template<typename T> class Pool;
 class PScene;
 class Server;
+//
+//typedef std::unordered_map<const std::type_info*, 
+//    std::shared_ptr<Pool<T>>> PoolHashTable;
 
 // ========================================================================= //
 // Represents everything in the physical game world. The World holds a
@@ -114,6 +117,9 @@ public:
     PhysicsComponentPtr createPhysicsComponent(void);
     SceneComponentPtr createSceneComponent(void);
 
+    template<typename T>
+    void attachComponent(EntityPtr entity);
+
     // === //
 
     // Getters:
@@ -137,7 +143,7 @@ public:
     EntityPtr getPlayer(void) const;
 
     // Returns pointer to camera which views the game world.
-    Ogre::Camera* getMainCamera(void) const;
+    CameraComponentPtr getMainCamera(void) const;
 
     // Returns pointer to PScene (physics scene).
     std::shared_ptr<PScene> getPScene(void) const;
@@ -157,7 +163,7 @@ public:
     void setPlayer(const EntityPtr);
 
     // Sets pointer to main camera which views the game world.
-    void setMainCamera(Ogre::Camera*);
+    void setMainCamera(CameraComponentPtr);
 
     // === // 
 
@@ -202,7 +208,7 @@ private:
     bool m_hasPlayer;
 
     // Main camera which renders to viewport.
-    Ogre::Camera* m_mainCamera;
+    CameraComponentPtr m_mainCameraC;
 
     // Component pools. The idea here is to avoid dynamic allocation of 
     // any Components during the game state. They are allocated during the
@@ -246,8 +252,8 @@ inline EntityPtr World::getPlayer(void) const{
     return m_player;
 }
 
-inline Ogre::Camera* World::getMainCamera(void) const{
-    return m_mainCamera;
+inline CameraComponentPtr World::getMainCamera(void) const{
+    return m_mainCameraC;
 }
 
 inline std::shared_ptr<PScene> World::getPScene(void) const{
@@ -268,8 +274,8 @@ inline Input* World::getInput(void) const{
 
 // Setters:
 
-inline void World::setMainCamera(Ogre::Camera* camera){
-    m_mainCamera = camera;
+inline void World::setMainCamera(CameraComponentPtr cameraC){
+    m_mainCameraC = cameraC;
 }
 
 // ========================================================================= //

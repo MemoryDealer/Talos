@@ -85,7 +85,7 @@ void SkyHighGraphics::init(World* world,
     m_skyX->setTimeMultiplier(0.01f);
 
     // Assign the Ogre::Camera pointer for updating.    
-    m_camera = world->getMainCamera();
+    m_camera = world->getMainCamera()->getCamera();
     Assert(m_camera != nullptr, "SkyX initialized with invalid Main Camera");
 
     m_skyX->getVCloudsManager()->getVClouds()->registerCamera(m_camera);

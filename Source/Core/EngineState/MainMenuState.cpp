@@ -23,6 +23,7 @@
 
 #include "Command/Command.hpp"
 #include "Component/CameraComponent.hpp"
+#include "Component/LightComponent.hpp"
 #include "Component/SceneComponent.hpp"
 #include "Core/EngineNotifications.hpp"
 #include "Input/Input.hpp"
@@ -58,14 +59,13 @@ void MainMenuState::enter(void)
 
     // Create camera.
     EntityPtr camera = m_world.createEntity();
-    SceneComponentPtr sceneC = m_world.createSceneComponent();
+    /*SceneComponentPtr sceneC = m_world.createSceneComponent();
     sceneC->init(camera, m_world);
-    camera->attachComponent(sceneC);
-    CameraComponentPtr cameraC = m_world.createCameraComponent();
-    cameraC->init(camera, m_world);
-    camera->attachComponent(cameraC);
+    camera->attachComponent(sceneC);*/
+    m_world.attachComponent<SceneComponent>(camera);
+    m_world.attachComponent<CameraComponent>(camera);
 
-    m_world.setMainCamera(cameraC->getCamera());
+    m_world.setMainCamera(camera->getComponent<CameraComponent>());
 
     // Create Ocean.
 #ifdef _DEBUG
@@ -139,19 +139,29 @@ void MainMenuState::update(void)
 
         m_world.update();
         if (m_ui->update() == true){
-            // Process UI events.
-            int uiEvent = 0;
-            while ((uiEvent = m_ui->getNextEvent())){
-                switch (uiEvent){
-                default:
-                    break;
-
-                case MainMenuUI::Event::Exit:
-                    m_subject.notify(EngineNotification::Pop);
-                    return;
-                }
-            }
+            this->handleUIEvents();
         } // if(m_ui->update() == true)        
+    }
+}
+
+// ========================================================================= //
+
+void MainMenuState::handleUIEvents(void)
+{
+    int uiEvent = 0;
+    while ((uiEvent = m_ui->getNextEvent())){
+        switch (uiEvent){
+        default:
+            break;
+
+        case MainMenuUI::Event::Exit:
+            m_subject.notify(EngineNotification::Pop);
+            return;
+
+        case MainMenuUI::Event::HostGame:
+
+            break;
+        }
     }
 }
 

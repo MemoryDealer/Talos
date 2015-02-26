@@ -22,6 +22,7 @@
 // ========================================================================= //
 
 #include "Component/ActorComponent.hpp"
+#include "Component/CameraComponent.hpp"
 #include "Entity/Entity.hpp"
 #include "Environment.hpp"
 #include "Rendering/Ocean/OceanHighGraphics.hpp"
@@ -175,7 +176,7 @@ void Environment::setSunDirection(const Ogre::Vector3& dir)
     if (m_renderOcean){
         // Set the Ocean's sun position relative to player.
         m_ocean->setSunPosition(
-            m_world->getMainCamera()->getDerivedPosition() -
+            m_world->getMainCamera()->getCamera()->getDerivedPosition() -
             dir *
             m_sky->calcSkydomeRadius());
     }

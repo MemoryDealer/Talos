@@ -45,7 +45,8 @@ template<typename T>
 Pool<T>::Pool(const int size) :
 m_pool(new T[size]),
 m_numActive(0),
-m_size(size){
+m_size(size)
+{
 
 }
 
