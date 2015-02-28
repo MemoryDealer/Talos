@@ -42,6 +42,15 @@ UI::~UI(void)
 
 // ========================================================================= //
 
+bool UI::update(void)
+{
+    CEGUI::System::getSingleton().injectTimePulse(1.f / 16.f);
+
+    return (m_events.empty() == false);
+}
+
+// ========================================================================= //
+
 void UI::pushLayer(const unsigned int n)
 {
     Assert(n < m_layers.size(), "Invalid layer");

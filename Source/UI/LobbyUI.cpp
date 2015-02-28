@@ -60,12 +60,23 @@ void LobbyUI::init(void)
 
 void LobbyUI::destroy(void)
 {
+    while (m_layerStack.empty() == false){
+        CEGUI::Window* current = m_layers[m_layerStack.top()];
+        current->setVisible(false);
+        current->deactivate();
+
+        m_layerStack.pop();
+    }
+
     CEGUI::WindowManager& wmgr = CEGUI::WindowManager::getSingleton();
 
     for (int i = 0; i < Layer::NumLayers; ++i){
-        m_layers[i]->deactivate();
+        //m_layers[i]->deactivate();
+        //m_layers[i]->setVisible(false);
         CEGUI::System::getSingleton().getDefaultGUIContext().
             getRootWindow()->removeChild(m_layers[i]);
+        /*CEGUI::System::getSingleton().getDefaultGUIContext().
+            getRootWindow()->destroyChild(m_layers[i]);*/
         wmgr.destroyWindow(m_layers[i]);
     }
 }
@@ -74,10 +85,7 @@ void LobbyUI::destroy(void)
 
 bool LobbyUI::update(void)
 {
-    /*CEGUI::System::getSingleton().
-        injectTimePulse(1.f / 16.f);*/
-
-    return (m_events.empty() == false);
+    return UI::update();
 }
 
 // ========================================================================= //

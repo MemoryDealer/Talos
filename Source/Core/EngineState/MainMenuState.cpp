@@ -108,6 +108,7 @@ void MainMenuState::pause(void)
 
 void MainMenuState::resume(void)
 {
+    m_world.resume();
     m_ui->setVisible(true);
 }
 

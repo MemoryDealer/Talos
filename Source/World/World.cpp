@@ -128,7 +128,20 @@ void World::destroy(void)
 
     m_environment->destroy();
 
+    for (int i = 0; i < m_entityPool->m_poolSize; ++i){
+        m_entityPool->m_pool[i].destroy(*this);
+    }
+
+    m_scene->destroyAllCameras();
+    m_scene->clearScene();
     m_root->destroySceneManager(m_scene);
+}
+
+// ========================================================================= //
+
+void World::resume(void)
+{
+    m_viewport->setCamera(m_mainCameraC->getCamera());
 }
 
 // ========================================================================= //

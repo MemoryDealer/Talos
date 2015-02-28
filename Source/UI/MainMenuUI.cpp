@@ -117,10 +117,7 @@ void MainMenuUI::destroy(void)
 
 bool MainMenuUI::update(void)
 {
-    /*CEGUI::System::getSingleton().
-        injectTimePulse(1.f / 16.f);*/
-
-    return (m_events.empty() == false);
+    return UI::update();
 }
 
 // ========================================================================= //

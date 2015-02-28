@@ -322,7 +322,11 @@
 * Created LobbyState which is pushed when the user hosts a game (in the future joining a game will do the same).
 
 == 2/27/15 ==
-* 
+* Upon popping the LobbyState, the MainMenuState would render CEGUI incorrectly; the mouse arrow would accumulate endlessly forming a trail, the windows were not applying alpha values. This was
+    caused by destroying the scene manager in World upon popping the state. Furthermore this was caused by destroying the camera associated with the viewport in the LobbyState. By not destroying
+    the camera, everything is fine, since the menu state was still trying to render the viewport using lobby state's camera. I've added World::resume() which assigns the World's main camera
+    to the viewport, and should be called when resuming any state.
+* Made UI::update() non-pure, it calls injectTimePulse on CEGUI's System and returns true if there are queued events. Derived UIs currently just call the super function.
 
 == TODO ==
 * CEGUI rendering acting crazy when popping LobbyState back to main menu.

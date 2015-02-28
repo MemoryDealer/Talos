@@ -66,7 +66,7 @@ void CameraComponent::init(EntityPtr entity, World& world)
 void CameraComponent::destroy(EntityPtr entity, World& world)
 {
     world.getSceneManager()->destroyCamera(m_camera);
-
+    
     this->setInitialized(false);
 }
 

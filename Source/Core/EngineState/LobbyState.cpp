@@ -95,6 +95,7 @@ void LobbyState::pause(void)
 
 void LobbyState::resume(void)
 {
+    m_world.resume();
     m_ui->setVisible(true);
 }
 

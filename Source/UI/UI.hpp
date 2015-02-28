@@ -48,7 +48,7 @@ public:
 
     // Updates CEGUI system, returns true if there are events that need 
     // processing.
-    virtual bool update(void) = 0;
+    virtual bool update(void);
 
     // Pushes layer at index n onto layer stack, activating it.
     virtual void pushLayer(const unsigned int n);

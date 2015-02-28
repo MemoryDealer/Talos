@@ -67,6 +67,9 @@ public:
     // De-allocates all data.
     void destroy(void);
 
+    // Resumes world state, assigns main camera to viewport.
+    void resume(void);
+
     // Entity pool functions:
 
     // Get the next free Entity from the internal pool and return a pointer.
