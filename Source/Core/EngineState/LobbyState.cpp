@@ -26,6 +26,7 @@
 #include "Component/LightComponent.hpp"
 #include "Component/SceneComponent.hpp"
 #include "Core/EngineNotifications.hpp"
+#include "Core/EngineState/EngineStateID.hpp"
 #include "Input/Input.hpp"
 #include "LobbyState.hpp"
 #include "UI/LobbyUI.hpp"
@@ -35,7 +36,7 @@
 
 LobbyState::LobbyState(void)
 {
-
+    this->setID(EngineStateID::Lobby);
 }
 
 // ========================================================================= //

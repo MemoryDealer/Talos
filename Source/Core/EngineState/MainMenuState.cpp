@@ -38,7 +38,7 @@
 
 MainMenuState::MainMenuState(void)
 {
-
+    this->setID(EngineStateID::MainMenu);
 }
 
 // ========================================================================= //

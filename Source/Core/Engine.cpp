@@ -71,7 +71,10 @@ bool Engine::init(void)
 
     // Create logging system.
     Ogre::LogManager* logMgr = new Ogre::LogManager();
-    m_log = Ogre::LogManager::getSingleton().createLog("OgreLog.log");
+    m_log = Ogre::LogManager::getSingleton().createLog("Talos.log");
+
+    // Allocate Talos Log singleton.
+    new Talos::Log();
 
     // Initialize Ogre's root component.
     m_root = new Ogre::Root();
@@ -201,6 +204,7 @@ void Engine::shutdown(void)
 {
     m_physics->destroy();
     delete m_root;
+    delete Talos::Log::getSingletonPtr();
     delete Ogre::LogManager::getSingletonPtr();
 }
 
@@ -222,8 +226,6 @@ void Engine::start(const EngineStateID id)
         if (m_renderWindow->isClosed()){
             m_active = false;
         }
-
-        //Ogre::WindowEventUtilities::messagePump();
 
         // Update the engine if the render window is active.
         if (m_renderWindow->isActive()){
@@ -268,7 +270,7 @@ void Engine::registerState(const EngineStateID id)
         break;
     }
 
-    Assert(state != nullptr, "Test");
+    Assert(state != nullptr, "Invalid EngineState");
 
     // Inject dependencies from Engine into World.
     World::Dependencies deps;
@@ -286,6 +288,9 @@ void Engine::registerState(const EngineStateID id)
 
     // Add state to list of states.
     m_states.push_back(state);
+
+    Talos::Log::getSingleton().log("Registered EngineStateID " +
+                                   toString(id) + " to Engine.");
 }
 
 // ========================================================================= //
@@ -307,6 +312,8 @@ void Engine::pushState(const EngineStateID id)
     // Initialize the state.
     state->setActive(true);
     state->enter();
+
+    Talos::Log::getSingleton().log("Pushed engine state ID " + toString(id));
 }
 
 // ========================================================================= //
@@ -317,6 +324,9 @@ void Engine::popState(void)
     state->setActive(false);
     state->exit();
 
+    Talos::Log::getSingleton().log("Popped engine state ID " + 
+                                   toString(state->getID()));
+
     m_stateStack.pop();
     // If there are no more states awaiting execution, shutdown the engine.
     if (m_stateStack.empty() == true){
@@ -326,6 +336,8 @@ void Engine::popState(void)
         // Resume last state.
         m_stateStack.top()->setActive(true);
         m_stateStack.top()->resume();
+        Talos::Log::getSingleton().log("Resumed engine state ID " +
+                                       toString(m_stateStack.top()->getID()));
     }
 }
 
@@ -338,6 +350,9 @@ void Engine::popAndPushState(const EngineStateID id)
     state->setActive(false);
     state->exit();
     m_stateStack.pop();
+    
+    Talos::Log::getSingleton().log("Popped engine state ID " +
+                                   toString(state->getID()));
 
     // Push new state.
     state = m_states[id];
@@ -346,6 +361,8 @@ void Engine::popAndPushState(const EngineStateID id)
     // Initialize.
     state->setActive(true);
     state->enter();
+
+    Talos::Log::getSingleton().log("Pushed engine state ID " + toString(id));
 }
 
 // ========================================================================= //

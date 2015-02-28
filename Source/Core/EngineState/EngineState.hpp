@@ -26,6 +26,7 @@
 
 // ========================================================================= //
 
+#include "EngineStateID.hpp"
 #include "Observer/Subject.hpp"
 #include "stdafx.hpp"
 #include "World/World.hpp"
@@ -72,11 +73,17 @@ public:
     // Returns World for injecting dependencies in Engine.
     World& getWorld(void);
 
+    // Returns engine state ID.
+    const EngineStateID getID(void) const;
+
     // Setters:
 
     // Sets state to active or not. If true, the state will update itself.
     // Otherwise no updates will be performed.
     void setActive(const bool);
+
+    // Sets ID of this engine state.
+    void setID(const EngineStateID);
 
 protected:
     // Subject for Engine's Observer.
@@ -86,6 +93,9 @@ protected:
     World m_world;
     std::shared_ptr<UI> m_ui;
     bool m_active;
+
+private:
+    EngineStateID m_id;
 };
 
 // ========================================================================= //
@@ -100,10 +110,18 @@ inline World& EngineState::getWorld(void){
     return m_world;
 }
 
+inline const EngineStateID EngineState::getID(void) const{
+    return m_id;
+}
+
 // Setters:
 
 inline void EngineState::setActive(const bool active){
     m_active = active;
+}
+
+inline void EngineState::setID(const EngineStateID id){
+    m_id = id;
 }
 
 // ========================================================================= //

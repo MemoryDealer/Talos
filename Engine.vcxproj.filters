@@ -139,6 +139,12 @@
     <Filter Include="Source Files\UI">
       <UniqueIdentifier>{b62e2ebf-c826-471c-929d-836eeb14cd33}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Log">
+      <UniqueIdentifier>{e227d589-fe95-49fc-b9b4-98a8f9c12ed0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Log">
+      <UniqueIdentifier>{ddf6923e-8edc-4934-aecf-3f20ef8f5fb7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\main.cpp">
@@ -308,6 +314,9 @@
     </ClCompile>
     <ClCompile Include="Source\UI\LobbyUI.cpp">
       <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Log\Log.cpp">
+      <Filter>Source Files\Log</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -547,6 +556,9 @@
     </ClInclude>
     <ClInclude Include="Source\UI\LobbyUI.hpp">
       <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Log\Log.hpp">
+      <Filter>Header Files\Log</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

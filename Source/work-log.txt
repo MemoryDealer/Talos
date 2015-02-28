@@ -328,6 +328,9 @@
     to the viewport, and should be called when resuming any state.
 * Made UI::update() non-pure, it calls injectTimePulse on CEGUI's System and returns true if there are queued events. Derived UIs currently just call the super function.
 
+== 2/28/15 ==
+* Added Talos::Log singleton class. This is the first singleton and probably the last.
+
 == TODO ==
 * CEGUI disappears when resizing window.
 * Create EventQueue system to deal with network and UI. Pass World into network classes and have something like World::handleNetworkEvent().

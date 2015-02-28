@@ -31,7 +31,7 @@
 StartupState::StartupState(void) :
 m_loaded(false)
 {
-
+    this->setID(EngineStateID::Startup);
 }
 
 // ========================================================================= //
