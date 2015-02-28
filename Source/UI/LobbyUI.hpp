@@ -15,50 +15,48 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: StartupState.hpp
+// File: LobbyUI.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines StartupState class.
+// Defines LobbyUI class.
 // ========================================================================= //
 
-#ifndef __STARTUPSTATE_HPP__
-#define __STARTUPSTATE_HPP__
+#ifndef __LOBBYUI_HPP__
+#define __LOBBYUI_HPP__
 
 // ========================================================================= //
 
-#include "EngineState.hpp"
+#include "UI.hpp"
 
 // ========================================================================= //
-// The first state of the engine. Loads resources and displays intros.
-class StartupState final : public EngineState
+
+class LobbyUI : public UI
 {
 public:
-    // Calls EngineState constructor.
-    explicit StartupState(void);
+    // Default initializes member data.
+    explicit LobbyUI(void);
 
     // Empty destructor.
-    virtual ~StartupState(void) override;
+    virtual ~LobbyUI(void) override;
 
-    // Set up basic stuff.
-    virtual void enter(void) override;
+    // Creates layouts for lobby.
+    virtual void init(void) override;
 
-    // Free basic stuff.
-    virtual void exit(void) override;
+    // Destroys layouts for lobby.
+    virtual void destroy(void) override;
 
-    // Empty.
-    virtual void pause(void) override;
+    // Steps CEGUI system.
+    virtual bool update(void) override;
 
-    // Empty.
-    virtual void resume(void) override;
+    enum Layer{
+        Root = 0,
 
-    // Loads resources.
-    virtual void update(void) override;
+        NumLayers
+    };
 
-    // Thread to load engine resources.
-    void loadResources(void);
-
-private:
-    bool m_loaded;
+    enum Event{
+        Exit = 1
+    };
 };
 
 // ========================================================================= //

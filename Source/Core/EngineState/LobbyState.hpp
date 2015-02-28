@@ -53,6 +53,9 @@ public:
 
     // Processes UI interaction.
     virtual void update(void) override;
+
+    // Process UI events.
+    void handleUIEvents(void);
 };
 
 // ========================================================================= //

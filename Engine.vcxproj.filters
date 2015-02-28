@@ -306,6 +306,9 @@
     <ClCompile Include="Source\Core\EngineState\LobbyState.cpp">
       <Filter>Source Files\Core\EngineState</Filter>
     </ClCompile>
+    <ClCompile Include="Source\UI\LobbyUI.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\Engine.hpp">
@@ -541,6 +544,9 @@
     </ClInclude>
     <ClInclude Include="Source\Core\EngineState\LobbyState.hpp">
       <Filter>Header Files\Core\EngineState</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\LobbyUI.hpp">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

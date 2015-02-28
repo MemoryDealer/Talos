@@ -45,14 +45,14 @@ public:
     // Destroys world.
     virtual void exit(void) override;
 
-    // Processes UI interaction.
-    virtual void update(void) override;
-
     // Hides UI.
     virtual void pause(void) override;
 
     // Shows UI.
     virtual void resume(void) override;
+
+    // Processes UI interaction.
+    virtual void update(void) override;
 
     // Processes UI events.
     void handleUIEvents(void);

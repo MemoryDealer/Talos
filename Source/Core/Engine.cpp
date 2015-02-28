@@ -239,6 +239,9 @@ void Engine::start(const EngineStateID id)
                 lag -= MS_PER_UPDATE;
             }
 
+            /*CEGUI::System::getSingleton().
+                injectTimePulse(lag / MS_PER_UPDATE);*/
+
             // Render the updated frame, compensating for lag.
             m_root->renderOneFrame(Ogre::Real(lag / MS_PER_UPDATE));
         }

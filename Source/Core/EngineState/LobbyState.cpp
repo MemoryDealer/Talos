@@ -28,7 +28,7 @@
 #include "Core/EngineNotifications.hpp"
 #include "Input/Input.hpp"
 #include "LobbyState.hpp"
-
+#include "UI/LobbyUI.hpp"
 #include "World/Environment.hpp"
 
 // ========================================================================= //
@@ -67,6 +67,10 @@ void LobbyState::enter(void)
     // Create sky.
     m_world.getEnvironment()->loadSky();
 
+    // Load UI.
+    m_ui.reset(new LobbyUI());
+    m_ui->init();
+
     if (m_world.checkEntities() == false){
         throw std::exception("LobbyState entities reported uninitialized");
     }
@@ -76,7 +80,22 @@ void LobbyState::enter(void)
 
 void LobbyState::exit(void)
 {
+    m_ui->destroy();
     m_world.destroy();
+}
+
+// ========================================================================= //
+
+void LobbyState::pause(void)
+{
+    m_ui->setVisible(false);
+}
+
+// ========================================================================= //
+
+void LobbyState::resume(void)
+{
+    m_ui->setVisible(true);
 }
 
 // ========================================================================= //
@@ -120,24 +139,27 @@ void LobbyState::update(void)
         }
 
         m_world.update();
-        /*if (m_ui->update() == true){
+        if (m_ui->update() == true){
             this->handleUIEvents();
-        }     */
+        }     
     }
 }
 
 // ========================================================================= //
 
-void LobbyState::pause(void)
+void LobbyState::handleUIEvents(void)
 {
+    int uiEvent = 0;
+    while ((uiEvent = m_ui->getNextEvent())){
+        switch (uiEvent){
+        default:
+            break;
 
-}
+        case LobbyUI::Event::Exit:
 
-// ========================================================================= //
-
-void LobbyState::resume(void)
-{
-
+            break;
+        }
+    }
 }
 
 // ========================================================================= //

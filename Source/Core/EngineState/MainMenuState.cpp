@@ -99,6 +99,20 @@ void MainMenuState::exit(void)
 
 // ========================================================================= //
 
+void MainMenuState::pause(void)
+{
+    m_ui->setVisible(false);
+}
+
+// ========================================================================= //
+
+void MainMenuState::resume(void)
+{
+    m_ui->setVisible(true);
+}
+
+// ========================================================================= //
+
 void MainMenuState::update(void)
 {
     if (m_active){
@@ -142,20 +156,6 @@ void MainMenuState::update(void)
             this->handleUIEvents();
         }   
     }
-}
-
-// ========================================================================= //
-
-void MainMenuState::pause(void)
-{
-    m_ui->setVisible(false);
-}
-
-// ========================================================================= //
-
-void MainMenuState::resume(void)
-{
-    m_ui->setVisible(true);
 }
 
 // ========================================================================= //

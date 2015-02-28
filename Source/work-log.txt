@@ -321,6 +321,9 @@
 * Added pause() and resume() to EngineState.
 * Created LobbyState which is pushed when the user hosts a game (in the future joining a game will do the same).
 
+== 2/27/15 ==
+* 
+
 == TODO ==
 * CEGUI rendering acting crazy when popping LobbyState back to main menu.
 * Create EventQueue system to deal with network and UI. Pass World into network classes and have something like World::handleNetworkEvent().

@@ -100,7 +100,7 @@ void MainMenuUI::init(void)
         CEGUI::System::getSingleton().getDefaultGUIContext().
             getRootWindow()->addChild(m_layers[i]);
              m_layers[i]->setVisible(false);
-    }  
+    }
 
     // Push first layer onto stack.
     this->pushLayer(Layer::Root);
@@ -117,8 +117,8 @@ void MainMenuUI::destroy(void)
 
 bool MainMenuUI::update(void)
 {
-    CEGUI::System::getSingleton().
-        injectTimePulse(1.f / 16.f);
+    /*CEGUI::System::getSingleton().
+        injectTimePulse(1.f / 16.f);*/
 
     return (m_events.empty() == false);
 }

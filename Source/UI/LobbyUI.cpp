@@ -15,54 +15,69 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: StartupState.hpp
+// File: LobbyUI.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines StartupState class.
+// Implements LobbyUI class.
 // ========================================================================= //
 
-#ifndef __STARTUPSTATE_HPP__
-#define __STARTUPSTATE_HPP__
+#include "LobbyUI.hpp"
 
 // ========================================================================= //
 
-#include "EngineState.hpp"
-
-// ========================================================================= //
-// The first state of the engine. Loads resources and displays intros.
-class StartupState final : public EngineState
+LobbyUI::LobbyUI(void)
 {
-public:
-    // Calls EngineState constructor.
-    explicit StartupState(void);
-
-    // Empty destructor.
-    virtual ~StartupState(void) override;
-
-    // Set up basic stuff.
-    virtual void enter(void) override;
-
-    // Free basic stuff.
-    virtual void exit(void) override;
-
-    // Empty.
-    virtual void pause(void) override;
-
-    // Empty.
-    virtual void resume(void) override;
-
-    // Loads resources.
-    virtual void update(void) override;
-
-    // Thread to load engine resources.
-    void loadResources(void);
-
-private:
-    bool m_loaded;
-};
+    m_layers.resize(Layer::NumLayers);
+}
 
 // ========================================================================= //
 
-#endif
+LobbyUI::~LobbyUI(void)
+{
+
+}
+
+// ========================================================================= //
+
+void LobbyUI::init(void)
+{
+    CEGUI::WindowManager& wmgr = CEGUI::WindowManager::getSingleton();
+
+    m_layers[Layer::Root] = wmgr.loadLayoutFromFile("Lobby/root.layout");
+
+    // Add each layer to root window.
+    for (int i = 0; i < Layer::NumLayers; ++i){
+        CEGUI::System::getSingleton().getDefaultGUIContext().
+            getRootWindow()->addChild(m_layers[i]);
+        m_layers[i]->setVisible(false);
+    }
+
+    // Push first layer onto stack.
+    this->pushLayer(Layer::Root);
+}
+
+// ========================================================================= //
+
+void LobbyUI::destroy(void)
+{
+    CEGUI::WindowManager& wmgr = CEGUI::WindowManager::getSingleton();
+
+    for (int i = 0; i < Layer::NumLayers; ++i){
+        m_layers[i]->deactivate();
+        CEGUI::System::getSingleton().getDefaultGUIContext().
+            getRootWindow()->removeChild(m_layers[i]);
+        wmgr.destroyWindow(m_layers[i]);
+    }
+}
+
+// ========================================================================= //
+
+bool LobbyUI::update(void)
+{
+    /*CEGUI::System::getSingleton().
+        injectTimePulse(1.f / 16.f);*/
+
+    return (m_events.empty() == false);
+}
 
 // ========================================================================= //
