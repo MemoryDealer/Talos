@@ -44,6 +44,15 @@ void LobbyUI::init(void)
     CEGUI::WindowManager& wmgr = CEGUI::WindowManager::getSingleton();
 
     m_layers[Layer::Root] = wmgr.loadLayoutFromFile("Lobby/root.layout");
+    // Disable manual editing of chat multiline edit box.
+    m_layers[Layer::Root]->getChild("Chat")->disable();
+    // Subscribe event handlers.
+    m_layers[Layer::Root]->getChild("EditSend")->subscribeEvent(
+        CEGUI::Editbox::EventTextAccepted,
+        CEGUI::Event::Subscriber(&LobbyUI::root_SendPressed, this));
+    m_layers[Layer::Root]->getChild("ButtonSend")->subscribeEvent(
+        CEGUI::PushButton::EventClicked,
+        CEGUI::Event::Subscriber(&LobbyUI::root_SendPressed, this));
 
     // Add each layer to root window.
     for (int i = 0; i < Layer::NumLayers; ++i){
@@ -60,23 +69,12 @@ void LobbyUI::init(void)
 
 void LobbyUI::destroy(void)
 {
-    while (m_layerStack.empty() == false){
-        CEGUI::Window* current = m_layers[m_layerStack.top()];
-        current->setVisible(false);
-        current->deactivate();
-
-        m_layerStack.pop();
-    }
+    UI::destroy();
 
     CEGUI::WindowManager& wmgr = CEGUI::WindowManager::getSingleton();
-
     for (int i = 0; i < Layer::NumLayers; ++i){
-        //m_layers[i]->deactivate();
-        //m_layers[i]->setVisible(false);
         CEGUI::System::getSingleton().getDefaultGUIContext().
             getRootWindow()->removeChild(m_layers[i]);
-        /*CEGUI::System::getSingleton().getDefaultGUIContext().
-            getRootWindow()->destroyChild(m_layers[i]);*/
         wmgr.destroyWindow(m_layers[i]);
     }
 }
@@ -86,6 +84,29 @@ void LobbyUI::destroy(void)
 bool LobbyUI::update(void)
 {
     return UI::update();
+}
+
+// ========================================================================= //
+
+bool LobbyUI::root_SendPressed(const CEGUI::EventArgs& e)
+{
+    // Get message.
+    CEGUI::String str = m_layers[Layer::Root]->getChild("EditSend")->getText();
+    if (str.empty() == true){
+        return false;
+    }
+
+    // Add text to chat box.
+    CEGUI::MultiLineEditbox* chat = static_cast<CEGUI::MultiLineEditbox*>(
+        m_layers[Layer::Root]->getChild("Chat"));
+    chat->appendText(str + "\n");
+    // Scroll to bottom of chat box.
+    chat->getVertScrollbar()->setScrollPosition(99999.f);
+
+    // Clear edit box.
+    m_layers[Layer::Root]->getChild("EditSend")->setText("");    
+
+    return true;
 }
 
 // ========================================================================= //

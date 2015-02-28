@@ -42,6 +42,19 @@ UI::~UI(void)
 
 // ========================================================================= //
 
+void UI::destroy(void)
+{
+    while (m_layerStack.empty() == false){
+        CEGUI::Window* current = m_layers[m_layerStack.top()];
+        current->setVisible(false);
+        current->deactivate();
+
+        m_layerStack.pop();
+    }
+}
+
+// ========================================================================= //
+
 bool UI::update(void)
 {
     CEGUI::System::getSingleton().injectTimePulse(1.f / 16.f);

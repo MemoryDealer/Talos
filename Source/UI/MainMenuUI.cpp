@@ -110,7 +110,14 @@ void MainMenuUI::init(void)
 
 void MainMenuUI::destroy(void)
 {
-    
+    UI::destroy();
+
+    CEGUI::WindowManager& wmgr = CEGUI::WindowManager::getSingleton();
+    for (int i = 0; i < Layer::NumLayers; ++i){
+        CEGUI::System::getSingleton().getDefaultGUIContext().
+            getRootWindow()->removeChild(m_layers[i]);
+        wmgr.destroyWindow(m_layers[i]);
+    }
 }
 
 // ========================================================================= //

@@ -43,8 +43,8 @@ public:
     // Initializes all CEGUI data.
     virtual void init(void) = 0;
 
-    // Frees all CEGUI data that was initialized.
-    virtual void destroy(void) = 0;
+    // Pops all layers.
+    virtual void destroy(void);
 
     // Updates CEGUI system, returns true if there are events that need 
     // processing.

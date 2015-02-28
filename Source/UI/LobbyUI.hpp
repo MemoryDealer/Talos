@@ -48,6 +48,10 @@ public:
     // Steps CEGUI system.
     virtual bool update(void) override;
 
+    // Event handlers:
+
+    bool root_SendPressed(const CEGUI::EventArgs& e);
+
     enum Layer{
         Root = 0,
 

@@ -329,7 +329,7 @@
 * Made UI::update() non-pure, it calls injectTimePulse on CEGUI's System and returns true if there are queued events. Derived UIs currently just call the super function.
 
 == TODO ==
-* CEGUI rendering acting crazy when popping LobbyState back to main menu.
+* CEGUI disappears when resizing window.
 * Create EventQueue system to deal with network and UI. Pass World into network classes and have something like World::handleNetworkEvent().
 * SkyLowGraphics.
 * Consider creating a function in World to handle input for Client so it can be sent to the server.
