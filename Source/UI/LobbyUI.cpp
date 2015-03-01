@@ -44,7 +44,8 @@ void LobbyUI::init(void)
     CEGUI::WindowManager& wmgr = CEGUI::WindowManager::getSingleton();
 
     m_layers[Layer::Root] = wmgr.loadLayoutFromFile("Lobby/root.layout");
-    // Disable manual editing of chat multiline edit box.
+    // Disable manual editing of multiline edit boxes.
+    m_layers[Layer::Root]->getChild("PlayerList")->disable();
     m_layers[Layer::Root]->getChild("Chat")->disable();
     // Subscribe event handlers.
     m_layers[Layer::Root]->getChild("EditSend")->subscribeEvent(

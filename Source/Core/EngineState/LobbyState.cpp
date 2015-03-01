@@ -29,6 +29,8 @@
 #include "Core/EngineState/EngineStateID.hpp"
 #include "Input/Input.hpp"
 #include "LobbyState.hpp"
+#include "Network/Client/Client.hpp"
+#include "Network/Server/Server.hpp"
 #include "UI/LobbyUI.hpp"
 #include "World/Environment.hpp"
 
@@ -81,6 +83,14 @@ void LobbyState::enter(void)
 
 void LobbyState::exit(void)
 {
+    // Close network connections.
+    if (m_world.getServer()->initialized()){
+        m_world.destroyServer();
+    }
+    else if (m_world.getClient()->initialized()){
+        m_world.destroyClient();
+    }
+
     m_ui->destroy();
     m_world.destroy();
 }
@@ -151,9 +161,9 @@ void LobbyState::update(void)
 
 void LobbyState::handleUIEvents(void)
 {
-    int uiEvent = 0;
-    while ((uiEvent = m_ui->getNextEvent())){
-        switch (uiEvent){
+    UIEvent e = m_ui->getNextEvent();
+    for (; e.type != UIEvent::None; e = m_ui->getNextEvent()){
+        switch (e.type){
         default:
             break;
 

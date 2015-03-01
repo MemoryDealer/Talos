@@ -98,7 +98,7 @@ public:
     // Network functions:
 
     // Initializes Server, update will process Server updates.
-    void initServer(void);
+    void initServer(const int port, const std::string& username);
 
     // Destroys Server.
     void destroyServer(void);
@@ -202,8 +202,6 @@ private:
     // Network.
     std::shared_ptr<Server> m_server;
     std::shared_ptr<Client> m_client;
-    bool m_useServer;
-    bool m_useClient;
 
     // Entity pool.
     std::shared_ptr<EntityPool> m_entityPool;

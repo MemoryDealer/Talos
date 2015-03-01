@@ -50,15 +50,15 @@ public:
 
     // Event handlers:
 
-    bool root_CampaignPressed(const CEGUI::EventArgs& e);
-    bool root_MultiplayerPressed(const CEGUI::EventArgs& e);
-    bool root_ExitPressed(const CEGUI::EventArgs& e);
+    bool root_CampaignPressed(const CEGUI::EventArgs& args);
+    bool root_MultiplayerPressed(const CEGUI::EventArgs& args);
+    bool root_ExitPressed(const CEGUI::EventArgs& args);
 
-    bool multiplayer_HostPressed(const CEGUI::EventArgs& e);
+    bool multiplayer_HostPressed(const CEGUI::EventArgs& args);
 
-    bool host_HostPressed(const CEGUI::EventArgs& e);
+    bool host_HostPressed(const CEGUI::EventArgs& args);
 
-    bool BackPressed(const CEGUI::EventArgs& e);
+    bool BackPressed(const CEGUI::EventArgs& args);
 
     // Window layers.
     enum Layer{

@@ -22,16 +22,18 @@
 // ========================================================================= //
 
 #include "Config/Config.hpp"
-#include "Network/Client/Client.hpp"
 #include "Network/NetData.hpp"
 #include "Server.hpp"
 
 // ========================================================================= //
 
 Server::Server(void) :
+m_initialized(false),
 m_peer(nullptr),
 m_packet(nullptr),
-m_tickRate(8)
+m_tickRate(8),
+m_host(nullptr),
+m_players()
 {
 
 }
@@ -45,10 +47,9 @@ Server::~Server(void)
 
 // ========================================================================= //
 
-void Server::init(void)
+void Server::init(const int port, const std::string& username)
 {
     // Prepare server data.
-    int port = 0;
     int maxClients = 0;
     bool simulate = false;
     float packetLoss = 0.f;
@@ -57,7 +58,6 @@ void Server::init(void)
     // Load server settings from config file.
     Talos::Config c("Data/Network/net.cfg");
     if (c.isLoaded()){
-        port = c.parseInt("core", "port");
         maxClients = c.parseInt("core", "maxClients");
 
         simulate = c.parseBool("simulator", "active");
@@ -68,7 +68,6 @@ void Server::init(void)
     }
     else{
         // File failed to load, fill default values.
-        port = 7042;
         maxClients = 16;
     }
     
@@ -82,6 +81,13 @@ void Server::init(void)
         // be applied to clients as well.
         m_peer->ApplyNetworkSimulator(packetLoss, delay / 2, 0);
     }
+
+    // Allocate Player instance for host.
+    m_host.reset(new Player());
+    m_host->username = username.c_str();
+    m_host->entity = nullptr;
+
+    m_initialized = true;
 }
 
 // ========================================================================= //
@@ -89,6 +95,8 @@ void Server::init(void)
 void Server::destroy(void)
 {
     RakNet::RakPeerInterface::DestroyInstance(m_peer);
+
+    m_initialized = false;
 }
 
 // ========================================================================= //
@@ -132,6 +140,14 @@ void Server::registerNewClient(void)
     reg.Serialize(false, &bs);
 
     printf("New client %s connected!\n", reg.username.C_String());
+
+    // Insert player into player list.
+    std::shared_ptr<Player> player;
+    player.reset(new Player());
+    player->username = reg.username;
+    player->entity = nullptr;
+    m_players[m_peer->GetGuidFromSystemAddress(m_packet->systemAddress)] =
+        player;
 }
 
 // ========================================================================= //

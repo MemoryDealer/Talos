@@ -65,10 +65,16 @@ public:
                   const PacketPriority priority, 
                   const PacketReliability reliability);
 
+    // Getters:
+
+    // Returns true if client has been initialized.
+    const bool initialized(void) const;
+
 private:
     // Sends registration info to server.
     void registerWithServer(void);
 
+    bool m_initialized;
     RakNet::RakPeerInterface* m_peer;
     RakNet::Packet* m_packet;
     RakNet::SystemAddress m_serverSystemAddr;
@@ -77,6 +83,12 @@ private:
     bool m_connected;
     RakNet::RakString m_username;
 };
+
+// ========================================================================= //
+
+inline const bool Client::initialized(void) const{
+    return m_initialized;
+}
 
 // ========================================================================= //
 

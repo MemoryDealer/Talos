@@ -133,7 +133,7 @@ bool MainMenuUI::update(void)
 
 // ========================================================================= //
 
-bool MainMenuUI::root_CampaignPressed(const CEGUI::EventArgs& e)
+bool MainMenuUI::root_CampaignPressed(const CEGUI::EventArgs& args)
 {
     printf("Campaign pressed!");
 
@@ -142,7 +142,7 @@ bool MainMenuUI::root_CampaignPressed(const CEGUI::EventArgs& e)
 
 // ========================================================================= //
 
-bool MainMenuUI::root_MultiplayerPressed(const CEGUI::EventArgs& e)
+bool MainMenuUI::root_MultiplayerPressed(const CEGUI::EventArgs& args)
 {
     this->pushLayer(Layer::Multiplayer);
     return true;
@@ -150,15 +150,15 @@ bool MainMenuUI::root_MultiplayerPressed(const CEGUI::EventArgs& e)
 
 // ========================================================================= //
 
-bool MainMenuUI::root_ExitPressed(const CEGUI::EventArgs& e)
+bool MainMenuUI::root_ExitPressed(const CEGUI::EventArgs& args)
 {
-    m_events.push(Event::Exit);
+    m_events.push(UIEvent(Event::Exit));
     return true;
 }
 
 // ========================================================================= //
 
-bool MainMenuUI::multiplayer_HostPressed(const CEGUI::EventArgs& e)
+bool MainMenuUI::multiplayer_HostPressed(const CEGUI::EventArgs& args)
 {
     this->pushLayer(Layer::Host);
     return true;
@@ -166,15 +166,24 @@ bool MainMenuUI::multiplayer_HostPressed(const CEGUI::EventArgs& e)
 
 // ========================================================================= //
 
-bool MainMenuUI::host_HostPressed(const CEGUI::EventArgs& e)
+bool MainMenuUI::host_HostPressed(const CEGUI::EventArgs& args)
 {
-    m_events.push(Event::HostGame);
+    UIEvent e(Event::HostGame);
+
+    // Get username and port.
+    CEGUI::String str = m_layers[Layer::Host]->getChild(
+        "EditUsername")->getText();
+    e.s1 = str.c_str();
+    str = m_layers[Layer::Host]->getChild("EditPort")->getText();
+    e.field.x = std::stoi(str.c_str());
+    
+    m_events.push(e);
     return true;
 }
 
 // ========================================================================= //
 
-bool MainMenuUI::BackPressed(const CEGUI::EventArgs& e)
+bool MainMenuUI::BackPressed(const CEGUI::EventArgs& args)
 {
     this->popLayer();
 

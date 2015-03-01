@@ -29,6 +29,23 @@
 #include "stdafx.hpp"
 
 // ========================================================================= //
+
+class Entity;
+
+// ========================================================================= //
+
+namespace std{
+    template<> 
+    struct hash<RakNet::RakNetGUID>
+    {
+        size_t operator()(const RakNet::RakNetGUID& g) const
+        {
+            return hash<unsigned long>()(g.ToUint32(g));
+        }
+    };
+}
+
+// ========================================================================= //
 // Operates network functionality for running a server with multiple clients.
 class Server final
 {
@@ -40,7 +57,7 @@ public:
     ~Server(void);
 
     // Loads server settings from config file and sets up server connection.
-    void init(void);
+    void init(const int port, const std::string& username);
 
     // Destroys server connection.
     void destroy(void);
@@ -48,14 +65,39 @@ public:
     // Receives and handles incoming packets on server port.
     void update(void);
 
+    // Getters:
+
+    // Returns true if server has been initialized.
+    const bool initialized(void) const;
+
+    // === //
+
+    struct Player{
+        RakNet::RakString username;
+        Entity* entity;
+    };
+
 private:
     // Processes new client registration.
     void registerNewClient(void);
 
+    bool m_initialized;
     RakNet::RakPeerInterface* m_peer;
     RakNet::Packet* m_packet;
-    unsigned int m_tickRate;
+    unsigned int m_tickRate;  
+
+    // Player instance of user running server.
+    std::shared_ptr<Player> m_host;
+
+    // Hash table of connected players.
+    std::unordered_map<RakNet::RakNetGUID, std::shared_ptr<Player>> m_players;
 };
+
+// ========================================================================= //
+
+inline const bool Server::initialized(void) const{
+    return m_initialized;
+}
 
 // ========================================================================= //
 

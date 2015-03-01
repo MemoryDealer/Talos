@@ -120,13 +120,13 @@ void UI::setVisible(const bool visible)
 
 // ========================================================================= //
 
-int UI::getNextEvent(void)
+const UIEvent UI::getNextEvent(void)
 {
     if (m_events.empty() == true){
-        return 0;
+        return UIEvent(UIEvent::None);
     }
 
-    int e = m_events.front();
+    UIEvent e = m_events.front();
     m_events.pop();
     return e;
 }

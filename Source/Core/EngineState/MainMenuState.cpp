@@ -163,9 +163,9 @@ void MainMenuState::update(void)
 
 void MainMenuState::handleUIEvents(void)
 {
-    int uiEvent = 0;
-    while ((uiEvent = m_ui->getNextEvent())){
-        switch (uiEvent){
+    UIEvent e = m_ui->getNextEvent();
+    for(; e.type != UIEvent::None; e = m_ui->getNextEvent()){
+        switch (e.type){
         default:
             break;
 
@@ -175,7 +175,7 @@ void MainMenuState::handleUIEvents(void)
 
         case MainMenuUI::Event::HostGame:
             // Setup server.
-            m_world.initServer();
+            m_world.initServer(e.field.x, e.s1);
 
             m_subject.notify(EngineNotification::Push, EngineStateID::Lobby);
             break;

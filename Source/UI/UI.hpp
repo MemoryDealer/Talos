@@ -29,6 +29,30 @@
 #include "stdafx.hpp"
 
 // ========================================================================= //
+// Identifies an event that occurs in the UI and any data associated with it.
+struct UIEvent{
+    explicit UIEvent(void) : type(0) { }
+    explicit UIEvent(const int _type) : type(_type) { }
+
+    int type;
+
+    // Additional data.
+    std::string s1;
+    union{
+        struct{
+            
+            int x, y, z;
+        } field;
+
+        void* data;
+    };
+
+    enum{
+        None = -1
+    };
+};
+
+// ========================================================================= //
 // Handles CEGUI creation and events. Uses a stack to manage GUI layers, 
 // allowing users to traverse menu systems.
 class UI
@@ -60,7 +84,7 @@ public:
     virtual void setVisible(const bool visible);
 
     // Get the ID of the next event in the event queue.
-    virtual int getNextEvent(void);
+    virtual const UIEvent getNextEvent(void);
 
 protected:
     // All layers (windows loaded from a layout).
@@ -68,7 +92,7 @@ protected:
     // Active layers, with the top being the currently visible layer.
     std::stack<int> m_layerStack;
     // Event queue for passing events from inside UI class to the outside.
-    std::queue<int> m_events;
+    std::queue<UIEvent> m_events;
 };
 
 // ========================================================================= //

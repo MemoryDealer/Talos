@@ -48,8 +48,6 @@ m_PScene(nullptr),
 m_usePhysics(false),
 m_server(nullptr),
 m_client(nullptr),
-m_useServer(false),
-m_useClient(false),
 m_entityPool(nullptr),
 m_player(nullptr),
 m_hasPlayer(false),
@@ -116,12 +114,6 @@ void World::init(const bool usePhysics)
 
 void World::destroy(void)
 {
-    if (m_useServer){
-        this->destroyServer();
-    }
-    if (m_useClient){
-        this->destroyClient();
-    }
     if (m_usePhysics){
         m_PScene->destroy();
     }
@@ -177,10 +169,10 @@ const bool World::checkEntities(void) const
 void World::update(void)
 {
     // Network.
-    if (m_useServer){
+    if (m_server->initialized()){
         m_server->update();
     }
-    else if (m_useClient){
+    else if (m_client->initialized()){
         m_client->update();
     }
 
@@ -214,12 +206,12 @@ void World::initPhysics(void)
 
 // ========================================================================= //
 
-void World::initServer(void)
+void World::initServer(const int port, const std::string& username)
 {
-    Assert(m_useClient == false, "Trying to init Server with Client active");
+    Assert(m_client->initialized() == false, 
+           "Trying to init Server with Client active");
 
-    m_server->init();
-    m_useServer = true;
+    m_server->init(port, username);
 }
 
 // ========================================================================= //
@@ -227,17 +219,16 @@ void World::initServer(void)
 void World::destroyServer(void)
 {
     m_server->destroy();
-    m_useServer = false;
 }
 
 // ========================================================================= //
 
 void World::initClient(void)
 {
-    Assert(m_useServer == false, "Trying to init Client with Server active");
+    Assert(m_server->initialized() == false, 
+           "Trying to init Client with Server active");
 
     m_client->init();
-    m_useClient = true;
 }
 
 // ========================================================================= //
@@ -245,7 +236,6 @@ void World::initClient(void)
 void World::destroyClient(void)
 {
     m_client->destroy();
-    m_useClient = false;
 }
 
 // ========================================================================= //
