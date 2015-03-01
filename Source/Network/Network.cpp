@@ -15,129 +15,99 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: UI.cpp
+// File: Network.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements UI class.
+// Implements Network class.
 // ========================================================================= //
 
-#include "UI.hpp"
+#include "Network.hpp"
 
 // ========================================================================= //
 
-UI::UI(void) :
-m_layers(),
-m_layerStack(),
-m_events()
+Network::Network(void) :
+m_mode(),
+m_initialized(false),
+m_username("")
 {
 
 }
 
 // ========================================================================= //
 
-UI::~UI(void)
+Network::~Network(void)
 {
 
 }
 
 // ========================================================================= //
 
-void UI::destroy(void)
+void Network::init(void)
 {
-    while (m_layerStack.empty() == false){
-        CEGUI::Window* current = m_layers[m_layerStack.top()];
-        current->setVisible(false);
-        current->deactivate();
-
-        m_layerStack.pop();
-    }
+    Talos::Log::getSingleton().log(
+        "WARNING: Default Network::init() called");
 }
 
 // ========================================================================= //
 
-bool UI::update(void)
+void Network::init(const int port, const std::string& username)
 {
-    CEGUI::System::getSingleton().injectTimePulse(1.f / 16.f);
-
-    return (m_events.empty() == false);
+    Talos::Log::getSingleton().log(
+        "WARNING: Default Network::init(port, username) called");
 }
 
 // ========================================================================= //
 
-void UI::pushLayer(const unsigned int n)
+void Network::destroy(void)
 {
-    Assert(n < m_layers.size(), "Invalid layer");
-
-    // Hide current active layer.
-    if (m_layerStack.empty() == false){
-        CEGUI::Window* current = m_layers[m_layerStack.top()];
-        current->setVisible(false);
-        current->deactivate();
-    }
-
-    // Activate new layer.
-    m_layerStack.push(n);
-    m_layers[n]->setVisible(true);
-    m_layers[n]->activate();
+    Talos::Log::getSingleton().log(
+        "WARNING: Default Network::destroy() called");
 }
 
 // ========================================================================= //
 
-void UI::popLayer(void)
+void Network::update(void)
 {
-    // Hide and deactivate active layer and pop index.
-    CEGUI::Window* current = m_layers[m_layerStack.top()];
-    current->setVisible(false);
-    current->deactivate();
-
-    m_layerStack.pop();
-
-    // Get next layer and activate it.
-    if (m_layerStack.empty() == false){
-        current = m_layers[m_layerStack.top()];
-        current->setVisible(true);
-        current->activate();
-    }
-    else{
-
-    }
+    Talos::Log::getSingleton().log(
+        "WARNING: Default Network::update() called");
 }
 
 // ========================================================================= //
 
-void UI::setVisible(const bool visible)
+void Network::connect(const std::string& addr,
+                      const int port,
+                      const std::string& username)
 {
-    CEGUI::Window* currentLayer = m_layers[m_layerStack.top()];
-    currentLayer->setVisible(visible);
-
-    if (visible == true){
-        currentLayer->activate();
-    }
-    else{
-        currentLayer->deactivate();
-    }
+    Talos::Log::getSingleton().log(
+        "WARNING: Default Network::connect() called");
 }
 
 // ========================================================================= //
 
-const UIEvent UI::getNextEvent(void)
+void Network::reconnect(void)
 {
-    if (m_events.empty() == true){
-        return UIEvent(UIEvent::None);
-    }
-
-    UIEvent e = m_events.front();
-    m_events.pop();
-    return e;
+    Talos::Log::getSingleton().log(
+        "WARNING: Default Network::reconnect() called");
 }
 
 // ========================================================================= //
 
-CEGUI::Window* UI::getWindow(const int layer, const std::string& name)
+void Network::disconnect(void)
 {
-    Assert(m_layers.size() <= layer, "Invalid layer");
+    Talos::Log::getSingleton().log(
+        "WARNING: Default Network::disconnect() called");
+}
 
-    return m_layers[layer]->getChild(CEGUI::String(name));
+// ========================================================================= //
+
+uint32_t Network::send(const RakNet::BitStream& bs,
+                       const PacketPriority priority,
+                       const PacketReliability reliability)
+{
+    Talos::Log::getSingleton().log(
+        "WARNING: Default Network::send() called");
+
+    return 0;
 }
 
 // ========================================================================= //

@@ -37,7 +37,7 @@ struct UIEvent{
     int type;
 
     // Additional data.
-    std::string s1;
+    std::string s1, s2, s3;
     union{
         struct{
             
@@ -85,6 +85,9 @@ public:
 
     // Get the ID of the next event in the event queue.
     virtual const UIEvent getNextEvent(void);
+
+    // Returns pointer to CEGUI::Window of associated layer and name.
+    virtual CEGUI::Window* getWindow(const int layer, const std::string& name);
 
 protected:
     // All layers (windows loaded from a layout).

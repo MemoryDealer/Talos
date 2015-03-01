@@ -28,7 +28,6 @@
 // ========================================================================= //
 
 Client::Client(void) :
-m_initialized(false),
 m_peer(nullptr),
 m_packet(nullptr),
 m_serverSystemAddr(),
@@ -36,7 +35,7 @@ m_serverIP(),
 m_port(0),
 m_connected(false)
 {
-
+    this->setMode(Network::Mode::Client);
 }
 
 // ========================================================================= //
@@ -64,7 +63,7 @@ void Client::init(void)
         m_peer->ApplyNetworkSimulator(packetLoss, delay / 2, 0);
     }
 
-    m_initialized = true;
+    this->setInitialized(true);
 }
 
 // ========================================================================= //
@@ -80,7 +79,7 @@ void Client::destroy(void)
 
     RakNet::RakPeerInterface::DestroyInstance(m_peer);
 
-    m_initialized = false;
+    this->setInitialized(false);
 }
 
 // ========================================================================= //

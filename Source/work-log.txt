@@ -330,6 +330,13 @@
 
 == 2/28/15 ==
 * Added Talos::Log singleton class. This is the first singleton and probably the last.
+* Created UIEvent struct (defined in UI.hpp) which is queued in UI when events that need processing occur. The state holding the UI can access the UIEvents and their data as needed.
+* Removed World::m_useServer and m_useClient and just put a m_initialized bool inside Server and Client for efficiency. This is also needed so LobbyState can close network connections upon exit.
+* Added a hash table for connected clients in Server, had to implement a custom hash function for RakNet::RakNetGUID since I want to store clients by their unique GUIDs. The hash function simply
+    uses the GUID since they are unique.
+* Enabled user to specify username and port when hosting game.
+* Reworked how Server/Client initialization is handled. Created abstract base class Network which Server and Client derive from. Network provides mostly interface functions but a few important ones as well.
+    Now to update/access the server or client service, it can be done directly through the World::Network pointer, which is assigned to the Server or Client when they are initialized.
 
 == TODO ==
 * CEGUI disappears when resizing window.

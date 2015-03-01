@@ -84,12 +84,7 @@ void LobbyState::enter(void)
 void LobbyState::exit(void)
 {
     // Close network connections.
-    if (m_world.getServer()->initialized()){
-        m_world.destroyServer();
-    }
-    else if (m_world.getClient()->initialized()){
-        m_world.destroyClient();
-    }
+    m_world.getNetwork()->destroy();
 
     m_ui->destroy();
     m_world.destroy();

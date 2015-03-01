@@ -69,6 +69,9 @@ void MainMenuUI::init(void)
     m_layers[Layer::Multiplayer]->getChild("ButtonHost")->subscribeEvent(
         CEGUI::PushButton::EventClicked,
         CEGUI::Event::Subscriber(&MainMenuUI::multiplayer_HostPressed, this));
+    m_layers[Layer::Multiplayer]->getChild("ButtonJoin")->subscribeEvent(
+        CEGUI::PushButton::EventClicked,
+        CEGUI::Event::Subscriber(&MainMenuUI::multiplayer_JoinPressed, this));
     m_layers[Layer::Multiplayer]->getChild("ButtonBack")->subscribeEvent(
         CEGUI::PushButton::EventClicked,
         CEGUI::Event::Subscriber(&MainMenuUI::BackPressed, this));
@@ -84,6 +87,9 @@ void MainMenuUI::init(void)
 
     // Join layer.
     m_layers[Layer::Join] = wmgr.loadLayoutFromFile("MainMenu/join.layout");
+    m_layers[Layer::Join]->getChild("ButtonConnect")->subscribeEvent(
+        CEGUI::PushButton::EventClicked,
+        CEGUI::Event::Subscriber(&MainMenuUI::join_ConnectPressed, this));
     m_layers[Layer::Join]->getChild("ButtonBack")->subscribeEvent(
         CEGUI::PushButton::EventClicked,
         CEGUI::Event::Subscriber(&MainMenuUI::BackPressed, this));
@@ -166,17 +172,39 @@ bool MainMenuUI::multiplayer_HostPressed(const CEGUI::EventArgs& args)
 
 // ========================================================================= //
 
+bool MainMenuUI::multiplayer_JoinPressed(const CEGUI::EventArgs& args)
+{
+    this->pushLayer(Layer::Join);
+    return true;
+}
+
+// ========================================================================= //
+
 bool MainMenuUI::host_HostPressed(const CEGUI::EventArgs& args)
 {
     UIEvent e(Event::HostGame);
 
     // Get username and port.
-    CEGUI::String str = m_layers[Layer::Host]->getChild(
-        "EditUsername")->getText();
-    e.s1 = str.c_str();
-    str = m_layers[Layer::Host]->getChild("EditPort")->getText();
-    e.field.x = std::stoi(str.c_str());
+    e.s1 = m_layers[Layer::Host]->getChild("EditUsername")->getText().c_str();
+    e.field.x = std::stoi(
+        m_layers[Layer::Host]->getChild("EditPort")->getText().c_str());
     
+    m_events.push(e);
+    return true;
+}
+
+// ========================================================================= //
+
+bool MainMenuUI::join_ConnectPressed(const CEGUI::EventArgs& args)
+{
+    UIEvent e(Event::JoinGame);
+
+    // Get username, server address, and port.
+    e.s1 = m_layers[Layer::Join]->getChild("EditUsername")->getText().c_str();
+    e.s2 = m_layers[Layer::Join]->getChild("EditServer")->getText().c_str();
+    e.field.x = std::stoi(
+        m_layers[Layer::Join]->getChild("EditPort")->getText().c_str());
+
     m_events.push(e);
     return true;
 }

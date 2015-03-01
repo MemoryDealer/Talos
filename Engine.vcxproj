@@ -34,6 +34,7 @@
     <ClCompile Include="Source\Input\Input.cpp" />
     <ClCompile Include="Source\Log\Log.cpp" />
     <ClCompile Include="Source\Network\Client\Client.cpp" />
+    <ClCompile Include="Source\Network\Network.cpp" />
     <ClCompile Include="Source\Network\Server\Server.cpp" />
     <ClCompile Include="Source\Observer\Subject.cpp" />
     <ClCompile Include="Source\Physics\PDebugDrawer.cpp" />
@@ -109,6 +110,7 @@
     <ClInclude Include="Source\Network\Client\Client.hpp" />
     <ClInclude Include="Source\Network\NetData.hpp" />
     <ClInclude Include="Source\Network\NetMessage.hpp" />
+    <ClInclude Include="Source\Network\Network.hpp" />
     <ClInclude Include="Source\Network\Server\Server.hpp" />
     <ClInclude Include="Source\Observer\Observer.hpp" />
     <ClInclude Include="Source\Observer\Subject.hpp" />

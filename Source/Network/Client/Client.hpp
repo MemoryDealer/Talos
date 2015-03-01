@@ -26,55 +26,50 @@
 
 // ========================================================================= //
 
-#include "stdafx.hpp"
+#include "Network/Network.hpp"
 
 // ========================================================================= //
 // Operates network functionality for connecting to remote server.
-class Client final
+class Client final : public Network
 {
 public:
     // Default initializes member data.
     explicit Client(void);
 
     // Empty destructor.
-    ~Client(void);
+    virtual ~Client(void) override;
 
     // Loads client settings from config file and connects to server on 
     // specified address and port
-    void init(void);
+    virtual void init(void) override;
 
     // Closes client connection to server.
-    void destroy(void);
+    virtual void destroy(void) override;
 
     // Receives incoming packets from server and handles them.
-    void update(void);
+    virtual void update(void) override;
 
     // Sends connection request to server. A response will be received in 
     // the update loop.
-    void connect(const std::string& addr, 
-                 const int port, 
-                 const std::string& username);
+    virtual void connect(const std::string& addr,
+                         const int port,
+                         const std::string& username) override;
 
     // Sends a connection request to server using current server data.
-    void reconnect(void);
+    virtual void reconnect(void) override;
 
     // Disconnects from currently connected server.
-    void disconnect(void);
+    virtual void disconnect(void) override;
 
-    uint32_t send(const RakNet::BitStream& bs, 
-                  const PacketPriority priority, 
-                  const PacketReliability reliability);
+    virtual uint32_t send(const RakNet::BitStream& bs,
+                          const PacketPriority priority, 
+                          const PacketReliability reliability) override;
 
-    // Getters:
-
-    // Returns true if client has been initialized.
-    const bool initialized(void) const;
 
 private:
     // Sends registration info to server.
     void registerWithServer(void);
 
-    bool m_initialized;
     RakNet::RakPeerInterface* m_peer;
     RakNet::Packet* m_packet;
     RakNet::SystemAddress m_serverSystemAddr;
@@ -83,12 +78,6 @@ private:
     bool m_connected;
     RakNet::RakString m_username;
 };
-
-// ========================================================================= //
-
-inline const bool Client::initialized(void) const{
-    return m_initialized;
-}
 
 // ========================================================================= //
 

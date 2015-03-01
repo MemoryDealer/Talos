@@ -26,7 +26,7 @@
 
 // ========================================================================= //
 
-#include "stdafx.hpp"
+#include "Network/Network.hpp"
 
 // ========================================================================= //
 
@@ -47,28 +47,25 @@ namespace std{
 
 // ========================================================================= //
 // Operates network functionality for running a server with multiple clients.
-class Server final
+class Server final : public Network
 {
 public:
     // Default initializes member data.
     explicit Server(void);
 
     // Empty destructor.
-    ~Server(void);
+    virtual ~Server(void) override;
 
     // Loads server settings from config file and sets up server connection.
-    void init(const int port, const std::string& username);
+    virtual void init(const int port, const std::string& username) override;
 
     // Destroys server connection.
-    void destroy(void);
+    virtual void destroy(void) override;
 
     // Receives and handles incoming packets on server port.
-    void update(void);
+    virtual void update(void) override;
 
     // Getters:
-
-    // Returns true if server has been initialized.
-    const bool initialized(void) const;
 
     // === //
 
@@ -81,7 +78,6 @@ private:
     // Processes new client registration.
     void registerNewClient(void);
 
-    bool m_initialized;
     RakNet::RakPeerInterface* m_peer;
     RakNet::Packet* m_packet;
     unsigned int m_tickRate;  
@@ -92,12 +88,6 @@ private:
     // Hash table of connected players.
     std::unordered_map<RakNet::RakNetGUID, std::shared_ptr<Player>> m_players;
 };
-
-// ========================================================================= //
-
-inline const bool Server::initialized(void) const{
-    return m_initialized;
-}
 
 // ========================================================================= //
 

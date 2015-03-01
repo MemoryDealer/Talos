@@ -102,10 +102,10 @@ bool LobbyUI::root_SendPressed(const CEGUI::EventArgs& e)
         m_layers[Layer::Root]->getChild("Chat"));
     chat->appendText(str + "\n");
     // Scroll to bottom of chat box.
-    chat->getVertScrollbar()->setScrollPosition(99999.f);
+    chat->getVertScrollbar()->setScrollPosition(999999.f);
 
     // Clear edit box.
-    m_layers[Layer::Root]->getChild("EditSend")->setText("");    
+    m_layers[Layer::Root]->getChild("EditSend")->setText("");  
 
     return true;
 }

@@ -29,8 +29,7 @@
 #include "Core/EngineState/EngineStateID.hpp"
 #include "Input/Input.hpp"
 #include "MainMenuState.hpp"
-#include "Network/Client/Client.hpp"
-#include "Network/Server/Server.hpp"
+#include "Network/Network.hpp"
 #include "UI/MainMenuUI.hpp"
 #include "World/Environment.hpp"
 
@@ -176,6 +175,13 @@ void MainMenuState::handleUIEvents(void)
         case MainMenuUI::Event::HostGame:
             // Setup server.
             m_world.initServer(e.field.x, e.s1);
+
+            m_subject.notify(EngineNotification::Push, EngineStateID::Lobby);
+            break;
+
+        case MainMenuUI::Event::JoinGame:
+            m_world.initClient();
+            m_world.getNetwork()->connect(e.s2, e.field.x, e.s1);
 
             m_subject.notify(EngineNotification::Push, EngineStateID::Lobby);
             break;

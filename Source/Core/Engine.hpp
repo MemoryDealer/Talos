@@ -34,9 +34,10 @@
 // ========================================================================= //
 
 class Client;
-class Input;
-class Physics;
 class Server;
+class Input;
+class Network;
+class Physics;
 
 typedef std::stack<EngineStatePtr> EngineStateStack;
 typedef std::vector<EngineStatePtr> EngineStateList;

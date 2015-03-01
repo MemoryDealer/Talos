@@ -176,7 +176,6 @@ bool Engine::init(void)
     // === //
 
     // Network:
-
     m_server.reset(new Server());
     m_client.reset(new Client());
 

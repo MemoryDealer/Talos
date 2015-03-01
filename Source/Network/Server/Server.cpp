@@ -28,14 +28,13 @@
 // ========================================================================= //
 
 Server::Server(void) :
-m_initialized(false),
 m_peer(nullptr),
 m_packet(nullptr),
 m_tickRate(8),
 m_host(nullptr),
 m_players()
 {
-
+    this->setMode(Network::Mode::Server);
 }
 
 // ========================================================================= //
@@ -87,7 +86,7 @@ void Server::init(const int port, const std::string& username)
     m_host->username = username.c_str();
     m_host->entity = nullptr;
 
-    m_initialized = true;
+    this->setInitialized(true);
 }
 
 // ========================================================================= //
@@ -96,7 +95,7 @@ void Server::destroy(void)
 {
     RakNet::RakPeerInterface::DestroyInstance(m_peer);
 
-    m_initialized = false;
+    this->setInitialized(false);
 }
 
 // ========================================================================= //

@@ -46,6 +46,7 @@ m_graphics(),
 m_physics(nullptr),
 m_PScene(nullptr),
 m_usePhysics(false),
+m_network(nullptr),
 m_server(nullptr),
 m_client(nullptr),
 m_entityPool(nullptr),
@@ -108,6 +109,14 @@ void World::init(const bool usePhysics)
     m_modelComponentPool.reset(new Pool<ModelComponent>(1024));
     m_physicsComponentPool.reset(new Pool<PhysicsComponent>(1024));
     m_sceneComponentPool.reset(new Pool<SceneComponent>(1024));
+
+    // Assign Network pointer if server or client is active.
+    if (m_server->initialized() == true){
+        m_network = m_server.get();
+    }
+    else if (m_client->initialized() == true){
+        m_network = m_client.get();
+    }
 }
 
 // ========================================================================= //
@@ -134,6 +143,13 @@ void World::destroy(void)
 void World::resume(void)
 {
     m_viewport->setCamera(m_mainCameraC->getCamera());
+
+    // Detach Network pointer if network services are disabled.
+    if (m_network != nullptr){
+        if (m_network->initialized() == false){
+            m_network = nullptr;
+        }
+    }
 }
 
 // ========================================================================= //
@@ -169,11 +185,8 @@ const bool World::checkEntities(void) const
 void World::update(void)
 {
     // Network.
-    if (m_server->initialized()){
-        m_server->update();
-    }
-    else if (m_client->initialized()){
-        m_client->update();
+    if (m_network != nullptr){
+        m_network->update();
     }
 
     for (int i = 0; i < m_entityPool->m_poolSize; ++i){
@@ -208,34 +221,38 @@ void World::initPhysics(void)
 
 void World::initServer(const int port, const std::string& username)
 {
-    Assert(m_client->initialized() == false, 
-           "Trying to init Server with Client active");
+    Assert(m_network == nullptr, 
+           "Trying to init Server with Network already initialized");
 
-    m_server->init(port, username);
+    m_network = m_server.get();
+    m_network->init(port, username);
 }
 
 // ========================================================================= //
 
 void World::destroyServer(void)
 {
-    m_server->destroy();
+    m_network->destroy();
+    m_network = nullptr;
 }
 
 // ========================================================================= //
 
 void World::initClient(void)
 {
-    Assert(m_server->initialized() == false, 
-           "Trying to init Client with Server active");
+    Assert(m_network == nullptr,
+           "Trying to init Client with Network already initialized");
 
-    m_client->init();
+    m_network = m_client.get();
+    m_network->init();
 }
 
 // ========================================================================= //
 
 void World::destroyClient(void)
 {
-    m_client->destroy();
+    m_network->destroy();
+    m_network = nullptr;
 }
 
 // ========================================================================= //

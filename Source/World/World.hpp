@@ -31,14 +31,13 @@
 
 // ========================================================================= //
 
-class Client;
 class EntityPool;
 class Environment;
 class Input;
+class Network;
 class Physics;
 template<typename T> class Pool;
 class PScene;
-class Server;
 //
 //typedef std::unordered_map<const std::type_info*, 
 //    std::shared_ptr<Pool<T>>> PoolHashTable;
@@ -153,11 +152,8 @@ public:
     // Returns pointer to PScene (physics scene).
     std::shared_ptr<PScene> getPScene(void) const;
 
-    // Returns pointer to Server.
-    std::shared_ptr<Server> getServer(void) const;
-
-    // Returns pointer to Client.
-    std::shared_ptr<Client> getClient(void) const;
+    // Returns pointer to Network.
+    Network* getNetwork(void) const;
 
     // Returns reference to internal Input instance.
     Input* getInput(void) const;
@@ -178,8 +174,8 @@ public:
         std::shared_ptr<Physics> physics;
         Input* input;
         Graphics graphics;
-        std::shared_ptr<Server> server;
-        std::shared_ptr<Client> client;
+        std::shared_ptr<Network> server;
+        std::shared_ptr<Network> client;
     };
 
 private:
@@ -200,8 +196,9 @@ private:
     bool m_usePhysics;
 
     // Network.
-    std::shared_ptr<Server> m_server;
-    std::shared_ptr<Client> m_client;
+    Network* m_network;
+    std::shared_ptr<Network> m_server;
+    std::shared_ptr<Network> m_client;
 
     // Entity pool.
     std::shared_ptr<EntityPool> m_entityPool;
@@ -263,12 +260,8 @@ inline std::shared_ptr<PScene> World::getPScene(void) const{
     return m_PScene;
 }
 
-inline std::shared_ptr<Server> World::getServer(void) const{
-    return m_server;
-}
-
-inline std::shared_ptr<Client> World::getClient(void) const{
-    return m_client;
+inline Network* World::getNetwork(void) const{
+    return m_network;
 }
 
 inline Input* World::getInput(void) const{

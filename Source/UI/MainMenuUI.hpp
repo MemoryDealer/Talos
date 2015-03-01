@@ -55,8 +55,11 @@ public:
     bool root_ExitPressed(const CEGUI::EventArgs& args);
 
     bool multiplayer_HostPressed(const CEGUI::EventArgs& args);
+    bool multiplayer_JoinPressed(const CEGUI::EventArgs& args);
 
     bool host_HostPressed(const CEGUI::EventArgs& args);
+
+    bool join_ConnectPressed(const CEGUI::EventArgs& args);
 
     bool BackPressed(const CEGUI::EventArgs& args);
 
@@ -74,7 +77,8 @@ public:
 
     enum Event{
         Exit = 1,
-        HostGame
+        HostGame,
+        JoinGame
     };
 };
 

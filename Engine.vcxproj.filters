@@ -318,6 +318,9 @@
     <ClCompile Include="Source\Log\Log.cpp">
       <Filter>Source Files\Log</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Network\Network.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\Engine.hpp">
@@ -559,6 +562,9 @@
     </ClInclude>
     <ClInclude Include="Source\Log\Log.hpp">
       <Filter>Header Files\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\Network.hpp">
+      <Filter>Header Files\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
