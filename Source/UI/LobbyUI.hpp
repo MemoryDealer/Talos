@@ -59,7 +59,8 @@ public:
     };
 
     enum Event{
-        Exit = 1
+        Exit = 1,
+        Chat
     };
 };
 

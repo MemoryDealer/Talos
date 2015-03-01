@@ -26,7 +26,19 @@
 
 // ========================================================================= //
 
+#include "NetMessage.hpp"
 #include "stdafx.hpp"
+
+// ========================================================================= //
+
+struct NetEvent{
+    explicit NetEvent(void) : type(NetMessage::Null) { }
+    explicit NetEvent(const NetMessage msg) : type(msg) { }
+
+    int type;
+
+    std::string s1;
+};
 
 // ========================================================================= //
 // Abstract class for either Server or Client operations (Server/Client derives
@@ -73,6 +85,31 @@ public:
                           const PacketPriority priority,
                           const PacketReliability reliability);
 
+    // Empty.
+    virtual uint32_t send(const RakNet::AddressOrGUID identifier,
+                          const RakNet::BitStream& bs,
+                          const PacketPriority priority,
+                          const PacketReliability reliability);
+
+    // Empty.
+    virtual uint32_t broadcast(const RakNet::BitStream& bs,
+                               const PacketPriority priority,
+                               const PacketReliability reliability,
+                               const RakNet::SystemAddress& exclude =
+                               RakNet::UNASSIGNED_SYSTEM_ADDRESS);
+
+    // Empty.
+    virtual uint32_t chat(const std::string& msg);
+
+    // Enqueues NetEvent.
+    void pushEvent(const NetEvent& e);
+
+    // Returns true if there is at least one NetEvent in the queue.
+    const bool hasPendingEvent(void) const;
+
+    // Returns next NetEvent in queue.
+    const NetEvent getNextEvent(void);
+
     // Getters:
 
     // Returns mode of operation.
@@ -99,6 +136,8 @@ private:
     Mode m_mode;
     bool m_initialized;
     std::string m_username;
+
+    std::queue<NetEvent> m_events;
 };
 
 // ========================================================================= //

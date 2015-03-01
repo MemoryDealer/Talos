@@ -89,7 +89,7 @@ bool LobbyUI::update(void)
 
 // ========================================================================= //
 
-bool LobbyUI::root_SendPressed(const CEGUI::EventArgs& e)
+bool LobbyUI::root_SendPressed(const CEGUI::EventArgs& args)
 {
     // Get message.
     CEGUI::String str = m_layers[Layer::Root]->getChild("EditSend")->getText();
@@ -105,7 +105,12 @@ bool LobbyUI::root_SendPressed(const CEGUI::EventArgs& e)
     chat->getVertScrollbar()->setScrollPosition(999999.f);
 
     // Clear edit box.
-    m_layers[Layer::Root]->getChild("EditSend")->setText("");  
+    m_layers[Layer::Root]->getChild("EditSend")->setText("");
+
+    // Notify LobbyState.
+    UIEvent e(Event::Chat);
+    e.s1 = str.c_str();
+    m_events.push(e);
 
     return true;
 }

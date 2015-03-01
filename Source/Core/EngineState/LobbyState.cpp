@@ -74,6 +74,10 @@ void LobbyState::enter(void)
     m_ui.reset(new LobbyUI());
     m_ui->init();
 
+    // Setup initial UI data.
+    m_ui->getWindow(LobbyUI::Layer::Root, "PlayerList")->appendText(
+        m_world.getNetwork()->getUsername());
+
     if (m_world.checkEntities() == false){
         throw std::exception("LobbyState entities reported uninitialized");
     }
@@ -146,9 +150,47 @@ void LobbyState::update(void)
         }
 
         m_world.update();
+        if (m_world.getNetwork() != nullptr){
+            if (m_world.getNetwork()->hasPendingEvent() == true){
+                this->handleNetEvents();
+            }
+        }
         if (m_ui->update() == true){
             this->handleUIEvents();
         }     
+    }
+}
+
+// ========================================================================= //
+
+void LobbyState::handleNetEvents(void)
+{
+    NetEvent e = m_world.getNetwork()->getNextEvent();
+    for (;
+         e.type != NetMessage::Null;
+         e = m_world.getNetwork()->getNextEvent()){
+        switch (e.type){
+        default:
+            break;
+
+        case NetMessage::Register:
+            {
+                CEGUI::Window* players = m_ui->getWindow(
+                    LobbyUI::Layer::Root, "PlayerList");
+
+                players->appendText(CEGUI::String(e.s1 + "\n"));
+            }
+            break;
+
+        case NetMessage::Chat:
+            {
+                CEGUI::Window* chat = m_ui->getWindow(
+                    LobbyUI::Layer::Root, "Chat");
+
+                chat->appendText(e.s1);
+            }
+            break;
+        }
     }
 }
 
@@ -164,6 +206,10 @@ void LobbyState::handleUIEvents(void)
 
         case LobbyUI::Event::Exit:
 
+            break;
+
+        case LobbyUI::Event::Chat:
+            m_world.getNetwork()->chat(e.s1);
             break;
         }
     }

@@ -37,11 +37,31 @@ namespace NetData
 
 // ========================================================================= //
 
+struct String{
+    RakNet::RakString str;
+
+    void Serialize(const bool write, RakNet::BitStream* bs){
+        bs->Serialize(write, str);
+    }
+};
+
+// ========================================================================= //
+
 struct ClientRegistration{
     RakNet::RakString username;
 
     void Serialize(const bool write, RakNet::BitStream* bs){
         bs->Serialize(write, username);
+    }
+};
+
+// ========================================================================= //
+
+struct Chat{
+    RakNet::RakString msg;
+
+    void Serialize(const bool write, RakNet::BitStream* bs){
+        bs->Serialize(write, msg);
     }
 };
 

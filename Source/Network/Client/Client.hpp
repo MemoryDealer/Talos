@@ -65,6 +65,9 @@ public:
                           const PacketPriority priority, 
                           const PacketReliability reliability) override;
 
+    // Sends chat message to server.
+    virtual uint32_t chat(const std::string& msg) override;
+
 
 private:
     // Sends registration info to server.

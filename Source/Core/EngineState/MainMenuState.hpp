@@ -54,6 +54,9 @@ public:
     // Processes UI interaction.
     virtual void update(void) override;
 
+    // Processes network events.
+    void handleNetEvents(void);
+
     // Processes UI events.
     void handleUIEvents(void);
 };

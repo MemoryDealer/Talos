@@ -152,9 +152,38 @@ void MainMenuState::update(void)
         }
 
         m_world.update();
+        if (m_world.getNetwork() != nullptr){
+            if (m_world.getNetwork()->hasPendingEvent() == true){
+                this->handleNetEvents();
+            }
+        }
         if (m_ui->update() == true){
             this->handleUIEvents();
-        }   
+        } 
+    }
+}
+
+// ========================================================================= //
+
+void MainMenuState::handleNetEvents(void)
+{
+    NetEvent e = m_world.getNetwork()->getNextEvent();
+    for (; 
+         e.type != NetMessage::Null; 
+         e = m_world.getNetwork()->getNextEvent()){
+        switch (e.type){
+        default:
+            break;
+
+        case NetMessage::RegistrationSuccessful:
+            m_subject.notify(EngineNotification::Push, EngineStateID::Lobby);
+            break;
+
+        case NetMessage::UsernameAlreadyInUse:
+            // @TODO: Pop up error box.
+            printf("USERNAME ALREADY IN USE!\n");
+            break;
+        }
     }
 }
 
@@ -163,7 +192,7 @@ void MainMenuState::update(void)
 void MainMenuState::handleUIEvents(void)
 {
     UIEvent e = m_ui->getNextEvent();
-    for(; e.type != UIEvent::None; e = m_ui->getNextEvent()){
+    for (; e.type != UIEvent::None; e = m_ui->getNextEvent()){
         switch (e.type){
         default:
             break;
@@ -180,10 +209,10 @@ void MainMenuState::handleUIEvents(void)
             break;
 
         case MainMenuUI::Event::JoinGame:
-            m_world.initClient();
+            if (m_world.getNetwork() == nullptr){
+                m_world.initClient();
+            }
             m_world.getNetwork()->connect(e.s2, e.field.x, e.s1);
-
-            m_subject.notify(EngineNotification::Push, EngineStateID::Lobby);
             break;
         }
     }

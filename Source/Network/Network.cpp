@@ -111,3 +111,66 @@ uint32_t Network::send(const RakNet::BitStream& bs,
 }
 
 // ========================================================================= //
+
+uint32_t Network::send(const RakNet::AddressOrGUID identifier,
+                       const RakNet::BitStream& bs,
+                       const PacketPriority priority,
+                       const PacketReliability reliability)
+{
+    Talos::Log::getSingleton().log(
+        "WARNING: Default Network::send() (server) called");
+
+    return 0;
+}
+
+// ========================================================================= //
+
+uint32_t Network::broadcast(const RakNet::BitStream& bs,
+                            const PacketPriority priority,
+                            const PacketReliability reliability,
+                            const RakNet::SystemAddress& exclude)
+{
+    Talos::Log::getSingleton().log(
+        "WARNING: Default Network::broadcast() called");
+
+    return 0;
+}
+
+// ========================================================================= //
+
+uint32_t Network::chat(const std::string& msg)
+{
+    Talos::Log::getSingleton().log(
+        "WARNING: Default Network::chat() called");
+
+    return 0;
+}
+
+// ========================================================================= //
+
+void Network::pushEvent(const NetEvent& e)
+{
+    m_events.push(e);
+}
+
+// ========================================================================= //
+
+const bool Network::hasPendingEvent(void) const
+{
+    return (m_events.empty() == false);
+}
+
+// ========================================================================= //
+
+const NetEvent Network::getNextEvent(void)
+{
+    if (m_events.empty() == true){
+        return NetEvent();
+    }
+
+    NetEvent e = m_events.front();
+    m_events.pop();
+    return e;
+}
+
+// ========================================================================= //

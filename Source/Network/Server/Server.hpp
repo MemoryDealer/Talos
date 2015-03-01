@@ -65,12 +65,29 @@ public:
     // Receives and handles incoming packets on server port.
     virtual void update(void) override;
 
+    // Sends bitstream to client with corresponding GUID.
+    uint32_t send(const RakNet::AddressOrGUID identifier,
+                  const RakNet::BitStream& bs,
+                  const PacketPriority priority,
+                  const PacketReliability reliability) override;
+
+    // Sends bitstream to all registered clients.
+    virtual uint32_t broadcast(const RakNet::BitStream& bs,
+                               const PacketPriority priority,
+                               const PacketReliability reliability,
+                               const RakNet::SystemAddress& exclude = 
+                                   RakNet::UNASSIGNED_SYSTEM_ADDRESS) override;
+
+    // Sends chat message to all registered clients.
+    virtual uint32_t chat(const std::string& msg) override;
+
     // Getters:
 
     // === //
 
     struct Player{
         RakNet::RakString username;
+        RakNet::SystemAddress systemAddress;
         Entity* entity;
     };
 

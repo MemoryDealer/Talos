@@ -95,12 +95,41 @@ void Client::update(void)
 
         case ID_CONNECTION_REQUEST_ACCEPTED:
             // Store server's system address.
-            m_serverSystemAddr = m_packet->systemAddress;
-            m_connected = true;
-            printf("Connected to server! %d\n", m_serverSystemAddr.GetPort());
+            m_serverSystemAddr = m_packet->systemAddress;            
 
             // Register user info with server.            
             this->registerWithServer();
+            break;
+
+        case NetMessage::Register:
+            {
+                NetEvent e(NetMessage::Register);
+                NetData::ClientRegistration reg;
+                RakNet::BitStream bs(m_packet->data, m_packet->length, false);
+                bs.IgnoreBytes(sizeof(RakNet::MessageID));
+                reg.Serialize(false, &bs);
+
+                e.s1 = reg.username.C_String();
+                this->pushEvent(e);
+            }
+            break;
+
+        case NetMessage::RegistrationSuccessful:
+            m_connected = true;
+            this->pushEvent(NetEvent(NetMessage::RegistrationSuccessful));
+            break;
+
+        case NetMessage::Chat:
+            {
+                NetEvent e(NetMessage::Chat);
+                RakNet::BitStream bs(m_packet->data, m_packet->length, false);
+                bs.IgnoreBytes(sizeof(RakNet::MessageID));
+                NetData::Chat chat;
+                chat.Serialize(false, &bs);
+                
+                e.s1 = chat.msg.C_String();
+                this->pushEvent(e);
+            }
             break;
         }
     }
@@ -116,6 +145,8 @@ void Client::connect(const std::string& addr,
         m_serverIP = addr;
         m_port = port;
         m_username = username.c_str();
+
+        this->setUsername(username);
 
         m_peer->Connect(m_serverIP.c_str(), m_port, nullptr, 0);
     }
@@ -141,7 +172,7 @@ void Client::disconnect(void)
                                 IMMEDIATE_PRIORITY);
 
         // Reset server system address.
-        m_serverSystemAddr = RakNet::SystemAddress();
+        m_serverSystemAddr = RakNet::UNASSIGNED_SYSTEM_ADDRESS;
     }
 }
 
@@ -157,6 +188,19 @@ uint32_t Client::send(const RakNet::BitStream& bs,
                         0, 
                         m_serverSystemAddr, 
                         false);
+}
+
+// ========================================================================= //
+
+uint32_t Client::chat(const std::string& msg)
+{
+    RakNet::BitStream bs;
+    NetData::Chat chat;    
+    bs.Write(static_cast<RakNet::MessageID>(NetMessage::Chat));
+    chat.msg = msg.c_str();
+    chat.Serialize(true, &bs);
+
+    return this->send(bs, MEDIUM_PRIORITY, RELIABLE);
 }
 
 // ========================================================================= //

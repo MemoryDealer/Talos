@@ -135,7 +135,7 @@ const UIEvent UI::getNextEvent(void)
 
 CEGUI::Window* UI::getWindow(const int layer, const std::string& name)
 {
-    Assert(m_layers.size() <= layer, "Invalid layer");
+    Assert(layer <= m_layers.size(), "Invalid layer");
 
     return m_layers[layer]->getChild(CEGUI::String(name));
 }

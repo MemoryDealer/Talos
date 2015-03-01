@@ -36,7 +36,6 @@
 class Client;
 class Server;
 class Input;
-class Network;
 class Physics;
 
 typedef std::stack<EngineStatePtr> EngineStateStack;

@@ -86,6 +86,7 @@ void Server::init(const int port, const std::string& username)
     m_host->username = username.c_str();
     m_host->entity = nullptr;
 
+    this->setUsername(username);
     this->setInitialized(true);
 }
 
@@ -121,8 +122,69 @@ void Server::update(void)
         case NetMessage::Register:
             this->registerNewClient();
             break;
+
+        case NetMessage::Chat:
+            {
+                NetEvent e(NetMessage::Chat);
+                RakNet::BitStream bs(m_packet->data, m_packet->length, false);
+                bs.IgnoreBytes(sizeof(RakNet::MessageID));
+                NetData::Chat chat;
+                chat.Serialize(false, &bs);
+
+                e.s1 = chat.msg.C_String();
+                this->pushEvent(e);
+
+                // Broadcast chat message to all other clients.
+                this->broadcast(bs, MEDIUM_PRIORITY, RELIABLE, m_packet->systemAddress);
+            }
+            break;
         }
     }
+}
+
+// ========================================================================= //
+
+uint32_t Server::send(const RakNet::AddressOrGUID identifier,
+                      const RakNet::BitStream& bs,
+                      const PacketPriority priority,
+                      const PacketReliability reliability)
+{
+    return m_peer->Send(&bs,
+                        priority,
+                        reliability,
+                        0,
+                        identifier,
+                        false);
+}
+
+// ========================================================================= //
+
+uint32_t Server::broadcast(const RakNet::BitStream& bs,
+                           const PacketPriority priority,
+                           const PacketReliability reliability,
+                           const RakNet::SystemAddress& exclude)
+{
+    m_peer->Send(&bs,
+                 priority,
+                 reliability,
+                 0,
+                 exclude, // Address will be excluded from broadcast.
+                 true); // true means broadcast to all connected peers.
+
+    return 0;
+}
+
+// ========================================================================= //
+
+uint32_t Server::chat(const std::string& msg)
+{
+    RakNet::BitStream bs;
+    NetData::Chat chat;
+    bs.Write(static_cast<RakNet::MessageID>(NetMessage::Chat));
+    chat.msg = msg.c_str();
+    chat.Serialize(true, &bs);
+
+    return this->broadcast(bs, MEDIUM_PRIORITY, RELIABLE);
 }
 
 // ========================================================================= //
@@ -138,15 +200,28 @@ void Server::registerNewClient(void)
     bs.IgnoreBytes(sizeof(RakNet::MessageID));
     reg.Serialize(false, &bs);
 
-    printf("New client %s connected!\n", reg.username.C_String());
-
     // Insert player into player list.
     std::shared_ptr<Player> player;
     player.reset(new Player());
     player->username = reg.username;
+    player->systemAddress = m_packet->systemAddress;
     player->entity = nullptr;
     m_players[m_peer->GetGuidFromSystemAddress(m_packet->systemAddress)] =
         player;
+
+    // Send registration confirmation to client.
+    RakNet::BitStream confirm;
+    confirm.Write(static_cast<RakNet::MessageID>(
+        NetMessage::RegistrationSuccessful));
+    this->send(player->systemAddress, confirm, MEDIUM_PRIORITY, RELIABLE);
+
+    // Broadcast new player registration.
+    this->broadcast(bs, MEDIUM_PRIORITY, RELIABLE, m_packet->systemAddress);
+
+    // Add event for engine state.
+    NetEvent e(NetMessage::Register);
+    e.s1 = player->username;
+    this->pushEvent(e);
 }
 
 // ========================================================================= //
