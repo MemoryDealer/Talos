@@ -51,6 +51,10 @@ Client::~Client(void)
 
 void Client::init(void)
 {
+    if (m_connected == true){
+        return;
+    }
+
     // Setup RakNet peer interface.
     RakNet::SocketDescriptor sd;
     m_peer = RakNet::RakPeerInterface::GetInstance();
@@ -76,8 +80,6 @@ void Client::destroy(void)
         this->disconnect();
     }
 
-    RakNet::RakPeerInterface::DestroyInstance(m_peer);
-
     this->setInitialized(false);
 }
 
@@ -85,6 +87,11 @@ void Client::destroy(void)
 
 void Client::update(void)
 {
+    // Too much overhead?
+    if (this->initialized() == false){
+        return;
+    }
+
     for (m_packet = m_peer->Receive();
          m_packet;
          m_peer->DeallocatePacket(m_packet), m_packet = m_peer->Receive()){
@@ -98,6 +105,10 @@ void Client::update(void)
 
             // Register user info with server.            
             this->registerWithServer();
+            break;
+
+        case ID_DISCONNECTION_NOTIFICATION:
+            m_connected = false;
             break;
 
         case ID_CONNECTION_LOST:
@@ -231,13 +242,23 @@ void Client::disconnect(void)
         bs.Write(static_cast<RakNet::MessageID>(NetMessage::ClientDisconnect));
         this->send(bs, IMMEDIATE_PRIORITY, RELIABLE);
 
-        m_peer->Shutdown(3000);
-
-        // Reset server system address.
-        m_serverSystemAddr = RakNet::UNASSIGNED_SYSTEM_ADDRESS;
-
-        m_connected = false;
+        std::thread t(&Client::_shutdown, this);
+        t.detach();
     }
+}
+
+// ========================================================================= //
+
+void Client::_shutdown(void)
+{
+    m_peer->Shutdown(3000);
+
+    // Reset server system address.
+    m_serverSystemAddr = RakNet::UNASSIGNED_SYSTEM_ADDRESS;
+
+    RakNet::RakPeerInterface::DestroyInstance(m_peer);
+
+    m_connected = false;
 }
 
 // ========================================================================= //

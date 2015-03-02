@@ -136,7 +136,6 @@ void LobbyState::update(void)
                 {
                     // Temporary exit handling.
                     if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE){
-                        m_world.getNetwork()->disconnect();
                         m_subject.notify(EngineNotification::Pop);
                         return;
                     }

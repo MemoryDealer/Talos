@@ -61,6 +61,9 @@ public:
     // Disconnects from currently connected server.
     virtual void disconnect(void) override;
 
+    // Thread to wait on shutdown.
+    void _shutdown(void);
+
     virtual uint32_t send(const RakNet::BitStream& bs,
                           const PacketPriority priority, 
                           const PacketReliability reliability) override;

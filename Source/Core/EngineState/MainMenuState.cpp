@@ -212,6 +212,9 @@ void MainMenuState::handleUIEvents(void)
             if (m_world.getNetwork() == nullptr){
                 m_world.initClient();
             }
+            else if (m_world.getNetwork()->initialized() == false){
+                m_world.getNetwork()->init();
+            }
             m_world.getNetwork()->connect(e.s2, e.field.x, e.s1);
             break;
         }
