@@ -71,14 +71,18 @@ void LobbyState::enter(void)
 
     // Create sky.
     m_world.getEnvironment()->loadSky();
-    m_world.getEnvironment()->getSky()->loadPreset(SkyPresets[SkyPreset::Thunderstorm1]);
+    m_world.getEnvironment()->getSky()->loadPreset(
+        SkyPresets[SkyPreset::Thunderstorm1]);
 
     // Load UI.
     m_ui.reset(new LobbyUI());
     m_ui->init();
 
     // Setup initial UI data.
-    //m_ui->insertListboxItem("PlayerList", m_world.getNetwork()->getUsername());
+    if (m_world.getNetwork()->getMode() == Network::Mode::Server){
+        m_ui->insertListboxItem(
+            "PlayerList", m_world.getNetwork()->getUsername());
+    }
 
     m_world.getNetwork()->unlockEventQueue();
 
@@ -177,11 +181,18 @@ void LobbyState::handleNetEvents(void)
         default:
             break;
 
+        case ID_CONNECTION_LOST:
+            m_subject.notify(EngineNotification::Pop);
+            return;
+
         case NetMessage::Register:
             {
-                                     printf("Inserting %s\n", e.s1.c_str());
                 m_ui->insertListboxItem("PlayerList", e.s1);
             }
+            break;
+
+        case NetMessage::ClientDisconnect:
+            m_ui->removeListboxItem("PlayerList", e.s1);
             break;
 
         case NetMessage::Chat:
@@ -195,7 +206,7 @@ void LobbyState::handleNetEvents(void)
 
         case NetMessage::PlayerList:
             {
-                m_ui->insertListboxItem("PlayerList", e.s1);
+                m_ui->clearListbox("PlayerList");
             }
             break;
         }
@@ -217,6 +228,10 @@ void LobbyState::handleUIEvents(void)
             break;
 
         case LobbyUI::Event::Chat:
+            if (m_world.getNetwork()->getMode() == Network::Mode::Server){
+                m_world.getNetwork()->chat(
+                    m_world.getNetwork()->getUsername() + ": " + e.s1);
+            }
             m_world.getNetwork()->chat(e.s1);
             break;
         }

@@ -116,7 +116,27 @@ void Server::update(void)
             break;
 
         case ID_DISCONNECTION_NOTIFICATION:
+        case ID_CONNECTION_LOST:
+            {
+                NetEvent e(NetMessage::ClientDisconnect);
+                e.s1 = m_players[m_packet->guid]->username;
+                this->pushEvent(e);
 
+                // Send notification to all connected clients.
+                RakNet::BitStream bs;
+                bs.Write(static_cast<RakNet::MessageID>(
+                    NetMessage::ClientDisconnect));
+                bs.Write(m_players[m_packet->guid]->username.C_String());
+                this->broadcast(bs, MEDIUM_PRIORITY, RELIABLE);
+
+                // Remove player from client hash table.
+                m_players.erase(m_packet->guid);
+
+                // Update player list for each client.
+                for (auto& i : m_players){
+                    this->sendPlayerList(i.second->systemAddress);
+                }
+            }
             break;
 
         case NetMessage::Register:
@@ -136,7 +156,12 @@ void Server::update(void)
                 this->pushEvent(e);
 
                 // Broadcast chat message to all other clients.
-                this->broadcast(bs, 
+                // Assign ID so clients know which player said this.
+                chat.id = m_players[m_packet->guid]->id;
+                RakNet::BitStream bsOut;
+                bsOut.Write(static_cast<RakNet::MessageID>(NetMessage::Chat));
+                chat.Serialize(true, &bsOut);
+                this->broadcast(bsOut, 
                                 MEDIUM_PRIORITY, 
                                 RELIABLE, 
                                 m_packet->systemAddress);
@@ -186,6 +211,7 @@ uint32_t Server::chat(const std::string& msg)
     NetData::Chat chat;
     bs.Write(static_cast<RakNet::MessageID>(NetMessage::Chat));
     chat.msg = msg.c_str();
+    chat.id = 0;
     chat.Serialize(true, &bs);
 
     return this->broadcast(bs, MEDIUM_PRIORITY, RELIABLE);
@@ -220,8 +246,6 @@ void Server::sendPlayerList(const RakNet::AddressOrGUID& identifier)
 
 void Server::registerNewClient(void)
 {
-    static int idCounter = 1;
-
     NetData::ClientRegistration reg;
     RakNet::BitStream bs(m_packet->data, m_packet->length, false);
     bs.IgnoreBytes(sizeof(RakNet::MessageID));
@@ -232,7 +256,7 @@ void Server::registerNewClient(void)
     player.reset(new Player());
     player->username = reg.username;
     player->systemAddress = m_packet->systemAddress;
-    player->id = idCounter++;
+    player->id = m_players.size() + 1;
     player->entity = nullptr;
     m_players[m_packet->guid] = player;
 
@@ -246,7 +270,10 @@ void Server::registerNewClient(void)
     this->sendPlayerList(m_packet->guid);
 
     // Broadcast new player registration.
-    this->broadcast(bs, MEDIUM_PRIORITY, RELIABLE, m_packet->systemAddress);
+    RakNet::BitStream bsOut;
+    bsOut.Write(static_cast<RakNet::MessageID>(NetMessage::Register));
+    reg.Serialize(true, &bsOut);
+    this->broadcast(bsOut, MEDIUM_PRIORITY, RELIABLE, m_packet->systemAddress);
 
     // Add event for engine state.
     NetEvent e(NetMessage::Register);

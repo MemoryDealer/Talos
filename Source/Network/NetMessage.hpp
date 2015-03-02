@@ -35,6 +35,8 @@ enum NetMessage{
     Register,
     RegistrationSuccessful,
     UsernameAlreadyInUse,
+    ClientDisconnect,
+    LostConnection,
     Chat,
     PlayerList
 };

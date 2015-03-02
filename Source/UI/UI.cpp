@@ -178,3 +178,12 @@ void UI::removeListboxItem(const std::string& window,
 }
 
 // ========================================================================= //
+
+void UI::clearListbox(const std::string& window)
+{
+    CEGUI::Listbox* listbox = static_cast<CEGUI::Listbox*>(
+        m_currentLayer->getChild(window));
+    listbox->resetList();
+}
+
+// ========================================================================= //

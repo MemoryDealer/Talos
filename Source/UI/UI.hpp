@@ -103,6 +103,9 @@ public:
     void removeListboxItem(const std::string& window,
                            const std::string& text);
 
+    // Removes all items from listbox.
+    void clearListbox(const std::string& window);
+
 protected:
     // All layers (windows loaded from a layout).
     std::vector<CEGUI::Window*> m_layers;
