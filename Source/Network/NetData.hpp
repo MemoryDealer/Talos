@@ -49,9 +49,11 @@ struct String{
 
 struct ClientRegistration{
     RakNet::RakString username;
+    int id;
 
     void Serialize(const bool write, RakNet::BitStream* bs){
         bs->Serialize(write, username);
+        bs->Serialize(write, id);
     }
 };
 

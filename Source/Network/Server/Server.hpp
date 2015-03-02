@@ -95,6 +95,9 @@ public:
         Entity* entity;
     };
 
+    typedef std::unordered_map<RakNet::RakNetGUID,
+        std::shared_ptr<Player>> PlayerList;
+
 private:
     // Processes new client registration.
     void registerNewClient(void);
@@ -107,7 +110,7 @@ private:
     std::shared_ptr<Player> m_host;
 
     // Hash table of connected players.
-    std::unordered_map<RakNet::RakNetGUID, std::shared_ptr<Player>> m_players;
+    PlayerList m_players;
 };
 
 // ========================================================================= //

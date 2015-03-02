@@ -136,6 +136,7 @@ void LobbyState::update(void)
                 {
                     // Temporary exit handling.
                     if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE){
+                        m_world.getNetwork()->disconnect();
                         m_subject.notify(EngineNotification::Pop);
                         return;
                     }
@@ -228,10 +229,6 @@ void LobbyState::handleUIEvents(void)
             break;
 
         case LobbyUI::Event::Chat:
-            if (m_world.getNetwork()->getMode() == Network::Mode::Server){
-                m_world.getNetwork()->chat(
-                    m_world.getNetwork()->getUsername() + ": " + e.s1);
-            }
             m_world.getNetwork()->chat(e.s1);
             break;
         }

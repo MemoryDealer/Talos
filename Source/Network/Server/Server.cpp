@@ -117,7 +117,13 @@ void Server::update(void)
 
         case ID_DISCONNECTION_NOTIFICATION:
         case ID_CONNECTION_LOST:
-            {
+            {               
+                // First make sure this disconnection wasn't already processed.
+                PlayerList::const_iterator itr = m_players.find(m_packet->guid);
+                if (itr == m_players.end()){
+                    break;
+                }
+
                 NetEvent e(NetMessage::ClientDisconnect);
                 e.s1 = m_players[m_packet->guid]->username;
                 this->pushEvent(e);
@@ -127,6 +133,32 @@ void Server::update(void)
                 bs.Write(static_cast<RakNet::MessageID>(
                     NetMessage::ClientDisconnect));
                 bs.Write(m_players[m_packet->guid]->username.C_String());
+                this->broadcast(bs, MEDIUM_PRIORITY, RELIABLE);                
+
+                // Remove player from client hash table.
+                m_players.erase(m_packet->guid);
+
+                // Update player list for each client.
+                for (auto& i : m_players){
+                    this->sendPlayerList(i.second->systemAddress);
+                }
+            }
+            break;
+
+        case NetMessage::ClientDisconnect:
+            {
+                // Manually close connection to client.
+                m_peer->CloseConnection(m_packet->guid, false);
+
+                NetEvent e(NetMessage::ClientDisconnect);
+                e.s1 = m_players[m_packet->guid]->username;
+                this->pushEvent(e);
+
+                // Send notification to all connected clients.
+                RakNet::BitStream bs;
+                bs.Write(static_cast<RakNet::MessageID>(
+                    NetMessage::ClientDisconnect));
+                bs.Write(m_players[m_packet->guid]->id);
                 this->broadcast(bs, MEDIUM_PRIORITY, RELIABLE);
 
                 // Remove player from client hash table.
@@ -224,7 +256,8 @@ void Server::sendPlayerList(const RakNet::AddressOrGUID& identifier)
     RakNet::BitStream bsConfirm;
     bsConfirm.Write(static_cast<RakNet::MessageID>(NetMessage::PlayerList));
     // Write number of players + server.
-    bsConfirm.Write(m_players.size() + 1);
+    uint32_t num = m_players.size() + 1;
+    bsConfirm.Write(num);
     // Write server username.
     bsConfirm.Write(this->getUsername().c_str());
     bsConfirm.Write(static_cast<int>(0));
@@ -272,6 +305,7 @@ void Server::registerNewClient(void)
     // Broadcast new player registration.
     RakNet::BitStream bsOut;
     bsOut.Write(static_cast<RakNet::MessageID>(NetMessage::Register));
+    reg.id = player->id;
     reg.Serialize(true, &bsOut);
     this->broadcast(bsOut, MEDIUM_PRIORITY, RELIABLE, m_packet->systemAddress);
 

@@ -103,22 +103,23 @@ void Client::update(void)
         case ID_CONNECTION_LOST:
             {
                 this->pushEvent(NetEvent(NetMessage::LostConnection));
+                m_connected = false;
             }
             break;
 
         case NetMessage::Register:
-            {
-                NetEvent e(NetMessage::Register);
+            { 
                 NetData::ClientRegistration reg;
                 RakNet::BitStream bs(m_packet->data, m_packet->length, false);
                 bs.IgnoreBytes(sizeof(RakNet::MessageID));
                 reg.Serialize(false, &bs);
 
+                NetEvent e(NetMessage::Register);
                 e.s1 = reg.username.C_String();
                 this->pushEvent(e);
 
                 // Add to player list.
-                m_players.push_back(reg.username);
+                m_players[reg.id] = reg.username;
             }
             break;
 
@@ -126,12 +127,18 @@ void Client::update(void)
             {
                 RakNet::BitStream bs(m_packet->data, m_packet->length, false);
                 bs.IgnoreBytes(sizeof(RakNet::MessageID));
-                RakNet::RakString rs;
-                bs.Read(rs);
+                int id = 0;
+                bs.Read(id);
 
+                Assert(id != 0, "Disconnect with ID 0");
+
+                // Notify UI to remove player name.
                 NetEvent e(NetMessage::ClientDisconnect);
-                e.s1 = rs.C_String();
+                e.s1 = m_players[id];
                 this->pushEvent(e);
+
+                // Remove player entry.
+                m_players.erase(id);
             }
             break;
 
@@ -172,14 +179,12 @@ void Client::update(void)
                 // Read number of players and allocate space.
                 uint32_t num = 0;
                 bs.Read(num);
-                m_players.resize(num);
                 // Copy each string into local player list.
                 for (uint32_t i = 0; i < num; ++i){
                     RakNet::RakString username;
                     int id;
                     bs.Read(username);
                     bs.Read(id);
-                    Assert(id <= m_players.size(), "Server sent invalid player ID");
                     m_players[id] = username.C_String();
 
                     NetEvent e(NetMessage::Register);
@@ -222,11 +227,16 @@ void Client::reconnect(void)
 void Client::disconnect(void)
 {
     if (m_connected == true){
-        m_peer->CloseConnection(m_serverSystemAddr, 
-                                true);
+        RakNet::BitStream bs;
+        bs.Write(static_cast<RakNet::MessageID>(NetMessage::ClientDisconnect));
+        this->send(bs, IMMEDIATE_PRIORITY, RELIABLE);
+
+        m_peer->Shutdown(3000);
 
         // Reset server system address.
         m_serverSystemAddr = RakNet::UNASSIGNED_SYSTEM_ADDRESS;
+
+        m_connected = false;
     }
 }
 

@@ -68,6 +68,7 @@ public:
     // Sends chat message to server.
     virtual uint32_t chat(const std::string& msg) override;
 
+    typedef std::unordered_map<int, RakNet::RakString> PlayerList;
 
 private:
     // Sends registration info to server.
@@ -81,7 +82,7 @@ private:
     bool m_connected;
     int m_id;
 
-    std::vector<RakNet::RakString> m_players;
+    PlayerList m_players;
 };
 
 // ========================================================================= //
