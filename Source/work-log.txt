@@ -343,10 +343,9 @@
 == 3/1/15 ==
 * Server now sends clients player list upon connection. 
 * Got disconnection notifications working, except only with LOST_CONNECTION, it won't send a notification immediately.
+* When disconnecting the client creates a thread to wait for RakNet to send out the disconnection notification.
 
 == TODO ==
-* Client can't recoonect after disconnect' (closeconnection())
-* Remove player names when they leave. Put username in front of chat messages.
 * CEGUI disappears when resizing window.
 * Create EventQueue system to deal with network and UI. Pass World into network classes and have something like World::handleNetworkEvent().
 * SkyLowGraphics.

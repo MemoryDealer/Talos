@@ -106,6 +106,16 @@ public:
     // Removes all items from listbox.
     void clearListbox(const std::string& window);
 
+    // Getters:
+
+    // Returns network username.
+    const std::string& getUsername(void) const;
+
+    // Setters:
+
+    // Sets network username for chatting etc.
+    void setUsername(const std::string& username);
+
 protected:
     // All layers (windows loaded from a layout).
     std::vector<CEGUI::Window*> m_layers;
@@ -117,7 +127,22 @@ protected:
 private:
     // Event queue for passing events from inside UI class to the outside.
     std::queue<UIEvent> m_events;
+    std::string m_username;
 };
+
+// ========================================================================= //
+
+// Getters:
+
+inline const std::string& UI::getUsername(void) const{
+    return m_username;
+}
+
+// Setters:
+
+inline void UI::setUsername(const std::string& username){
+    m_username = username;
+}
 
 // ========================================================================= //
 // Convert SDL Key to CEGUI key.

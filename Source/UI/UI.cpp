@@ -29,7 +29,8 @@ UI::UI(void) :
 m_layers(),
 m_layerStack(),
 m_currentLayer(nullptr),
-m_events()
+m_events(),
+m_username()
 {
 
 }

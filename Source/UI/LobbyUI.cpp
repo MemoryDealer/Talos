@@ -100,7 +100,7 @@ bool LobbyUI::root_SendPressed(const CEGUI::EventArgs& args)
     // Add text to chat box.
     CEGUI::MultiLineEditbox* chat = static_cast<CEGUI::MultiLineEditbox*>(
         m_layers[Layer::Root]->getChild("Chat"));
-    chat->appendText(str + "\n");
+    chat->appendText(this->getUsername() + ": " + str + "\n");
     // Scroll to bottom of chat box.
     chat->getVertScrollbar()->setScrollPosition(999999.f);
 

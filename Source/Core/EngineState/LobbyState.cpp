@@ -83,6 +83,7 @@ void LobbyState::enter(void)
         m_ui->insertListboxItem(
             "PlayerList", m_world.getNetwork()->getUsername());
     }
+    m_ui->setUsername(m_world.getNetwork()->getUsername());
 
     m_world.getNetwork()->unlockEventQueue();
 
