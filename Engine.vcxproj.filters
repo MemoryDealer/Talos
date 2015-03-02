@@ -321,6 +321,9 @@
     <ClCompile Include="Source\Network\Network.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Rendering\Sky\SkyPresets.cpp">
+      <Filter>Source Files\Rendering\Sky</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\Engine.hpp">

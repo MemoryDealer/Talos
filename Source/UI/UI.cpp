@@ -28,6 +28,7 @@
 UI::UI(void) :
 m_layers(),
 m_layerStack(),
+m_currentLayer(nullptr),
 m_events()
 {
 
@@ -79,6 +80,7 @@ void UI::pushLayer(const unsigned int n)
     m_layerStack.push(n);
     m_layers[n]->setVisible(true);
     m_layers[n]->activate();
+    m_currentLayer = m_layers[n];
 }
 
 // ========================================================================= //
@@ -94,12 +96,12 @@ void UI::popLayer(void)
 
     // Get next layer and activate it.
     if (m_layerStack.empty() == false){
-        current = m_layers[m_layerStack.top()];
-        current->setVisible(true);
-        current->activate();
+        m_currentLayer = m_layers[m_layerStack.top()];
+        m_currentLayer->setVisible(true);
+        m_currentLayer->activate();
     }
     else{
-
+        m_currentLayer = nullptr;
     }
 }
 
@@ -107,15 +109,21 @@ void UI::popLayer(void)
 
 void UI::setVisible(const bool visible)
 {
-    CEGUI::Window* currentLayer = m_layers[m_layerStack.top()];
-    currentLayer->setVisible(visible);
+    m_currentLayer->setVisible(visible);
 
     if (visible == true){
-        currentLayer->activate();
+        m_currentLayer->activate();
     }
     else{
-        currentLayer->deactivate();
+        m_currentLayer->deactivate();
     }
+}
+
+// ========================================================================= //
+
+void UI::pushEvent(const UIEvent e)
+{
+    m_events.push(e);
 }
 
 // ========================================================================= //
@@ -138,6 +146,35 @@ CEGUI::Window* UI::getWindow(const int layer, const std::string& name)
     Assert(layer <= m_layers.size(), "Invalid layer");
 
     return m_layers[layer]->getChild(CEGUI::String(name));
+}
+
+// ========================================================================= //
+
+// Helper functions:
+
+// ========================================================================= //
+
+void UI::insertListboxItem(const std::string& window, const std::string& text)
+{
+    CEGUI::Listbox* listbox = static_cast<CEGUI::Listbox*>(
+        m_currentLayer->getChild(window));
+
+    CEGUI::ListboxTextItem* item = new CEGUI::ListboxTextItem(text);
+    listbox->addItem(item);
+}
+
+// ========================================================================= //
+
+void UI::removeListboxItem(const std::string& window,
+                           const std::string& text)
+{
+    CEGUI::Listbox* listbox = static_cast<CEGUI::Listbox*>(
+        m_currentLayer->getChild(window));
+
+    CEGUI::ListboxItem* item = listbox->findItemWithText(text, nullptr);
+    if (item != nullptr){
+        listbox->removeItem(item);
+    }
 }
 
 // ========================================================================= //

@@ -110,7 +110,7 @@ bool LobbyUI::root_SendPressed(const CEGUI::EventArgs& args)
     // Notify LobbyState.
     UIEvent e(Event::Chat);
     e.s1 = str.c_str();
-    m_events.push(e);
+    this->pushEvent(e);
 
     return true;
 }

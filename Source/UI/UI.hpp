@@ -83,17 +83,35 @@ public:
     // Shows top layer if true, hides top layer if false.
     virtual void setVisible(const bool visible);
 
+    // Enqueues UIEvent.
+    void pushEvent(const UIEvent e);
+
     // Get the ID of the next event in the event queue.
-    virtual const UIEvent getNextEvent(void);
+    const UIEvent getNextEvent(void);
 
     // Returns pointer to CEGUI::Window of associated layer and name.
-    virtual CEGUI::Window* getWindow(const int layer, const std::string& name);
+    virtual CEGUI::Window* getWindow(const int layer, 
+                                     const std::string& name);
+
+    // Helper functions to manipulate CEGUI windows (operate in current layer).
+
+    // Adds a ListboxTextItem to the Listbox.
+    void insertListboxItem(const std::string& window, 
+                           const std::string& text);
+
+    // Removes the ListboxTextItem from Listbox with coresponding text.
+    void removeListboxItem(const std::string& window,
+                           const std::string& text);
 
 protected:
     // All layers (windows loaded from a layout).
     std::vector<CEGUI::Window*> m_layers;
     // Active layers, with the top being the currently visible layer.
     std::stack<int> m_layerStack;
+    // Pointer to currently active layer.
+    CEGUI::Window* m_currentLayer;
+
+private:
     // Event queue for passing events from inside UI class to the outside.
     std::queue<UIEvent> m_events;
 };

@@ -33,7 +33,9 @@ m_packet(nullptr),
 m_serverSystemAddr(),
 m_serverIP(),
 m_port(0),
-m_connected(false)
+m_connected(false),
+m_id(0),
+m_players()
 {
     this->setMode(Network::Mode::Client);
 }
@@ -131,6 +133,34 @@ void Client::update(void)
                 this->pushEvent(e);
             }
             break;
+
+        case NetMessage::PlayerList:
+            {
+                // Build player list received from server.
+                RakNet::BitStream bs(m_packet->data, m_packet->length, false);
+                bs.IgnoreBytes(sizeof(RakNet::MessageID));
+
+                // Clear current player list.
+                m_players.clear();
+
+                // Read number of players and allocate space.
+                uint32_t num = 0;
+                bs.Read(num);
+                m_players.resize(num);
+                // Copy each string into local player list.
+                for (uint32_t i = 0; i < num; ++i){
+                    RakNet::RakString username;
+                    int id;
+                    bs.Read(username);
+                    bs.Read(id);
+                    m_players[id] = username.C_String();
+
+                    NetEvent e(NetMessage::Register);
+                    e.s1 = username.C_String();
+                    this->pushEvent(e);
+                }
+            }
+            break;
         }
     }
 }
@@ -144,7 +174,6 @@ void Client::connect(const std::string& addr,
     if (m_connected == false){
         m_serverIP = addr;
         m_port = port;
-        m_username = username.c_str();
 
         this->setUsername(username);
 
@@ -214,10 +243,12 @@ void Client::registerWithServer(void)
     RakNet::BitStream bs;
     bs.Write(static_cast<RakNet::MessageID>(NetMessage::Register));
     NetData::ClientRegistration reg;
-    reg.username = m_username;
+    reg.username = this->getUsername().c_str();
     reg.Serialize(true, &bs);
 
     this->send(bs, HIGH_PRIORITY, RELIABLE);
+
+    this->lockEventQueue();
 }
 
 // ========================================================================= //

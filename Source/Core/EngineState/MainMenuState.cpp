@@ -177,7 +177,7 @@ void MainMenuState::handleNetEvents(void)
 
         case NetMessage::RegistrationSuccessful:
             m_subject.notify(EngineNotification::Push, EngineStateID::Lobby);
-            break;
+            return;
 
         case NetMessage::UsernameAlreadyInUse:
             // @TODO: Pop up error box.

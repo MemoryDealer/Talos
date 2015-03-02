@@ -79,7 +79,9 @@ private:
     std::string m_serverIP;
     int m_port;
     bool m_connected;
-    RakNet::RakString m_username;
+    int m_id;
+
+    std::vector<RakNet::RakString> m_players;
 };
 
 // ========================================================================= //

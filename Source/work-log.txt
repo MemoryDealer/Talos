@@ -337,8 +337,11 @@
 * Enabled user to specify username and port when hosting game.
 * Reworked how Server/Client initialization is handled. Created abstract base class Network which Server and Client derive from. Network provides mostly interface functions but a few important ones as well.
     Now to update/access the server or client service, it can be done directly through the World::Network pointer, which is assigned to the Server or Client when they are initialized.
+* Added Server broadcasting.
+* Added chat service.
 
 == TODO ==
+* Remove player names when they leave. Put username in front of chat messages.
 * CEGUI disappears when resizing window.
 * Create EventQueue system to deal with network and UI. Pass World into network classes and have something like World::handleNetworkEvent().
 * SkyLowGraphics.

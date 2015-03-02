@@ -52,7 +52,7 @@ public:
               const std::string&);
 
     // Applies a SkyPreset's data to SkyX.
-    void loadPreset(const SkyPreset&);
+    virtual void loadPreset(const SkyPreset&) override;
 
     // Removes SkyX and frees the allocated memory.
     virtual void destroy(void) override;

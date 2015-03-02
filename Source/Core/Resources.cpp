@@ -101,9 +101,9 @@ void loadCEGUIResources(void)
     CEGUI::SchemeManager::getSingleton().createFromFile(
     "Generic.scheme");
     CEGUI::SchemeManager::getSingleton().createFromFile(
-    "VanillaSkin.scheme");
+    "VanillaSkin.scheme");*/
     CEGUI::SchemeManager::getSingleton().createFromFile(
-    "TaharezLook.scheme");*/
+    "TaharezLook.scheme");
     CEGUI::FontManager::getSingleton().createFromFile("DejaVuSans-10.font");
     CEGUI::System::getSingleton().getDefaultGUIContext().
         setDefaultFont("DejaVuSans-10");

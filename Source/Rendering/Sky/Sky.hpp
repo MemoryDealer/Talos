@@ -29,6 +29,10 @@
 #include "stdafx.hpp"
 
 // ========================================================================= //
+
+struct SkyPreset;
+
+// ========================================================================= //
 // Interface for rendering a sky in the game world.
 class Sky
 {
@@ -36,6 +40,8 @@ public:
     explicit Sky(void) { }
 
     virtual ~Sky(void) = 0 { }
+
+    virtual void loadPreset(const SkyPreset&) { }
 
     virtual void destroy(void) = 0;
 

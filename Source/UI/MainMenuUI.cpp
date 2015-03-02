@@ -158,7 +158,7 @@ bool MainMenuUI::root_MultiplayerPressed(const CEGUI::EventArgs& args)
 
 bool MainMenuUI::root_ExitPressed(const CEGUI::EventArgs& args)
 {
-    m_events.push(UIEvent(Event::Exit));
+    this->pushEvent(UIEvent(Event::Exit));
     return true;
 }
 
@@ -189,7 +189,7 @@ bool MainMenuUI::host_HostPressed(const CEGUI::EventArgs& args)
     e.field.x = std::stoi(
         m_layers[Layer::Host]->getChild("EditPort")->getText().c_str());
     
-    m_events.push(e);
+    this->pushEvent(e);
     return true;
 }
 
@@ -205,7 +205,7 @@ bool MainMenuUI::join_ConnectPressed(const CEGUI::EventArgs& args)
     e.field.x = std::stoi(
         m_layers[Layer::Join]->getChild("EditPort")->getText().c_str());
 
-    m_events.push(e);
+    this->pushEvent(e);
     return true;
 }
 

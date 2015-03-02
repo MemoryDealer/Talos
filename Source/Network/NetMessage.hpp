@@ -35,7 +35,8 @@ enum NetMessage{
     Register,
     RegistrationSuccessful,
     UsernameAlreadyInUse,
-    Chat
+    Chat,
+    PlayerList
 };
 
 // ========================================================================= //

@@ -81,6 +81,9 @@ public:
     // Sends chat message to all registered clients.
     virtual uint32_t chat(const std::string& msg) override;
 
+    // Sends a list of all connected client's usernames and server's username.
+    virtual void sendPlayerList(const RakNet::AddressOrGUID& identifier) override;
+
     // Getters:
 
     // === //
@@ -88,6 +91,7 @@ public:
     struct Player{
         RakNet::RakString username;
         RakNet::SystemAddress systemAddress;
+        int id;
         Entity* entity;
     };
 
@@ -97,7 +101,7 @@ private:
 
     RakNet::RakPeerInterface* m_peer;
     RakNet::Packet* m_packet;
-    unsigned int m_tickRate;  
+    unsigned int m_tickRate;
 
     // Player instance of user running server.
     std::shared_ptr<Player> m_host;

@@ -46,6 +46,7 @@
     <ClCompile Include="Source\Rendering\Ocean\OceanHighGraphics.cpp" />
     <ClCompile Include="Source\Rendering\Ocean\OceanLowGraphics.cpp" />
     <ClCompile Include="Source\Rendering\Sky\SkyHighGraphics.cpp" />
+    <ClCompile Include="Source\Rendering\Sky\SkyPresets.cpp" />
     <ClCompile Include="Source\Rendering\Sky\SkyX\AtmosphereManager.cpp" />
     <ClCompile Include="Source\Rendering\Sky\SkyX\BasicController.cpp" />
     <ClCompile Include="Source\Rendering\Sky\SkyX\CloudsManager.cpp" />

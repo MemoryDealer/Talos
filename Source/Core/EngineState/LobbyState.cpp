@@ -31,6 +31,8 @@
 #include "LobbyState.hpp"
 #include "Network/Client/Client.hpp"
 #include "Network/Server/Server.hpp"
+#include "Rendering/Sky/SkyHighGraphics.hpp"
+#include "Rendering/Sky/SkyPresets.hpp"
 #include "UI/LobbyUI.hpp"
 #include "World/Environment.hpp"
 
@@ -69,14 +71,16 @@ void LobbyState::enter(void)
 
     // Create sky.
     m_world.getEnvironment()->loadSky();
+    m_world.getEnvironment()->getSky()->loadPreset(SkyPresets[SkyPreset::Thunderstorm1]);
 
     // Load UI.
     m_ui.reset(new LobbyUI());
     m_ui->init();
 
     // Setup initial UI data.
-    m_ui->getWindow(LobbyUI::Layer::Root, "PlayerList")->appendText(
-        m_world.getNetwork()->getUsername());
+    //m_ui->insertListboxItem("PlayerList", m_world.getNetwork()->getUsername());
+
+    m_world.getNetwork()->unlockEventQueue();
 
     if (m_world.checkEntities() == false){
         throw std::exception("LobbyState entities reported uninitialized");
@@ -175,10 +179,8 @@ void LobbyState::handleNetEvents(void)
 
         case NetMessage::Register:
             {
-                CEGUI::Window* players = m_ui->getWindow(
-                    LobbyUI::Layer::Root, "PlayerList");
-
-                players->appendText(CEGUI::String(e.s1 + "\n"));
+                                     printf("Inserting %s\n", e.s1.c_str());
+                m_ui->insertListboxItem("PlayerList", e.s1);
             }
             break;
 
@@ -188,6 +190,12 @@ void LobbyState::handleNetEvents(void)
                     LobbyUI::Layer::Root, "Chat");
 
                 chat->appendText(e.s1);
+            }
+            break;
+
+        case NetMessage::PlayerList:
+            {
+                m_ui->insertListboxItem("PlayerList", e.s1);
             }
             break;
         }

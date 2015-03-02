@@ -37,7 +37,7 @@ struct NetEvent{
 
     int type;
 
-    std::string s1;
+    std::string s1, s2, s3;
 };
 
 // ========================================================================= //
@@ -101,6 +101,9 @@ public:
     // Empty.
     virtual uint32_t chat(const std::string& msg);
 
+    // Empty.
+    virtual void sendPlayerList(const RakNet::AddressOrGUID& identifier);
+
     // Enqueues NetEvent.
     void pushEvent(const NetEvent& e);
 
@@ -132,12 +135,20 @@ public:
     // Sets username.
     void setUsername(const std::string& username);
 
+    // Locks event queue, preventing events from being popped.
+    void lockEventQueue(void);
+
+    // Unlocks event queue, allowing events to be popped.
+    void unlockEventQueue(void);
+
 private:
     Mode m_mode;
     bool m_initialized;
     std::string m_username;
 
     std::queue<NetEvent> m_events;
+    std::queue<NetEvent> m_immediateEvents; // Can't be locked.
+    bool m_eventQueueLocked;
 };
 
 // ========================================================================= //
@@ -168,6 +179,14 @@ inline void Network::setInitialized(const bool initialized){
 
 inline void Network::setUsername(const std::string& username){
     m_username = username;
+}
+
+inline void Network::lockEventQueue(void){
+    m_eventQueueLocked = true;
+}
+
+inline void Network::unlockEventQueue(void){
+    m_eventQueueLocked = false;
 }
 
 // ========================================================================= //

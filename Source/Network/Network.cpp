@@ -28,7 +28,10 @@
 Network::Network(void) :
 m_mode(),
 m_initialized(false),
-m_username("")
+m_username(""),
+m_events(),
+m_immediateEvents(),
+m_eventQueueLocked(false)
 {
 
 }
@@ -148,16 +151,35 @@ uint32_t Network::chat(const std::string& msg)
 
 // ========================================================================= //
 
+void Network::sendPlayerList(const RakNet::AddressOrGUID& identifier)
+{
+    
+}
+
+// ========================================================================= //
+
 void Network::pushEvent(const NetEvent& e)
 {
-    m_events.push(e);
+    switch (e.type){
+    default:
+        m_events.push(e);
+        break;
+
+    case NetMessage::RegistrationSuccessful:
+    case NetMessage::UsernameAlreadyInUse:
+        m_immediateEvents.push(e);
+        break;
+    }
+    
 }
 
 // ========================================================================= //
 
 const bool Network::hasPendingEvent(void) const
 {
-    return (m_events.empty() == false);
+    return (m_eventQueueLocked == true) ? 
+        (m_immediateEvents.empty() == false) : 
+        (m_events.empty() == false);
 }
 
 // ========================================================================= //
@@ -166,6 +188,16 @@ const NetEvent Network::getNextEvent(void)
 {
     if (m_events.empty() == true){
         return NetEvent();
+    }
+    // If event queue is locked, return Null event and keep queued events.
+    else if (m_eventQueueLocked == true){
+        if (m_immediateEvents.empty() == true){
+            return NetEvent();
+        }
+
+        NetEvent e = m_immediateEvents.front();
+        m_immediateEvents.pop();
+        return e;        
     }
 
     NetEvent e = m_events.front();
