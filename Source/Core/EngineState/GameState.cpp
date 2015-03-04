@@ -15,58 +15,97 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: MainMenuState.cpp
+// File: GameState.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements MainMenuState class.
+// Implements GameState class.
 // ========================================================================= //
 
 #include "Command/Command.hpp"
+#include "Component/ActorComponent.hpp"
 #include "Component/CameraComponent.hpp"
 #include "Component/LightComponent.hpp"
+#include "Component/ModelComponent.hpp"
+#include "Component/PhysicsComponent.hpp"
 #include "Component/SceneComponent.hpp"
 #include "Core/EngineNotifications.hpp"
-#include "Core/EngineState/EngineStateID.hpp"
+#include "GameState.hpp"
 #include "Input/Input.hpp"
-#include "MainMenuState.hpp"
 #include "Network/Network.hpp"
-#include "UI/MainMenuUI.hpp"
+#include "Physics/PScene.hpp"
 #include "World/Environment.hpp"
 
 // ========================================================================= //
 
-MainMenuState::MainMenuState(void)
-{
-    this->setID(EngineStateID::MainMenu);
-}
-
-// ========================================================================= //
-
-MainMenuState::~MainMenuState(void)
+GameState::GameState(void)
 {
 
 }
 
 // ========================================================================= //
 
-void MainMenuState::enter(void)
+GameState::~GameState(void)
+{
+
+}
+
+// ========================================================================= //
+
+void GameState::enter(void)
 {
     m_world.init();
-    m_world.getInput()->setMode(Input::Mode::UI);
+    m_world.getInput()->setMode(Input::Mode::PLAYER);
+    m_world.initPhysics();
+    //m_world.getPScene()->loadDebugDrawer();
+
+    // Create player.
+    EntityPtr player = m_world.createEntity();
+    m_world.attachComponent<ActorComponent>(player);
+    m_world.attachComponent<CameraComponent>(player);
+
+    m_world.setPlayer(player);
+
+    // Create basic plane.
+    EntityPtr plane = m_world.createEntity();
+    m_world.attachComponent<SceneComponent>(plane);
+    m_world.attachComponent<ModelComponent>(plane);
+    m_world.attachComponent<PhysicsComponent>(plane);
+    ModelComponentPtr modelC = plane->getComponent<ModelComponent>();
+    modelC->init(m_world, "Plane/Board", "Board");
+    plane->getComponent<SceneComponent>()->onComponentAttached(modelC);
+    PhysicsComponentPtr physicsC = plane->getComponent<PhysicsComponent>();
+    physicsC->init(m_world, plane, PhysicsComponent::Type::STATIC,
+                   physx::PxBoxGeometry(75.f, 5.f, 75.f));
+    physicsC->translate(0.f, -50.f, 0.f);
+
+    // Create ball.
+    EntityPtr ball = m_world.createEntity();
+    m_world.attachComponent<SceneComponent>(ball);
+    m_world.attachComponent<ModelComponent>(ball);
+    m_world.attachComponent<LightComponent>(ball);
+    m_world.attachComponent<PhysicsComponent>(ball);
+    modelC = ball->getComponent<ModelComponent>();
+    modelC->init(m_world, "icosphere.mesh");    
+    ball->getComponent<SceneComponent>()->onComponentAttached(modelC);   
+    physicsC = ball->getComponent<PhysicsComponent>();
+    physicsC->init(m_world, ball, PhysicsComponent::Type::DYNAMIC,
+                   PxSphereGeometry(5.5f),
+                   0.2f, 0.2f, 0.1f);
+    physicsC->getDynamicActor()->addForce(PxVec3(500.f, 0.f, 0.f));
+    LightComponentPtr lightC = ball->getComponent<LightComponent>();
+    lightC->setType(LightComponent::Type::POINT);
+    lightC->setColour(50.f, 0.f, 50.f);
+    lightC->setRange(175.f);
+    /*ball->getComponent<SceneComponent>()->getSceneNode()->
+        scale(10.f, 10.f, 10.f);*/
+    
 
     // Setup visual scene settings.
-    m_world.getEnvironment()->setAmbientLight(255.f, 255.f, 255.f);
-    m_world.getEnvironment()->setSunColour(200.f, 175.f, 189.f);
+    //m_world.getEnvironment()->setAmbientLight(255.f, 255.f, 255.f);
+    m_world.getEnvironment()->setSunColour(20.f, 17.5f, 18.9f);
     m_world.getEnvironment()->setMoonColour(.50f, .50f, 255.f);
-    
-    // Create camera.
-    EntityPtr camera = m_world.createEntity();
-    m_world.attachComponent<SceneComponent>(camera);
-    m_world.attachComponent<CameraComponent>(camera);
 
-    m_world.setMainCamera(camera->getComponent<CameraComponent>());
-
-    // Create Ocean.
+        // Create Ocean.
 #ifdef _DEBUG
     m_world.getEnvironment()->loadOcean("Ocean2_HLSL_GLSL");
 #else
@@ -75,13 +114,10 @@ void MainMenuState::enter(void)
 
     m_world.getEnvironment()->setOceanPosition(0.f, -100.f, 0.f);
 
-
     // Create sky.
     m_world.getEnvironment()->loadSky();
 
-    // Load GUI.
-    m_ui.reset(new MainMenuUI());
-    m_ui->init();
+    
 
     if (m_world.checkEntities() == false){
         throw std::exception("MainMenu entities reported uninitialized");
@@ -90,31 +126,29 @@ void MainMenuState::enter(void)
 
 // ========================================================================= //
 
-void MainMenuState::exit(void)
+void GameState::exit(void)
 {
-    m_ui->destroy(); // m_ui deallocated automatically.
     m_world.destroy();
+    
 }
 
 // ========================================================================= //
 
-void MainMenuState::pause(void)
+void GameState::pause(void)
 {
-    m_ui->setVisible(false);
+
 }
 
 // ========================================================================= //
 
-void MainMenuState::resume(void)
+void GameState::resume(void)
 {
-    m_world.getInput()->setMode(Input::Mode::UI);
-    m_world.resume();
-    m_ui->setVisible(true);
+
 }
 
 // ========================================================================= //
 
-void MainMenuState::update(void)
+void GameState::update(void)
 {
     if (m_active){
         SDL_Event e;
@@ -136,13 +170,19 @@ void MainMenuState::update(void)
                     }
 
                     // Send input commands to the player.
-                    m_world.getInput()->handle(e);
+                    CommandPtr command = m_world.getInput()->handle(e);
+                    if (command != nullptr){
+                        command->execute(m_world.getPlayer());
+                    }
                 }
                 break;
 
             case SDL_KEYUP:
                 {
                     CommandPtr command = m_world.getInput()->handle(e);
+                    if (command != nullptr){
+                        command->unexecute(m_world.getPlayer());
+                    }
                 }
                 break;
 
@@ -158,72 +198,39 @@ void MainMenuState::update(void)
                 this->handleNetEvents();
             }
         }
-        if (m_ui->update() == true){
+        /*if (m_ui->update() == true){
             this->handleUIEvents();
-        } 
+        } */
     }
 }
 
 // ========================================================================= //
 
-void MainMenuState::handleNetEvents(void)
+void GameState::handleNetEvents(void)
 {
     NetEvent e = m_world.getNetwork()->getNextEvent();
     for (; 
          e.type != NetMessage::Null; 
          e = m_world.getNetwork()->getNextEvent()){
-        switch (e.type){
+        /*switch (e.type){
         default:
             break;
-
-        case NetMessage::RegistrationSuccessful:
-            m_subject.notify(EngineNotification::Push, EngineStateID::Lobby);
-            return;
-
-        case NetMessage::UsernameAlreadyInUse:
-            // @TODO: Pop up error box.
-            printf("USERNAME ALREADY IN USE!\n");
-            break;
-        }
+        }*/
     }
 }
 
 // ========================================================================= //
 
-void MainMenuState::handleUIEvents(void)
+void GameState::handleUIEvents(void)
 {
-    UIEvent e = m_ui->getNextEvent();
+    /*UIEvent e = m_ui->getNextEvent();
     for (; e.type != UIEvent::None; e = m_ui->getNextEvent()){
         switch (e.type){
         default:
             break;
-
-        case MainMenuUI::Event::StartCampaign:
-            m_subject.notify(EngineNotification::Push, EngineStateID::Game);
-            break;
-
-        case MainMenuUI::Event::Exit:
-            m_subject.notify(EngineNotification::Pop);
-            break;
-
-        case MainMenuUI::Event::HostGame:
-            // Setup server.
-            m_world.initServer(e.field.x, e.s1);
-
-            m_subject.notify(EngineNotification::Push, EngineStateID::Lobby);
-            break;
-
-        case MainMenuUI::Event::JoinGame:
-            if (m_world.getNetwork() == nullptr){
-                m_world.initClient();
-            }
-            else if (m_world.getNetwork()->initialized() == false){
-                m_world.getNetwork()->init();
-            }
-            m_world.getNetwork()->connect(e.s2, e.field.x, e.s1);
-            break;
+        
         }
-    }
+    }*/
 }
 
 // ========================================================================= //

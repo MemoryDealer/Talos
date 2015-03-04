@@ -44,10 +44,11 @@ template class Pool<SceneComponent>;
 template<typename T>
 Pool<T>::Pool(const int size) :
 m_pool(new T[size]),
+m_inUse(new bool[size]),
 m_numActive(0),
 m_size(size)
 {
-
+    
 }
 
 template<typename T>

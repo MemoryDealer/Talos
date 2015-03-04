@@ -78,6 +78,12 @@ public:
     // Returns entity's ID.
     const EntityID getID(void) const;
 
+    // Returns true if Entity has component of type T attached.
+    template<typename T>
+    bool hasComponent(void){
+        return (m_components.count(&typeid(T)) != 0);
+    }
+
     // Returns ComponentPtr to specified type from internal hash table.
     template<typename T>
     T* getComponent(void){

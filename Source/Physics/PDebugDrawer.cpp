@@ -98,6 +98,7 @@ void PDebugDrawer::add(PxRigidActor* actor, PxGeometry& geometry)
         SceneComponentPtr sceneC = entity->getComponent<SceneComponent>();
         Ogre::SceneNode* lnode = sceneC->getSceneNode();
         lnode->attachObject(node.lines.get());
+        
 
         // Set line colour to red for dynamic actors.
         if (node.actor->getType() == PxActorType::eRIGID_DYNAMIC){

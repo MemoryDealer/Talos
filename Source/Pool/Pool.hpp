@@ -38,6 +38,7 @@ public:
 
 private:
     T* m_pool;
+    bool* m_inUse;
     int m_numActive;
     int m_size;
 };

@@ -165,8 +165,6 @@ void Client::update(void)
                 bs.IgnoreBytes(sizeof(RakNet::MessageID));
                 NetData::Chat chat;
                 chat.Serialize(false, &bs);
-
-                Assert(chat.id <= m_players.size(), "Invalid player ID");
                 
                 e.s1 = m_players[chat.id] +
                     ": " +

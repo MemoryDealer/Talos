@@ -23,6 +23,7 @@
 
 #include "Engine.hpp"
 #include "EngineNotifications.hpp"
+#include "EngineState/GameState.hpp"
 #include "EngineState/LobbyState.hpp"
 #include "EngineState/MainMenuState.hpp"
 #include "EngineState/StartupState.hpp"
@@ -106,7 +107,6 @@ bool Engine::init(void)
         SDL_WINDOW_RESIZABLE);
 
     // Bind mouse to window.
-    SDL_SetRelativeMouseMode(SDL_TRUE);
     SDL_ShowCursor(0);
 
     // Give the window handle to Ogre.
@@ -191,6 +191,7 @@ bool Engine::init(void)
     this->registerState(EngineStateID::Startup);
     this->registerState(EngineStateID::MainMenu);
     this->registerState(EngineStateID::Lobby);
+    this->registerState(EngineStateID::Game);
 
     // === //
 
@@ -266,6 +267,10 @@ void Engine::registerState(const EngineStateID id)
 
     case EngineStateID::Lobby:
         state.reset(new LobbyState());
+        break;
+
+    case EngineStateID::Game:
+        state.reset(new GameState());
         break;
     }
 

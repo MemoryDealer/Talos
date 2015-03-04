@@ -85,8 +85,10 @@ void SceneComponent::message(const ComponentMessage& msg)
 void SceneComponent::onComponentAttached(ComponentPtr component)
 {
     if (typeid(*component) == typeid(ModelComponent)){
+        if (component->isInitialized()){
         m_node->attachObject(
             static_cast<ModelComponentPtr>(component)->getOgreEntity());
+        }
     }
     else if (typeid(*component) == typeid(LightComponent)){
         m_node->attachObject(

@@ -346,10 +346,17 @@
 * When disconnecting the client creates a thread to wait for RakNet to send out the disconnection notification.
     When the thread is complete, m_connected is set to false. Initializing or connecting is not possible if m_connected is true.
 * Added UI::setUsername() so the user sees their own username when sending a chat message.
-* Added server broadcasting of client disconnections. Each client is just sent the player list again.
+* (3/2/15) Added server broadcasting of client disconnections. Each client is just sent the player list again.
 * Changed client to use a hash table for player list instead of vector as before.
 
+== 3/4/15 ==
+* Added GameState.
+* Changed Input key map to use a hash table.
+* Fix World::attachComponent<T> to return the pointer to the newly created Component, using additional template specialization (a struct with a typedef that is
+	also specialized). attachComponent<T> now returns componentReturn<T>::type.
+
 == TODO ==
+* When client reconnects, a third client that was still connected can send a chat and the reconnected client will display the chat from their own username.
 * Popup error box when trying to connect while previous connection is being closed.
 * CEGUI disappears when resizing window.
 * Create EventQueue system to deal with network and UI. Pass World into network classes and have something like World::handleNetworkEvent().

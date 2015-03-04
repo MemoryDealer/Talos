@@ -145,6 +145,9 @@
     <Filter Include="Source Files\Log">
       <UniqueIdentifier>{ddf6923e-8edc-4934-aecf-3f20ef8f5fb7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\System">
+      <UniqueIdentifier>{5fed6b1e-488c-4da4-ba2f-fd110811e5b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\main.cpp">
@@ -323,6 +326,9 @@
     </ClCompile>
     <ClCompile Include="Source\Rendering\Sky\SkyPresets.cpp">
       <Filter>Source Files\Rendering\Sky</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\EngineState\GameState.cpp">
+      <Filter>Source Files\Core\EngineState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -568,6 +574,9 @@
     </ClInclude>
     <ClInclude Include="Source\Network\Network.hpp">
       <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\EngineState\GameState.hpp">
+      <Filter>Header Files\Core\EngineState</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

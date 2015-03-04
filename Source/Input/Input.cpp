@@ -37,15 +37,16 @@ m_mode(Mode::UI)
     // @TODO: For every key on keyboard read from keymap file
     // (add mapKey() function which is a switch-case on the command).
     for (unsigned int i = 0; i < SDLK_z; ++i){
-        m_keymap.insert(KM_VT(i, m_commandRepo->NullCommand));
+        //m_keymap.insert(KM_VT(i, m_commandRepo->NullCommand));
+        m_keymap[i] = m_commandRepo->NullCommand;
     }
-    m_keymap.insert(KM_VT(SDLK_LALT, m_commandRepo->NullCommand));
+    m_keymap[SDLK_LALT] = m_commandRepo->NullCommand;
 
-    m_keymap.find(SDLK_w)->second = m_commandRepo->MoveForwardCommand;
-    m_keymap.find(SDLK_s)->second = m_commandRepo->MoveBackwardCommand;
-    m_keymap.find(SDLK_a)->second = m_commandRepo->MoveLeftCommand;
-    m_keymap.find(SDLK_d)->second = m_commandRepo->MoveRightCommand;
-    m_keymap.find(SDLK_SPACE)->second = m_commandRepo->SpectatorCommand;
+    m_keymap[SDLK_w] = m_commandRepo->MoveForwardCommand;
+    m_keymap[SDLK_s] = m_commandRepo->MoveBackwardCommand;
+    m_keymap[SDLK_a] = m_commandRepo->MoveLeftCommand;
+    m_keymap[SDLK_d] = m_commandRepo->MoveRightCommand;
+    m_keymap[SDLK_SPACE] = m_commandRepo->SpectatorCommand;
 }
 
 // ========================================================================= //
@@ -127,7 +128,8 @@ const CommandPtr Input::handle(const SDL_Event& e)
         else{
             switch (e.key.keysym.sym){
             default:
-                return m_keymap.find(e.key.keysym.sym)->second;
+                //return m_keymap.find(e.key.keysym.sym)->second;
+                return m_keymap[e.key.keysym.sym];
 
             case SDLK_ESCAPE:
                 return nullptr;
@@ -161,6 +163,23 @@ const CommandPtr Input::handle(const SDL_Event& e)
     }
 
     return nullptr;
+}
+
+// ========================================================================= //
+
+void Input::setMode(const Mode mode)
+{
+    m_mode = mode;
+    if (m_mode == Mode::PLAYER){
+        SDL_SetRelativeMouseMode(SDL_TRUE);
+        CEGUI::System::getSingleton().
+            getDefaultGUIContext().getMouseCursor().hide();
+    }
+    else if (m_mode == Mode::UI){
+        SDL_SetRelativeMouseMode(SDL_FALSE);
+        CEGUI::System::getSingleton().
+            getDefaultGUIContext().getMouseCursor().show();
+    }
 }
 
 // ========================================================================= //

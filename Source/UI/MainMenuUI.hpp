@@ -77,6 +77,7 @@ public:
 
     enum Event{
         Exit = 1,
+        StartCampaign,
         HostGame,
         JoinGame
     };

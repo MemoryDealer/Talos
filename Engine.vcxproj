@@ -24,6 +24,7 @@
     <ClCompile Include="Source\Core\Assert.cpp" />
     <ClCompile Include="Source\Core\Engine.cpp" />
     <ClCompile Include="Source\Core\EngineState\EngineState.cpp" />
+    <ClCompile Include="Source\Core\EngineState\GameState.cpp" />
     <ClCompile Include="Source\Core\EngineState\LobbyState.cpp" />
     <ClCompile Include="Source\Core\EngineState\MainMenuState.cpp" />
     <ClCompile Include="Source\Core\EngineState\StartupState.cpp" />
@@ -99,6 +100,7 @@
     <ClInclude Include="Source\Core\EngineNotifications.hpp" />
     <ClInclude Include="Source\Core\EngineState\EngineState.hpp" />
     <ClInclude Include="Source\Core\EngineState\EngineStateID.hpp" />
+    <ClInclude Include="Source\Core\EngineState\GameState.hpp" />
     <ClInclude Include="Source\Core\EngineState\LobbyState.hpp" />
     <ClInclude Include="Source\Core\EngineState\MainMenuState.hpp" />
     <ClInclude Include="Source\Core\EngineState\StartupState.hpp" />
@@ -186,11 +188,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(OGREX_HEADER);$(BOOST_ROOT);$(SDL)\include;E:\Engine\cegui\cegui\include;$(CEGUI_HEADER)\include;$(PHYSX_HEADER);$(RAKNET)\Source;E:\Engine\Solution\Source\Rendering\Sky\SkyX;$(IncludePath)</IncludePath>
+    <IncludePath>$(OGREX_HEADER);$(BOOST_ROOT);$(SDL)\include;..\cegui\cegui\include;$(CEGUI_HEADER)\include;$(PHYSX_HEADER);$(RAKNET)\Source;Source\Rendering\Sky\SkyX;$(IncludePath)</IncludePath>
     <LibraryPath>$(OGREX_LIB)\$(configuration);$(BOOST_LIB);$(SDL)\lib\x86;$(CEGUI_LIB);$(PHYSX_LIB);$(RAKNET)\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(OGREX_HEADER);$(BOOST_ROOT);$(SDL)\include;E:\Engine\cegui\cegui\include;$(CEGUI_HEADER)\include;$(PHYSX_HEADER);$(RAKNET)\Source;E:\Engine\Solution\Source\Rendering\Sky\SkyX;$(IncludePath)</IncludePath>
+    <IncludePath>$(OGREX_HEADER);$(BOOST_ROOT);$(SDL)\include;..\cegui\cegui\include;$(CEGUI_HEADER)\include;$(PHYSX_HEADER);$(RAKNET)\Source;Source\Rendering\Sky\SkyX;$(IncludePath)</IncludePath>
     <LibraryPath>$(OGREX_LIB)\$(configuration);$(BOOST_LIB);$(SDL)\lib\x86;$(CEGUI_LIB);$(PHYSX_LIB);$(RAKNET)\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

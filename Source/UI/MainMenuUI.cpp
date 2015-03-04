@@ -141,8 +141,7 @@ bool MainMenuUI::update(void)
 
 bool MainMenuUI::root_CampaignPressed(const CEGUI::EventArgs& args)
 {
-    printf("Campaign pressed!");
-
+    this->pushEvent(UIEvent(Event::StartCampaign));
     return true;
 }
 

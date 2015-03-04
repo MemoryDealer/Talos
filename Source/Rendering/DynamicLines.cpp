@@ -81,7 +81,7 @@ void DynamicLines::setPoint(const unsigned short index,
 void DynamicLines::translate(const Ogre::Vector3& offset)
 {
     m_origin += offset;
-    for (std::vector<Ogre::Vector3>::iterator itr = m_points.begin();
+    for (auto itr = m_points.begin();
          itr != m_points.end();
          ++itr){
         *itr += offset;
@@ -112,7 +112,7 @@ void DynamicLines::clear(void)
 void DynamicLines::setOrigin(const Ogre::Vector3& origin)
 {
     // Reset all points to zero origin.
-    for (std::vector<Ogre::Vector3>::iterator itr = m_points.begin();
+    for (auto itr = m_points.begin();
          itr != m_points.end();
          ++itr){
         *itr -= m_origin;
