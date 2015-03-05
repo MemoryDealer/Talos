@@ -40,16 +40,16 @@ public:
     virtual ~ModelComponent(void) override;
 
     // Loads Ogre::Entity from scene manager using scene manager.
-    virtual void init(EntityPtr, World&) override;
+    virtual void init(World&) override;
     virtual void init(World&, 
                       const std::string&, 
                       const std::string& matName = "");
 
     // Empty.
-    virtual void destroy(EntityPtr, World&) override;
+    virtual void destroy(World&) override;
 
     // Empty.
-    virtual void update(EntityPtr, World&) override;
+    virtual void update(World&) override;
 
     // Empty.
     virtual void message(const ComponentMessage&) override;

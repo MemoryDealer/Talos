@@ -15,55 +15,42 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: GameState.hpp
+// File: System.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines GameState class.
+// Implements System class.
 // ========================================================================= //
 
-#ifndef __GAMESTATE_HPP__
-#define __GAMESTATE_HPP__
+#include "Entity/Entity.hpp"
+#include "System.hpp"
 
 // ========================================================================= //
 
-#include "EngineState.hpp"
-#include "System/PhysicsSystem.hpp"
-
-// ========================================================================= //
-// Gameplay, processes player-world interaction, multiplayer, etc.
-class GameState : public EngineState
+System::System(void) :
+m_entities()
 {
-public:
-    explicit GameState(void);
 
-    virtual ~GameState(void) override;
-
-    // Creates world, UI.
-    virtual void enter(void) override;
-
-    // Destroys world.
-    virtual void exit(void) override;
-
-    // Hides UI.
-    virtual void pause(void) override;
-
-    // Shows UI.
-    virtual void resume(void) override;
-
-    // Processes player/UI interaction.
-    virtual void update(void) override;
-
-    // Processes network events.
-    void handleNetEvents(void);
-
-    // Processes UI events.
-    void handleUIEvents(void);    
-
-    PhysicsSystem m_physicsSystem;
-};
+}
 
 // ========================================================================= //
 
-#endif
+System::~System(void)
+{
+
+}
+
+// ========================================================================= //
+
+void System::attachEntity(EntityPtr entity)
+{
+    m_entities[entity->getID()] = entity;
+}
+
+// ========================================================================= //
+
+void System::detachEntity(EntityPtr entity)
+{
+    m_entities.erase(entity->getID());
+}
 
 // ========================================================================= //

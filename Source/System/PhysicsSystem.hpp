@@ -15,51 +15,32 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: GameState.hpp
+// File: PhysicsSystem.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines GameState class.
+// Defines PhysicsSystem class.
 // ========================================================================= //
 
-#ifndef __GAMESTATE_HPP__
-#define __GAMESTATE_HPP__
+#ifndef __PHYSICS_SYSTEM_HPP__
+#define __PHYSICS_SYSTEM_HPP__
 
 // ========================================================================= //
 
-#include "EngineState.hpp"
-#include "System/PhysicsSystem.hpp"
+#include "System.hpp"
 
 // ========================================================================= //
-// Gameplay, processes player-world interaction, multiplayer, etc.
-class GameState : public EngineState
+// Updates SceneComponents from PhysicsComponents.
+class PhysicsSystem : public System
 {
 public:
-    explicit GameState(void);
+    // Empty constructor.
+    explicit PhysicsSystem(void);
 
-    virtual ~GameState(void) override;
+    // Empty destructor.
+    virtual ~PhysicsSystem(void) override;
 
-    // Creates world, UI.
-    virtual void enter(void) override;
-
-    // Destroys world.
-    virtual void exit(void) override;
-
-    // Hides UI.
-    virtual void pause(void) override;
-
-    // Shows UI.
-    virtual void resume(void) override;
-
-    // Processes player/UI interaction.
+    // Gets transform from PhysicsComponent and applies it to SceneComponent.
     virtual void update(void) override;
-
-    // Processes network events.
-    void handleNetEvents(void);
-
-    // Processes UI events.
-    void handleUIEvents(void);    
-
-    PhysicsSystem m_physicsSystem;
 };
 
 // ========================================================================= //

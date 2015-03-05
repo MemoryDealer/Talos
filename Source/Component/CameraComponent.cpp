@@ -23,7 +23,6 @@
 
 #include "CameraComponent.hpp"
 #include "ComponentMessage.hpp"
-#include "Entity/Entity.hpp"
 #include "SceneComponent.hpp"
 #include "World/World.hpp"
 
@@ -45,7 +44,7 @@ CameraComponent::~CameraComponent(void)
 
 // ========================================================================= //
 
-void CameraComponent::init(EntityPtr entity, World& world)
+void CameraComponent::init(World& world)
 {
     // Create the camera object.
     m_camera = world.getSceneManager()->createCamera("PlayerCam");
@@ -63,7 +62,7 @@ void CameraComponent::init(EntityPtr entity, World& world)
 
 // ========================================================================= //
 
-void CameraComponent::destroy(EntityPtr entity, World& world)
+void CameraComponent::destroy(World& world)
 {
     world.getSceneManager()->destroyCamera(m_camera);
     
@@ -72,7 +71,7 @@ void CameraComponent::destroy(EntityPtr entity, World& world)
 
 // ========================================================================= //
 
-void CameraComponent::update(EntityPtr entity, World& world)
+void CameraComponent::update(World& world)
 {
     
 }

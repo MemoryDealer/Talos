@@ -148,6 +148,9 @@
     <Filter Include="Header Files\System">
       <UniqueIdentifier>{5fed6b1e-488c-4da4-ba2f-fd110811e5b8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\System">
+      <UniqueIdentifier>{c5835f4c-75c6-478c-8bb4-082cd91ed7d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\main.cpp">
@@ -329,6 +332,12 @@
     </ClCompile>
     <ClCompile Include="Source\Core\EngineState\GameState.cpp">
       <Filter>Source Files\Core\EngineState</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\System.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\PhysicsSystem.cpp">
+      <Filter>Source Files\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -577,6 +586,12 @@
     </ClInclude>
     <ClInclude Include="Source\Core\EngineState\GameState.hpp">
       <Filter>Header Files\Core\EngineState</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\System.hpp">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\PhysicsSystem.hpp">
+      <Filter>Header Files\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

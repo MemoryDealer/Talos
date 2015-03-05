@@ -353,7 +353,11 @@
 * Added GameState.
 * Changed Input key map to use a hash table.
 * Fix World::attachComponent<T> to return the pointer to the newly created Component, using additional template specialization (a struct with a typedef that is
-	also specialized). attachComponent<T> now returns componentReturn<T>::type.
+	also specialized). attachComponent<T> now returns componentReturn<T>::type, which is T*.
+* Added abstract System class, which holds a hash table of Entities who have related components (such as SceneComponent and PhysicsComponent). Any per-frame
+	updates are done in the System::update() function in derived classes. 
+* Tested System with PhysicsSystem for updating scene nodes transforms from the physics engine. Temporarily have it in GameState, but some kind of System container
+	will go in World.
 
 == TODO ==
 * When client reconnects, a third client that was still connected can send a chat and the reconnected client will display the chat from their own username.

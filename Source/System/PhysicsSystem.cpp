@@ -15,55 +15,51 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: GameState.hpp
+// File: PhysicsSystem.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines GameState class.
+// Implements PhysicsSystem class.
 // ========================================================================= //
 
-#ifndef __GAMESTATE_HPP__
-#define __GAMESTATE_HPP__
+#include "Component/PhysicsComponent.hpp"
+#include "Component/SceneComponent.hpp"
+#include "Entity/Entity.hpp"
+#include "PhysicsSystem.hpp"
 
 // ========================================================================= //
 
-#include "EngineState.hpp"
-#include "System/PhysicsSystem.hpp"
-
-// ========================================================================= //
-// Gameplay, processes player-world interaction, multiplayer, etc.
-class GameState : public EngineState
+PhysicsSystem::PhysicsSystem(void)
 {
-public:
-    explicit GameState(void);
 
-    virtual ~GameState(void) override;
-
-    // Creates world, UI.
-    virtual void enter(void) override;
-
-    // Destroys world.
-    virtual void exit(void) override;
-
-    // Hides UI.
-    virtual void pause(void) override;
-
-    // Shows UI.
-    virtual void resume(void) override;
-
-    // Processes player/UI interaction.
-    virtual void update(void) override;
-
-    // Processes network events.
-    void handleNetEvents(void);
-
-    // Processes UI events.
-    void handleUIEvents(void);    
-
-    PhysicsSystem m_physicsSystem;
-};
+}
 
 // ========================================================================= //
 
-#endif
+PhysicsSystem::~PhysicsSystem(void)
+{
+
+}
+
+// ========================================================================= //
+
+void PhysicsSystem::update(void)
+{
+    for (auto& i : m_entities){
+        PhysicsComponentPtr physicsC = 
+            i.second->getComponent<PhysicsComponent>();
+        SceneComponentPtr sceneC =
+            i.second->getComponent<SceneComponent>();
+
+        PxTransform transform = physicsC->getRigidActor()->getGlobalPose();
+        // Update SceneComponent's position and orientaiton.
+        sceneC->setPosition(transform.p.x, 
+                            transform.p.y, 
+                            transform.p.z);
+        sceneC->setOrientation(transform.q.w, 
+                               transform.q.x, 
+                               transform.q.y, 
+                               transform.q.z);
+    }
+}
 
 // ========================================================================= //

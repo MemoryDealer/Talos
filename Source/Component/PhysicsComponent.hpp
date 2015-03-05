@@ -49,7 +49,7 @@ public:
     };
 
     // Empty.
-    virtual void init(EntityPtr, World&) override;
+    virtual void init(World&) override;
 
     // Initializes PhysX actor, adds to World's PxScene.
     virtual void init(World&, 
@@ -62,11 +62,11 @@ public:
                       const PxReal density = 10.f);
 
     // Removes PhysX actor from World's PxScene.
-    virtual void destroy(EntityPtr, World&) override;
+    virtual void destroy(World&) override;
 
     // Retrieves the actor's position and orientation, applies them to the
     // attached SceneComponent for rendering.
-    virtual void update(EntityPtr, World&) override;
+    virtual void update(World&) override;
 
     // Empty.
     virtual void message(const ComponentMessage&) override;

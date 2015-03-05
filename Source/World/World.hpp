@@ -123,7 +123,7 @@ public:
     // because with template specialization, it's not possible to specify 
     // the return type as the generic type.
     template<typename T>
-    struct componentReturn{ typedef T type; };    
+    struct componentReturn{ typedef T* type; };    
 
     // Creates component from pool, initializes it, and attaches it 
     // to the entity.

@@ -59,7 +59,7 @@ void Entity::init(World& world)
 void Entity::destroy(World& world)
 {
     for (auto& itr : m_components){
-        itr.second->destroy(this, world);
+        itr.second->destroy(world);
     }
 }
 
@@ -68,7 +68,7 @@ void Entity::destroy(World& world)
 void Entity::update(World& world)
 {
     for (auto& itr : m_components){
-        itr.second->update(this, world);
+        itr.second->update(world);
     }
 }
 

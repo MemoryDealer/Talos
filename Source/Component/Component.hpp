@@ -45,13 +45,13 @@ public:
     virtual ~Component(void) = 0;
 
     // Interface function for initialization.
-    virtual void init(EntityPtr, World&) = 0;
+    virtual void init(World&) = 0;
 
     // Interface function for destruction.
-    virtual void destroy(EntityPtr, World&) = 0;
+    virtual void destroy(World&) = 0;
 
     // Interface function for updating.
-    virtual void update(EntityPtr, World&) = 0;
+    virtual void update(World&) = 0;
 
     // Handles a message received from parent Entity.
     virtual void message(const ComponentMessage&) = 0;

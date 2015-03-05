@@ -68,15 +68,15 @@ void GameState::enter(void)
     // Create basic plane.
     EntityPtr plane = m_world.createEntity();
     m_world.attachComponent<SceneComponent>(plane);
-    m_world.attachComponent<ModelComponent>(plane);
-    m_world.attachComponent<PhysicsComponent>(plane);
-    ModelComponentPtr modelC = plane->getComponent<ModelComponent>();
+    ModelComponentPtr modelC = m_world.attachComponent<ModelComponent>(plane);
     modelC->init(m_world, "Plane/Board", "Board");
+    m_world.attachComponent<PhysicsComponent>(plane);    
     plane->getComponent<SceneComponent>()->onComponentAttached(modelC);
     PhysicsComponentPtr physicsC = plane->getComponent<PhysicsComponent>();
     physicsC->init(m_world, plane, PhysicsComponent::Type::STATIC,
                    physx::PxBoxGeometry(75.f, 5.f, 75.f));
     physicsC->translate(0.f, -50.f, 0.f);
+    m_physicsSystem.attachEntity(plane);
 
     // Create ball.
     EntityPtr ball = m_world.createEntity();
@@ -96,6 +96,7 @@ void GameState::enter(void)
     lightC->setType(LightComponent::Type::POINT);
     lightC->setColour(50.f, 0.f, 50.f);
     lightC->setRange(175.f);
+    m_physicsSystem.attachEntity(ball);
     /*ball->getComponent<SceneComponent>()->getSceneNode()->
         scale(10.f, 10.f, 10.f);*/
     
@@ -191,7 +192,7 @@ void GameState::update(void)
                 return;
             }
         }
-
+        m_physicsSystem.update();
         m_world.update();
         if (m_world.getNetwork() != nullptr){
             if (m_world.getNetwork()->hasPendingEvent() == true){

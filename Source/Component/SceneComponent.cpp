@@ -25,7 +25,6 @@
 #include "Component/LightComponent.hpp"
 #include "Component/ModelComponent.hpp"
 #include "ComponentMessage.hpp"
-#include "Entity/Entity.hpp"
 #include "SceneComponent.hpp"
 #include "World/World.hpp"
 
@@ -47,19 +46,19 @@ SceneComponent::~SceneComponent(void)
 
 // ========================================================================= //
 
-void SceneComponent::init(EntityPtr entity, World& world)
+void SceneComponent::init(World& world)
 {
     Assert(m_node == nullptr, "init() called more than once!");
 
     m_node = world.getSceneManager()->getRootSceneNode()->
-        createChildSceneNode(toString(entity->getID()));
+        createChildSceneNode();
 
     this->setInitialized(true);
 }
 
 // ========================================================================= //
 
-void SceneComponent::destroy(EntityPtr entity, World& world)
+void SceneComponent::destroy(World& world)
 {
     world.getSceneManager()->destroySceneNode(m_node);
 
@@ -68,7 +67,7 @@ void SceneComponent::destroy(EntityPtr entity, World& world)
 
 // ========================================================================= //
 
-void SceneComponent::update(EntityPtr, World&)
+void SceneComponent::update(World&)
 {
     
 }
@@ -91,6 +90,9 @@ void SceneComponent::onComponentAttached(ComponentPtr component)
         }
     }
     else if (typeid(*component) == typeid(LightComponent)){
+        Assert(static_cast<LightComponentPtr>(component)->getLight() != nullptr,
+               "LightComponent's Ogre::Light not initialized in "
+               "SceneComponent::onComponentAttached");
         m_node->attachObject(
             static_cast<LightComponentPtr>(component)->getLight());
     }

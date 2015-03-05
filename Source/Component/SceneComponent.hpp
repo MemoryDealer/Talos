@@ -40,13 +40,13 @@ public:
     virtual ~SceneComponent(void) override;
 
     // Creates a Ogre::SceneNode within the world.
-    virtual void init(EntityPtr, World&) override;
+    virtual void init(World&) override;
 
     // Destroys the internal Ogre::SceneNode.
-    virtual void destroy(EntityPtr, World&) override;
+    virtual void destroy(World&) override;
 
     // Empty.
-    virtual void update(EntityPtr, World&) override;
+    virtual void update(World&) override;
 
     // Empty.
     virtual void message(const ComponentMessage&) override;

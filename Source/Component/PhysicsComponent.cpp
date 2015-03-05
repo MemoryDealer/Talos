@@ -48,7 +48,7 @@ PhysicsComponent::~PhysicsComponent(void)
 
 // ========================================================================= //
 
-void PhysicsComponent::init(EntityPtr, World&)
+void PhysicsComponent::init(World&)
 {
 
 }
@@ -101,6 +101,7 @@ void PhysicsComponent::init(World& world,
     }
 
     if (m_actor != nullptr){
+        // @TODO: Set to entity ID?
         m_actor->userData = static_cast<EntityPtr>(entity);
 
         // Add to debug drawer if activated.
@@ -120,7 +121,7 @@ void PhysicsComponent::init(World& world,
 
 // ========================================================================= //
 
-void PhysicsComponent::destroy(EntityPtr entity, World& world)
+void PhysicsComponent::destroy(World& world)
 {
     Assert(m_actor != nullptr, "Null m_actor!");
 
@@ -131,19 +132,9 @@ void PhysicsComponent::destroy(EntityPtr entity, World& world)
 
 // ========================================================================= //
 
-void PhysicsComponent::update(EntityPtr entity, World& world)
+void PhysicsComponent::update(World& world)
 {
-    PxTransform transform = m_actor->getGlobalPose();
-
-    SceneComponentPtr sceneC = entity->getComponent<SceneComponent>();
-
-    Assert(sceneC != nullptr, 
-           "PhysicsComponent without corresponding SceneComponent");
-
-    // Set position and orientation.
-    sceneC->setPosition(transform.p.x, transform.p.y, transform.p.z);
-    sceneC->setOrientation(transform.q.w, transform.q.x, transform.q.y,
-                           transform.q.z);
+    
 }
 
 // ========================================================================= //

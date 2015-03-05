@@ -43,7 +43,7 @@ ModelComponent::~ModelComponent(void)
 
 // ========================================================================= //
 
-void ModelComponent::init(EntityPtr entity, World& world)
+void ModelComponent::init(World& world)
 {
     
 }
@@ -64,7 +64,7 @@ void ModelComponent::init(World& world,
 
 // ========================================================================= //
 
-void ModelComponent::destroy(EntityPtr entity, World& world)
+void ModelComponent::destroy(World& world)
 {
     m_entity->detachFromParent();
     m_entity = nullptr;
@@ -74,7 +74,7 @@ void ModelComponent::destroy(EntityPtr entity, World& world)
 
 // ========================================================================= //
 
-void ModelComponent::update(EntityPtr entity, World& world)
+void ModelComponent::update(World& world)
 {
 
 }

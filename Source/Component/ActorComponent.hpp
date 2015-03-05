@@ -46,13 +46,13 @@ public:
     virtual ~ActorComponent(void) override;
 
     // Creates all needed scene nodes for controlling first person camera.
-    virtual void init(EntityPtr, World&) override;
+    virtual void init(World&) override;
 
     // Destroys the internal scene nodes for the camera.
-    virtual void destroy(EntityPtr, World&) override;
+    virtual void destroy(World&) override;
 
     // Empty.
-    virtual void update(EntityPtr, World&) override;
+    virtual void update(World&) override;
 
     // Handles input messages.
     virtual void message(const ComponentMessage&) override;

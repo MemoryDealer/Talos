@@ -37,11 +37,11 @@ public:
 
     virtual ~NullComponent(void) override { }
 
-    virtual void init(EntityPtr, World&) override { }
+    virtual void init(World&) override { }
 
-    virtual void destroy(EntityPtr, World&) override { }
+    virtual void destroy(World&) override { }
 
-    virtual void update(EntityPtr, World&) override { }
+    virtual void update(World&) override { }
 
     virtual void message(const ComponentMessage&) override { }
 };

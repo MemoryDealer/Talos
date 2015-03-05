@@ -15,51 +15,50 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: GameState.hpp
+// File: System.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines GameState class.
+// Defines System class.
 // ========================================================================= //
 
-#ifndef __GAMESTATE_HPP__
-#define __GAMESTATE_HPP__
+#ifndef __SYSTEM_HPP__
+#define __SYSTEM_HPP__
 
 // ========================================================================= //
 
-#include "EngineState.hpp"
-#include "System/PhysicsSystem.hpp"
+#include "stdafx.hpp"
 
 // ========================================================================= //
-// Gameplay, processes player-world interaction, multiplayer, etc.
-class GameState : public EngineState
+
+class Entity;
+
+typedef Entity* EntityPtr;
+typedef unsigned int EntityID;
+typedef std::unordered_map<EntityID, EntityPtr> EntityHashTable;
+
+// ========================================================================= //
+// Holds a collection of Entities which have related Components that require
+// per-frame processing.
+class System
 {
 public:
-    explicit GameState(void);
+    // Default initializes member data.
+    explicit System(void);
 
-    virtual ~GameState(void) override;
+    // Empty destructor.
+    virtual ~System(void) = 0;
 
-    // Creates world, UI.
-    virtual void enter(void) override;
+    // Inserts EntityPtr into internal hash table.
+    virtual void attachEntity(EntityPtr entity);
 
-    // Destroys world.
-    virtual void exit(void) override;
+    // Removes EntityPtr from internal hash table.
+    virtual void detachEntity(EntityPtr entity);
 
-    // Hides UI.
-    virtual void pause(void) override;
+    // Processes related components.
+    virtual void update(void) = 0;
 
-    // Shows UI.
-    virtual void resume(void) override;
-
-    // Processes player/UI interaction.
-    virtual void update(void) override;
-
-    // Processes network events.
-    void handleNetEvents(void);
-
-    // Processes UI events.
-    void handleUIEvents(void);    
-
-    PhysicsSystem m_physicsSystem;
+protected:
+    EntityHashTable m_entities;
 };
 
 // ========================================================================= //

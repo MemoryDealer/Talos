@@ -61,9 +61,9 @@ ActorComponent::~ActorComponent(void)
 
 // ========================================================================= //
 
-void ActorComponent::init(EntityPtr entity, World& world)
+void ActorComponent::init(World& world)
 {
-    SceneComponent::init(entity, world);
+    SceneComponent::init(world);
 
     // Acquire the camera node from the parent class.
     m_cameraNode = this->getSceneNode();
@@ -93,7 +93,7 @@ void ActorComponent::init(EntityPtr entity, World& world)
 
 // ========================================================================= //
 
-void ActorComponent::destroy(EntityPtr entity, World& world)
+void ActorComponent::destroy(World& world)
 {
     // Destroy character controller.
     if (m_cc == CC::KINEMATIC){
@@ -104,14 +104,14 @@ void ActorComponent::destroy(EntityPtr entity, World& world)
     }
 
     world.getSceneManager()->destroySceneNode(m_yawNode);
-    SceneComponent::destroy(entity, world);
+    SceneComponent::destroy(world);
 
     this->setInitialized(false);
 }
 
 // ========================================================================= //
 
-void ActorComponent::update(EntityPtr, World&)
+void ActorComponent::update(World&)
 {
     Ogre::Vector3 translate(Ogre::Vector3::ZERO);
     if (m_movingForward){

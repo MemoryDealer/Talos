@@ -41,7 +41,7 @@ LightComponent::~LightComponent(void)
 
 // ========================================================================= //
 
-void LightComponent::init(EntityPtr entity, World& world)
+void LightComponent::init(World& world)
 {
     m_light = world.getSceneManager()->createLight();
     // Set to point light by default.
@@ -51,7 +51,7 @@ void LightComponent::init(EntityPtr entity, World& world)
 
 // ========================================================================= //
 
-void LightComponent::destroy(EntityPtr entity, World& world)
+void LightComponent::destroy(World& world)
 {
     world.getSceneManager()->destroyLight(m_light);
 
@@ -60,7 +60,7 @@ void LightComponent::destroy(EntityPtr entity, World& world)
 
 // ========================================================================= //
 
-void LightComponent::update(EntityPtr entity, World& world)
+void LightComponent::update(World& world)
 {
 
 }

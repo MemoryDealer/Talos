@@ -316,7 +316,7 @@ static void initComponent(ComponentPtr component,
                           EntityPtr entity, 
                           World* world)
 {
-    component->init(entity, *world);
+    component->init(*world);
     entity->attachComponent(component);
 }
 
