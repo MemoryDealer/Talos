@@ -69,6 +69,7 @@
     <ClCompile Include="Source\Rendering\Sky\SkyX\VClouds\VClouds.cpp" />
     <ClCompile Include="Source\System\PhysicsSystem.cpp" />
     <ClCompile Include="Source\System\System.cpp" />
+    <ClCompile Include="Source\System\SystemManager.cpp" />
     <ClCompile Include="Source\UI\LobbyUI.cpp" />
     <ClCompile Include="Source\UI\MainMenuUI.cpp" />
     <ClCompile Include="Source\UI\UI.cpp" />
@@ -156,6 +157,7 @@
     <ClInclude Include="Source\stdafx.hpp" />
     <ClInclude Include="Source\System\PhysicsSystem.hpp" />
     <ClInclude Include="Source\System\System.hpp" />
+    <ClInclude Include="Source\System\SystemManager.hpp" />
     <ClInclude Include="Source\UI\LobbyUI.hpp" />
     <ClInclude Include="Source\UI\MainMenuUI.hpp" />
     <ClInclude Include="Source\UI\UI.hpp" />

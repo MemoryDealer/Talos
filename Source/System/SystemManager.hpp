@@ -15,49 +15,69 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: GameState.hpp
+// File: SystemManager.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines GameState class.
+// Defines SystemManager class.
 // ========================================================================= //
 
-#ifndef __GAMESTATE_HPP__
-#define __GAMESTATE_HPP__
+#ifndef __SYSTEMMANAGER_HPP__
+#define __SYSTEMMANAGER_HPP__
 
 // ========================================================================= //
 
-#include "EngineState.hpp"
-#include "System/PhysicsSystem.hpp"
+#include "stdafx.hpp"
 
 // ========================================================================= //
-// Gameplay, processes player-world interaction, multiplayer, etc.
-class GameState : public EngineState
+
+class Entity;
+class System;
+
+typedef std::unordered_map<const std::type_info*, System*> SystemTable;
+
+// ========================================================================= //
+// Holds a table of Systems which can be added/removed and accessed.
+class SystemManager final
 {
 public:
-    explicit GameState(void);
+    // Default initializes SystemTable.
+    explicit SystemManager(void);
 
-    virtual ~GameState(void) override;
+    // Empty destructor.
+    ~SystemManager(void);
 
-    // Creates world, UI.
-    virtual void enter(void) override;
+    // Deletes every System in table.
+    void destroy(void);
 
-    // Destroys world.
-    virtual void exit(void) override;
+    // Inserts new System into table.
+    void addSystem(System* system);
 
-    // Hides UI.
-    virtual void pause(void) override;
+    // Tests if Entity meets requirements for any Systems in the table and adds
+    // it to that System if so.
+    void addEntity(Entity* entity);
 
-    // Shows UI.
-    virtual void resume(void) override;
+    // Updates each System in table.
+    void update(void);
 
-    // Processes player/UI interaction.
-    virtual void update(void) override;
+    // Returns true if System exists.
+    template<typename T>
+    bool hasSystem(void){
+        return (m_systems.count(&typeid(T)) != 0);
+    }
+    
+    // Returns System pointer if type.
+    template<typename T>
+    T* getSystem(void){
+        if (m_systems.count(&typeid(T)) != 0){
+            return static_cast<T*>(m_systems[&typeid(T)]);
+        }
+        else{
+            return nullptr;
+        }
+    }
 
-    // Processes network events.
-    void handleNetEvents(void);
-
-    // Processes UI events.
-    void handleUIEvents(void);    
+private:
+    SystemTable m_systems;
 };
 
 // ========================================================================= //

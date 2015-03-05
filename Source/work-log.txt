@@ -361,6 +361,7 @@
 * Removed Component's need for Entity, reduced coupling.
 * (3/5/15) Created ComponentFactory which remove the need for holding all the component pools in World and delegates them to a factory class. World now calls into ComponentFactory from
     attachComponent<T>.
+* Added SystemManager which holds a hash table of System objects. It has been added to World, which has the helper function addSystem() which calls into SystemManager.
 
 == TODO ==
 * Changed PhysicsComponent to store EntityID instead of EntityPtr?

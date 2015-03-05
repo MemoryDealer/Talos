@@ -34,6 +34,7 @@
 #include "Network/Server/Server.hpp"
 #include "Physics/PScene.hpp"
 #include "Pool/Pool.hpp"
+#include "System/SystemManager.hpp"
 #include "World.hpp"
 
 // ========================================================================= //
@@ -52,6 +53,7 @@ m_server(nullptr),
 m_client(nullptr),
 m_entityPool(nullptr),
 m_componentFactory(nullptr),
+m_systemManager(nullptr),
 m_player(nullptr),
 m_hasPlayer(false),
 m_mainCameraC(nullptr),
@@ -102,6 +104,8 @@ void World::init(const bool usePhysics)
     // Allocate component factory (component pools).
     m_componentFactory.reset(new ComponentFactory());
     m_componentFactory->init();
+
+    m_systemManager.reset(new SystemManager());
 
     // Assign Network pointer if server or client is active.
     if (m_server->initialized() == true){
@@ -177,6 +181,8 @@ const bool World::checkEntities(void) const
         if (entity->checkComponents() == false){
             return false;
         }
+
+        m_systemManager->addEntity(entity);
     }
 
     return true;
@@ -190,6 +196,8 @@ void World::update(void)
     if (m_network != nullptr){
         m_network->update();
     }
+
+    m_systemManager->update();
 
     for (int i = 0; i < m_entityPool->m_poolSize; ++i){
         m_entityPool->m_pool[i].update(*this); // Dereference self.
@@ -356,6 +364,13 @@ template<> World::componentReturn<SceneComponent>::type World::attachComponent<S
     SceneComponentPtr c = m_componentFactory->createSceneComponent();
     initComponent(c, entity, this);
     return c;
+}
+
+// ========================================================================= //
+
+void World::addSystem(System* system)
+{
+    m_systemManager->addSystem(system);
 }
 
 // ========================================================================= //

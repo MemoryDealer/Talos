@@ -33,6 +33,7 @@
 #include "Input/Input.hpp"
 #include "Network/Network.hpp"
 #include "Physics/PScene.hpp"
+#include "System/PhysicsSystem.hpp"
 #include "World/Environment.hpp"
 
 // ========================================================================= //
@@ -58,6 +59,9 @@ void GameState::enter(void)
     m_world.initPhysics();
     //m_world.getPScene()->loadDebugDrawer();
 
+    // Add systems.
+    m_world.addSystem(new PhysicsSystem());
+
     // Create player.
     EntityPtr player = m_world.createEntity();
     m_world.attachComponent<ActorComponent>(player);
@@ -76,7 +80,6 @@ void GameState::enter(void)
     physicsC->init(m_world, plane, PhysicsComponent::Type::Static,
                    physx::PxBoxGeometry(75.f, 5.f, 75.f));
     physicsC->translate(0.f, -50.f, 0.f);
-    m_physicsSystem.attachEntity(plane);
 
     // Create ball.
     EntityPtr ball = m_world.createEntity();
@@ -96,7 +99,6 @@ void GameState::enter(void)
     lightC->setType(LightComponent::Type::POINT);
     lightC->setColour(50.f, 0.f, 50.f);
     lightC->setRange(175.f);
-    m_physicsSystem.attachEntity(ball);
     /*ball->getComponent<SceneComponent>()->getSceneNode()->
         scale(10.f, 10.f, 10.f);*/
     
@@ -192,7 +194,7 @@ void GameState::update(void)
                 return;
             }
         }
-        m_physicsSystem.update();
+
         m_world.update();
         if (m_world.getNetwork() != nullptr){
             if (m_world.getNetwork()->hasPendingEvent() == true){

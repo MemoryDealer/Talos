@@ -15,53 +15,70 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: GameState.hpp
+// File: SystemManager.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines GameState class.
+// Implements SystemManager class.
 // ========================================================================= //
 
-#ifndef __GAMESTATE_HPP__
-#define __GAMESTATE_HPP__
+#include "Entity/Entity.hpp"
+#include "PhysicsSystem.hpp"
+#include "System.hpp"
+#include "SystemManager.hpp"
 
 // ========================================================================= //
 
-#include "EngineState.hpp"
-#include "System/PhysicsSystem.hpp"
-
-// ========================================================================= //
-// Gameplay, processes player-world interaction, multiplayer, etc.
-class GameState : public EngineState
+SystemManager::SystemManager(void) :
+m_systems()
 {
-public:
-    explicit GameState(void);
 
-    virtual ~GameState(void) override;
-
-    // Creates world, UI.
-    virtual void enter(void) override;
-
-    // Destroys world.
-    virtual void exit(void) override;
-
-    // Hides UI.
-    virtual void pause(void) override;
-
-    // Shows UI.
-    virtual void resume(void) override;
-
-    // Processes player/UI interaction.
-    virtual void update(void) override;
-
-    // Processes network events.
-    void handleNetEvents(void);
-
-    // Processes UI events.
-    void handleUIEvents(void);    
-};
+}
 
 // ========================================================================= //
 
-#endif
+SystemManager::~SystemManager(void)
+{
+   
+}
+
+// ========================================================================= //
+
+void SystemManager::destroy(void)
+{
+    for (auto& i : m_systems){
+        delete i.second;
+    }
+
+    m_systems.clear();
+}
+
+// ========================================================================= //
+
+void SystemManager::addSystem(System* system)
+{
+    m_systems[&typeid(*system)] = system;
+}
+
+// ========================================================================= //
+
+void SystemManager::addEntity(Entity* entity)
+{
+    // Physics system.
+    if (this->hasSystem<PhysicsSystem>()){
+        if (entity->hasComponent<SceneComponent>() &&
+            entity->hasComponent<PhysicsComponent>()){
+            this->getSystem<PhysicsSystem>()->attachEntity(entity);
+        }
+    }
+}
+
+// ========================================================================= //
+
+void SystemManager::update(void)
+{
+    for (auto& i : m_systems){
+        i.second->update();
+    }
+}
 
 // ========================================================================= //

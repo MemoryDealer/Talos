@@ -38,6 +38,8 @@ class Input;
 class Network;
 class Physics;
 class PScene;
+class System;
+class SystemManager;
 
 // ========================================================================= //
 // Represents everything in the physical game world. The World holds a
@@ -125,6 +127,12 @@ public:
 
     // === //
 
+    // Systems:
+
+    void addSystem(System* system);
+
+    // === //
+
     // Getters:
 
     // Returns pointer to Ogre::Root object.
@@ -205,6 +213,9 @@ private:
 
     // Component factory used by attachComponent<T>().
     std::shared_ptr<ComponentFactory> m_componentFactory;
+
+    // System manager for entity-component management.
+    std::shared_ptr<SystemManager> m_systemManager;
 
     // The Entity the player controls.
     EntityPtr m_player;
