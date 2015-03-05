@@ -32,8 +32,7 @@
 
 // ========================================================================= //
 
-Environment::Environment(World* world,
-                         Graphics& graphics) :
+Environment::Environment(World* world, Graphics& graphics) :
 m_world(world),
 m_sun(nullptr),
 m_sunColour(Ogre::ColourValue::Black),
@@ -42,9 +41,11 @@ m_moonColour(Ogre::ColourValue::Black),
 //m_world(nullptr), // Compiler complains 'm_world' : already initialized
 m_graphics(graphics),
 m_ocean(nullptr),
-m_renderOcean(false),
 m_sky(nullptr),
-m_renderSky(false)
+m_renderOcean(false),
+m_renderSky(false),
+m_oceanCfg(""),
+m_skyCfg("")
 {
     m_world = world;
 }
@@ -97,6 +98,30 @@ void Environment::destroy(void)
 
 // ========================================================================= //
 
+void Environment::pause(void)
+{
+    if (m_renderOcean){
+        m_ocean->destroy();
+    }
+    if (m_renderSky){
+        m_sky->destroy();
+    }
+}
+
+// ========================================================================= //
+
+void Environment::resume(void)
+{
+    if (m_renderOcean){
+        this->loadOcean(m_oceanCfg);
+    }
+    if (m_renderSky){
+        this->loadSky(m_skyCfg);
+    }
+}
+
+// ========================================================================= //
+
 void Environment::update(void)
 {
     // Update Ocean.
@@ -131,6 +156,7 @@ void Environment::loadOcean(const std::string& cfg)
     }
 
     m_renderOcean = true;
+    m_oceanCfg = cfg;
 }
 
 // ========================================================================= //
@@ -152,6 +178,7 @@ void Environment::loadSky(const std::string& cfg)
     }
 
     m_renderSky = true;
+    m_skyCfg = cfg;
 }
 
 // ========================================================================= //

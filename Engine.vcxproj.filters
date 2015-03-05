@@ -151,6 +151,12 @@
     <Filter Include="Source Files\System">
       <UniqueIdentifier>{c5835f4c-75c6-478c-8bb4-082cd91ed7d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Factory">
+      <UniqueIdentifier>{d208c735-2f48-4683-a64b-60be522cedc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Factory">
+      <UniqueIdentifier>{f3747e03-9928-4640-a029-18a38e95ad1a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\main.cpp">
@@ -338,6 +344,9 @@
     </ClCompile>
     <ClCompile Include="Source\System\PhysicsSystem.cpp">
       <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Factory\ComponentFactory.cpp">
+      <Filter>Source Files\Factory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -592,6 +601,9 @@
     </ClInclude>
     <ClInclude Include="Source\System\PhysicsSystem.hpp">
       <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Factory\ComponentFactory.hpp">
+      <Filter>Header Files\Factory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

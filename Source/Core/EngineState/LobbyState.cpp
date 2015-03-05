@@ -107,6 +107,7 @@ void LobbyState::exit(void)
 
 void LobbyState::pause(void)
 {
+    m_world.pause();
     m_ui->setVisible(false);
 }
 

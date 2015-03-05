@@ -100,6 +100,7 @@ void MainMenuState::exit(void)
 
 void MainMenuState::pause(void)
 {
+    m_world.pause();
     m_ui->setVisible(false);
 }
 

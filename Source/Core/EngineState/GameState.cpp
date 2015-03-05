@@ -73,7 +73,7 @@ void GameState::enter(void)
     m_world.attachComponent<PhysicsComponent>(plane);    
     plane->getComponent<SceneComponent>()->onComponentAttached(modelC);
     PhysicsComponentPtr physicsC = plane->getComponent<PhysicsComponent>();
-    physicsC->init(m_world, plane, PhysicsComponent::Type::STATIC,
+    physicsC->init(m_world, plane, PhysicsComponent::Type::Static,
                    physx::PxBoxGeometry(75.f, 5.f, 75.f));
     physicsC->translate(0.f, -50.f, 0.f);
     m_physicsSystem.attachEntity(plane);
@@ -88,7 +88,7 @@ void GameState::enter(void)
     modelC->init(m_world, "icosphere.mesh");    
     ball->getComponent<SceneComponent>()->onComponentAttached(modelC);   
     physicsC = ball->getComponent<PhysicsComponent>();
-    physicsC->init(m_world, ball, PhysicsComponent::Type::DYNAMIC,
+    physicsC->init(m_world, ball, PhysicsComponent::Type::Dynamic,
                    PxSphereGeometry(5.5f),
                    0.2f, 0.2f, 0.1f);
     physicsC->getDynamicActor()->addForce(PxVec3(500.f, 0.f, 0.f));
@@ -137,14 +137,14 @@ void GameState::exit(void)
 
 void GameState::pause(void)
 {
-
+    m_world.pause();
 }
 
 // ========================================================================= //
 
 void GameState::resume(void)
 {
-
+    m_world.resume();
 }
 
 // ========================================================================= //

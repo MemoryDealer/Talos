@@ -55,6 +55,12 @@ public:
     // Destroys directional light.
     void destroy(void);
 
+    // Disables SkyX and HydraX to allow for use in other states.
+    void pause(void);
+
+    // Re-enables SkyX and HydraX with previous settings.
+    void resume(void);
+
     // Updates directional light, water, and sky if active.
     void update(void);
 
@@ -142,9 +148,9 @@ private:
 
     // Water and Sky.
     std::shared_ptr<Ocean> m_ocean;
-    bool m_renderOcean;
     std::shared_ptr<Sky> m_sky;
-    bool m_renderSky;
+    bool m_renderOcean, m_renderSky;
+    std::string m_oceanCfg, m_skyCfg;
 };
 
 // ========================================================================= //

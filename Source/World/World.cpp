@@ -29,6 +29,7 @@
 #include "Component/SceneComponent.hpp"
 #include "Entity/EntityPool.hpp"
 #include "Environment.hpp"
+#include "Factory/ComponentFactory.hpp"
 #include "Network/Client/Client.hpp"
 #include "Network/Server/Server.hpp"
 #include "Physics/PScene.hpp"
@@ -50,13 +51,10 @@ m_network(nullptr),
 m_server(nullptr),
 m_client(nullptr),
 m_entityPool(nullptr),
+m_componentFactory(nullptr),
 m_player(nullptr),
 m_hasPlayer(false),
 m_mainCameraC(nullptr),
-m_actorComponentPool(nullptr),
-m_cameraComponentPool(nullptr),
-m_modelComponentPool(nullptr),
-m_sceneComponentPool(nullptr),
 m_input(nullptr)
 {
     
@@ -101,14 +99,9 @@ void World::init(const bool usePhysics)
     // @TODO: Read pool size from config file.
     m_entityPool.reset(new EntityPool(256));
 
-    // Allocate Component pools.
-    // @TODO: Read sizes from config file.
-    m_actorComponentPool.reset(new Pool<ActorComponent>(256));
-    m_cameraComponentPool.reset(new Pool<CameraComponent>(5));
-    m_lightComponentPool.reset(new Pool<LightComponent>(16));
-    m_modelComponentPool.reset(new Pool<ModelComponent>(1024));
-    m_physicsComponentPool.reset(new Pool<PhysicsComponent>(1024));
-    m_sceneComponentPool.reset(new Pool<SceneComponent>(1024));
+    // Allocate component factory (component pools).
+    m_componentFactory.reset(new ComponentFactory());
+    m_componentFactory->init();
 
     // Assign Network pointer if server or client is active.
     if (m_server->initialized() == true){
@@ -140,9 +133,18 @@ void World::destroy(void)
 
 // ========================================================================= //
 
+void World::pause(void)
+{
+    m_environment->pause();
+}
+
+// ========================================================================= //
+
 void World::resume(void)
 {
     m_viewport->setCamera(m_mainCameraC->getCamera());
+
+    m_environment->resume();
 
     // Detach Network pointer if network services are disabled.
     if (m_network != nullptr){
@@ -257,52 +259,6 @@ void World::destroyClient(void)
 
 // ========================================================================= //
 
-// Component factory functions:
-
-// ========================================================================= //
-
-ActorComponentPtr World::createActorComponent(void)
-{
-    return m_actorComponentPool->create();
-}
-
-// ========================================================================= //
-
-CameraComponentPtr World::createCameraComponent(void)
-{
-    return m_cameraComponentPool->create();
-}
-
-// ========================================================================= //
-
-LightComponentPtr World::createLightComponent(void)
-{
-    return m_lightComponentPool->create();
-}
-
-// ========================================================================= //
-
-ModelComponentPtr World::createModelComponent(void)
-{
-    return m_modelComponentPool->create();
-}
-
-// ========================================================================= //
-
-PhysicsComponentPtr World::createPhysicsComponent(void)
-{
-    return m_physicsComponentPool->create();
-}
-
-// ========================================================================= //
-
-SceneComponentPtr World::createSceneComponent(void)
-{
-    return m_sceneComponentPool->create();
-}
-
-// ========================================================================= //
-
 template<typename T>
 typename World::componentReturn<T>::type World::attachComponent(EntityPtr entity)
 { 
@@ -332,7 +288,7 @@ template<> struct World::componentReturn<ActorComponent>{
 
 template<> World::componentReturn<ActorComponent>::type World::attachComponent<ActorComponent>(EntityPtr entity)
 {
-    ActorComponentPtr c = this->createActorComponent();
+    ActorComponentPtr c = m_componentFactory->createActorComponent();
     initComponent(c, entity, this);
     return c;
 }
@@ -345,7 +301,7 @@ template<> struct World::componentReturn<CameraComponent>{
 
 template<> World::componentReturn<CameraComponent>::type World::attachComponent<CameraComponent>(EntityPtr entity)
 {
-    CameraComponentPtr c = this->createCameraComponent();
+    CameraComponentPtr c = m_componentFactory->createCameraComponent();
     initComponent(c, entity, this);
     return c;
 }
@@ -358,7 +314,7 @@ template<> struct World::componentReturn<LightComponent>{
 
 template<> World::componentReturn<LightComponent>::type World::attachComponent<LightComponent>(EntityPtr entity)
 {
-    LightComponentPtr c = this->createLightComponent();
+    LightComponentPtr c = m_componentFactory->createLightComponent();
     initComponent(c, entity, this);
     return c;
 }
@@ -371,7 +327,7 @@ template<> struct World::componentReturn<ModelComponent>{
 
 template<> World::componentReturn<ModelComponent>::type World::attachComponent<ModelComponent>(EntityPtr entity)
 {
-    ModelComponentPtr c = this->createModelComponent();
+    ModelComponentPtr c = m_componentFactory->createModelComponent();
     initComponent(c, entity, this);
     return c;
 }
@@ -384,7 +340,7 @@ template<> struct World::componentReturn<PhysicsComponent>{
 
 template<> World::componentReturn<PhysicsComponent>::type World::attachComponent<PhysicsComponent>(EntityPtr entity)
 {
-    PhysicsComponentPtr c = this->createPhysicsComponent();
+    PhysicsComponentPtr c = m_componentFactory->createPhysicsComponent();
     initComponent(c, entity, this);
     return c;
 }
@@ -397,7 +353,7 @@ template<> struct World::componentReturn<SceneComponent>{
 
 template<> World::componentReturn<SceneComponent>::type World::attachComponent<SceneComponent>(EntityPtr entity)
 {
-    SceneComponentPtr c = this->createSceneComponent();
+    SceneComponentPtr c = m_componentFactory->createSceneComponent();
     initComponent(c, entity, this);
     return c;
 }

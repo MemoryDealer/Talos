@@ -31,16 +31,13 @@
 
 // ========================================================================= //
 
+class ComponentFactory;
 class EntityPool;
 class Environment;
 class Input;
 class Network;
 class Physics;
-template<typename T> class Pool;
 class PScene;
-//
-//typedef std::unordered_map<const std::type_info*, 
-//    std::shared_ptr<Pool<T>>> PoolHashTable;
 
 // ========================================================================= //
 // Represents everything in the physical game world. The World holds a
@@ -65,6 +62,9 @@ public:
 
     // De-allocates all data.
     void destroy(void);
+
+    // Pauses environment.
+    void pause(void);
 
     // Resumes world state, assigns main camera to viewport.
     void resume(void);
@@ -110,14 +110,7 @@ public:
 
     // === //
 
-    // Component factory functions:
-
-    ActorComponentPtr createActorComponent(void);
-    CameraComponentPtr createCameraComponent(void);
-    LightComponentPtr createLightComponent(void);
-    ModelComponentPtr createModelComponent(void);
-    PhysicsComponentPtr createPhysicsComponent(void);
-    SceneComponentPtr createSceneComponent(void);
+    // Component creation:
 
     // Specialize return types for each Component. This is necessary
     // because with template specialization, it's not possible to specify 
@@ -174,6 +167,7 @@ public:
 
     // === // 
 
+    // Dependency data that is injected from Engine.
     struct Dependencies{
         Ogre::Root* root;
         Ogre::Viewport* viewport;
@@ -209,22 +203,15 @@ private:
     // Entity pool.
     std::shared_ptr<EntityPool> m_entityPool;
 
+    // Component factory used by attachComponent<T>().
+    std::shared_ptr<ComponentFactory> m_componentFactory;
+
     // The Entity the player controls.
     EntityPtr m_player;
     bool m_hasPlayer;
 
     // Main camera which renders to viewport.
     CameraComponentPtr m_mainCameraC;
-
-    // Component pools. The idea here is to avoid dynamic allocation of 
-    // any Components during the game state. They are allocated during the
-    // World's intialization and retrieved from a memory pool as needed.
-    std::shared_ptr<Pool<ActorComponent>> m_actorComponentPool;
-    std::shared_ptr<Pool<CameraComponent>> m_cameraComponentPool;
-    std::shared_ptr<Pool<LightComponent>> m_lightComponentPool;
-    std::shared_ptr<Pool<ModelComponent>> m_modelComponentPool;
-    std::shared_ptr<Pool<PhysicsComponent>> m_physicsComponentPool;
-    std::shared_ptr<Pool<SceneComponent>> m_sceneComponentPool;
 
     // Input component.
     Input* m_input;

@@ -50,15 +50,9 @@ void PhysicsSystem::update(void)
         SceneComponentPtr sceneC =
             i.second->getComponent<SceneComponent>();
 
-        PxTransform transform = physicsC->getRigidActor()->getGlobalPose();
         // Update SceneComponent's position and orientaiton.
-        sceneC->setPosition(transform.p.x, 
-                            transform.p.y, 
-                            transform.p.z);
-        sceneC->setOrientation(transform.q.w, 
-                               transform.q.x, 
-                               transform.q.y, 
-                               transform.q.z);
+        sceneC->setPosition(physicsC->getPosition());
+        sceneC->setOrientation(physicsC->getOrientation());
     }
 }
 

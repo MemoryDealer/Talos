@@ -32,6 +32,7 @@
     <ClCompile Include="Source\Core\Resources.cpp" />
     <ClCompile Include="Source\Entity\Entity.cpp" />
     <ClCompile Include="Source\Entity\EntityPool.cpp" />
+    <ClCompile Include="Source\Factory\ComponentFactory.cpp" />
     <ClCompile Include="Source\Input\Input.cpp" />
     <ClCompile Include="Source\Log\Log.cpp" />
     <ClCompile Include="Source\Network\Client\Client.cpp" />
@@ -110,6 +111,7 @@
     <ClInclude Include="Source\Core\Resources.hpp" />
     <ClInclude Include="Source\Entity\Entity.hpp" />
     <ClInclude Include="Source\Entity\EntityPool.hpp" />
+    <ClInclude Include="Source\Factory\ComponentFactory.hpp" />
     <ClInclude Include="Source\Input\Input.hpp" />
     <ClInclude Include="Source\Log\Log.hpp" />
     <ClInclude Include="Source\Network\Client\Client.hpp" />

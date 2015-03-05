@@ -359,9 +359,12 @@
 * Tested System with PhysicsSystem for updating scene nodes transforms from the physics engine. Temporarily have it in GameState, but some kind of System container
 	will go in World.
 * Removed Component's need for Entity, reduced coupling.
+* (3/5/15) Created ComponentFactory which remove the need for holding all the component pools in World and delegates them to a factory class. World now calls into ComponentFactory from
+    attachComponent<T>.
 
 == TODO ==
 * Changed PhysicsComponent to store EntityID instead of EntityPtr?
+* Hydrax/SkyX need to be shared between states--make them world dependencies perhaps and add code to check if they are already initialized.
 * When client reconnects, a third client that was still connected can send a chat and the reconnected client will display the chat from their own username.
 * Popup error box when trying to connect while previous connection is being closed.
 * CEGUI disappears when resizing window.
@@ -375,9 +378,7 @@
 * ActorComponent could use some redesign - CameraComponent is completely unnecessary, and AIComponent will be redundant.
 * Put 16.f somewhere as a constant that every file can access (MS per update).
 * Put character controller data into config file to speed up testing.
-* Make PScene optional when initializing World.
 * Make PhysX use software mode if NVIDIA card is not detected.
-* Have a UI object (an interface) which defines functions for GUI events. Derive one for each state. It should have a queue of events that the EngineState::update() function processes.
 * Enums appear to be at random places in class definitions, make them consistent.
 * Have a pointer to an EntityFactor in World? (For creating specific Entities such as box, enemy, etc.)
 * Have all classes that shouldn't be derived from be declared as final.

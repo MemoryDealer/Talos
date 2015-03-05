@@ -61,14 +61,20 @@ public:
 
     // Setters:
 
+    // Sets position of Ogre::SceneNode.
+    void setPosition(const Ogre::Vector3& pos);
+
     // Sets position of Ogre::SceneNode. 
-    // Note: This may be overriden by a PhysicsComponent attached to the
-    // same Entity.
     void setPosition(const Ogre::Real, const Ogre::Real, const Ogre::Real);
 
     // Sets orientation of Ogre::SceneNode.
-    void setOrientation(const Ogre::Real, const Ogre::Real, const Ogre::Real,
-                        const Ogre::Real);
+    void setOrientation(const Ogre::Quaternion& orientation);
+
+    // Sets orientation of Ogre::SceneNode.
+    void setOrientation(const Ogre::Real w, 
+                        const Ogre::Real x, 
+                        const Ogre::Real y,
+                        const Ogre::Real z);
 
 private:
     Ogre::SceneNode* m_node;

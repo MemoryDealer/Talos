@@ -79,7 +79,7 @@ void PhysicsComponent::init(World& world,
     }
 
     // Create a static PhysX actor.
-    if (type == Type::STATIC){
+    if (type == Type::Static){
         m_sActor = PxCreateStatic(*world.getPScene()->getSDK(),
                                   PxTransform(PxVec3(0.f, 0.f, 0.f)),
                                   geometry,
@@ -89,7 +89,7 @@ void PhysicsComponent::init(World& world,
         m_actor = m_sActor;
     }
     // Create a dynamic PhysX actor.
-    else if(type == Type::DYNAMIC){
+    else if(type == Type::Dynamic){
         m_dActor = PxCreateDynamic(*world.getPScene()->getSDK(),
                                    PxTransform(PxVec3(0.f, 0.f, 0.f)),
                                    geometry,
@@ -209,4 +209,28 @@ void PhysicsComponent::rotate(const PxReal dx,
 }
 
 // ========================================================================= //
+
+const Ogre::Vector3 PhysicsComponent::getPosition(void) const
+{
+    PxTransform transform = m_actor->getGlobalPose();
+
+    return Ogre::Vector3(transform.p.x, 
+                         transform.p.y, 
+                         transform.p.z);
+}
+
+// ========================================================================= //
+
+const Ogre::Quaternion PhysicsComponent::getOrientation(void) const
+{
+    PxTransform transform = m_actor->getGlobalPose();
+
+    return Ogre::Quaternion(transform.q.w,
+                            transform.q.x,
+                            transform.q.y,
+                            transform.q.z);
+}
+
+// ========================================================================= //
+
 

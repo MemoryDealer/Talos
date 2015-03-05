@@ -43,9 +43,9 @@ public:
     // Empty destructor.
     virtual ~PhysicsComponent(void) override;
 
-    enum Type{
-        STATIC = 0,
-        DYNAMIC
+    enum class Type{
+        Static,
+        Dynamic
     };
 
     // Empty.
@@ -88,8 +88,19 @@ public:
 
     // Getters:
 
+    // Returns position in form of Ogre::Vector3.
+    const Ogre::Vector3 getPosition(void) const;
+
+    // Returns position in form of Ogre::Quaternion.
+    const Ogre::Quaternion getOrientation(void) const;
+
+    // Returns pointer to PxRigidActor.
     PxRigidActor* getRigidActor(void) const;
+
+    // Returns pointer to PxRigidStatic.
     PxRigidStatic* getStaticActor(void) const;
+
+    // Returns pointer to PxRigidDynamic.
     PxRigidDynamic* getDynamicActor(void) const;
 
 private:
@@ -103,6 +114,8 @@ private:
 };
 
 // ========================================================================= //
+
+// Getters:
 
 inline PxRigidActor* PhysicsComponent::getRigidActor(void) const{
     return m_actor;

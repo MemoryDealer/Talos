@@ -15,83 +15,56 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: Component.hpp
+// File: ComponentFactory.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines Component class.
+// Defines ComponentFactory class.
 // ========================================================================= //
 
-#ifndef __COMPONENT_HPP__
-#define __COMPONENT_HPP__
-
-// ========================================================================= //
-
-#include "ComponentDecls.hpp"
-#include "stdafx.hpp"
+#ifndef __COMPONENTFACTORY_HPP__
+#define __COMPONENTFACTORY_HPP__
 
 // ========================================================================= //
 
-class World;
+#include "Component/Component.hpp"
 
 // ========================================================================= //
-// Holds data & behavior(if necessary) for specific Entity needs.
-class Component
+
+template<typename T> class Pool;
+
+// ========================================================================= //
+// Contains pools of Components, creates Component objects.
+class ComponentFactory final
 {
 public:
-    // Initializes m_name to "nil".
-    explicit Component(void);
+    // Default initializes pools.
+    explicit ComponentFactory(void);
 
     // Empty destructor.
-    virtual ~Component(void) = 0;
+    ~ComponentFactory(void);
 
-    // Interface function for initialization.
-    virtual void init(World&) = 0;
+    // Allocates component pools.
+    void init(void);
 
-    // Interface function for destruction.
-    virtual void destroy(World&) = 0;
-
-    // Interface function for updating.
-    virtual void update(World&) = 0;
-
-    // Handles a message received from parent Entity.
-    virtual void message(const ComponentMessage&) = 0;
-
-    // Triggered for all attached components when a new component is 
-    // attached to an Entity.
-    virtual void onComponentAttached(ComponentPtr) { }
-
-    // Triggered for all attached components when a component is 
-    // detached from an Entity.
-    virtual void onComponentDetached(ComponentPtr) { }
-
-    // Getters:
-
-    // Returns true if Component has been initialized.
-    const bool isInitialized(void) const;
-
-    // Setters:
-
-    // Sets initialization state of Component.
-    void setInitialized(const bool);
-
+    // Creation functions:
+    ActorComponentPtr createActorComponent(void);
+    CameraComponentPtr createCameraComponent(void);
+    LightComponentPtr createLightComponent(void);
+    ModelComponentPtr createModelComponent(void);
+    PhysicsComponentPtr createPhysicsComponent(void);
+    SceneComponentPtr createSceneComponent(void);
 
 private:
-    bool m_initialized;
+    // Component pools. The idea here is to avoid dynamic allocation of 
+    // any Components during the game state. They are allocated during the
+    // World's intialization and retrieved from a memory pool as needed.
+    std::shared_ptr<Pool<ActorComponent>> m_actorComponentPool;
+    std::shared_ptr<Pool<CameraComponent>> m_cameraComponentPool;
+    std::shared_ptr<Pool<LightComponent>> m_lightComponentPool;
+    std::shared_ptr<Pool<ModelComponent>> m_modelComponentPool;
+    std::shared_ptr<Pool<PhysicsComponent>> m_physicsComponentPool;
+    std::shared_ptr<Pool<SceneComponent>> m_sceneComponentPool;
 };
-
-// ========================================================================= //
-
-// Getters:
-
-inline const bool Component::isInitialized(void) const{
-    return m_initialized;
-}
-
-// Setters:
-
-inline void Component::setInitialized(const bool initialized){
-    m_initialized = initialized;
-}
 
 // ========================================================================= //
 
