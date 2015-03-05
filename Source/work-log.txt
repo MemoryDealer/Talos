@@ -358,8 +358,10 @@
 	updates are done in the System::update() function in derived classes. 
 * Tested System with PhysicsSystem for updating scene nodes transforms from the physics engine. Temporarily have it in GameState, but some kind of System container
 	will go in World.
+* Removed Component's need for Entity, reduced coupling.
 
 == TODO ==
+* Changed PhysicsComponent to store EntityID instead of EntityPtr?
 * When client reconnects, a third client that was still connected can send a chat and the reconnected client will display the chat from their own username.
 * Popup error box when trying to connect while previous connection is being closed.
 * CEGUI disappears when resizing window.
