@@ -81,8 +81,9 @@ public:
 
     // Checks if each Entity's Components have been initialized and linked. 
     // Returns true if they all have. Should be called after initial scene 
-    // setup.
-    const bool checkEntities(void) const;
+    // setup. Links all components together by calling onComponentAttached()
+    // for each component. Adds Entities to Systems as needed.
+    const bool setupEntities(void) const;
 
     // Updates every active Entity in the game world, updates environment.
     void update(void);
@@ -129,7 +130,12 @@ public:
 
     // Systems:
 
+    // Inserts new System into SystemManager.
     void addSystem(System* system);
+
+    // Attaches Entity to internal System if it meets the requirements of
+    // any registered system.
+    void addEntityToSystem(EntityPtr entity);
 
     // === //
 

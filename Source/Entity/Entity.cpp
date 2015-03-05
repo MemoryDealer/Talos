@@ -21,13 +21,8 @@
 // Defines Entity class.
 // ========================================================================= //
 
-#include "Component/ActorComponent.hpp"
-#include "Component/CameraComponent.hpp"
+#include "Component/Component.hpp"
 #include "Component/ComponentMessage.hpp"
-#include "Component/LightComponent.hpp"
-#include "Component/ModelComponent.hpp"
-#include "Component/PhysicsComponent.hpp"
-#include "Component/SceneComponent.hpp"
 #include "Entity.hpp"
 
 // ========================================================================= //
@@ -80,9 +75,9 @@ ComponentPtr Entity::attachComponent(const ComponentPtr component)
     m_components[&typeid(*component)] = component;
 
     // Notify all attached components of newly attached component.
-    for (auto& itr : m_components){
+    /*for (auto& itr : m_components){
         itr.second->onComponentAttached(component);
-    }
+    }*/
 
     return component;
 }
@@ -97,11 +92,17 @@ void Entity::detachComponent(const ComponentPtr component)
 
 // ========================================================================= //
 
-const bool Entity::checkComponents(void)
+const bool Entity::setupComponents(void)
 {
     for (auto& itr : m_components){
         if (itr.second->isInitialized() == false){
             return false;
+        }
+
+        // Call onComponentAttached() for every component to every component.
+        // Doing this now ensure they are all initialized.
+        for (auto& c : m_components){
+            itr.second->onComponentAttached(c.second);
         }
     }
 
@@ -112,7 +113,7 @@ const bool Entity::checkComponents(void)
 
 void Entity::message(const ComponentMessage& msg)
 {
-    Assert(msg.type != ComponentMessageType::NIL, "NIL Entity message!");
+    Assert(msg.type != ComponentMessageType::Null, "Null Entity message!");
 
     // Broadcast to all attached components.
     for (auto& itr : m_components){

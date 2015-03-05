@@ -87,7 +87,7 @@ void LobbyState::enter(void)
 
     m_world.getNetwork()->unlockEventQueue();
 
-    if (m_world.checkEntities() == false){
+    if (m_world.setupEntities() == false){
         throw std::exception("LobbyState entities reported uninitialized");
     }
 }

@@ -174,11 +174,11 @@ void World::destroyEntity(EntityPtr e)
 
 // ========================================================================= //
 
-const bool World::checkEntities(void) const
+const bool World::setupEntities(void) const
 {
     for (int i = 0; i < m_entityPool->m_poolSize; ++i){
         EntityPtr entity = &m_entityPool->m_pool[i];
-        if (entity->checkComponents() == false){
+        if (entity->setupComponents() == false){
             return false;
         }
 
@@ -371,6 +371,13 @@ template<> World::componentReturn<SceneComponent>::type World::attachComponent<S
 void World::addSystem(System* system)
 {
     m_systemManager->addSystem(system);
+}
+
+// ========================================================================= //
+
+void World::addEntityToSystem(EntityPtr entity)
+{
+    m_systemManager->addEntity(entity);
 }
 
 // ========================================================================= //

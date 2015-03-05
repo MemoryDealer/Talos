@@ -69,14 +69,16 @@ void GameState::enter(void)
 
     m_world.setPlayer(player);
 
+    LightComponentPtr lightC = nullptr;
+    ModelComponentPtr modelC = nullptr;
+    PhysicsComponentPtr physicsC = nullptr;
+
     // Create basic plane.
     EntityPtr plane = m_world.createEntity();
     m_world.attachComponent<SceneComponent>(plane);
-    ModelComponentPtr modelC = m_world.attachComponent<ModelComponent>(plane);
-    modelC->init(m_world, "Plane/Board", "Board");
-    m_world.attachComponent<PhysicsComponent>(plane);    
-    plane->getComponent<SceneComponent>()->onComponentAttached(modelC);
-    PhysicsComponentPtr physicsC = plane->getComponent<PhysicsComponent>();
+    modelC = m_world.attachComponent<ModelComponent>(plane);
+    modelC->init(m_world, "Plane/Board", "Board");      
+    physicsC = m_world.attachComponent<PhysicsComponent>(plane);
     physicsC->init(m_world, plane, PhysicsComponent::Type::Static,
                    physx::PxBoxGeometry(75.f, 5.f, 75.f));
     physicsC->translate(0.f, -50.f, 0.f);
@@ -84,31 +86,24 @@ void GameState::enter(void)
     // Create ball.
     EntityPtr ball = m_world.createEntity();
     m_world.attachComponent<SceneComponent>(ball);
-    m_world.attachComponent<ModelComponent>(ball);
-    m_world.attachComponent<LightComponent>(ball);
-    m_world.attachComponent<PhysicsComponent>(ball);
-    modelC = ball->getComponent<ModelComponent>();
-    modelC->init(m_world, "icosphere.mesh");    
-    ball->getComponent<SceneComponent>()->onComponentAttached(modelC);   
-    physicsC = ball->getComponent<PhysicsComponent>();
+    modelC = m_world.attachComponent<ModelComponent>(ball);
+    modelC->init(m_world, "icosphere.mesh");
+    lightC = m_world.attachComponent<LightComponent>(ball);
+    lightC->setType(LightComponent::Type::POINT);
+    lightC->setColour(50.f, 0.f, 50.f);
+    lightC->setRange(175.f);
+    physicsC = m_world.attachComponent<PhysicsComponent>(ball);      
     physicsC->init(m_world, ball, PhysicsComponent::Type::Dynamic,
                    PxSphereGeometry(5.5f),
                    0.2f, 0.2f, 0.1f);
     physicsC->getDynamicActor()->addForce(PxVec3(500.f, 0.f, 0.f));
-    LightComponentPtr lightC = ball->getComponent<LightComponent>();
-    lightC->setType(LightComponent::Type::POINT);
-    lightC->setColour(50.f, 0.f, 50.f);
-    lightC->setRange(175.f);
-    /*ball->getComponent<SceneComponent>()->getSceneNode()->
-        scale(10.f, 10.f, 10.f);*/
     
-
     // Setup visual scene settings.
     //m_world.getEnvironment()->setAmbientLight(255.f, 255.f, 255.f);
-    m_world.getEnvironment()->setSunColour(20.f, 17.5f, 18.9f);
+    //m_world.getEnvironment()->setSunColour(20.f, 17.5f, 18.9f);
     m_world.getEnvironment()->setMoonColour(.50f, .50f, 255.f);
 
-        // Create Ocean.
+    // Create Ocean.
 #ifdef _DEBUG
     m_world.getEnvironment()->loadOcean("Ocean2_HLSL_GLSL");
 #else
@@ -119,10 +114,9 @@ void GameState::enter(void)
 
     // Create sky.
     m_world.getEnvironment()->loadSky();
-
     
 
-    if (m_world.checkEntities() == false){
+    if (m_world.setupEntities() == false){
         throw std::exception("MainMenu entities reported uninitialized");
     }
 }

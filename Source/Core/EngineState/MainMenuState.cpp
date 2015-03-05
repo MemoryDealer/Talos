@@ -83,7 +83,7 @@ void MainMenuState::enter(void)
     m_ui.reset(new MainMenuUI());
     m_ui->init();
 
-    if (m_world.checkEntities() == false){
+    if (m_world.setupEntities() == false){
         throw std::exception("MainMenu entities reported uninitialized");
     }
 }

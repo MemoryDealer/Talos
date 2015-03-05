@@ -363,7 +363,15 @@
     attachComponent<T>.
 * Added SystemManager which holds a hash table of System objects. It has been added to World, which has the helper function addSystem() which calls into SystemManager.
 
+== 3/5/15 ==
+* Changed Entity::checkComponents() to setupComponents() - it calls Component::onComponentAttached() for every component attached, passing in every component that's attached. This makes it so
+    the order in which components are attached to an Entity does not matter, so long as Entity::setupComponents() is called once all components are attached. This is automated through 
+    World::setupEntities().
+    So to manually create a new Entity without using World::setupEntities(), one could add the components like normal, then call Entity::setupComponents() directly, and World::addEntityToSystem().
+
+
 == TODO ==
+* GameState for networked games. Add jumping & sprinting.
 * Changed PhysicsComponent to store EntityID instead of EntityPtr?
 * Hydrax/SkyX need to be shared between states--make them world dependencies perhaps and add code to check if they are already initialized.
 * When client reconnects, a third client that was still connected can send a chat and the reconnected client will display the chat from their own username.
