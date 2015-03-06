@@ -32,6 +32,7 @@
 #include "Network/Server/Server.hpp"
 #include "Physics/Physics.hpp"
 #include "Resources.hpp"
+#include "Talos.hpp"
 #include "World/World.hpp"
 
 // ========================================================================= //
@@ -217,7 +218,6 @@ void Engine::start(const EngineStateID id)
     // Push the specified state onto the active stack and run the game loop.
     this->pushState(id);
 
-    const double MS_PER_UPDATE = 16.0;
     double prev = m_timer->getMilliseconds();
     double lag = 0.0;
 
@@ -235,14 +235,14 @@ void Engine::start(const EngineStateID id)
             lag += elapsed;
 
             // Update the current state.
-            while (lag >= MS_PER_UPDATE && m_active == true){
+            while (lag >= Talos::MS_PER_UPDATE && m_active == true){
                 m_stateStack.top()->update();
 
-                lag -= MS_PER_UPDATE;
+                lag -= Talos::MS_PER_UPDATE;
             }
 
             // Render the updated frame, compensating for lag.
-            m_root->renderOneFrame(Ogre::Real(lag / MS_PER_UPDATE));
+            m_root->renderOneFrame(Ogre::Real(lag / Talos::MS_PER_UPDATE));
         }
     }
 }

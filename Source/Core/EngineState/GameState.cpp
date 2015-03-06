@@ -92,7 +92,7 @@ void GameState::enter(void)
     lightC->setType(LightComponent::Type::POINT);
     lightC->setColour(50.f, 0.f, 50.f);
     lightC->setRange(175.f);
-    physicsC = m_world.attachComponent<PhysicsComponent>(ball);      
+    physicsC = m_world.attachComponent<PhysicsComponent>(ball);
     physicsC->init(m_world, ball, PhysicsComponent::Type::Dynamic,
                    PxSphereGeometry(5.5f),
                    0.2f, 0.2f, 0.1f);
@@ -168,8 +168,9 @@ void GameState::update(void)
 
                     // Send input commands to the player.
                     CommandPtr command = m_world.getInput()->handle(e);
-                    if (command != nullptr){
+                    if (command){
                         command->execute(m_world.getPlayer());
+                        printf("Command: %d\t%d\n", sizeof(command), typeid(*command).hash_code());
                     }
                 }
                 break;
@@ -177,7 +178,7 @@ void GameState::update(void)
             case SDL_KEYUP:
                 {
                     CommandPtr command = m_world.getInput()->handle(e);
-                    if (command != nullptr){
+                    if (command){
                         command->unexecute(m_world.getPlayer());
                     }
                 }
@@ -190,8 +191,8 @@ void GameState::update(void)
         }
 
         m_world.update();
-        if (m_world.getNetwork() != nullptr){
-            if (m_world.getNetwork()->hasPendingEvent() == true){
+        if (m_world.getNetwork()){
+            if (m_world.getNetwork()->hasPendingEvent()){
                 this->handleNetEvents();
             }
         }
@@ -207,7 +208,7 @@ void GameState::handleNetEvents(void)
 {
     NetEvent e = m_world.getNetwork()->getNextEvent();
     for (; 
-         e.type != NetMessage::Null; 
+         e.type != NetMessage::Null;
          e = m_world.getNetwork()->getNextEvent()){
         /*switch (e.type){
         default:

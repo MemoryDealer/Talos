@@ -21,6 +21,7 @@
 // Implements PhysicsScene class.
 // ========================================================================= //
 
+#include "Core/Talos.hpp"
 #include "PDebugDrawer.hpp"
 #include "PScene.hpp"
 
@@ -97,7 +98,7 @@ void PScene::destroy(void)
 
 void PScene::simulate(PxReal speed)
 {
-    const PxReal step = 1.f / 16.f * speed;
+    const PxReal step = 1.0 / Talos::MS_PER_UPDATE * speed;
 
     m_scene->simulate(step);
     m_scene->fetchResults(true);
