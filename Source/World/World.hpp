@@ -31,15 +31,8 @@
 
 // ========================================================================= //
 
-class ComponentFactory;
-class EntityPool;
-class Environment;
-class Input;
-class Network;
-class Physics;
-class PScene;
-class System;
-class SystemManager;
+// Hash table for fast Entity lookup.
+typedef std::unordered_map<EntityID, EntityPtr> EntityIDMap;
 
 // ========================================================================= //
 // Represents everything in the physical game world. The World holds a
@@ -69,9 +62,14 @@ public:
     void pause(void);
 
     // Resumes world state, assigns main camera to viewport.
-    void resume(void);
+    void resume(void); 
 
-    // Entity pool functions:
+    // Updates every active Entity in the game world, updates environment.
+    void update(void);
+
+    // === //
+
+    // Entity functions:
 
     // Get the next free Entity from the internal pool and return a pointer.
     EntityPtr createEntity(void);
@@ -85,8 +83,8 @@ public:
     // for each component. Adds Entities to Systems as needed.
     const bool setupEntities(void) const;
 
-    // Updates every active Entity in the game world, updates environment.
-    void update(void);
+    // Returns pointer to Entity if it exists in World.
+    EntityPtr getEntityPtr(const EntityID id);
 
     // === //
 
@@ -216,6 +214,7 @@ private:
 
     // Entity pool.
     std::shared_ptr<EntityPool> m_entityPool;
+    EntityIDMap m_entityIDMap;
 
     // Component factory used by attachComponent<T>().
     std::shared_ptr<ComponentFactory> m_componentFactory;

@@ -30,10 +30,6 @@
 #include "stdafx.hpp"
 
 // ========================================================================= //
-
-class World;
-
-// ========================================================================= //
 // Renders Ocean texture to a plane with some shading.
 class OceanLowGraphics : public Ocean
 {

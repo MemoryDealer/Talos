@@ -33,10 +33,6 @@
 using namespace physx;
 
 // ========================================================================= //
-
-class DynamicLines;
-
-// ========================================================================= //
 // Draws registered PhysX actors using dynamic lines in Ogre3D.
 class PDebugDrawer final
 {

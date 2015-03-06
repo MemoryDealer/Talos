@@ -15,36 +15,56 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: ComponentDecls.hpp
+// File: Typedefs.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Forward declares classes for each type of Component and the typedefs for
-// pointers to them.
+// Defines typedefs and forward declarations used across engine. Anything
+// that must be forward declared/typedef'd in more than once place should go
+// here.
 // ========================================================================= //
 
-#ifndef __COMPONENTDECLS_HPP__
-#define __COMPONENTDECLS_HPP__
+#ifndef __TYPEDEFS_HPP__
+#define __TYPEDEFS_HPP__
 
 // ========================================================================= //
 
-class Component;
+#include <cstdint>
+#include <memory>
+
+// ========================================================================= //
+
 class ActorComponent;
-class CameraComponent;
-class LightComponent;
-class ModelComponent;
-class PhysicsComponent;
-class SceneComponent;
-// Other forward declarations.
-struct ComponentMessage;
+class Client;
+class Command;
+struct CommandRepository;
+class ComponentFactory;
+class DCC;
+class DynamicLines;
+class EngineState;
+class Entity;
+class EntityPool;
+class Environment;
+class Input;
+class KCC;
+class Network;
+class Ocean;
+class PDebugDrawer;
+class Physics;
+template<typename T> class Pool;
+class PScene;
+class Server;
+class Sky;
+struct SkyPreset;
+class System;
+class SystemManager;
+class UI;
+class World;
 
-typedef Component* ComponentPtr;
 typedef ActorComponent* ActorComponentPtr;
-typedef CameraComponent* CameraComponentPtr;
-typedef LightComponent* LightComponentPtr;
-typedef ModelComponent* ModelComponentPtr;
-typedef PhysicsComponent* PhysicsComponentPtr;
-typedef SceneComponent* SceneComponentPtr;
-
+typedef std::shared_ptr<Command> CommandPtr;
+typedef std::shared_ptr<EngineState> EngineStatePtr;
+typedef uint32_t EntityID;
+typedef Entity* EntityPtr;
 
 // ========================================================================= //
 

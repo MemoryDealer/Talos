@@ -33,10 +33,6 @@
 using namespace physx;
 
 // ========================================================================= //
-
-class World;
-
-// ========================================================================= //
 // Kinematic character controller using PhysX.
 class KCC final
 {

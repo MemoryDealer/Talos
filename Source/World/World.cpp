@@ -52,6 +52,7 @@ m_network(nullptr),
 m_server(nullptr),
 m_client(nullptr),
 m_entityPool(nullptr),
+m_entityIDMap(),
 m_componentFactory(nullptr),
 m_systemManager(nullptr),
 m_player(nullptr),
@@ -108,10 +109,10 @@ void World::init(const bool usePhysics)
     m_systemManager.reset(new SystemManager());
 
     // Assign Network pointer if server or client is active.
-    if (m_server->initialized() == true){
+    if (m_server->initialized()){
         m_network = m_server.get();
     }
-    else if (m_client->initialized() == true){
+    else if (m_client->initialized()){
         m_network = m_client.get();
     }
 }
@@ -151,41 +152,11 @@ void World::resume(void)
     m_environment->resume();
 
     // Detach Network pointer if network services are disabled.
-    if (m_network != nullptr){
-        if (m_network->initialized() == false){
+    if (m_network){
+        if (!m_network->initialized()){
             m_network = nullptr;
         }
     }
-}
-
-// ========================================================================= //
-
-EntityPtr World::createEntity(void)
-{
-    return m_entityPool->create();
-}
-
-// ========================================================================= //
-
-void World::destroyEntity(EntityPtr e)
-{
-    return m_entityPool->destroy(e);
-}
-
-// ========================================================================= //
-
-const bool World::setupEntities(void) const
-{
-    for (int i = 0; i < m_entityPool->m_poolSize; ++i){
-        EntityPtr entity = &m_entityPool->m_pool[i];
-        if (entity->setupComponents() == false){
-            return false;
-        }
-
-        m_systemManager->addEntity(entity);
-    }
-
-    return true;
 }
 
 // ========================================================================= //
@@ -208,6 +179,54 @@ void World::update(void)
     }
 
     m_environment->update();
+}
+
+// ========================================================================= //
+
+// Entity functions:
+
+// ========================================================================= //
+
+EntityPtr World::createEntity(void)
+{
+    EntityPtr e = m_entityPool->create();
+    m_entityIDMap[e->getID()] = e;
+    return e;
+}
+
+// ========================================================================= //
+
+void World::destroyEntity(EntityPtr e)
+{
+    m_entityIDMap.erase(e->getID());
+    return m_entityPool->destroy(e);
+}
+
+// ========================================================================= //
+
+const bool World::setupEntities(void) const
+{
+    for (int i = 0; i < m_entityPool->m_poolSize; ++i){
+        EntityPtr entity = &m_entityPool->m_pool[i];
+        if (!entity->setupComponents()){
+            return false;
+        }
+
+        m_systemManager->addEntity(entity);
+    }
+
+    return true;
+}
+
+// ========================================================================= //
+
+EntityPtr World::getEntityPtr(const EntityID id)
+{
+    if (m_entityIDMap.count(id) != 0){
+        return m_entityIDMap[id];
+    }
+
+    return nullptr;
 }
 
 // ========================================================================= //

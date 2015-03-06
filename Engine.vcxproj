@@ -160,6 +160,7 @@
     <ClInclude Include="Source\System\PhysicsSystem.hpp" />
     <ClInclude Include="Source\System\System.hpp" />
     <ClInclude Include="Source\System\SystemManager.hpp" />
+    <ClInclude Include="Source\Typedefs.hpp" />
     <ClInclude Include="Source\UI\LobbyUI.hpp" />
     <ClInclude Include="Source\UI\MainMenuUI.hpp" />
     <ClInclude Include="Source\UI\UI.hpp" />

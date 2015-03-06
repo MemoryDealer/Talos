@@ -29,11 +29,6 @@
 #include "SceneComponent.hpp"
 
 // ========================================================================= //
-
-class DCC;
-class KCC;
-
-// ========================================================================= //
 // Allows an Entity to be controlled by either: a player giving local input,
 // an AI, a networked player, or from a list of replay commands.
 class ActorComponent final : public SceneComponent

@@ -30,10 +30,6 @@
 
 // ========================================================================= //
 
-class Entity;
-
-typedef Entity* EntityPtr;
-typedef unsigned int EntityID;
 typedef std::unordered_map<EntityID, EntityPtr> EntityHashTable;
 
 // ========================================================================= //

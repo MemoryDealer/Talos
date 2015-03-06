@@ -29,10 +29,6 @@
 #include "Physics.hpp"
 
 // ========================================================================= //
-
-class PDebugDrawer;
-
-// ========================================================================= //
 // A single physics scene to be used by a state (PScene is easier to type).
 class PScene final
 {

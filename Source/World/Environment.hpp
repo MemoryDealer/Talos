@@ -29,15 +29,6 @@
 #include "stdafx.hpp"
 
 // ========================================================================= //
-
-class ActorComponent;
-class Ocean;
-class Sky;
-class World;
-
-typedef ActorComponent* ActorComponentPtr;
-
-// ========================================================================= //
 // Responsible for managing visual environment rendered in Ogre3D.
 class Environment final
 {

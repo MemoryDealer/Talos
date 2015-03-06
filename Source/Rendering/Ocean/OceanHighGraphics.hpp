@@ -32,11 +32,6 @@
 #include "Ocean.hpp"
 
 // ========================================================================= //
-
-class ActorComponent;
-class World;
-
-// ========================================================================= //
 // Renders high-detail ocean using Hydrax Ogre3D plugin (Perlin or FFT noise).
 class OceanHighGraphics final : public Ocean
 {

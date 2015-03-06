@@ -30,13 +30,6 @@
 
 // ========================================================================= //
 
-class Command;
-struct CommandRepository;
-class Entity;
-
-typedef std::shared_ptr<Command> CommandPtr;
-typedef Entity* EntityPtr;
-
 typedef std::unordered_map<unsigned int, CommandPtr> KeyMap;
 
 // ========================================================================= //

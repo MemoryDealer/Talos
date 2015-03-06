@@ -27,6 +27,7 @@
 // ========================================================================= //
 
 // My own files.
+#include "Typedefs.hpp"
 #include "Core/HelperFunctions.hpp"
 #include "Core/Assert.hpp"
 #include "Log/Log.hpp"

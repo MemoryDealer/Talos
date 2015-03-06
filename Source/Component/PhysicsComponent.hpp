@@ -52,9 +52,9 @@ public:
     virtual void init(World&) override;
 
     // Initializes PhysX actor, adds to World's PxScene.
-    virtual void init(World&, 
-                      EntityPtr,
-                      const Type,
+    virtual void init(World& world, 
+                      const EntityID id,
+                      const Type type,
                       PxGeometry&,
                       const PxReal staticFriction = 0.5f, 
                       const PxReal dynamicFriction = 0.5f, 

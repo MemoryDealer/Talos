@@ -30,10 +30,6 @@
 #include "stdafx.hpp"
 
 // ========================================================================= //
-
-class World;
-
-// ========================================================================= //
 // Holds data & behavior(if necessary) for specific Entity needs.
 class Component
 {

@@ -30,11 +30,6 @@
 #include "Sky.hpp"
 
 // ========================================================================= //
-
-struct SkyPreset;
-class World;
-
-// ========================================================================= //
 // Renders high-detail sky with cloud layers, sun/moon, day & night cycles,
 // and weather such as thunderstorms and lighting.
 class SkyHighGraphics final : public Sky

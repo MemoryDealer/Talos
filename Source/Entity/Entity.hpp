@@ -31,9 +31,6 @@
 
 // ========================================================================= //
 
-class World;
-
-typedef unsigned int EntityID;
 typedef std::unordered_map<const std::type_info*, 
     ComponentPtr> ComponentHashTable;
 

@@ -29,10 +29,6 @@
 #include "Component/Component.hpp"
 
 // ========================================================================= //
-
-template<typename T> class Pool;
-
-// ========================================================================= //
 // Contains pools of Components, creates Component objects.
 class ComponentFactory final
 {

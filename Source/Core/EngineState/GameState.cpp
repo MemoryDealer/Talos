@@ -54,9 +54,8 @@ GameState::~GameState(void)
 
 void GameState::enter(void)
 {
-    m_world.init();
+    m_world.init(true);
     m_world.getInput()->setMode(Input::Mode::PLAYER);
-    m_world.initPhysics();
     //m_world.getPScene()->loadDebugDrawer();
 
     // Add systems.
@@ -79,7 +78,7 @@ void GameState::enter(void)
     modelC = m_world.attachComponent<ModelComponent>(plane);
     modelC->init(m_world, "Plane/Board", "Board");      
     physicsC = m_world.attachComponent<PhysicsComponent>(plane);
-    physicsC->init(m_world, plane, PhysicsComponent::Type::Static,
+    physicsC->init(m_world, plane->getID(), PhysicsComponent::Type::Static,
                    physx::PxBoxGeometry(75.f, 5.f, 75.f));
     physicsC->translate(0.f, -50.f, 0.f);
 
@@ -93,7 +92,7 @@ void GameState::enter(void)
     lightC->setColour(50.f, 0.f, 50.f);
     lightC->setRange(175.f);
     physicsC = m_world.attachComponent<PhysicsComponent>(ball);
-    physicsC->init(m_world, ball, PhysicsComponent::Type::Dynamic,
+    physicsC->init(m_world, ball->getID(), PhysicsComponent::Type::Dynamic,
                    PxSphereGeometry(5.5f),
                    0.2f, 0.2f, 0.1f);
     physicsC->getDynamicActor()->addForce(PxVec3(500.f, 0.f, 0.f));

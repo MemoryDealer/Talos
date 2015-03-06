@@ -370,6 +370,11 @@
     So to manually create a new Entity without using World::setupEntities(), one could add the components like normal, then call Entity::setupComponents() directly, and World::addEntityToSystem().
 * Added Talos.hpp/cpp which defines MS_PER_UPDATE (16.0 for now) and the version major and minor values for engine.
 
+== 3/6/16 ==
+* Changed PhysicsComponent to store the EntityID in the PhysX actor's user data rather than the EntityPtr itself.
+* Added a hash table into World that stores EntityIDs and EntityPtrs, so looking up an Entity by its ID is O(1). A little extra overhead but worth it for raycasting PhysX actors.
+* Added Typedefs.hpp to Source directory, which forward declares most classes and several typedefs. Anything that must be forward declared in a header file more than once should go here.
+
 == TODO ==
 * GameState for networked games. Add jumping & sprinting.
 * Changed PhysicsComponent to store EntityID instead of EntityPtr?

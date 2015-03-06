@@ -32,13 +32,6 @@
 #include "World/World.hpp"
 
 // ========================================================================= //
-
-class EngineState;
-class UI;
-
-typedef std::shared_ptr<EngineState> EngineStatePtr;
-
-// ========================================================================= //
 // Abstract class which controls a single state to be run by the engine. Only 
 // one state can be active at a time.
 class EngineState
