@@ -115,6 +115,14 @@ void GameState::enter(void)
 
     // Create sky.
     m_world.getEnvironment()->loadSky();
+
+    // Network game setup.
+    if (m_world.getNetwork()->getMode() == Network::Mode::Server){
+        uint32_t numPlayers = m_world.getNetwork()->getNumPlayers();
+        for (uint32_t i = 0; i < numPlayers; ++i){
+            this->addNetworkPlayer();
+        }
+    }
     
 
     if (!m_world.setupEntities()){
@@ -233,6 +241,19 @@ void GameState::handleUIEvents(void)
         
         }
     }*/
+}
+
+// ========================================================================= //
+
+void GameState::addNetworkPlayer(void)
+{
+    EntityPtr e = m_world.createEntity();
+
+    m_world.attachComponent<ActorComponent>(e);
+    m_world.attachComponent<ModelComponent>(e)->init(
+        m_world, "Cylinder.mesh");
+
+    m_world.getNetwork()->addPlayerEntity(e);
 }
 
 // ========================================================================= //

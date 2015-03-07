@@ -34,16 +34,15 @@
 
 ActorComponent::ActorComponent(void) :
 SceneComponent(),
-m_camera(nullptr),
-m_cameraNode(nullptr),
+m_rootNode(nullptr),
 m_yawNode(nullptr),
 m_pitchNode(nullptr),
 m_rollNode(nullptr),
 m_speed(0.5f),
-m_cc(CC::KINEMATIC),
+m_cc(CC::Kinematic),
 m_dcc(nullptr),
 m_kcc(nullptr),
-m_mode(Mode::PLAYER),
+m_mode(Mode::Player),
 m_movingForward(false),
 m_movingBack(false),
 m_movingLeft(false),
@@ -65,11 +64,11 @@ void ActorComponent::init(World& world)
 {
     SceneComponent::init(world);
 
-    // Acquire the camera node from the parent class.
-    m_cameraNode = this->getSceneNode();
+    // Acquire the camera node from the parent SceneComponent class.
+    m_rootNode = this->getSceneNode();
 
     // Create yaw node as the camera's top node.
-    m_yawNode = m_cameraNode->createChildSceneNode();
+    m_yawNode = m_rootNode->createChildSceneNode();
 
     // Create pitch node as the camera's middle node.
     m_pitchNode = m_yawNode->createChildSceneNode();
@@ -83,7 +82,7 @@ void ActorComponent::init(World& world)
     m_rollNode->setOrientation(Ogre::Quaternion::IDENTITY);
 
     // Create PhysX character controller.
-    if (m_cc == CC::KINEMATIC){
+    if (m_cc == CC::Kinematic){
         m_kcc = new KCC();
         m_kcc->init(world);
     }
@@ -96,10 +95,10 @@ void ActorComponent::init(World& world)
 void ActorComponent::destroy(World& world)
 {
     // Destroy character controller.
-    if (m_cc == CC::KINEMATIC){
+    if (m_cc == CC::Kinematic){
         delete m_kcc;
     }
-    else if (m_cc == CC::DYNAMIC){
+    else if (m_cc == CC::Dynamic){
         delete m_dcc;
     }
 
@@ -131,14 +130,17 @@ void ActorComponent::update(World&)
     translate = m_yawNode->getOrientation() *
         m_pitchNode->getOrientation() *
         translate;
+
     // Calculate the forwards vector and use it to keep the player moving at
     // the same velocity despite the pitch of the camera.
-    Ogre::Vector3 forwards = m_camera->getDerivedUp();
-    forwards.crossProduct(m_camera->getDerivedRight());
-    forwards.normalise();
+    Ogre::Vector3 right, up, forwards;
+    m_rollNode->_getDerivedOrientation().ToAxes(right, up, forwards);
+    up.crossProduct(right);
+    up.normalise();
+
     // Modify original movement vector.
-    translate.x /= forwards.y;
-    translate.z /= forwards.y;
+    translate.x /= up.y;
+    translate.z /= up.y;
 
     // Prevent faster movement when moving diagonally.
     translate.normalise();
@@ -147,17 +149,17 @@ void ActorComponent::update(World&)
     default:
         break;
 
-    case Mode::SPECTATOR:
-        m_cameraNode->translate(translate, Ogre::SceneNode::TS_LOCAL);
+    case Mode::Spectator:
+        m_rootNode->translate(translate, Ogre::SceneNode::TS_LOCAL);
         break;
 
-    case Mode::PLAYER:
+    case Mode::Player:
         {
-            if (m_cc == CC::KINEMATIC){
+            if (m_cc == CC::Kinematic){
                 PxExtendedVec3 pos = m_kcc->update(translate.x,
                                                    translate.y,
                                                    translate.z);
-                m_cameraNode->setPosition(Ogre::Real(pos.x),
+                m_rootNode->setPosition(Ogre::Real(pos.x),
                                           Ogre::Real(pos.y),
                                           Ogre::Real(pos.z));
             }
@@ -182,7 +184,6 @@ void ActorComponent::onComponentAttached(ComponentPtr component)
     if (typeid(*component) == typeid(CameraComponent)){
         CameraComponentPtr cameraC = static_cast<CameraComponentPtr>(component);
         m_rollNode->attachObject(cameraC->getCamera());
-        m_camera = cameraC->getCamera();
     }
 }
 
@@ -236,12 +237,12 @@ void ActorComponent::setMode(const Mode mode)
     default:
         break;
 
-    case Mode::PLAYER:
+    case Mode::Player:
         // For debugging.
-        m_kcc->setPosition(m_cameraNode->getPosition());
+        m_kcc->setPosition(m_rootNode->getPosition());
         break;
 
-    case Mode::SPECTATOR:
+    case Mode::Spectator:
 
         break;
     }

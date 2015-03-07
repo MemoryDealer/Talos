@@ -111,6 +111,12 @@ public:
 
     virtual void endGame(void) { }
 
+    virtual const uint32_t getNumPlayers(void) const { 
+        return 0; 
+    }
+
+    virtual void addPlayerEntity(EntityPtr entity) { }
+
     // === //
 
     // Enqueues NetEvent.

@@ -191,7 +191,7 @@ void Client::update(void)
                 // Copy each string into local player list.
                 for (uint32_t i = 0; i < num; ++i){
                     RakNet::RakString username;
-                    int id;
+                    uint32_t id;
                     bs.Read(username);
                     bs.Read(id);
                     m_players[id] = username.C_String();

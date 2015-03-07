@@ -30,7 +30,7 @@
 
 // ========================================================================= //
 // A null object for Network.
-class NullNetwork : public Network
+class NullNetwork final : public Network
 {
 public:
     explicit NullNetwork(void) { }

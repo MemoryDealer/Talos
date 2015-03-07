@@ -30,6 +30,7 @@
 
 // ========================================================================= //
 
+// Hashing function for RakNet's GUID, used for Server hash table of clients.
 namespace std{
     template<> 
     struct hash<RakNet::RakNetGUID>
@@ -87,6 +88,13 @@ public:
     // Broadcasts end game message to all clients. Broadcasts player list.
     virtual void endGame(void) override;
 
+    // Returns number of connected clients.
+    virtual const uint32_t getNumPlayers(void) const override;
+
+    // Find next player with null EntityPtr and assigns it to the passed in
+    // pointer.
+    virtual void addPlayerEntity(EntityPtr entity) override;
+
     // Getters:
 
     // === //
@@ -94,8 +102,8 @@ public:
     struct Player{
         RakNet::RakString username;
         RakNet::SystemAddress systemAddress;
-        int id;
-        Entity* entity;
+        uint32_t id;
+        EntityPtr entity;
     };
 
     typedef std::unordered_map<RakNet::RakNetGUID,

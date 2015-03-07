@@ -27,7 +27,6 @@
 // ========================================================================= //
 
 #include "EngineState.hpp"
-#include "System/PhysicsSystem.hpp"
 
 // ========================================================================= //
 // Gameplay, processes player-world interaction, multiplayer, etc.
@@ -57,7 +56,10 @@ public:
     void handleNetEvents(void);
 
     // Processes UI events.
-    void handleUIEvents(void);    
+    void handleUIEvents(void);
+
+    // Creates new Entity for player and adds it to the Network object.
+    void addNetworkPlayer(void);
 };
 
 // ========================================================================= //

@@ -161,7 +161,7 @@ void World::resume(void)
 
     m_environment->resume();
 
-    // Detach Network pointer if network services are disabled.
+    // Assign Network pointer to NullNetwork if network services are disabled.
     if (m_network){
         if (!m_network->initialized()){
             m_network = SNullNetwork;
@@ -173,7 +173,6 @@ void World::resume(void)
 
 void World::update(void)
 {
-    // Network.
     m_network->update();
 
     m_systemManager->update();

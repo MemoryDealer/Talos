@@ -57,15 +57,15 @@ public:
     virtual void onComponentAttached(ComponentPtr) override;
 
     // Modes the actor can be in.
-    enum Mode{
-        SPECTATOR = 0,
-        PLAYER
+    enum class Mode{
+        Spectator = 0,
+        Player
     };
 
     // Two types of character controllers.
-    enum CC{
-        KINEMATIC = 0,
-        DYNAMIC
+    enum class CC{
+        Kinematic = 0,
+        Dynamic
     };
 
     // Changes the actor's orientation based on relative x/y looking.
@@ -76,8 +76,6 @@ public:
     const Ogre::Vector3& getPosition(void) const;
 
     const Ogre::Quaternion& getOrientation(void) const;
-
-    Ogre::Camera* getCamera(void) const;
 
     const bool isMovingForward(void) const;
 
@@ -106,8 +104,7 @@ public:
 
 private:
     // Ogre3D.
-    Ogre::Camera* m_camera;
-    Ogre::SceneNode* m_cameraNode;
+    Ogre::SceneNode* m_rootNode;
     Ogre::SceneNode* m_yawNode;
     Ogre::SceneNode* m_pitchNode;
     Ogre::SceneNode* m_rollNode;
@@ -132,15 +129,11 @@ private:
 // Getters:
 
 inline const Ogre::Vector3& ActorComponent::getPosition(void) const{
-    return m_cameraNode->getPosition();
+    return m_rootNode->getPosition();
 }
 
 inline const Ogre::Quaternion& ActorComponent::getOrientation(void) const{
     return m_yawNode->getOrientation() * m_pitchNode->getOrientation();
-}
-
-inline Ogre::Camera* ActorComponent::getCamera(void) const{
-    return m_camera;
 }
 
 inline const bool ActorComponent::isMovingForward(void) const{

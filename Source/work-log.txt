@@ -378,6 +378,8 @@
 * Added NullNetwork, which is a null object of the abstract Network class. There is a static instance in World.cpp which is assigned to World::m_network when neither the client nor server are
     active. This removes the need for null guarding in engine states.
 * Added basic game starting and ending for multiplayer.
+* Removed Ogre::Camera pointer from ActorComponent. Now the translation vector per frame is modified to maintain the same velocity regardless of pitch using the roll nodes derived orientation.
+* Added Network::getNumPlayers() and Network::addPlayerEntity(). In GameState::enter(), an entity is created for each player and added to the server.
 
 == TODO ==
 * GameState for networked games. Add jumping & sprinting.

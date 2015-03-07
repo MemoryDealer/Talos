@@ -297,7 +297,27 @@ void Server::endGame(void)
     this->broadcast(bs, IMMEDIATE_PRIORITY, RELIABLE);
 
     // Broadcast a player list.
-    //this->sendPlayerList(RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+    this->sendPlayerList(RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+}
+
+// ========================================================================= //
+
+const uint32_t Server::getNumPlayers(void) const
+{
+    return m_players.size();
+}
+
+// ========================================================================= //
+
+void Server::addPlayerEntity(EntityPtr entity)
+{
+    for (auto& i : m_players){
+        if (!i.second->entity){
+            i.second->entity = entity;
+        }
+
+        // @TODO: send player spawn information
+    }
 }
 
 // ========================================================================= //
