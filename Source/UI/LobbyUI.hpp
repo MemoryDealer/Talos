@@ -51,6 +51,7 @@ public:
     // Event handlers:
 
     bool root_SendPressed(const CEGUI::EventArgs& e);
+    bool root_StartPressed(const CEGUI::EventArgs& e);
 
     enum Layer{
         Root = 0,
@@ -60,7 +61,8 @@ public:
 
     enum Event{
         Exit = 1,
-        Chat
+        Chat,
+        Start
     };
 };
 

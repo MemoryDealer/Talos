@@ -121,6 +121,7 @@
     <ClInclude Include="Source\Network\NetData.hpp" />
     <ClInclude Include="Source\Network\NetMessage.hpp" />
     <ClInclude Include="Source\Network\Network.hpp" />
+    <ClInclude Include="Source\Network\NullNetwork.hpp" />
     <ClInclude Include="Source\Network\Server\Server.hpp" />
     <ClInclude Include="Source\Observer\Observer.hpp" />
     <ClInclude Include="Source\Observer\Subject.hpp" />

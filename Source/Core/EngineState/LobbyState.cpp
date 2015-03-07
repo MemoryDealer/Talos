@@ -87,7 +87,7 @@ void LobbyState::enter(void)
 
     m_world.getNetwork()->unlockEventQueue();
 
-    if (m_world.setupEntities() == false){
+    if (!m_world.setupEntities()){
         throw std::exception("LobbyState entities reported uninitialized");
     }
 }
@@ -115,6 +115,7 @@ void LobbyState::pause(void)
 
 void LobbyState::resume(void)
 {
+    m_world.getInput()->setMode(Input::Mode::UI);
     m_world.resume();
     m_ui->setVisible(true);
 }
@@ -143,13 +144,13 @@ void LobbyState::update(void)
                     }
 
                     // Send input commands to the player.
-                    m_world.getInput()->handle(e);
+                    m_world.handleInput(e);
                 }
                 break;
 
             case SDL_KEYUP:
                 {
-                    CommandPtr command = m_world.getInput()->handle(e);
+                    CommandPtr command = m_world.handleInput(e);
                 }
                 break;
 
@@ -160,12 +161,10 @@ void LobbyState::update(void)
         }
 
         m_world.update();
-        if (m_world.getNetwork() != nullptr){
-            if (m_world.getNetwork()->hasPendingEvent() == true){
-                this->handleNetEvents();
-            }
+        if (m_world.getNetwork()->hasPendingEvent()){
+            this->handleNetEvents();
         }
-        if (m_ui->update() == true){
+        if (m_ui->update()){
             this->handleUIEvents();
         }     
     }
@@ -211,6 +210,10 @@ void LobbyState::handleNetEvents(void)
                 m_ui->clearListbox("PlayerList");
             }
             break;
+
+        case NetMessage::StartGame:
+            m_subject.notify(EngineNotification::Push, EngineStateID::Game);
+            break;
         }
     }
 }
@@ -231,6 +234,13 @@ void LobbyState::handleUIEvents(void)
 
         case LobbyUI::Event::Chat:
             m_world.getNetwork()->chat(e.s1);
+            break;
+
+        case LobbyUI::Event::Start:
+            if (m_world.getNetwork()->getMode() == Network::Mode::Server){
+                m_world.getNetwork()->startGame();
+                m_subject.notify(EngineNotification::Push, EngineStateID::Game);
+            }
             break;
         }
     }

@@ -137,6 +137,14 @@ public:
 
     // === //
 
+    // Input:
+
+    // Handles input using internal Input object, returns CommandPtr that was
+    // generated.
+    CommandPtr handleInput(const SDL_Event& e);
+
+    // === //
+
     // Getters:
 
     // Returns pointer to Ogre::Root object.

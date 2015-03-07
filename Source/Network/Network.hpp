@@ -46,8 +46,9 @@ struct NetEvent{
 class Network
 {
 public:
-    enum Mode{
-        Server = 0,
+    enum class Mode{
+        Null = 0,
+        Server,
         Client
     };
 
@@ -57,52 +58,60 @@ public:
     // Empty destructor.
     virtual ~Network(void) = 0;
 
-    // Empty.
-    virtual void init(void);
+    // === //
 
-    // Empty.
-    virtual void init(const int port, const std::string& username);
+    // Interfaces:
 
-    // Empty.
-    virtual void destroy(void);
+    virtual void init(void) { }
 
-    // Empty.
-    virtual void update(void);
+    virtual void init(const int port, const std::string& username) { }
 
-    // Empty.
+    virtual void destroy(void) { }
+
+    virtual void update(void) { }
+
     virtual void connect(const std::string& addr,
                          const int port,
-                         const std::string& username);
+                         const std::string& username) { }
 
-    // Empty.
-    virtual void reconnect(void);
 
-    // Empty.
-    virtual void disconnect(void);
+    virtual void reconnect(void) { }
 
-    // Empty.
+    virtual void disconnect(void) { }
+
     virtual uint32_t send(const RakNet::BitStream& bs,
                           const PacketPriority priority,
-                          const PacketReliability reliability);
+                          const PacketReliability reliability) {
+        return 0;
+    }
 
-    // Empty.
     virtual uint32_t send(const RakNet::AddressOrGUID identifier,
                           const RakNet::BitStream& bs,
                           const PacketPriority priority,
-                          const PacketReliability reliability);
+                          const PacketReliability reliability) {
+        return 0;
+    }
 
-    // Empty.
     virtual uint32_t broadcast(const RakNet::BitStream& bs,
                                const PacketPriority priority,
                                const PacketReliability reliability,
                                const RakNet::SystemAddress& exclude =
-                               RakNet::UNASSIGNED_SYSTEM_ADDRESS);
+                               RakNet::UNASSIGNED_SYSTEM_ADDRESS) {
+        return 0;
+    }
 
-    // Empty.
-    virtual uint32_t chat(const std::string& msg);
+    virtual uint32_t chat(const std::string& msg) { 
+        return 0; 
+    }
 
-    // Empty.
-    virtual void sendPlayerList(const RakNet::AddressOrGUID& identifier);
+    virtual void sendPlayerList(const RakNet::AddressOrGUID& identifier,
+                                bool broadcast = false) { }
+
+    virtual void startGame(void) { }
+
+    virtual void endGame(void) { }
+
+    // === //
 
     // Enqueues NetEvent.
     void pushEvent(const NetEvent& e);

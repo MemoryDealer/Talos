@@ -170,7 +170,7 @@ const CommandPtr Input::handle(const SDL_Event& e)
 void Input::setMode(const Mode mode)
 {
     m_mode = mode;
-    if (m_mode == Mode::PLAYER){
+    if (m_mode == Mode::Player){
         SDL_SetRelativeMouseMode(SDL_TRUE);
         CEGUI::System::getSingleton().
             getDefaultGUIContext().getMouseCursor().hide();

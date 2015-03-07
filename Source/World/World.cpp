@@ -30,12 +30,18 @@
 #include "Entity/EntityPool.hpp"
 #include "Environment.hpp"
 #include "Factory/ComponentFactory.hpp"
+#include "Input/Input.hpp"
+#include "Network/NullNetwork.hpp"
 #include "Network/Client/Client.hpp"
 #include "Network/Server/Server.hpp"
 #include "Physics/PScene.hpp"
 #include "Pool/Pool.hpp"
 #include "System/SystemManager.hpp"
 #include "World.hpp"
+
+// ========================================================================= //
+
+static Network* SNullNetwork = new NullNetwork();
 
 // ========================================================================= //
 
@@ -94,7 +100,7 @@ void World::init(const bool usePhysics)
     m_environment.reset(new Environment(this, m_graphics));
     m_environment->init();
     
-    if (usePhysics == true){
+    if (usePhysics){
         this->initPhysics();
     }
 
@@ -115,6 +121,9 @@ void World::init(const bool usePhysics)
     else if (m_client->initialized()){
         m_network = m_client.get();
     }
+    else{
+        m_network = SNullNetwork;
+    }
 }
 
 // ========================================================================= //
@@ -126,6 +135,7 @@ void World::destroy(void)
     for (int i = 0; i < m_entityPool->m_poolSize; ++i){
         m_entityPool->m_pool[i].destroy(*this);
     }
+    m_entityIDMap.clear();
 
     if (m_usePhysics){
         m_PScene->destroy();
@@ -154,7 +164,7 @@ void World::resume(void)
     // Detach Network pointer if network services are disabled.
     if (m_network){
         if (!m_network->initialized()){
-            m_network = nullptr;
+            m_network = SNullNetwork;
         }
     }
 }
@@ -164,9 +174,7 @@ void World::resume(void)
 void World::update(void)
 {
     // Network.
-    if (m_network != nullptr){
-        m_network->update();
-    }
+    m_network->update();
 
     m_systemManager->update();
 
@@ -250,7 +258,7 @@ void World::initPhysics(void)
 
 void World::initServer(const int port, const std::string& username)
 {
-    Assert(m_network == nullptr, 
+    Assert(m_network->initialized() == false, 
            "Trying to init Server with Network already initialized");
 
     m_network = m_server.get();
@@ -262,14 +270,14 @@ void World::initServer(const int port, const std::string& username)
 void World::destroyServer(void)
 {
     m_network->destroy();
-    m_network = nullptr;
+    m_network = SNullNetwork;
 }
 
 // ========================================================================= //
 
 void World::initClient(void)
 {
-    Assert(m_network == nullptr,
+    Assert(m_network->initialized() == false,
            "Trying to init Client with Network already initialized");
 
     m_network = m_client.get();
@@ -281,7 +289,7 @@ void World::initClient(void)
 void World::destroyClient(void)
 {
     m_network->destroy();
-    m_network = nullptr;
+    m_network = SNullNetwork;
 }
 
 // ========================================================================= //
@@ -397,6 +405,15 @@ void World::addSystem(System* system)
 void World::addEntityToSystem(EntityPtr entity)
 {
     m_systemManager->addEntity(entity);
+}
+
+// ========================================================================= //
+
+CommandPtr World::handleInput(const SDL_Event& e)
+{
+    CommandPtr command = m_input->handle(e);
+    
+    return command;
 }
 
 // ========================================================================= //

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<GUILayout version="4" >
+    <Window type="AlfiskoSkin/FrameWindow" name="Lobby/root_FrameWindow" >
+        <Property name="Size" value="{{1, 0}, {1, 0}}" />
+        <Property name="Position" value="{{0, 0}, {0, 0}}" />        
+        <Property name="Alpha" value="0.65" />
+        <Property name="RollUpEnabled" value="false" />
+        <Property name="SizingEnabled" value="false" />
+        <Property name="TitlebarEnabled" value="false" />
+        <Property name="DragMovingEnabled" value="false" />
+        <Property name="CloseButtonEnabled" value="false" /> 
+        
+        <Window type="TaharezLook/Listbox" name="PlayerList" >
+            <Property name="Size" value="{{0.20, 0}, {0.55, 0}}" />
+            <Property name="Position" value="{{0.50, 0}, {0, 0}}" />
+            <Property name="Font" value="DejaVuSans-12" />
+        </Window>    
+
+        <Window type="AlfiskoSkin/MultiLineEditbox" name="Chat" >
+            <Property name="Size" value="{{0.30, 0}, {0.95, 0}}" />
+            <Property name="Position" value="{{0.70, 0}, {0, 0}}" />
+            <Property name="Font" value="DejaVuSans-12" />
+        </Window>              
+        
+        <Window type="AlfiskoSkin/Editbox" name="EditSend" >
+            <Property name="Size" value="{{0.90, 0}, {0.05, 0}}" />
+            <Property name="Position" value="{{0, 0}, {0.95, 0}}" />
+            <Property name="Font" value="DejaVuSans-12" />
+            <Property name="Text" value="" />
+        </Window>      
+        
+        <Window type="AlfiskoSkin/Button" name="ButtonSend" >
+            <Property name="Size" value="{{0.10, 0}, {0.05, 0}}" />
+            <Property name="Position" value="{{0.90, 0}, {0.95, 0}}" />
+            <Property name="Font" value="DejaVuSans-12" />
+            <Property name="Text" value="Send" />
+        </Window>     
+
+        <Window type="AlfiskoSkin/Button" name="ButtonStart" >
+            <Property name="Size" value="{{0.20, 0}, {0.10, 0}}" />
+            <Property name="Position" value="{{0, 0}, {0, 0}}" />
+            <Property name="Font" value="DejaVuSans-12" />
+            <Property name="Text" value="Start" />
+        </Window>   
+        
+    </Window>
+</GUILayout>

@@ -75,10 +75,17 @@ public:
                                    RakNet::UNASSIGNED_SYSTEM_ADDRESS) override;
 
     // Sends chat message to all registered clients.
-    virtual uint32_t chat(const std::string& msg) override;
+    virtual uint32_t chat(const std::string& msg) override;   
 
     // Sends a list of all connected client's usernames and server's username.
-    virtual void sendPlayerList(const RakNet::AddressOrGUID& identifier) override;
+    virtual void sendPlayerList(const RakNet::AddressOrGUID& identifier,
+                                bool broadcast = false) override;
+
+    // Broadcasts start game message to all clients.
+    virtual void startGame(void) override;
+
+    // Broadcasts end game message to all clients. Broadcasts player list.
+    virtual void endGame(void) override;
 
     // Getters:
 

@@ -374,6 +374,10 @@
 * Changed PhysicsComponent to store the EntityID in the PhysX actor's user data rather than the EntityPtr itself.
 * Added a hash table into World that stores EntityIDs and EntityPtrs, so looking up an Entity by its ID is O(1). A little extra overhead but worth it for raycasting PhysX actors.
 * Added Typedefs.hpp to Source directory, which forward declares most classes and several typedefs. Anything that must be forward declared in a header file more than once should go here.
+* Added World::handleInput() to reduce pointer chasing in engine states.
+* Added NullNetwork, which is a null object of the abstract Network class. There is a static instance in World.cpp which is assigned to World::m_network when neither the client nor server are
+    active. This removes the need for null guarding in engine states.
+* Added basic game starting and ending for multiplayer.
 
 == TODO ==
 * GameState for networked games. Add jumping & sprinting.

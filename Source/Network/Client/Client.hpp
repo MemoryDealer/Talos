@@ -71,7 +71,12 @@ public:
     // Sends chat message to server.
     virtual uint32_t chat(const std::string& msg) override;
 
-    typedef std::unordered_map<int, RakNet::RakString> PlayerList;
+    // Sends disconnect notification to server.
+    virtual void endGame(void) override;
+
+    // === //
+
+    typedef std::unordered_map<uint32_t, RakNet::RakString> PlayerList;
 
 private:
     // Sends registration info to server.
@@ -83,7 +88,7 @@ private:
     std::string m_serverIP;
     int m_port;
     bool m_connected;
-    int m_id;
+    uint32_t m_id;
 
     PlayerList m_players;
 };

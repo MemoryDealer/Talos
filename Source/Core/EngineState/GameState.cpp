@@ -55,7 +55,7 @@ GameState::~GameState(void)
 void GameState::enter(void)
 {
     m_world.init(true);
-    m_world.getInput()->setMode(Input::Mode::PLAYER);
+    m_world.getInput()->setMode(Input::Mode::Player);
     //m_world.getPScene()->loadDebugDrawer();
 
     // Add systems.
@@ -65,6 +65,8 @@ void GameState::enter(void)
     EntityPtr player = m_world.createEntity();
     m_world.attachComponent<ActorComponent>(player);
     m_world.attachComponent<CameraComponent>(player);
+    m_world.attachComponent<ModelComponent>(player)->init(
+        m_world, "Cylinder.mesh");
 
     m_world.setPlayer(player);
 
@@ -115,7 +117,7 @@ void GameState::enter(void)
     m_world.getEnvironment()->loadSky();
     
 
-    if (m_world.setupEntities() == false){
+    if (!m_world.setupEntities()){
         throw std::exception("MainMenu entities reported uninitialized");
     }
 }
@@ -161,22 +163,22 @@ void GameState::update(void)
                 {
                     // Temporary exit handling.
                     if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE){
+                        m_world.getNetwork()->endGame();
                         m_subject.notify(EngineNotification::Pop);
                         return;
                     }
 
                     // Send input commands to the player.
-                    CommandPtr command = m_world.getInput()->handle(e);
+                    CommandPtr command = m_world.handleInput(e);
                     if (command){
-                        command->execute(m_world.getPlayer());
-                        printf("Command: %d\t%d\n", sizeof(command), typeid(*command).hash_code());
+                        command->execute(m_world.getPlayer());                        
                     }
                 }
                 break;
 
             case SDL_KEYUP:
                 {
-                    CommandPtr command = m_world.getInput()->handle(e);
+                    CommandPtr command = m_world.handleInput(e);
                     if (command){
                         command->unexecute(m_world.getPlayer());
                     }
@@ -190,10 +192,8 @@ void GameState::update(void)
         }
 
         m_world.update();
-        if (m_world.getNetwork()){
-            if (m_world.getNetwork()->hasPendingEvent()){
-                this->handleNetEvents();
-            }
+        if (m_world.getNetwork()->hasPendingEvent()){
+            this->handleNetEvents();
         }
         /*if (m_ui->update() == true){
             this->handleUIEvents();
@@ -209,10 +209,15 @@ void GameState::handleNetEvents(void)
     for (; 
          e.type != NetMessage::Null;
          e = m_world.getNetwork()->getNextEvent()){
-        /*switch (e.type){
+        switch (e.type){
         default:
             break;
-        }*/
+
+        case NetMessage::EndGame:
+            
+            m_subject.notify(EngineNotification::Pop);
+            break;
+        }
     }
 }
 

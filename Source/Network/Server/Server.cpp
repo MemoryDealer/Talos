@@ -251,24 +251,53 @@ uint32_t Server::chat(const std::string& msg)
 
 // ========================================================================= //
 
-void Server::sendPlayerList(const RakNet::AddressOrGUID& identifier)
+void Server::sendPlayerList(const RakNet::AddressOrGUID& identifier,
+                            bool broadcast)
 {
-    RakNet::BitStream bsConfirm;
-    bsConfirm.Write(static_cast<RakNet::MessageID>(NetMessage::PlayerList));
+    RakNet::BitStream bs;
+    bs.Write(static_cast<RakNet::MessageID>(NetMessage::PlayerList));
     // Write number of players + server.
     uint32_t num = m_players.size() + 1;
-    bsConfirm.Write(num);
+    bs.Write(num);
     // Write server username.
-    bsConfirm.Write(this->getUsername().c_str());
-    bsConfirm.Write(static_cast<int>(0));
+    bs.Write(this->getUsername().c_str());
+    bs.Write(static_cast<int>(0));
     // Write all other player usernames.
     for (auto& i : m_players){
-        bsConfirm.Write(i.second->username.C_String());
-        bsConfirm.Write(i.second->id);
+        bs.Write(i.second->username.C_String());
+        bs.Write(i.second->id);
     }
 
     // Send with low priority since this has a potentially high overhead.
-    this->send(identifier, bsConfirm, LOW_PRIORITY, RELIABLE);
+    if (broadcast){
+        this->broadcast(bs, LOW_PRIORITY, RELIABLE);
+    }
+    else{
+        this->send(identifier, bs, LOW_PRIORITY, RELIABLE);
+    }
+}
+
+// ========================================================================= //
+
+void Server::startGame(void)
+{
+    RakNet::BitStream bs;
+    bs.Write(static_cast<RakNet::MessageID>(NetMessage::StartGame));
+
+    this->broadcast(bs, HIGH_PRIORITY, RELIABLE);
+}
+
+// ========================================================================= //
+
+void Server::endGame(void)
+{
+    RakNet::BitStream bs;
+    bs.Write(static_cast<RakNet::MessageID>(NetMessage::EndGame));
+
+    this->broadcast(bs, IMMEDIATE_PRIORITY, RELIABLE);
+
+    // Broadcast a player list.
+    //this->sendPlayerList(RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }
 
 // ========================================================================= //

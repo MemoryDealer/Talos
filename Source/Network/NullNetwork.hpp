@@ -15,32 +15,27 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: NetMessage.hpp
+// File: NullNetwork.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Enumerates custom network messages.
+// Defines NullNetwork class.
 // ========================================================================= //
 
-#ifndef __NETMESSAGE_HPP__
-#define __NETMESSAGE_HPP__
-
-// ========================================================================= //
-
-#include "stdafx.hpp"
+#ifndef __NULLNETWORK_HPP__
+#define __NULLNETWORK_HPP__
 
 // ========================================================================= //
 
-enum NetMessage{
-    Null = ID_USER_PACKET_ENUM + 1,
-    Register,
-    RegistrationSuccessful,
-    UsernameAlreadyInUse,
-    ClientDisconnect,
-    LostConnection,
-    Chat,
-    PlayerList,
-    StartGame,
-    EndGame
+#include "Network.hpp"
+
+// ========================================================================= //
+// A null object for Network.
+class NullNetwork : public Network
+{
+public:
+    explicit NullNetwork(void) { }
+
+    virtual ~NullNetwork(void) override { }
 };
 
 // ========================================================================= //

@@ -26,7 +26,7 @@
 // ========================================================================= //
 
 Network::Network(void) :
-m_mode(),
+m_mode(Network::Mode::Null),
 m_initialized(false),
 m_username(""),
 m_events(),
@@ -41,119 +41,6 @@ m_eventQueueLocked(false)
 Network::~Network(void)
 {
 
-}
-
-// ========================================================================= //
-
-void Network::init(void)
-{
-    Talos::Log::getSingleton().log(
-        "WARNING: Default Network::init() called");
-}
-
-// ========================================================================= //
-
-void Network::init(const int port, const std::string& username)
-{
-    Talos::Log::getSingleton().log(
-        "WARNING: Default Network::init(port, username) called");
-}
-
-// ========================================================================= //
-
-void Network::destroy(void)
-{
-    Talos::Log::getSingleton().log(
-        "WARNING: Default Network::destroy() called");
-}
-
-// ========================================================================= //
-
-void Network::update(void)
-{
-    Talos::Log::getSingleton().log(
-        "WARNING: Default Network::update() called");
-}
-
-// ========================================================================= //
-
-void Network::connect(const std::string& addr,
-                      const int port,
-                      const std::string& username)
-{
-    Talos::Log::getSingleton().log(
-        "WARNING: Default Network::connect() called");
-}
-
-// ========================================================================= //
-
-void Network::reconnect(void)
-{
-    Talos::Log::getSingleton().log(
-        "WARNING: Default Network::reconnect() called");
-}
-
-// ========================================================================= //
-
-void Network::disconnect(void)
-{
-    Talos::Log::getSingleton().log(
-        "WARNING: Default Network::disconnect() called");
-}
-
-// ========================================================================= //
-
-uint32_t Network::send(const RakNet::BitStream& bs,
-                       const PacketPriority priority,
-                       const PacketReliability reliability)
-{
-    Talos::Log::getSingleton().log(
-        "WARNING: Default Network::send() called");
-
-    return 0;
-}
-
-// ========================================================================= //
-
-uint32_t Network::send(const RakNet::AddressOrGUID identifier,
-                       const RakNet::BitStream& bs,
-                       const PacketPriority priority,
-                       const PacketReliability reliability)
-{
-    Talos::Log::getSingleton().log(
-        "WARNING: Default Network::send() (server) called");
-
-    return 0;
-}
-
-// ========================================================================= //
-
-uint32_t Network::broadcast(const RakNet::BitStream& bs,
-                            const PacketPriority priority,
-                            const PacketReliability reliability,
-                            const RakNet::SystemAddress& exclude)
-{
-    Talos::Log::getSingleton().log(
-        "WARNING: Default Network::broadcast() called");
-
-    return 0;
-}
-
-// ========================================================================= //
-
-uint32_t Network::chat(const std::string& msg)
-{
-    Talos::Log::getSingleton().log(
-        "WARNING: Default Network::chat() called");
-
-    return 0;
-}
-
-// ========================================================================= //
-
-void Network::sendPlayerList(const RakNet::AddressOrGUID& identifier)
-{
-    
 }
 
 // ========================================================================= //

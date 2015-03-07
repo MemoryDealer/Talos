@@ -620,6 +620,9 @@
     <ClInclude Include="Source\Typedefs.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Network\NullNetwork.hpp">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Source\work-log.txt">

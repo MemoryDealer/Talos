@@ -202,6 +202,14 @@ void Client::update(void)
                 }
             }
             break;
+
+        case NetMessage::StartGame:
+            this->pushEvent(NetEvent(NetMessage::StartGame));
+            break;
+
+        case NetMessage::EndGame:
+            this->pushEvent(NetEvent(NetMessage::EndGame));
+            break;
         }
     }
 }
@@ -284,6 +292,13 @@ uint32_t Client::chat(const std::string& msg)
     chat.Serialize(true, &bs);
 
     return this->send(bs, MEDIUM_PRIORITY, RELIABLE);
+}
+
+// ========================================================================= //
+
+void Client::endGame(void)
+{
+    
 }
 
 // ========================================================================= //

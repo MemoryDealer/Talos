@@ -48,10 +48,10 @@ public:
     // Processes SDL input events. Returns a StateEvent if needed.
     const CommandPtr handle(const SDL_Event&);
 
-    enum Mode{
-        PLAYER = 0,
+    enum class Mode{
+        Player = 0,
         UI,
-        LOCKED
+        Locked
     };
 
     // Getters:

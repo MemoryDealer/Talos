@@ -54,6 +54,9 @@ void LobbyUI::init(void)
     m_layers[Layer::Root]->getChild("ButtonSend")->subscribeEvent(
         CEGUI::PushButton::EventClicked,
         CEGUI::Event::Subscriber(&LobbyUI::root_SendPressed, this));
+    m_layers[Layer::Root]->getChild("ButtonStart")->subscribeEvent(
+        CEGUI::PushButton::EventClicked,
+        CEGUI::Event::Subscriber(&LobbyUI::root_StartPressed, this));
 
     // Add each layer to root window.
     for (int i = 0; i < Layer::NumLayers; ++i){
@@ -112,6 +115,14 @@ bool LobbyUI::root_SendPressed(const CEGUI::EventArgs& args)
     e.s1 = str.c_str();
     this->pushEvent(e);
 
+    return true;
+}
+
+// ========================================================================= //
+
+bool LobbyUI::root_StartPressed(const CEGUI::EventArgs& e)
+{
+    this->pushEvent(UIEvent(Event::Start));
     return true;
 }
 

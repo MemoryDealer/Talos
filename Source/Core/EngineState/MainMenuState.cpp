@@ -83,7 +83,7 @@ void MainMenuState::enter(void)
     m_ui.reset(new MainMenuUI());
     m_ui->init();
 
-    if (m_world.setupEntities() == false){
+    if (!m_world.setupEntities()){
         throw std::exception("MainMenu entities reported uninitialized");
     }
 }
@@ -137,13 +137,13 @@ void MainMenuState::update(void)
                     }
 
                     // Send input commands to the player.
-                    m_world.getInput()->handle(e);
+                    m_world.handleInput(e);
                 }
                 break;
 
             case SDL_KEYUP:
                 {
-                    CommandPtr command = m_world.getInput()->handle(e);
+                    CommandPtr command = m_world.handleInput(e);
                 }
                 break;
 
@@ -154,14 +154,12 @@ void MainMenuState::update(void)
         }
 
         m_world.update();
-        if (m_world.getNetwork() != nullptr){
-            if (m_world.getNetwork()->hasPendingEvent() == true){
-                this->handleNetEvents();
-            }
+        if (m_world.getNetwork()->hasPendingEvent()){
+            this->handleNetEvents();
         }
-        if (m_ui->update() == true){
+        if (m_ui->update()){
             this->handleUIEvents();
-        } 
+        }
     }
 }
 
@@ -215,12 +213,15 @@ void MainMenuState::handleUIEvents(void)
             break;
 
         case MainMenuUI::Event::JoinGame:
-            if (m_world.getNetwork() == nullptr){
+            // Allocate client if it has not been allocated already.
+            if (m_world.getNetwork()->getMode() == Network::Mode::Null){
                 m_world.initClient();
             }
-            else if (m_world.getNetwork()->initialized() == false){
+            // Initialize client if it's still not intialized.
+            else if (!m_world.getNetwork()->initialized()){
                 m_world.getNetwork()->init();
             }
+            // Connect to server.
             m_world.getNetwork()->connect(e.s2, e.field.x, e.s1);
             break;
         }
