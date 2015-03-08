@@ -381,9 +381,11 @@
 * Removed Ogre::Camera pointer from ActorComponent. Now the translation vector per frame is modified to maintain the same velocity regardless of pitch using the roll nodes derived orientation.
 * Added Network::getNumPlayers() and Network::addPlayerEntity(). In GameState::enter(), an entity is created for each player and added to the server.
 
+== 3/7/16 ==
+* 
+
 == TODO ==
 * GameState for networked games. Add jumping & sprinting.
-* Changed PhysicsComponent to store EntityID instead of EntityPtr?
 * Hydrax/SkyX need to be shared between states--make them world dependencies perhaps and add code to check if they are already initialized.
 * When client reconnects, a third client that was still connected can send a chat and the reconnected client will display the chat from their own username.
 * Popup error box when trying to connect while previous connection is being closed.

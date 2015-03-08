@@ -22,6 +22,7 @@
 // ========================================================================= //
 
 #include "Client.hpp"
+#include "Command/Actor/MoveForward.hpp"
 #include "Config/Config.hpp"
 #include "Network/NetData.hpp"
 
@@ -292,6 +293,24 @@ uint32_t Client::chat(const std::string& msg)
     chat.Serialize(true, &bs);
 
     return this->send(bs, MEDIUM_PRIORITY, RELIABLE);
+}
+
+// ========================================================================= //
+
+uint32_t Client::sendCommand(CommandPtr command)
+{
+    RakNet::BitStream bs;
+    //NetData::ClientCommand cc;
+    bs.Write(static_cast<RakNet::MessageID>(NetMessage::ClientCommand));
+    /*cc.command = command.get();
+    cc.Serialize(true, &bs);*/
+    Command* mc = new MoveForwardCommand();
+    printf("Sending command type: %d\n", &typeid(*command));
+    const std::type_info* t = &typeid(*command);
+    bs.Write(t);
+    //bs.Write(command);
+
+    return this->send(bs, HIGH_PRIORITY, RELIABLE_ORDERED);
 }
 
 // ========================================================================= //

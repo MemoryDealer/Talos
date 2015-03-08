@@ -35,7 +35,7 @@ struct NetEvent{
     explicit NetEvent(void) : type(NetMessage::Null) { }
     explicit NetEvent(const NetMessage msg) : type(msg) { }
 
-    int type;
+    uint32_t type;
 
     std::string s1, s2, s3;
 };
@@ -110,6 +110,10 @@ public:
     virtual void startGame(void) { }
 
     virtual void endGame(void) { }
+
+    virtual uint32_t sendCommand(CommandPtr command) { 
+        return 0; 
+    }
 
     virtual const uint32_t getNumPlayers(void) const { 
         return 0; 

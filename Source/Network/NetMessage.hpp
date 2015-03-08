@@ -39,6 +39,7 @@ enum NetMessage{
     LostConnection,
     Chat,
     PlayerList,
+    ClientCommand,
     StartGame,
     EndGame
 };

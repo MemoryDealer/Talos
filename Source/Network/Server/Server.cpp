@@ -21,7 +21,10 @@
 // Implements Server class.
 // ========================================================================= //
 
+#include "Command/Command.hpp"
+#include "Command/Actor/MoveForward.hpp"
 #include "Config/Config.hpp"
+#include "Entity/Entity.hpp"
 #include "Network/NetData.hpp"
 #include "Server.hpp"
 
@@ -165,9 +168,7 @@ void Server::update(void)
                 m_players.erase(m_packet->guid);
 
                 // Update player list for each client.
-                for (auto& i : m_players){
-                    this->sendPlayerList(i.second->systemAddress);
-                }
+                this->sendPlayerList(RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
             }
             break;
 
@@ -197,6 +198,37 @@ void Server::update(void)
                                 MEDIUM_PRIORITY, 
                                 RELIABLE, 
                                 m_packet->systemAddress);
+            }
+            break;
+
+        case NetMessage::ClientCommand:
+            {
+                RakNet::BitStream bs(m_packet->data, m_packet->length, false);
+                bs.IgnoreBytes(sizeof(RakNet::MessageID));
+                /*NetData::ClientCommand cc;
+                cc.Serialize(false, &bs);*/
+                size_t type;
+                static const size_t moveForwardHash = typeid(MoveForwardCommand).hash_code();
+                CommandPtr command = nullptr;
+                //bs.Read(command);
+                /*switch (type){
+                default:
+                    break;
+
+                case moveForwardHash:
+                    command.reset(new MoveForwardCommand());
+                    break;
+                }*/
+                //bs.Read(command);
+                std::type_info* t;
+                bs.Read(t);
+                printf("Received type: %d\n", t);
+
+                /*NetEvent e(NetMessage::Command);
+                e.command = command;
+                this->pushEvent(e);*/
+                EntityPtr entity = m_players[m_packet->guid]->entity;
+                //command->execute(entity);
             }
             break;
         }

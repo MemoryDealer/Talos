@@ -71,6 +71,8 @@ public:
     // Sends chat message to server.
     virtual uint32_t chat(const std::string& msg) override;
 
+    virtual uint32_t sendCommand(CommandPtr command) override;
+
     // Sends disconnect notification to server.
     virtual void endGame(void) override;
 
