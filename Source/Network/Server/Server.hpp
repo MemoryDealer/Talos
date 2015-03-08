@@ -122,6 +122,9 @@ private:
 
     // Hash table of connected players.
     PlayerList m_players;
+
+    // Command repo for processing client inputs.
+    std::shared_ptr<CommandRepository> m_commandRepo;
 };
 
 // ========================================================================= //

@@ -33,6 +33,9 @@
 class NullCommand : public Command
 {
 public:
+    explicit NullCommand(void){
+        this->setType(CommandType::Null);
+    }
 
     virtual void execute(EntityPtr entity) override{
         return;

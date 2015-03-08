@@ -22,6 +22,13 @@
 // ========================================================================= //
 
 #include "Command/CommandRepository.hpp"
+#include "Command/NullCommand.hpp"
+#include "Command/Actor/Look.hpp"
+#include "Command/Actor/MoveBackward.hpp"
+#include "Command/Actor/MoveForward.hpp"
+#include "Command/Actor/MoveLeft.hpp"
+#include "Command/Actor/MoveRight.hpp"
+#include "Command/Actor/Debug/Spectator.hpp"
 #include "Component/ComponentMessage.hpp"
 #include "Entity/Entity.hpp"
 #include "Input.hpp"
@@ -38,15 +45,15 @@ m_mode(Mode::UI)
     // (add mapKey() function which is a switch-case on the command).
     for (unsigned int i = 0; i < SDLK_z; ++i){
         //m_keymap.insert(KM_VT(i, m_commandRepo->NullCommand));
-        m_keymap[i] = m_commandRepo->NullCommand;
+        m_keymap[i] = m_commandRepo->getCommand(CommandType::Null);
     }
-    m_keymap[SDLK_LALT] = m_commandRepo->NullCommand;
+    m_keymap[SDLK_LALT] = m_commandRepo->getCommand(CommandType::Null);
 
-    m_keymap[SDLK_w] = m_commandRepo->MoveForwardCommand;
-    m_keymap[SDLK_s] = m_commandRepo->MoveBackwardCommand;
-    m_keymap[SDLK_a] = m_commandRepo->MoveLeftCommand;
-    m_keymap[SDLK_d] = m_commandRepo->MoveRightCommand;
-    m_keymap[SDLK_SPACE] = m_commandRepo->SpectatorCommand;
+    m_keymap[SDLK_w] = m_commandRepo->getCommand(CommandType::MoveForward);
+    m_keymap[SDLK_s] = m_commandRepo->getCommand(CommandType::MoveBackward);
+    m_keymap[SDLK_a] = m_commandRepo->getCommand(CommandType::MoveLeft);
+    m_keymap[SDLK_d] = m_commandRepo->getCommand(CommandType::MoveRight);
+    m_keymap[SDLK_SPACE] = m_commandRepo->getCommand(CommandType::Spectator);
 }
 
 // ========================================================================= //
@@ -73,7 +80,7 @@ const CommandPtr Input::handle(const SDL_Event& e)
             CEGUI::MouseButton button;
             switch (e.button.button){
             default:
-                return m_commandRepo->NullCommand;
+                return m_commandRepo->getCommand(CommandType::Null);
 
             case SDL_BUTTON_LEFT:
                 button = CEGUI::MouseButton::LeftButton;
@@ -111,7 +118,8 @@ const CommandPtr Input::handle(const SDL_Event& e)
         }
         else{
             // Return modified MouseMoveCommand.
-            LookCommandPtr lc = m_commandRepo->LookCommand;
+            LookCommand* lc = static_cast<LookCommand*>(
+                m_commandRepo->getCommand(CommandType::Look));
             lc->setXY(e.motion.xrel, e.motion.yrel);
             return lc;
         }

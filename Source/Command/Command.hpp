@@ -26,6 +26,7 @@
 
 // ========================================================================= //
 
+#include "CommandTypes.hpp"
 #include "Entity/Entity.hpp"
 
 // ========================================================================= //
@@ -33,12 +34,22 @@
 class Command
 {
 public:
-    explicit Command(void) { }
+    explicit Command() { }
     virtual ~Command(void) { }
 
     virtual void execute(EntityPtr) = 0;
     virtual void unexecute(EntityPtr) { }
+
+    void setType(const CommandType _type);
+
+    CommandType type;
 };
+
+// ========================================================================= //
+
+inline void Command::setType(const CommandType _type){
+    type = _type;
+}
 
 // ========================================================================= //
 

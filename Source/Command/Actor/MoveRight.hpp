@@ -34,6 +34,9 @@
 class MoveRightCommand : public Command
 {
 public:
+    explicit MoveRightCommand(void){ 
+        this->setType(CommandType::MoveRight); 
+    }
 
     virtual void execute(EntityPtr entity) override{
         ActorComponentPtr actor = entity->getComponent<ActorComponent>();

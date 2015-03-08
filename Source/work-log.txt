@@ -382,9 +382,14 @@
 * Added Network::getNumPlayers() and Network::addPlayerEntity(). In GameState::enter(), an entity is created for each player and added to the server.
 
 == 3/7/16 ==
-* 
+* Changed CommandRepository to use a hash table for storing CommandPtr objects.
+* Added CommandType.hpp which enumerates the strongly typed CommandType. Now Command has a member CommandType, for use as a key in CommandRepository's hash table.
+    Note this is only for networking code--to identify which type of command the client sent without needing serialization. Serialization of the entire Command objects seems like a waste of
+    bandwidth, but if I have extra time I will see if it can be implemented. Or perhaps the RakNet RPC4 plugin would be useful for this.
+* Got basic client movement working with server. 
 
 == TODO ==
+* Just add commands for pressed and released--it will make it easier for sending to the server and keeping lists of unprocessed commands.
 * GameState for networked games. Add jumping & sprinting.
 * Hydrax/SkyX need to be shared between states--make them world dependencies perhaps and add code to check if they are already initialized.
 * When client reconnects, a third client that was still connected can send a chat and the reconnected client will display the chat from their own username.

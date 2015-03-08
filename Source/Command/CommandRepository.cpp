@@ -22,26 +22,70 @@
 // ========================================================================= //
 
 #include "CommandRepository.hpp"
+#include "Command/NullCommand.hpp"
+#include "Command/Actor/Look.hpp"
+#include "Command/Actor/MoveBackward.hpp"
+#include "Command/Actor/MoveForward.hpp"
+#include "Command/Actor/MoveLeft.hpp"
+#include "Command/Actor/MoveRight.hpp"
+#include "Command/Actor/Debug/Spectator.hpp"
 
 // ========================================================================= //
 
 CommandRepository::CommandRepository(void) :
-NullCommand(new ::NullCommand()),
-LookCommand(new ::LookCommand()),
-MoveBackwardCommand(new ::MoveBackwardCommand()),
-MoveForwardCommand(new ::MoveForwardCommand()),
-MoveLeftCommand(new ::MoveLeftCommand()),
-MoveRightCommand(new ::MoveRightCommand()),
-SpectatorCommand(new ::SpectatorCommand())
+m_commands()
 {
+    CommandPtr command = nullptr;
 
+    command = new NullCommand();
+    this->addCommand(command);
+
+    command = new LookCommand();
+    this->addCommand(command);
+
+    command = new MoveBackwardCommand();
+    this->addCommand(command);
+
+    command = new MoveForwardCommand();
+    this->addCommand(command);
+
+    command = new MoveLeftCommand();
+    this->addCommand(command);
+
+    command = new MoveRightCommand();
+    this->addCommand(command);
+
+    command = new SpectatorCommand();
+    this->addCommand(command);
 }
 
 // ========================================================================= //
 
 CommandRepository::~CommandRepository(void)
 {
+    for (auto& i : m_commands){
+        delete i.second;
+    }
 
+    m_commands.clear();
+}
+
+// ========================================================================= //
+
+void CommandRepository::addCommand(CommandPtr command)
+{
+    m_commands[command->type] = command;
+}
+
+// ========================================================================= //
+
+CommandPtr CommandRepository::getCommand(const CommandType type)
+{
+    if (m_commands.count(type) != 0){
+        return m_commands[type];
+    }
+
+    return m_commands[CommandType::Null];
 }
 
 // ========================================================================= //

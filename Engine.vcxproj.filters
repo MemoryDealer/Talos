@@ -623,6 +623,9 @@
     <ClInclude Include="Source\Network\NullNetwork.hpp">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Command\CommandTypes.hpp">
+      <Filter>Header Files\Command</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Source\work-log.txt">

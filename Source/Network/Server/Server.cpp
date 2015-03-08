@@ -22,7 +22,8 @@
 // ========================================================================= //
 
 #include "Command/Command.hpp"
-#include "Command/Actor/MoveForward.hpp"
+#include "Command/CommandRepository.hpp"
+#include "Command/Actor/Look.hpp"
 #include "Config/Config.hpp"
 #include "Entity/Entity.hpp"
 #include "Network/NetData.hpp"
@@ -35,7 +36,8 @@ m_peer(nullptr),
 m_packet(nullptr),
 m_tickRate(8),
 m_host(nullptr),
-m_players()
+m_players(),
+m_commandRepo(new CommandRepository())
 {
     this->setMode(Network::Mode::Server);
 }
@@ -201,34 +203,30 @@ void Server::update(void)
             }
             break;
 
-        case NetMessage::ClientCommand:
+        case NetMessage::ClientCommandPressed:
+        case NetMessage::ClientCommandReleased:
             {
                 RakNet::BitStream bs(m_packet->data, m_packet->length, false);
                 bs.IgnoreBytes(sizeof(RakNet::MessageID));
-                /*NetData::ClientCommand cc;
-                cc.Serialize(false, &bs);*/
-                size_t type;
-                static const size_t moveForwardHash = typeid(MoveForwardCommand).hash_code();
-                CommandPtr command = nullptr;
-                //bs.Read(command);
-                /*switch (type){
-                default:
-                    break;
+                CommandType type;
+                bs.Read(type);
+                CommandPtr command = m_commandRepo->getCommand(type);
+                if (type == CommandType::Look){
+                    command = static_cast<LookCommand*>(m_commandRepo->getCommand(type));
+                    int32_t relx, rely;
+                    bs.Read(relx);
+                    bs.Read(rely);
 
-                case moveForwardHash:
-                    command.reset(new MoveForwardCommand());
-                    break;
-                }*/
-                //bs.Read(command);
-                std::type_info* t;
-                bs.Read(t);
-                printf("Received type: %d\n", t);
+                    static_cast<LookCommand*>(command)->setXY(relx, rely);
+                }
 
-                /*NetEvent e(NetMessage::Command);
-                e.command = command;
-                this->pushEvent(e);*/
                 EntityPtr entity = m_players[m_packet->guid]->entity;
-                //command->execute(entity);
+                if (m_packet->data[0] == NetMessage::ClientCommandPressed){
+                    command->execute(entity);
+                }
+                else{
+                    command->unexecute(entity);
+                }
             }
             break;
         }
@@ -330,6 +328,11 @@ void Server::endGame(void)
 
     // Broadcast a player list.
     this->sendPlayerList(RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+
+    // Reset all player's entity's to nullptr, to prepare for next game.
+    for (auto& i : m_players){
+        i.second->entity = nullptr;
+    }
 }
 
 // ========================================================================= //

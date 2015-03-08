@@ -34,6 +34,9 @@
 class MoveBackwardCommand : public Command
 {
 public:
+    explicit MoveBackwardCommand(void){ 
+        this->setType(CommandType::MoveBackward); 
+    }
 
     virtual void execute(EntityPtr entity) override{
         ActorComponentPtr actor = entity->getComponent<ActorComponent>();

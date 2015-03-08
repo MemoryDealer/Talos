@@ -190,6 +190,7 @@ void GameState::update(void)
                     CommandPtr command = m_world.handleInput(e);
                     if (command){
                         command->unexecute(m_world.getPlayer());
+                        m_world.getNetwork()->sendCommand(command, true);
                     }
                 }
                 break;
@@ -220,10 +221,6 @@ void GameState::handleNetEvents(void)
          e = m_world.getNetwork()->getNextEvent()){
         switch (e.type){
         default:
-            break;
-
-        case NetMessage::ClientCommand:
-
             break;
 
         case NetMessage::EndGame:

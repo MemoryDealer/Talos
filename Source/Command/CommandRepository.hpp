@@ -26,36 +26,44 @@
 
 // ========================================================================= //
 
-#include "Command/NullCommand.hpp"
-#include "Command/Actor/Look.hpp"
-#include "Command/Actor/MoveBackward.hpp"
-#include "Command/Actor/MoveForward.hpp"
-#include "Command/Actor/MoveLeft.hpp"
-#include "Command/Actor/MoveRight.hpp"
-#include "Command/Actor/Debug/Spectator.hpp"
+#include "CommandTypes.hpp"
 #include "stdafx.hpp"
 
 // ========================================================================= //
+
+typedef std::unordered_map<CommandType, CommandPtr> CommandTable;
+
+// ========================================================================= //
 // A single location to statically store all Command instances needed by an 
-// actor. It's named a struct since all members are public.
+// actor. Each CommandPtr is stored in a hash table.
 // (note: this uses the Flyweight pattern)
-struct CommandRepository
+class CommandRepository
 {
 public:
-    // Allocates all Command smart pointers.
+    // Allocates all Command pointers, inserts them into table.
     explicit CommandRepository(void);
 
-    // Empty destructor (all smart pointers de-allocated).
+    // Deletes all Command pointers in table.
     ~CommandRepository(void);
 
-    // Smart pointers to possible Commands.
-    CommandPtr NullCommand;
-    LookCommandPtr LookCommand;
-    CommandPtr MoveBackwardCommand;
-    CommandPtr MoveForwardCommand;
-    CommandPtr MoveLeftCommand;
-    CommandPtr MoveRightCommand;
-    CommandPtr SpectatorCommand;
+    // Adds command into internal hash table.
+    void addCommand(CommandPtr command);
+
+    CommandPtr getCommand(const CommandType type);
+
+    // Returns pointer to Command of specified type, if in table.
+    /*template<typename T>
+    T* getCommand(void){
+        if (m_commands.count(&typeid(T)) != 0){
+            return static_cast<T*>(m_commands[&typeid(T)]);
+        }
+        else{
+            return nullptr;
+        }
+    }*/
+
+private:
+    CommandTable m_commands;
 };
 
 // ========================================================================= //

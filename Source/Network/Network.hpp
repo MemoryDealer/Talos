@@ -111,7 +111,7 @@ public:
 
     virtual void endGame(void) { }
 
-    virtual uint32_t sendCommand(CommandPtr command) { 
+    virtual uint32_t sendCommand(CommandPtr command, bool released = false) { 
         return 0; 
     }
 

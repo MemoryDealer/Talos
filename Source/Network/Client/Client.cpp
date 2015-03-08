@@ -22,7 +22,7 @@
 // ========================================================================= //
 
 #include "Client.hpp"
-#include "Command/Actor/MoveForward.hpp"
+#include "Command/Actor/Look.hpp"
 #include "Config/Config.hpp"
 #include "Network/NetData.hpp"
 
@@ -297,18 +297,18 @@ uint32_t Client::chat(const std::string& msg)
 
 // ========================================================================= //
 
-uint32_t Client::sendCommand(CommandPtr command)
+uint32_t Client::sendCommand(CommandPtr command, bool released)
 {
     RakNet::BitStream bs;
-    //NetData::ClientCommand cc;
-    bs.Write(static_cast<RakNet::MessageID>(NetMessage::ClientCommand));
-    /*cc.command = command.get();
-    cc.Serialize(true, &bs);*/
-    Command* mc = new MoveForwardCommand();
-    printf("Sending command type: %d\n", &typeid(*command));
-    const std::type_info* t = &typeid(*command);
-    bs.Write(t);
-    //bs.Write(command);
+    bs.Write(static_cast<RakNet::MessageID>(
+        (released == false) ? NetMessage::ClientCommandPressed : 
+        NetMessage::ClientCommandReleased));
+    bs.Write(command->type);
+    if (command->type == CommandType::Look){
+        LookCommand* lc = static_cast<LookCommand*>(command);
+        bs.Write(lc->m_relx);
+        bs.Write(lc->m_rely);
+    }
 
     return this->send(bs, HIGH_PRIORITY, RELIABLE_ORDERED);
 }

@@ -34,6 +34,9 @@
 class SpectatorCommand : public Command
 {
 public:
+    explicit SpectatorCommand(void){
+        this->setType(CommandType::Spectator);
+    }
     
     virtual void execute(EntityPtr entity) override{
         ActorComponentPtr actor = entity->getComponent<ActorComponent>();

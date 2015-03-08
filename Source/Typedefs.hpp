@@ -36,7 +36,7 @@
 class ActorComponent;
 class Client;
 class Command;
-struct CommandRepository;
+class CommandRepository;
 class ComponentFactory;
 class DCC;
 class DynamicLines;
@@ -61,7 +61,7 @@ class UI;
 class World;
 
 typedef ActorComponent* ActorComponentPtr;
-typedef std::shared_ptr<Command> CommandPtr;
+typedef Command* CommandPtr;
 typedef std::shared_ptr<EngineState> EngineStatePtr;
 typedef uint32_t EntityID;
 typedef Entity* EntityPtr;
