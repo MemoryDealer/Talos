@@ -76,7 +76,7 @@ void PhysicsComponent::init(World& world, EntityPtr entity)
             // Get the bounding box half extents.
             PxVec3 v(Physics::toPx(e->getBoundingBox().getHalfSize()));
             // Ensure not dimensions are zero.
-            const PxReal min = 0.1f;
+            const PxReal min = 0.001f;
             if (v.x == 0.f){
                 v.x = min;
             }

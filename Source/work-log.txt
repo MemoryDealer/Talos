@@ -391,18 +391,24 @@
 == 3/9/16 ==
 * Note that the error C2440: 'static_cast' : cannot convert from 'Component *' to 'xxxComponent *' when calling Entity::getComponent<T> is caused by not including the header associated with 
     that component.
+* Added CollisionComponent, which separates the extra clutter from PhysicsComponent for managing both static and dynamic PhysX actors. CollisionComponents are for static actors, while 
+    PhysicsComponents are for dynamic actors. 
+* PhysX objects are now added by getting the Ogre3D bounding box (for box shapes), so no needed to specify sizes manually anymore.
+* Added CollisionSystem to deal with CollisionComponent/SceneComponent pairs.
+* Added some basic static conversion functions to Physics class.
 
 == TODO ==
+* Implement gravity for KCC.
+* Use boost::variant for ComponentMessage--allow sending a message with Ogre::Vector3 to translate an entity.
+* Add ability to specify box half extents directly in collision objects for invisible walls and such.
+* Add PhysX mesh (cooking) collision volumes for models.
+* Move onComponentAttached() stuff to SystemManager, change m_initialized use or do away with it entirely.
 * Just add commands for pressed and released--it will make it easier for sending to the server and keeping lists of unprocessed commands.
 * GameState for networked games. Add jumping & sprinting.
-* Hydrax/SkyX need to be shared between states--make them world dependencies perhaps and add code to check if they are already initialized.
-* When client reconnects, a third client that was still connected can send a chat and the reconnected client will display the chat from their own username.
 * Popup error box when trying to connect while previous connection is being closed.
-* CEGUI disappears when resizing window.
 * Create EventQueue system to deal with network and UI. Pass World into network classes and have something like World::handleNetworkEvent().
 * SkyLowGraphics.
 * Consider creating a function in World to handle input for Client so it can be sent to the server.
-** Hydrax underwater is sped up, fix. (E:\Engine\Ogre3D\Hydrax-v0.5.1\Hydrax\Hydrax.vcproj to recompile).
 * Shift input for sprint.
 * Create a SkyX config file.
 * Add a "clock speed" variable to the World, should affect physics etc.
@@ -417,3 +423,10 @@
 * Alphabetize includes everywhere. Folder name is first if in a folder.
 * Implement config file loading for options in Engine::init() and others.
 * Refer to http://gameprogrammingpatterns.com/event-queue.html for Audio.
+
+== BUGS ==
+* Hydrax/SkyX need to be shared between states--make them world dependencies perhaps and add code to check if they are already initialized.
+* When client reconnects, a third client that was still connected can send a chat and the reconnected client will display the chat from their own username.
+* CEGUI disappears when resizing window.
+** Hydrax underwater is sped up, fix. (E:\Engine\Ogre3D\Hydrax-v0.5.1\Hydrax\Hydrax.vcproj to recompile).
+
