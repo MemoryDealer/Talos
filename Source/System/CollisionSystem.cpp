@@ -15,54 +15,54 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: PhysicsSystem.cpp
+// File: CollisionSystem.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements PhysicsSystem class.
+// Implements CollisionSystem class.
 // ========================================================================= //
 
-#include "Component/PhysicsComponent.hpp"
+#include "CollisionSystem.hpp"
+#include "Component/CollisionComponent.hpp"
 #include "Component/SceneComponent.hpp"
 #include "Entity/Entity.hpp"
-#include "PhysicsSystem.hpp"
 
 // ========================================================================= //
 
-PhysicsSystem::PhysicsSystem(void)
+CollisionSystem::CollisionSystem(void)
 {
 
 }
 
 // ========================================================================= //
 
-PhysicsSystem::~PhysicsSystem(void)
+CollisionSystem::~CollisionSystem(void)
 {
 
 }
 
 // ========================================================================= //
 
-void PhysicsSystem::onEntityAttached(EntityPtr entity)
+void CollisionSystem::onEntityAttached(EntityPtr entity)
 {
-    PhysicsComponentPtr physicsC =
-        entity->getComponent<PhysicsComponent>();
+    CollisionComponentPtr collisionC = 
+        entity->getComponent<CollisionComponent>();
 
-    physicsC->init(*m_world, entity);
+    collisionC->init(*m_world, entity);
 }
 
 // ========================================================================= //
 
-void PhysicsSystem::update(void)
+void CollisionSystem::update(void)
 {
     for (auto& i : m_entities){
-        PhysicsComponentPtr physicsC = 
-            i.second->getComponent<PhysicsComponent>();
+        CollisionComponentPtr collisionC =
+            i.second->getComponent<CollisionComponent>();
         SceneComponentPtr sceneC =
             i.second->getComponent<SceneComponent>();
 
         // Update SceneComponent's position and orientaiton.
-        sceneC->setPosition(physicsC->getPosition());
-        sceneC->setOrientation(physicsC->getOrientation());
+        sceneC->setPosition(collisionC->getPosition());
+        sceneC->setOrientation(collisionC->getOrientation());
     }
 }
 

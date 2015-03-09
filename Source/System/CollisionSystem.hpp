@@ -15,55 +15,39 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: PhysicsSystem.cpp
+// File: CollisionSystem.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements PhysicsSystem class.
+// Defines CollisionSystem class.
 // ========================================================================= //
 
-#include "Component/PhysicsComponent.hpp"
-#include "Component/SceneComponent.hpp"
-#include "Entity/Entity.hpp"
-#include "PhysicsSystem.hpp"
+#ifndef __COLLISIONSYSTEM_HPP__
+#define __COLLISIONSYSTEM_HPP__
 
 // ========================================================================= //
 
-PhysicsSystem::PhysicsSystem(void)
+#include "System.hpp"
+
+// ========================================================================= //
+// Updates SceneComponents from CollisionComponents.
+class CollisionSystem : public System
 {
+public:
+    // Empty constructor.
+    explicit CollisionSystem(void);
 
-}
+    // Empty destructor.
+    virtual ~CollisionSystem(void) override;
 
-// ========================================================================= //
+    // Initializes CollisionComponent with needed data.
+    virtual void onEntityAttached(EntityPtr entity) override;
 
-PhysicsSystem::~PhysicsSystem(void)
-{
-
-}
-
-// ========================================================================= //
-
-void PhysicsSystem::onEntityAttached(EntityPtr entity)
-{
-    PhysicsComponentPtr physicsC =
-        entity->getComponent<PhysicsComponent>();
-
-    physicsC->init(*m_world, entity);
-}
+    // Gets transform from CollisionComponent, applies it to SceneComponent.
+    virtual void update(void) override;
+};
 
 // ========================================================================= //
 
-void PhysicsSystem::update(void)
-{
-    for (auto& i : m_entities){
-        PhysicsComponentPtr physicsC = 
-            i.second->getComponent<PhysicsComponent>();
-        SceneComponentPtr sceneC =
-            i.second->getComponent<SceneComponent>();
-
-        // Update SceneComponent's position and orientaiton.
-        sceneC->setPosition(physicsC->getPosition());
-        sceneC->setOrientation(physicsC->getOrientation());
-    }
-}
+#endif
 
 // ========================================================================= //

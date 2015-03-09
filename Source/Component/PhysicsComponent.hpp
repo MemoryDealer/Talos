@@ -33,33 +33,27 @@
 using namespace physx;
 
 // ========================================================================= //
-
+// A dynamic actor in the physics simulation.
 class PhysicsComponent : public Component
 {
 public:
-    // Default initializes member data, stores mesh filename.
+    // Default initializes member data.
     explicit PhysicsComponent(void);
 
     // Empty destructor.
     virtual ~PhysicsComponent(void) override;
 
     enum class Type{
-        Static,
-        Dynamic
+        Box,
+        Sphere,
+        Mesh
     };
 
-    // Empty.
+    // Empty destructor.
     virtual void init(World&) override;
 
     // Initializes PhysX actor, adds to World's PxScene.
-    virtual void init(World& world, 
-                      const EntityID id,
-                      const Type type,
-                      PxGeometry&,
-                      const PxReal staticFriction = 0.5f, 
-                      const PxReal dynamicFriction = 0.5f, 
-                      const PxReal restitution = 0.3f,
-                      const PxReal density = 10.f);
+    virtual void init(World& world, EntityPtr entity);
 
     // Removes PhysX actor from World's PxScene.
     virtual void destroy(World&) override;
@@ -95,38 +89,45 @@ public:
     const Ogre::Quaternion getOrientation(void) const;
 
     // Returns pointer to PxRigidActor.
-    PxRigidActor* getRigidActor(void) const;
+    PxRigidDynamic* getRigidActor(void) const;
 
-    // Returns pointer to PxRigidStatic.
-    PxRigidStatic* getStaticActor(void) const;
+    // Setters:
 
-    // Returns pointer to PxRigidDynamic.
-    PxRigidDynamic* getDynamicActor(void) const;
+    // Sets collision volume type.
+    void setType(const Type& type);
+
+    // Sets material value for dynamic actor.
+    void setMaterial(World& world,
+                     const PxReal staticFriction,
+                     const PxReal dynamicFriction,
+                     const PxReal restitution);
+
+    // Sets density value for dynamic actor.
+    void setDensity(const PxReal density);
 
 private:
-    union{
-        PxRigidStatic* m_sActor;
-        PxRigidDynamic* m_dActor;
-    };
-
-    PxRigidActor* m_actor;
+    PxRigidDynamic* m_rigidActor;
+    Type m_type;
     PxMaterial* m_mat;
+    PxReal m_density;
 };
 
 // ========================================================================= //
 
 // Getters:
 
-inline PxRigidActor* PhysicsComponent::getRigidActor(void) const{
-    return m_actor;
+inline PxRigidDynamic* PhysicsComponent::getRigidActor(void) const{
+    return m_rigidActor;
 }
 
-inline PxRigidStatic* PhysicsComponent::getStaticActor(void) const{
-    return m_sActor;
+// Setters:
+
+inline void PhysicsComponent::setType(const Type& type){
+    m_type = type;
 }
 
-inline PxRigidDynamic* PhysicsComponent::getDynamicActor(void) const{
-    return m_dActor;
+inline void PhysicsComponent::setDensity(const PxReal density){
+    m_density = density;
 }
 
 // ========================================================================= //

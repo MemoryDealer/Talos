@@ -27,7 +27,8 @@
 // ========================================================================= //
 
 System::System(void) :
-m_entities()
+m_entities(),
+m_world(nullptr)
 {
 
 }
@@ -44,6 +45,7 @@ System::~System(void)
 void System::attachEntity(EntityPtr entity)
 {
     m_entities[entity->getID()] = entity;
+    this->onEntityAttached(entity);
 }
 
 // ========================================================================= //

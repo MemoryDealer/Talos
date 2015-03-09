@@ -15,55 +15,29 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: PhysicsSystem.cpp
+// File: CommandTypes.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements PhysicsSystem class.
+// Enumerates types for Commands.
 // ========================================================================= //
 
-#include "Component/PhysicsComponent.hpp"
-#include "Component/SceneComponent.hpp"
-#include "Entity/Entity.hpp"
-#include "PhysicsSystem.hpp"
-
-// ========================================================================= //
-
-PhysicsSystem::PhysicsSystem(void)
-{
-
-}
+#ifndef __COMMANDTYPES_HPP__
+#define __COMMANDTYPES_HPP__
 
 // ========================================================================= //
 
-PhysicsSystem::~PhysicsSystem(void)
-{
-
-}
-
-// ========================================================================= //
-
-void PhysicsSystem::onEntityAttached(EntityPtr entity)
-{
-    PhysicsComponentPtr physicsC =
-        entity->getComponent<PhysicsComponent>();
-
-    physicsC->init(*m_world, entity);
-}
+enum class CommandType{
+    Null = 0,
+    Look,
+    MoveBackward,
+    MoveForward,
+    MoveLeft,
+    MoveRight,
+    Spectator
+};
 
 // ========================================================================= //
 
-void PhysicsSystem::update(void)
-{
-    for (auto& i : m_entities){
-        PhysicsComponentPtr physicsC = 
-            i.second->getComponent<PhysicsComponent>();
-        SceneComponentPtr sceneC =
-            i.second->getComponent<SceneComponent>();
-
-        // Update SceneComponent's position and orientaiton.
-        sceneC->setPosition(physicsC->getPosition());
-        sceneC->setOrientation(physicsC->getOrientation());
-    }
-}
+#endif
 
 // ========================================================================= //

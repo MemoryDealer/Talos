@@ -23,6 +23,7 @@
 
 #include "Component/ActorComponent.hpp"
 #include "Component/CameraComponent.hpp"
+#include "Component/CollisionComponent.hpp"
 #include "Component/LightComponent.hpp"
 #include "Component/ModelComponent.hpp"
 #include "Component/PhysicsComponent.hpp"
@@ -36,6 +37,7 @@
 #include "Network/Server/Server.hpp"
 #include "Physics/PScene.hpp"
 #include "Pool/Pool.hpp"
+#include "System/System.hpp"
 #include "System/SystemManager.hpp"
 #include "World.hpp"
 
@@ -219,7 +221,7 @@ const bool World::setupEntities(void) const
             return false;
         }
 
-        m_systemManager->addEntity(entity);
+        m_systemManager->processEntity(entity);
     }
 
     return true;
@@ -342,6 +344,19 @@ template<> World::componentReturn<CameraComponent>::type World::attachComponent<
 
 // ========================================================================= //
 
+template<> struct World::componentReturn<CollisionComponent>{
+    typedef CollisionComponentPtr type;
+};
+
+template<> World::componentReturn<CollisionComponent>::type World::attachComponent<CollisionComponent>(EntityPtr entity)
+{
+    CollisionComponentPtr c = m_componentFactory->createCollisionComponent();
+    initComponent(c, entity, this);
+    return c;
+}
+
+// ========================================================================= //
+
 template<> struct World::componentReturn<LightComponent>{ 
     typedef LightComponentPtr type; 
 };
@@ -397,13 +412,14 @@ template<> World::componentReturn<SceneComponent>::type World::attachComponent<S
 void World::addSystem(System* system)
 {
     m_systemManager->addSystem(system);
+    system->setWorld(this);
 }
 
 // ========================================================================= //
 
 void World::addEntityToSystem(EntityPtr entity)
 {
-    m_systemManager->addEntity(entity);
+    m_systemManager->processEntity(entity);
 }
 
 // ========================================================================= //

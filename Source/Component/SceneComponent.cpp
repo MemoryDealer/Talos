@@ -100,6 +100,20 @@ void SceneComponent::onComponentAttached(ComponentPtr component)
 
 // ========================================================================= //
 
+const Ogre::Vector3 SceneComponent::getPosition(void) const
+{
+    return m_node->getPosition();
+}
+
+// ========================================================================= //
+
+const Ogre::Quaternion SceneComponent::getOrientation(void) const
+{
+    return m_node->getOrientation();
+}
+
+// ========================================================================= //
+
 void SceneComponent::setPosition(const Ogre::Vector3& pos)
 {
     m_node->setPosition(pos);

@@ -15,6 +15,7 @@
     <ClCompile Include="Source\Command\CommandRepository.cpp" />
     <ClCompile Include="Source\Component\ActorComponent.cpp" />
     <ClCompile Include="Source\Component\CameraComponent.cpp" />
+    <ClCompile Include="Source\Component\CollisionComponent.cpp" />
     <ClCompile Include="Source\Component\Component.cpp" />
     <ClCompile Include="Source\Component\LightComponent.cpp" />
     <ClCompile Include="Source\Component\ModelComponent.cpp" />
@@ -68,6 +69,7 @@
     <ClCompile Include="Source\Rendering\Sky\SkyX\VClouds\Lightning.cpp" />
     <ClCompile Include="Source\Rendering\Sky\SkyX\VClouds\LightningManager.cpp" />
     <ClCompile Include="Source\Rendering\Sky\SkyX\VClouds\VClouds.cpp" />
+    <ClCompile Include="Source\System\CollisionSystem.cpp" />
     <ClCompile Include="Source\System\PhysicsSystem.cpp" />
     <ClCompile Include="Source\System\System.cpp" />
     <ClCompile Include="Source\System\SystemManager.cpp" />
@@ -92,6 +94,7 @@
     <ClInclude Include="Source\Command\NullCommand.hpp" />
     <ClInclude Include="Source\Component\ActorComponent.hpp" />
     <ClInclude Include="Source\Component\CameraComponent.hpp" />
+    <ClInclude Include="Source\Component\CollisionComponent.hpp" />
     <ClInclude Include="Source\Component\Component.hpp" />
     <ClInclude Include="Source\Component\ComponentDecls.hpp" />
     <ClInclude Include="Source\Component\ComponentMessage.hpp" />
@@ -159,6 +162,7 @@
     <ClInclude Include="Source\Rendering\Sky\SkyX\VClouds\LightningManager.h" />
     <ClInclude Include="Source\Rendering\Sky\SkyX\VClouds\VClouds.h" />
     <ClInclude Include="Source\stdafx.hpp" />
+    <ClInclude Include="Source\System\CollisionSystem.hpp" />
     <ClInclude Include="Source\System\PhysicsSystem.hpp" />
     <ClInclude Include="Source\System\System.hpp" />
     <ClInclude Include="Source\System\SystemManager.hpp" />

@@ -26,29 +26,30 @@
 
 // ========================================================================= //
 
-enum class ComponentMessageType{
-    Null = 0,
-
-    InputMouseMotion,
-
-    End
-};
+#include "stdafx.hpp"
+#include <boost/variant.hpp>
 
 // ========================================================================= //
 
 struct ComponentMessage{
 
-    explicit ComponentMessage(void) : type(ComponentMessageType::Null) { }
+    enum class Type{
+        Null = 0,
 
-    ComponentMessageType type;
+        Translate,
+
+        End
+    };
+
+    explicit ComponentMessage(const Type type = Type::Null) : type(type) { }
+
+    Type type;
 
     union{
-        struct{
-            int x;
-            int y;
-            int absx;
-            int absy;
-        } mouse;
+        struct translate_t{
+            
+            Ogre::Real x, y, z;
+        } translate;
     };
 };
 

@@ -23,6 +23,7 @@
 
 #include "Component/ActorComponent.hpp"
 #include "Component/CameraComponent.hpp"
+#include "Component/CollisionComponent.hpp"
 #include "Component/LightComponent.hpp"
 #include "Component/ModelComponent.hpp"
 #include "Component/PhysicsComponent.hpp"
@@ -34,6 +35,7 @@
 // Explicitly instantiate ComponentPools.
 template class Pool<ActorComponent>;
 template class Pool<CameraComponent>;
+template class Pool<CollisionComponent>;
 template class Pool<LightComponent>;
 template class Pool<ModelComponent>;
 template class Pool<PhysicsComponent>;

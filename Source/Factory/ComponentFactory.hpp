@@ -45,6 +45,7 @@ public:
     // Creation functions:
     ActorComponentPtr createActorComponent(void);
     CameraComponentPtr createCameraComponent(void);
+    CollisionComponentPtr createCollisionComponent(void);
     LightComponentPtr createLightComponent(void);
     ModelComponentPtr createModelComponent(void);
     PhysicsComponentPtr createPhysicsComponent(void);
@@ -56,6 +57,7 @@ private:
     // World's intialization and retrieved from a memory pool as needed.
     std::shared_ptr<Pool<ActorComponent>> m_actorComponentPool;
     std::shared_ptr<Pool<CameraComponent>> m_cameraComponentPool;
+    std::shared_ptr<Pool<CollisionComponent>> m_collisionComponentPool;
     std::shared_ptr<Pool<LightComponent>> m_lightComponentPool;
     std::shared_ptr<Pool<ModelComponent>> m_modelComponentPool;
     std::shared_ptr<Pool<PhysicsComponent>> m_physicsComponentPool;

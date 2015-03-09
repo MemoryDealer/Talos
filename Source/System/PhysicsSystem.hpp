@@ -39,6 +39,8 @@ public:
     // Empty destructor.
     virtual ~PhysicsSystem(void) override;
 
+    virtual void onEntityAttached(EntityPtr entity) override;
+
     // Gets transform from PhysicsComponent and applies it to SceneComponent.
     virtual void update(void) override;
 };

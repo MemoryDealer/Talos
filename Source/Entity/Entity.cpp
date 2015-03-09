@@ -113,7 +113,7 @@ const bool Entity::setupComponents(void)
 
 void Entity::message(const ComponentMessage& msg)
 {
-    Assert(msg.type != ComponentMessageType::Null, "Null Entity message!");
+    Assert(msg.type != ComponentMessage::Type::Null, "Null Entity message!");
 
     // Broadcast to all attached components.
     for (auto& itr : m_components){

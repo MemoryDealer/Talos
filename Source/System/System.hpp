@@ -50,12 +50,29 @@ public:
     // Removes EntityPtr from internal hash table.
     virtual void detachEntity(EntityPtr entity);
 
+    // Called in attachEntity().
+    virtual void onEntityAttached(EntityPtr entity) = 0;
+
     // Processes related components.
     virtual void update(void) = 0;
 
+    // Setters:
+
+    // Sets internal World pointer.
+    void setWorld(World* world);
+
 protected:
     EntityHashTable m_entities;
+    World* m_world;
 };
+
+// ========================================================================= //
+
+// Setters:
+
+inline void System::setWorld(World* world){
+    m_world = world;
+}
 
 // ========================================================================= //
 

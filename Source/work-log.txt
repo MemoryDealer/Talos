@@ -388,6 +388,10 @@
     bandwidth, but if I have extra time I will see if it can be implemented. Or perhaps the RakNet RPC4 plugin would be useful for this.
 * Got basic client movement working with server. 
 
+== 3/9/16 ==
+* Note that the error C2440: 'static_cast' : cannot convert from 'Component *' to 'xxxComponent *' when calling Entity::getComponent<T> is caused by not including the header associated with 
+    that component.
+
 == TODO ==
 * Just add commands for pressed and released--it will make it easier for sending to the server and keeping lists of unprocessed commands.
 * GameState for networked games. Add jumping & sprinting.

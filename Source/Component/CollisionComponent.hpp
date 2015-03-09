@@ -15,78 +15,87 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: SystemManager.cpp
+// File: CollisionComponent.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements SystemManager class.
+// Defines CollisionComponent class.
 // ========================================================================= //
 
-#include "Entity/Entity.hpp"
-#include "CollisionSystem.hpp"
-#include "PhysicsSystem.hpp"
-#include "System.hpp"
-#include "SystemManager.hpp"
+#ifndef __COLLISIONCOMPONENT_HPP__
+#define __COLLISIONCOMPONENT_HPP__
 
 // ========================================================================= //
 
-SystemManager::SystemManager(void) :
-m_systems()
+#include "Component.hpp"
+
+// ========================================================================= //
+
+using namespace physx;
+
+// ========================================================================= //
+// A static collision object in the physics simulation.
+class CollisionComponent : public Component
 {
+public:
+    // Default initializes member data.
+    explicit CollisionComponent(void);
 
+    // Empty destructor.
+    virtual ~CollisionComponent(void) override;
+
+    // Methods of creating collision volume.
+    enum class Type{
+        Box,
+        Mesh,
+        Plane
+    };
+
+    // Empty.
+    virtual void init(World& world) override;
+
+    // Initializes PhysX actor, adds to World's PxScene.
+    virtual void init(World& world,
+                      EntityPtr entity);
+
+    // Removes PhysX actor from World's PxScene.
+    virtual void destroy(World& world) override;
+
+    // Retrieves the actor's position and orientation, applies them to the
+    // attached SceneComponent for rendering.
+    virtual void update(World& world) override;
+
+    // Empty.
+    virtual void message(const ComponentMessage& msg) override;
+
+    // Getters:
+
+    // Returns position in form of Ogre::Vector3.
+    const Ogre::Vector3 getPosition(void) const;
+
+    // Returns position in form of Ogre::Quaternion.
+    const Ogre::Quaternion getOrientation(void) const;
+
+    // Setters:
+
+    // Sets type of collision
+    void setType(const Type& type);
+
+private:
+    PxRigidStatic* m_rigidActor;
+    Type m_type;
+    EntityID m_entityID;
+};
+
+// ========================================================================= //
+
+// Setters:
+
+inline void CollisionComponent::setType(const Type& type){
+    m_type = type;
 }
 
 // ========================================================================= //
 
-SystemManager::~SystemManager(void)
-{
-   
-}
-
-// ========================================================================= //
-
-void SystemManager::destroy(void)
-{
-    for (auto& i : m_systems){
-        delete i.second;
-    }
-
-    m_systems.clear();
-}
-
-// ========================================================================= //
-
-void SystemManager::addSystem(System* system)
-{
-    m_systems[&typeid(*system)] = system;
-}
-
-// ========================================================================= //
-
-void SystemManager::processEntity(EntityPtr entity)
-{
-    // Collision System.
-    if (this->hasSystem<CollisionSystem>()){
-        if (entity->hasComponent<SceneComponent>() &&
-            entity->hasComponent<CollisionComponent>()){
-            this->getSystem<CollisionSystem>()->attachEntity(entity);
-        }
-    }
-    // Physics System.
-    if (this->hasSystem<PhysicsSystem>()){
-        if (entity->hasComponent<SceneComponent>() &&
-            entity->hasComponent<PhysicsComponent>()){
-            this->getSystem<PhysicsSystem>()->attachEntity(entity);
-        }
-    }    
-}
-
-// ========================================================================= //
-
-void SystemManager::update(void)
-{
-    for (auto& i : m_systems){
-        i.second->update();
-    }
-}
+#endif
 
 // ========================================================================= //

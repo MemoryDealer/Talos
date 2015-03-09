@@ -59,6 +59,12 @@ public:
     // Returns pointer to internal Ogre::SceneNode.
     Ogre::SceneNode* getSceneNode(void) const;
 
+    // Returns position of Ogre::SceneNode.
+    const Ogre::Vector3 getPosition(void) const;
+
+    // Returns orientation of Ogre::SceneNode.
+    const Ogre::Quaternion getOrientation(void) const;
+
     // Setters:
 
     // Sets position of Ogre::SceneNode.

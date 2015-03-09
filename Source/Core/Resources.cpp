@@ -77,8 +77,8 @@ void loadMeshes(void)
         20, 
         true, 
         1, 
-        12.f, 
-        12.f, 
+        22.f, 
+        22.f, 
         Ogre::Vector3::UNIT_Z);
 }
 

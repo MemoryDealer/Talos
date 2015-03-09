@@ -57,8 +57,8 @@ bool KCC::init(World& world)
     m_controller = world.getPScene()->getControllerManager()->
         createController(desc);
 
-    if (m_controller == nullptr){
-        return false;
+    if (!m_controller){
+        throw std::exception("PhysX character controller failed!");
     }
 
     return true;

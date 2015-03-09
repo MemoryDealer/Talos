@@ -30,6 +30,7 @@
 class Component;
 class ActorComponent;
 class CameraComponent;
+class CollisionComponent;
 class LightComponent;
 class ModelComponent;
 class PhysicsComponent;
@@ -40,6 +41,7 @@ struct ComponentMessage;
 typedef Component* ComponentPtr;
 typedef ActorComponent* ActorComponentPtr;
 typedef CameraComponent* CameraComponentPtr;
+typedef CollisionComponent* CollisionComponentPtr;
 typedef LightComponent* LightComponentPtr;
 typedef ModelComponent* ModelComponentPtr;
 typedef PhysicsComponent* PhysicsComponentPtr;

@@ -51,7 +51,7 @@ public:
 
     // Tests if Entity meets requirements for any Systems in the table and adds
     // it to that System if so.
-    void addEntity(Entity* entity);
+    void processEntity(EntityPtr entity);
 
     // Updates each System in table.
     void update(void);

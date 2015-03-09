@@ -24,6 +24,8 @@
 #include "Command/Command.hpp"
 #include "Component/ActorComponent.hpp"
 #include "Component/CameraComponent.hpp"
+#include "Component/CollisionComponent.hpp"
+#include "Component/ComponentMessage.hpp"
 #include "Component/LightComponent.hpp"
 #include "Component/ModelComponent.hpp"
 #include "Component/PhysicsComponent.hpp"
@@ -33,6 +35,7 @@
 #include "Input/Input.hpp"
 #include "Network/Network.hpp"
 #include "Physics/PScene.hpp"
+#include "System/CollisionSystem.hpp"
 #include "System/PhysicsSystem.hpp"
 #include "World/Environment.hpp"
 
@@ -59,6 +62,7 @@ void GameState::enter(void)
     //m_world.getPScene()->loadDebugDrawer();
 
     // Add systems.
+    m_world.addSystem(new CollisionSystem());
     m_world.addSystem(new PhysicsSystem());
 
     // Create player.
@@ -79,10 +83,11 @@ void GameState::enter(void)
     m_world.attachComponent<SceneComponent>(plane);
     modelC = m_world.attachComponent<ModelComponent>(plane);
     modelC->init(m_world, "Plane/Board", "Board");      
-    physicsC = m_world.attachComponent<PhysicsComponent>(plane);
-    physicsC->init(m_world, plane->getID(), PhysicsComponent::Type::Static,
-                   physx::PxBoxGeometry(75.f, 5.f, 75.f));
-    physicsC->translate(0.f, -50.f, 0.f);
+    m_world.attachComponent<CollisionComponent>(plane);
+    ComponentMessage msg(ComponentMessage::Type::Translate);
+    msg.translate.x = 0.f; msg.translate.z = 0.f;
+    msg.translate.y = -50.f;
+    plane->message(msg);
 
     // Create ball.
     EntityPtr ball = m_world.createEntity();
@@ -94,14 +99,12 @@ void GameState::enter(void)
     lightC->setColour(50.f, 0.f, 50.f);
     lightC->setRange(175.f);
     physicsC = m_world.attachComponent<PhysicsComponent>(ball);
-    physicsC->init(m_world, ball->getID(), PhysicsComponent::Type::Dynamic,
-                   PxSphereGeometry(5.5f),
-                   0.2f, 0.2f, 0.1f);
-    physicsC->getDynamicActor()->addForce(PxVec3(500.f, 0.f, 0.f));
+    physicsC->setType(PhysicsComponent::Type::Sphere);
+    
     
     // Setup visual scene settings.
-    //m_world.getEnvironment()->setAmbientLight(255.f, 255.f, 255.f);
-    //m_world.getEnvironment()->setSunColour(20.f, 17.5f, 18.9f);
+    m_world.getEnvironment()->setAmbientLight(255.f, 255.f, 255.f);
+    m_world.getEnvironment()->setSunColour(20.f, 17.5f, 18.9f);
     m_world.getEnvironment()->setMoonColour(.50f, .50f, 255.f);
 
     // Create Ocean.
@@ -126,7 +129,7 @@ void GameState::enter(void)
     
 
     if (!m_world.setupEntities()){
-        throw std::exception("MainMenu entities reported uninitialized");
+        throw std::exception("GameState entities reported uninitialized");
     }
 }
 

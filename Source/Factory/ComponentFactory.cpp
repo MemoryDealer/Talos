@@ -29,6 +29,7 @@
 ComponentFactory::ComponentFactory(void) :
 m_actorComponentPool(nullptr),
 m_cameraComponentPool(nullptr),
+m_collisionComponentPool(nullptr),
 m_lightComponentPool(nullptr),
 m_modelComponentPool(nullptr),
 m_physicsComponentPool(nullptr),
@@ -52,6 +53,7 @@ void ComponentFactory::init(void)
     // @TODO: Read sizes from config file.
     m_actorComponentPool.reset(new Pool<ActorComponent>(256));
     m_cameraComponentPool.reset(new Pool<CameraComponent>(5));
+    m_collisionComponentPool.reset(new Pool<CollisionComponent>(1024));
     m_lightComponentPool.reset(new Pool<LightComponent>(16));
     m_modelComponentPool.reset(new Pool<ModelComponent>(1024));
     m_physicsComponentPool.reset(new Pool<PhysicsComponent>(1024));
@@ -74,6 +76,13 @@ ActorComponentPtr ComponentFactory::createActorComponent(void)
 CameraComponentPtr ComponentFactory::createCameraComponent(void)
 {
     return m_cameraComponentPool->create();
+}
+
+// ========================================================================= //
+
+CollisionComponentPtr ComponentFactory::createCollisionComponent(void)
+{
+    return m_collisionComponentPool->create();
 }
 
 // ========================================================================= //
