@@ -15,68 +15,38 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: CameraComponent.cpp
+// File: Jump.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements CameraComponent class.
+// Defines JumpCommand class.
 // ========================================================================= //
 
-#include "CameraComponent.hpp"
-#include "ComponentMessage.hpp"
-#include "SceneComponent.hpp"
-#include "World/World.hpp"
+#ifndef __JUMP_HPP__
+#define __JUMP_HPP__
 
 // ========================================================================= //
 
-CameraComponent::CameraComponent(void) :
-Component(),
-m_camera(nullptr)
+#include "Command/Command.hpp"
+#include "Component/ActorComponent.hpp"
+
+// ========================================================================= //
+
+class JumpCommand : public Command
 {
-    
-}
+public:
+    explicit JumpCommand(void){
+        this->setType(CommandType::Jump);
+    }
+
+    virtual void execute(EntityPtr entity) override{
+        ActorComponentPtr actor = entity->getComponent<ActorComponent>();
+
+        actor->jump();
+    }
+};
 
 // ========================================================================= //
 
-CameraComponent::~CameraComponent(void)
-{
-
-}
-
-// ========================================================================= //
-
-void CameraComponent::init(World& world)
-{
-    // Create the camera object.
-    m_camera = world.getSceneManager()->createCamera("PlayerCam");
-    m_camera->setNearClipDistance(0.1f);
-    m_camera->setFarClipDistance(0.f);
-
-    // Setup viewport aspect ratio and assign camera to viewport.
-    Ogre::Viewport* viewport = world.getViewport();
-    m_camera->setAspectRatio(Ogre::Real(viewport->getActualWidth()) /
-                             Ogre::Real(viewport->getActualHeight()));
-    viewport->setCamera(m_camera);
-}
-
-// ========================================================================= //
-
-void CameraComponent::destroy(World& world)
-{
-    world.getSceneManager()->destroyCamera(m_camera);
-}
-
-// ========================================================================= //
-
-void CameraComponent::update(World& world)
-{
-    
-}
-
-// ========================================================================= //
-
-void CameraComponent::message(const ComponentMessage& msg)
-{
-
-}
+#endif
 
 // ========================================================================= //

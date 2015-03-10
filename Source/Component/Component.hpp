@@ -59,35 +59,7 @@ public:
     // Triggered for all attached components when a component is 
     // detached from an Entity.
     virtual void onComponentDetached(ComponentPtr) { }
-
-    // Getters:
-
-    // Returns true if Component has been initialized.
-    const bool isInitialized(void) const;
-
-    // Setters:
-
-    // Sets initialization state of Component.
-    void setInitialized(const bool);
-
-
-private:
-    bool m_initialized;
 };
-
-// ========================================================================= //
-
-// Getters:
-
-inline const bool Component::isInitialized(void) const{
-    return m_initialized;
-}
-
-// Setters:
-
-inline void Component::setInitialized(const bool initialized){
-    m_initialized = initialized;
-}
 
 // ========================================================================= //
 

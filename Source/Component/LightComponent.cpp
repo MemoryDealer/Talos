@@ -46,7 +46,6 @@ void LightComponent::init(World& world)
     m_light = world.getSceneManager()->createLight();
     // Set to point light by default.
     m_light->setType(Ogre::Light::LT_POINT);
-    this->setInitialized(true);
 }
 
 // ========================================================================= //
@@ -54,8 +53,6 @@ void LightComponent::init(World& world)
 void LightComponent::destroy(World& world)
 {
     world.getSceneManager()->destroyLight(m_light);
-
-    this->setInitialized(false);
 }
 
 // ========================================================================= //

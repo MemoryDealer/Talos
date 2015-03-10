@@ -23,6 +23,7 @@
 
 #include "CommandRepository.hpp"
 #include "Command/NullCommand.hpp"
+#include "Command/Actor/Jump.hpp"
 #include "Command/Actor/Look.hpp"
 #include "Command/Actor/MoveBackward.hpp"
 #include "Command/Actor/MoveForward.hpp"
@@ -53,6 +54,9 @@ m_commands()
     this->addCommand(command);
 
     command = new MoveRightCommand();
+    this->addCommand(command);
+
+    command = new JumpCommand();
     this->addCommand(command);
 
     command = new SpectatorCommand();

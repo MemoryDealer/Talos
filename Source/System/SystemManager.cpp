@@ -21,8 +21,13 @@
 // Implements SystemManager class.
 // ========================================================================= //
 
-#include "Entity/Entity.hpp"
 #include "CollisionSystem.hpp"
+#include "Component/ActorComponent.hpp"
+#include "Component/CameraComponent.hpp"
+#include "Component/LightComponent.hpp"
+#include "Component/ModelComponent.hpp"
+#include "Component/SceneComponent.hpp"
+#include "Entity/Entity.hpp"
 #include "PhysicsSystem.hpp"
 #include "System.hpp"
 #include "SystemManager.hpp"
@@ -78,6 +83,28 @@ void SystemManager::processEntity(EntityPtr entity)
             this->getSystem<PhysicsSystem>()->attachEntity(entity);
         }
     }    
+
+    // Additional setup.
+    if (entity->hasComponent<ActorComponent>() ||
+        entity->hasComponent<SceneComponent>()){
+        SceneComponentPtr sceneC = (entity->hasComponent<ActorComponent>()) ?
+            entity->getComponent<ActorComponent>() :
+            entity->getComponent<SceneComponent>();
+
+        if (entity->hasComponent<CameraComponent>()){
+            sceneC->attachCamera(
+                entity->getComponent<CameraComponent>()->getCamera());
+        }
+        if (entity->hasComponent<LightComponent>()){
+            sceneC->getSceneNode()->attachObject(
+                entity->getComponent<LightComponent>()->getLight());
+        }
+        if (entity->hasComponent<ModelComponent>()){
+            sceneC->getSceneNode()->attachObject(
+                entity->getComponent<ModelComponent>()->getOgreEntity());
+        }
+    }
+    
 }
 
 // ========================================================================= //

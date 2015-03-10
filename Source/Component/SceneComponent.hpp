@@ -53,6 +53,9 @@ public:
 
     // Wires up needed Components with itself.
     virtual void onComponentAttached(ComponentPtr) override;
+
+    // Attaches Ogre::Camera to scene node.
+    virtual void attachCamera(Ogre::Camera* camera);
     
     // Getters:
 

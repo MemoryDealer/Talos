@@ -23,12 +23,16 @@
 
 #include "KCC.hpp"
 #include "Physics/PScene.hpp"
+#include "Core/Talos.hpp"
 #include "World/World.hpp"
 
 // ========================================================================= //
 
 KCC::KCC(void) :
-m_controller(nullptr)
+m_controller(nullptr),
+m_yVel(0.f),
+m_onSurface(false),
+m_jumping(false)
 {
 
 }
@@ -73,18 +77,106 @@ void KCC::destroy(World& world)
 
 // ========================================================================= //
 
-PxExtendedVec3 KCC::update(const PxReal dx, const PxReal dy, const PxReal dz)
+PxExtendedVec3 KCC::update(World& world, 
+                           const PxReal dx, 
+                           const PxReal dy, 
+                           const PxReal dz)
 {
-    const PxReal gravity = -9.81f / 16.f; // Magic random value.
-    PxVec3 disp(dx, gravity, dz);
+    const PxReal gravity = 0.0281f;
+    const PxReal maxY = -7.81f;
+   
+    
 
-    m_controller->move(disp, 0.001f, 16.f, 0);
+    m_yVel -= gravity;
+    if (m_yVel < maxY){
+        m_yVel = maxY;
+    }
+
+
+
+    PxControllerState state;
+    m_controller->getState(state);
+    if (state.touchedActor){
+       
+        
+        
+    }
+
+
+    PxVec3 disp(dx, m_yVel, dz);
+    
+    m_controller->move(disp, 0.001f, 1.f / Talos::MS_PER_UPDATE, 0);
+
+    const PxReal surfaceMax = 1.32f;
+    PxExtendedVec3 pos = m_controller->getPosition();
+    PxVec3 origin(pos.x, pos.y, pos.z);
+    PxVec3 uDir = PxVec3(0.f, -1.f, 0.f);
+    PxReal maxDist = 99999.f;
+    PxRaycastBuffer hit;
+    PxQueryFilterData fd;
+    fd.flags |= PxQueryFlag::eANY_HIT;
+    bool status = world.getPScene()->getScene()->raycast(origin,
+                                                         uDir,
+                                                         maxDist,
+                                                         hit,
+                                                         PxHitFlags(PxHitFlag::eDEFAULT),
+                                                         fd);
+    if (status){
+        if (hit.hasBlock){
+            printf("Dist: %.2f", hit.block.distance);
+            printf("\t%s\n", hit.block.actor->getConcreteTypeName());
+
+            if (hit.block.distance <= surfaceMax){
+                m_onSurface = true;
+                m_yVel = 0.f;
+                m_jumping = false;
+            }
+            else{
+                m_onSurface = false;
+            }
+        }
+    }
     
     // Get updated position.
-    PxExtendedVec3 pos = m_controller->getPosition();
+    pos = m_controller->getPosition();
     // Adjust for head height.
     pos.y += 0.8644f;
     return pos;
+}
+
+// ========================================================================= //
+
+void KCC::jump(void)
+{
+    // See if standing on a surface.
+    /*PxVec3 origin(pos.x, pos.y, pos.z);
+    PxVec3 uDir = PxVec3(0.f, -1.f, 0.f);
+    PxReal maxDist = 10.f;
+    PxRaycastBuffer hit;
+    PxQueryFilterData fd;
+    fd.flags |= PxQueryFlag::eANY_HIT;
+    bool status = world.getPScene()->getScene()->raycast(origin,
+                                                         uDir,
+                                                         maxDist,
+                                                         hit,
+                                                         PxHitFlags(PxHitFlag::eDEFAULT),
+                                                         fd);
+    if (status){
+        printf("Dist: %.2f\n", hit.block.distance);
+        if (hit.block.distance < 0.1f){
+            m_onSurface = true;
+        }
+        else{
+            m_onSurface = false;
+        }
+    }*/
+    //m_onSurface = true;
+    if (!m_jumping){
+        if (m_onSurface){
+            m_jumping = true;
+            m_yVel = 0.8f;
+        }
+    }
 }
 
 // ========================================================================= //

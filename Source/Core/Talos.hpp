@@ -38,7 +38,7 @@ namespace Talos
 extern const uint32_t VERSION_MAJOR;
 extern const uint32_t VERSION_MINOR;
 
-extern const double MS_PER_UPDATE;
+extern const float MS_PER_UPDATE;
 
 // ========================================================================= //
 

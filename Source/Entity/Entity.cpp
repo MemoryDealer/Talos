@@ -75,9 +75,9 @@ ComponentPtr Entity::attachComponent(const ComponentPtr component)
     m_components[&typeid(*component)] = component;
 
     // Notify all attached components of newly attached component.
-    /*for (auto& itr : m_components){
+    for (auto& itr : m_components){
         itr.second->onComponentAttached(component);
-    }*/
+    }
 
     return component;
 }
@@ -88,25 +88,6 @@ void Entity::detachComponent(const ComponentPtr component)
 {
     m_components.erase(&typeid(*component));
     m_components[&typeid(*component)] = nullptr;
-}
-
-// ========================================================================= //
-
-const bool Entity::setupComponents(void)
-{
-    for (auto& itr : m_components){
-        if (itr.second->isInitialized() == false){
-            return false;
-        }
-
-        // Call onComponentAttached() for every component to every component.
-        // Doing this now ensure they are all initialized.
-        for (auto& c : m_components){
-            itr.second->onComponentAttached(c.second);
-        }
-    }
-
-    return true;
 }
 
 // ========================================================================= //

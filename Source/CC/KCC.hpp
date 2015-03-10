@@ -45,7 +45,12 @@ public:
 
     void destroy(World&);
 
-    PxExtendedVec3 update(const PxReal, const PxReal, const PxReal);
+    PxExtendedVec3 update(World& world, 
+                          const PxReal, 
+                          const PxReal, 
+                          const PxReal);
+
+    void jump(void);
 
     // Setters:
 
@@ -55,6 +60,9 @@ public:
 
 private:
     PxController* m_controller;
+    PxReal m_yVel;
+    bool m_onSurface;
+    bool m_jumping;
 };
 
 // ========================================================================= //

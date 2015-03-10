@@ -218,8 +218,8 @@ void Engine::start(const EngineStateID id)
     // Push the specified state onto the active stack and run the game loop.
     this->pushState(id);
 
-    double prev = m_timer->getMilliseconds();
-    double lag = 0.0;
+    float prev = m_timer->getMilliseconds();
+    float lag = 0.0;
 
     while (m_active == true){
         // Check for window closing.
@@ -229,8 +229,8 @@ void Engine::start(const EngineStateID id)
 
         // Update the engine if the render window is active.
         if (m_renderWindow->isActive()){
-            double current = m_timer->getMilliseconds();
-            double elapsed = current - prev;
+            float current = m_timer->getMilliseconds();
+            float elapsed = current - prev;
             prev = current;
             lag += elapsed;
 
@@ -242,7 +242,7 @@ void Engine::start(const EngineStateID id)
             }
 
             // Render the updated frame, compensating for lag.
-            m_root->renderOneFrame(Ogre::Real(lag / Talos::MS_PER_UPDATE));
+            m_root->renderOneFrame(lag / Talos::MS_PER_UPDATE);
         }
     }
 }

@@ -85,8 +85,15 @@ void GameState::enter(void)
     modelC->init(m_world, "Plane/Board", "Board");      
     m_world.attachComponent<CollisionComponent>(plane);
     ComponentMessage msg(ComponentMessage::Type::Translate);
-    msg.translate.x = 0.f; msg.translate.z = 0.f;
-    msg.translate.y = -50.f;
+    msg.data = Ogre::Vector3(0.f, -50.f, 0.f);
+    plane->message(msg);
+
+    plane = m_world.createEntity();
+    m_world.attachComponent<SceneComponent>(plane);
+    modelC = m_world.attachComponent<ModelComponent>(plane);
+    modelC->init(m_world, "Plane/Board", "Board");
+    m_world.attachComponent<CollisionComponent>(plane);
+    msg.data = Ogre::Vector3(75.f, 0.f, 0.f);
     plane->message(msg);
 
     // Create ball.
@@ -100,11 +107,13 @@ void GameState::enter(void)
     lightC->setRange(175.f);
     physicsC = m_world.attachComponent<PhysicsComponent>(ball);
     physicsC->setType(PhysicsComponent::Type::Sphere);
+    msg.data = Ogre::Vector3(10.f, 0.f, 0.f);
+    ball->message(msg);
     
     
     // Setup visual scene settings.
-    m_world.getEnvironment()->setAmbientLight(255.f, 255.f, 255.f);
-    m_world.getEnvironment()->setSunColour(20.f, 17.5f, 18.9f);
+    //m_world.getEnvironment()->setAmbientLight(255.f, 255.f, 255.f);
+    //m_world.getEnvironment()->setSunColour(20.f, 17.5f, 18.9f);
     m_world.getEnvironment()->setMoonColour(.50f, .50f, 255.f);
 
     // Create Ocean.

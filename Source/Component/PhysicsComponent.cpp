@@ -50,7 +50,7 @@ PhysicsComponent::~PhysicsComponent(void)
 
 void PhysicsComponent::init(World&)
 {
-    this->setInitialized(true);
+    
 }
 
 // ========================================================================= //
@@ -95,7 +95,7 @@ void PhysicsComponent::init(World& world, EntityPtr entity)
     case Type::Sphere:
         {
             // Create sphere geometry.
-            geometry.reset(new PxSphereGeometry(5.f));
+            geometry.reset(new PxSphereGeometry(e->getBoundingRadius()));
             //Assert(geometry->isValid(), "Invalid PxSphereGeometry for PhysicsComponent");
         }
         break;
@@ -132,8 +132,6 @@ void PhysicsComponent::destroy(World& world)
     Assert(m_rigidActor, "Null m_actor!");
 
     world.getPScene()->getScene()->removeActor(*m_rigidActor);
-
-    this->setInitialized(false);
 }
 
 // ========================================================================= //

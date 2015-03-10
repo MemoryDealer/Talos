@@ -33,6 +33,7 @@ enum class CommandType{
     MoveForward,
     MoveLeft,
     MoveRight,
+    Jump,
     Spectator
 };
 

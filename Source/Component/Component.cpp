@@ -25,8 +25,7 @@
 
 // ========================================================================= //
 
-Component::Component(void) :
-m_initialized(false)
+Component::Component(void)
 {
 
 }

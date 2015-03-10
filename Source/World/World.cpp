@@ -217,10 +217,6 @@ const bool World::setupEntities(void) const
 {
     for (int i = 0; i < m_entityPool->m_poolSize; ++i){
         EntityPtr entity = &m_entityPool->m_pool[i];
-        if (!entity->setupComponents()){
-            return false;
-        }
-
         m_systemManager->processEntity(entity);
     }
 

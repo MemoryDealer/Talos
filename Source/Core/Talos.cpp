@@ -33,7 +33,7 @@ namespace Talos
 const static uint32_t VERSION_MAJOR = 0;
 const static uint32_t VERSION_MINOR = 1;
 
-const double MS_PER_UPDATE = 16.0;
+const float MS_PER_UPDATE = 16.0;
 
 // ========================================================================= //
 

@@ -58,8 +58,6 @@ void ModelComponent::init(World& world,
     if (matName != ""){
         m_entity->setMaterialName(matName);
     }
-
-    this->setInitialized(true);
 }
 
 // ========================================================================= //
@@ -68,8 +66,6 @@ void ModelComponent::destroy(World& world)
 {
     m_entity->detachFromParent();
     m_entity = nullptr;
-
-    this->setInitialized(false);
 }
 
 // ========================================================================= //

@@ -638,6 +638,9 @@
     <ClInclude Include="Source\System\CollisionSystem.hpp">
       <Filter>Header Files\System</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Command\Actor\Jump.hpp">
+      <Filter>Header Files\Command\Actor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Source\work-log.txt">

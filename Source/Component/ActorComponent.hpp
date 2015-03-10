@@ -56,6 +56,9 @@ public:
     // type is CameraComponent.
     virtual void onComponentAttached(ComponentPtr) override;
 
+    // Attaches Ogre::Camera to roll node.
+    virtual void attachCamera(Ogre::Camera* camera) override;
+
     // Modes the actor can be in.
     enum class Mode{
         Spectator = 0,
@@ -70,6 +73,9 @@ public:
 
     // Changes the actor's orientation based on relative x/y looking.
     void look(const int, const int);
+
+    // Calls jump on character controller.
+    void jump(void);
 
     // Getters:
 

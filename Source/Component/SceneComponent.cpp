@@ -21,9 +21,6 @@
 // Implements PositionComponent class.
 // ========================================================================= //
 
-#include "Component/CameraComponent.hpp"
-#include "Component/LightComponent.hpp"
-#include "Component/ModelComponent.hpp"
 #include "ComponentMessage.hpp"
 #include "SceneComponent.hpp"
 #include "World/World.hpp"
@@ -52,8 +49,6 @@ void SceneComponent::init(World& world)
 
     m_node = world.getSceneManager()->getRootSceneNode()->
         createChildSceneNode();
-
-    this->setInitialized(true);
 }
 
 // ========================================================================= //
@@ -61,8 +56,6 @@ void SceneComponent::init(World& world)
 void SceneComponent::destroy(World& world)
 {
     world.getSceneManager()->destroySceneNode(m_node);
-
-    this->setInitialized(false);
 }
 
 // ========================================================================= //
@@ -76,26 +69,28 @@ void SceneComponent::update(World&)
 
 void SceneComponent::message(const ComponentMessage& msg)
 {
+    switch (msg.type){
+    default:
+        break;
 
+    case ComponentMessage::Type::Translate:
+        m_node->translate(boost::get<Ogre::Vector3>(msg.data));
+        break;
+    }
 }
 
 // ========================================================================= //
 
 void SceneComponent::onComponentAttached(ComponentPtr component)
 {
-    if (typeid(*component) == typeid(ModelComponent)){
-        if (component->isInitialized()){
-        m_node->attachObject(
-            static_cast<ModelComponentPtr>(component)->getOgreEntity());
-        }
-    }
-    else if (typeid(*component) == typeid(LightComponent)){
-        Assert(static_cast<LightComponentPtr>(component)->getLight() != nullptr,
-               "LightComponent's Ogre::Light not initialized in "
-               "SceneComponent::onComponentAttached");
-        m_node->attachObject(
-            static_cast<LightComponentPtr>(component)->getLight());
-    }
+    
+}
+
+// ========================================================================= //
+
+void SceneComponent::attachCamera(Ogre::Camera* camera)
+{
+    m_node->attachObject(camera);
 }
 
 // ========================================================================= //

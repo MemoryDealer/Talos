@@ -98,9 +98,10 @@ void PScene::destroy(void)
 
 void PScene::simulate(PxReal speed)
 {
-    const PxReal step = 1.0f / 
+    /*const PxReal step = 1.0f / 
         static_cast<PxReal>(Talos::MS_PER_UPDATE) * 
-        speed;
+        speed;*/
+    const PxReal step = 1.f / Talos::MS_PER_UPDATE;
 
     m_scene->simulate(step);
     m_scene->fetchResults(true);

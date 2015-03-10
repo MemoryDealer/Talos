@@ -22,6 +22,7 @@
 // ========================================================================= //
 
 #include "CollisionComponent.hpp"
+#include "ComponentMessage.hpp"
 #include "Entity/Entity.hpp"
 #include "ModelComponent.hpp"
 #include "Physics/PScene.hpp"
@@ -49,7 +50,7 @@ CollisionComponent::~CollisionComponent(void)
 
 void CollisionComponent::init(World& world)
 {
-    this->setInitialized(true);
+    
 }
 
 // ========================================================================= //
@@ -122,8 +123,6 @@ void CollisionComponent::destroy(World& world)
     Assert(m_rigidActor != nullptr, "Null m_actor!");
 
     world.getPScene()->getScene()->removeActor(*m_rigidActor);
-
-    this->setInitialized(false);
 }
 
 // ========================================================================= //
@@ -137,7 +136,20 @@ void CollisionComponent::update(World& world)
 
 void CollisionComponent::message(const ComponentMessage& msg)
 {
+    switch (msg.type){
+    default:
+        break;
 
+    case ComponentMessage::Type::Translate:
+        if (m_rigidActor){
+            Ogre::Vector3 translate = boost::get<Ogre::Vector3>(msg.data);
+            PxTransform transform = m_rigidActor->getGlobalPose();
+            transform.p += Physics::toPx(translate);
+
+            m_rigidActor->setGlobalPose(transform);
+        }
+        break;
+    }
 }
 
 // ========================================================================= //

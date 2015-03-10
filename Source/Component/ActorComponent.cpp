@@ -38,7 +38,7 @@ m_rootNode(nullptr),
 m_yawNode(nullptr),
 m_pitchNode(nullptr),
 m_rollNode(nullptr),
-m_speed(0.5f),
+m_speed(0.35f),
 m_cc(CC::Kinematic),
 m_dcc(nullptr),
 m_kcc(nullptr),
@@ -86,8 +86,6 @@ void ActorComponent::init(World& world)
         m_kcc = new KCC();
         m_kcc->init(world);
     }
-
-    this->setInitialized(true);
 }
 
 // ========================================================================= //
@@ -104,26 +102,25 @@ void ActorComponent::destroy(World& world)
 
     world.getSceneManager()->destroySceneNode(m_yawNode);
     SceneComponent::destroy(world);
-
-    this->setInitialized(false);
 }
 
 // ========================================================================= //
 
-void ActorComponent::update(World&)
+void ActorComponent::update(World& world)
 {
     Ogre::Vector3 translate(Ogre::Vector3::ZERO);
+    const Ogre::Real move = 1.f;
     if (m_movingForward){
-        translate.z = -m_speed;
+        translate.z = -move;
     }
     else if (m_movingBack){
-        translate.z = m_speed;
+        translate.z = move;
     }
     if (m_movingLeft){
-        translate.x = -m_speed;
+        translate.x = -move;
     }
     else if (m_movingRight){
-        translate.x = m_speed;
+        translate.x = move;
     }
 
     // Calculate movement vector.
@@ -145,6 +142,8 @@ void ActorComponent::update(World&)
     // Prevent faster movement when moving diagonally.
     translate.normalise();
 
+    translate *= m_speed;
+
     switch (m_mode){
     default:
         break;
@@ -156,7 +155,8 @@ void ActorComponent::update(World&)
     case Mode::Player:
         {
             if (m_cc == CC::Kinematic){
-                PxExtendedVec3 pos = m_kcc->update(translate.x,
+                PxExtendedVec3 pos = m_kcc->update(world,
+                                                   translate.x,
                                                    translate.y,
                                                    translate.z);
                 m_rootNode->setPosition(Ogre::Real(pos.x),
@@ -179,12 +179,14 @@ void ActorComponent::message(const ComponentMessage& msg)
 
 void ActorComponent::onComponentAttached(ComponentPtr component)
 {
-    SceneComponent::onComponentAttached(component);
+    
+}
 
-    if (typeid(*component) == typeid(CameraComponent)){
-        CameraComponentPtr cameraC = static_cast<CameraComponentPtr>(component);
-        m_rollNode->attachObject(cameraC->getCamera());
-    }
+// ========================================================================= //
+
+void ActorComponent::attachCamera(Ogre::Camera* camera)
+{
+    m_rollNode->attachObject(camera);
 }
 
 // ========================================================================= //
@@ -225,6 +227,13 @@ void ActorComponent::look(const int relx, const int rely)
             }
         }
     }
+}
+
+// ========================================================================= //
+
+void ActorComponent::jump(void)
+{
+    m_kcc->jump();
 }
 
 // ========================================================================= //

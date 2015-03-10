@@ -45,12 +45,7 @@ struct ComponentMessage{
 
     Type type;
 
-    union{
-        struct translate_t{
-            
-            Ogre::Real x, y, z;
-        } translate;
-    };
+    boost::variant<std::string, Ogre::Vector3> data;
 };
 
 // ========================================================================= //

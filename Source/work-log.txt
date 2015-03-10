@@ -383,7 +383,7 @@
 
 == 3/7/16 ==
 * Changed CommandRepository to use a hash table for storing CommandPtr objects.
-* Added CommandType.hpp which enumerates the strongly typed CommandType. Now Command has a member CommandType, for use as a key in CommandRepository's hash table.
+* (3/8/16) Added CommandType.hpp which enumerates the strongly typed CommandType. Now Command has a member CommandType, for use as a key in CommandRepository's hash table.
     Note this is only for networking code--to identify which type of command the client sent without needing serialization. Serialization of the entire Command objects seems like a waste of
     bandwidth, but if I have extra time I will see if it can be implemented. Or perhaps the RakNet RPC4 plugin would be useful for this.
 * Got basic client movement working with server. 
@@ -396,16 +396,20 @@
 * PhysX objects are now added by getting the Ogre3D bounding box (for box shapes), so no needed to specify sizes manually anymore.
 * Added CollisionSystem to deal with CollisionComponent/SceneComponent pairs.
 * Added some basic static conversion functions to Physics class.
+* Changed ComponentMessage to use boost::variant instead of union, so it can store classes inside of a union-like data structure, for saving memory when sending component messages.
+* It's now possible to translate a scene component by sending it a message.
+* Moved all linking together of components into SystemManager::processEntity(). There is no longer a need for Entity::setupComponents().
+* Added proper (at least visually) gravity for free fall.
+* Added jumping ability for KCC.
 
 == TODO ==
 * Implement gravity for KCC.
-* Use boost::variant for ComponentMessage--allow sending a message with Ogre::Vector3 to translate an entity.
 * Add ability to specify box half extents directly in collision objects for invisible walls and such.
 * Add PhysX mesh (cooking) collision volumes for models.
-* Move onComponentAttached() stuff to SystemManager, change m_initialized use or do away with it entirely.
 * Just add commands for pressed and released--it will make it easier for sending to the server and keeping lists of unprocessed commands.
 * GameState for networked games. Add jumping & sprinting.
 * Popup error box when trying to connect while previous connection is being closed.
+* Client should test timestamp of update packets to ensure no out of order updates.
 * Create EventQueue system to deal with network and UI. Pass World into network classes and have something like World::handleNetworkEvent().
 * SkyLowGraphics.
 * Consider creating a function in World to handle input for Client so it can be sent to the server.
