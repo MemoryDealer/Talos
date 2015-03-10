@@ -50,7 +50,7 @@ public:
     virtual void update(World&) override;
 
     // Handles input messages.
-    virtual void message(const ComponentMessage&) override;
+    virtual void message(ComponentMessage&) override;
 
     // Calls SceneComponent::onComponentAttached() and links camera if the
     // type is CameraComponent.
@@ -93,8 +93,14 @@ public:
 
     // Setters:
 
+    virtual void setPosition(const Ogre::Vector3& pos) override;
+
     // Sets the mode of the Actor, affecting controls/movement.
     void setMode(const Mode);
+
+    // Sets the internal remote flag. Should be set to true for any 
+    // instance of a remote player on a client game.
+    void setRemote(const bool remote);
 
     // Sets translate vector to forward if in spectator mode. 
     void setMovingForward(const bool);
@@ -115,6 +121,7 @@ private:
     Ogre::SceneNode* m_pitchNode;
     Ogre::SceneNode* m_rollNode;
     Ogre::Real m_speed;
+    bool m_remote; // Is this actor remote (for clients).
 
     // Character controller.
     CC m_cc;
@@ -159,6 +166,10 @@ inline const bool ActorComponent::isMovingRight(void) const{
 }
 
 // Setters:
+
+inline void ActorComponent::setRemote(const bool remote){
+    m_remote = remote;
+}
 
 inline void ActorComponent::setMovingForward(const bool moving){
     m_movingForward = moving;

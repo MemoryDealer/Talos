@@ -63,7 +63,7 @@ public:
     virtual void update(World&) override;
 
     // Empty.
-    virtual void message(const ComponentMessage&) override;
+    virtual void message(ComponentMessage&) override;
 
     // Component functions:
 

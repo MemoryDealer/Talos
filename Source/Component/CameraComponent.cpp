@@ -74,7 +74,7 @@ void CameraComponent::update(World& world)
 
 // ========================================================================= //
 
-void CameraComponent::message(const ComponentMessage& msg)
+void CameraComponent::message(ComponentMessage& msg)
 {
 
 }

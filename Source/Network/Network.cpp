@@ -28,6 +28,7 @@
 Network::Network(void) :
 m_mode(Network::Mode::Null),
 m_initialized(false),
+m_gameActive(false),
 m_username(""),
 m_events(),
 m_immediateEvents(),

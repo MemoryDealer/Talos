@@ -77,7 +77,7 @@ void ModelComponent::update(World& world)
 
 // ========================================================================= //
 
-void ModelComponent::message(const ComponentMessage& msg)
+void ModelComponent::message(ComponentMessage& msg)
 {
 
 }

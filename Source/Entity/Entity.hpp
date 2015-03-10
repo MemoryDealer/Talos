@@ -58,13 +58,13 @@ public:
 
     // Registers Component with the entity. Returns a pointer to the newly
     // attached Component for convenience.
-    ComponentPtr attachComponent(const ComponentPtr);
+    ComponentPtr attachComponent(const ComponentPtr component);
 
     // Unregisters component from the entity.
-    void detachComponent(const ComponentPtr);
+    void detachComponent(const ComponentPtr component);
 
     // Broadcasts ComponentMessage to all attached Components.
-    void message(const ComponentMessage&);
+    void message(ComponentMessage& msg);
 
     // Getters:
 
@@ -94,10 +94,10 @@ public:
     // Setters:
 
     // Sets a new ID for the entity.
-    void setID(const EntityID);
+    void setID(const EntityID id);
 
     // Sets the next EntityPtr for the EntityPool.
-    void setNext(const EntityPtr);
+    void setNext(const EntityPtr next);
 
 private:
     ComponentHashTable m_components;

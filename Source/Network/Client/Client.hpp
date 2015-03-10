@@ -77,6 +77,16 @@ public:
     // Sends disconnect notification to server.
     virtual void endGame(void) override;
 
+    // Returns number of players in the lobby/game.
+    virtual const uint32_t getNumPlayers(void) const override;
+
+    // Find next player with null EntityPtr and assigns it to the passed in
+    // pointer.
+    virtual void addPlayerEntity(EntityPtr entity) override;
+
+    // Sets player entity for user.
+    virtual void setPlayerEntity(EntityPtr entity) override;
+
     // === //
 
     struct Player{
@@ -84,7 +94,7 @@ public:
         EntityPtr entity;
     };
 
-    typedef std::unordered_map<uint32_t, RakNet::RakString> PlayerList;
+    typedef std::unordered_map<uint32_t, Player> PlayerList;
 
 private:
     // Sends registration info to server.

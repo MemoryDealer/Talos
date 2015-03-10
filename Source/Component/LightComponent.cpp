@@ -64,7 +64,7 @@ void LightComponent::update(World& world)
 
 // ========================================================================= //
 
-void LightComponent::message(const ComponentMessage&)
+void LightComponent::message(ComponentMessage&)
 {
 
 }

@@ -67,10 +67,18 @@ void SceneComponent::update(World&)
 
 // ========================================================================= //
 
-void SceneComponent::message(const ComponentMessage& msg)
+void SceneComponent::message(ComponentMessage& msg)
 {
     switch (msg.type){
     default:
+        break;
+
+    case ComponentMessage::Type::GetPosition:
+        msg.data = m_node->getPosition();
+        break;
+
+    case ComponentMessage::Type::SetPosition:
+        m_node->setPosition(boost::get<Ogre::Vector3>(msg.data));
         break;
 
     case ComponentMessage::Type::Translate:

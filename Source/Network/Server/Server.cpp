@@ -24,6 +24,7 @@
 #include "Command/Command.hpp"
 #include "Command/CommandRepository.hpp"
 #include "Command/Actor/Look.hpp"
+#include "Component/ComponentMessage.hpp"
 #include "Config/Config.hpp"
 #include "Entity/Entity.hpp"
 #include "Network/NetData.hpp"
@@ -34,7 +35,8 @@
 Server::Server(void) :
 m_peer(nullptr),
 m_packet(nullptr),
-m_tickRate(8),
+m_tickRate(100),
+m_tick(),
 m_host(nullptr),
 m_players(),
 m_commandRepo(new CommandRepository())
@@ -89,10 +91,13 @@ void Server::init(const int port, const std::string& username)
     // Allocate Player instance for host.
     m_host.reset(new Player());
     m_host->username = username.c_str();
+    m_host->id = 0;
     m_host->entity = nullptr;
 
     this->setUsername(username);
     this->setInitialized(true);
+
+    m_tick.reset();
 }
 
 // ========================================================================= //
@@ -219,8 +224,10 @@ void Server::update(void)
 
                     static_cast<LookCommand*>(command)->setXY(relx, rely);
                 }
-
+                
                 EntityPtr entity = m_players[m_packet->guid]->entity;
+                printf("Received input from GUID: %d\tID: %d\n", m_packet->guid, m_players[m_packet->guid]->id);
+                printf("EntityID: %d\n", entity->getID());
                 if (m_packet->data[0] == NetMessage::ClientCommandPressed){
                     command->execute(entity);
                 }
@@ -230,6 +237,46 @@ void Server::update(void)
             }
             break;
         }
+    }
+    
+    if (!this->gameActive()){
+        return;
+    }
+
+    // Update clients.
+    if (m_tick.getMilliseconds() > m_tickRate){
+        // Send each connected player's position.
+        for (auto& i : m_players){
+            RakNet::BitStream bs;
+            bs.Write(static_cast<RakNet::MessageID>(NetMessage::PlayerUpdate));
+            
+            // ID.
+            bs.Write(i.second->id);
+            // Position.
+            ComponentMessage msg(ComponentMessage::Type::GetPosition);
+            i.second->entity->message(msg);            
+            Ogre::Vector3 pos = boost::get<Ogre::Vector3>(msg.data);
+            bs.Write(pos.x);
+            bs.Write(pos.y);
+            bs.Write(pos.z);
+
+            this->broadcast(bs, HIGH_PRIORITY, UNRELIABLE_SEQUENCED);
+        }
+
+        // Send server's data.
+        RakNet::BitStream bs;
+        bs.Write(static_cast<RakNet::MessageID>(NetMessage::PlayerUpdate));
+        bs.Write(m_host->id);
+        ActorComponentPtr actor =
+            m_host->entity->getComponent<ActorComponent>();
+        Ogre::Vector3 pos = actor->getPosition();
+        bs.Write(pos.x);
+        bs.Write(pos.y);
+        bs.Write(pos.z);
+
+        this->broadcast(bs, HIGH_PRIORITY, UNRELIABLE_SEQUENCED);
+
+        m_tick.reset();
     }
 }
 
@@ -276,7 +323,7 @@ uint32_t Server::chat(const std::string& msg)
     chat.id = 0;
     chat.Serialize(true, &bs);
 
-    return this->broadcast(bs, MEDIUM_PRIORITY, RELIABLE);
+    return this->broadcast(bs, LOW_PRIORITY, RELIABLE);
 }
 
 // ========================================================================= //
@@ -290,8 +337,8 @@ void Server::sendPlayerList(const RakNet::AddressOrGUID& identifier,
     uint32_t num = m_players.size() + 1;
     bs.Write(num);
     // Write server username.
-    bs.Write(this->getUsername().c_str());
-    bs.Write(static_cast<int>(0));
+    bs.Write(m_host->username.C_String());
+    bs.Write(m_host->id);
     // Write all other player usernames.
     for (auto& i : m_players){
         bs.Write(i.second->username.C_String());
@@ -330,9 +377,13 @@ void Server::endGame(void)
     this->sendPlayerList(RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 
     // Reset all player's entity's to nullptr, to prepare for next game.
+    printf("PLAYERS:\n");
     for (auto& i : m_players){
+        printf("ID: %d\teID: %d\n", i.second->id, i.second->entity->getID());
         i.second->entity = nullptr;
     }
+
+    this->setGameActive(false);
 }
 
 // ========================================================================= //
@@ -349,10 +400,18 @@ void Server::addPlayerEntity(EntityPtr entity)
     for (auto& i : m_players){
         if (!i.second->entity){
             i.second->entity = entity;
+            return;
         }
 
         // @TODO: send player spawn information
     }
+}
+
+// ========================================================================= //
+
+void Server::setPlayerEntity(EntityPtr entity)
+{
+    m_host->entity = entity;
 }
 
 // ========================================================================= //

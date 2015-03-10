@@ -68,6 +68,9 @@ void GameState::enter(void)
     // Create player.
     EntityPtr player = m_world.createEntity();
     m_world.attachComponent<ActorComponent>(player);
+    if (m_world.getNetwork()->getMode() == Network::Mode::Client){
+        player->getComponent<ActorComponent>()->setRemote(true);
+    }
     m_world.attachComponent<CameraComponent>(player);
     m_world.attachComponent<ModelComponent>(player)->init(
         m_world, "Cylinder.mesh");
@@ -129,13 +132,14 @@ void GameState::enter(void)
     m_world.getEnvironment()->loadSky();
 
     // Network game setup.
-    if (m_world.getNetwork()->getMode() == Network::Mode::Server){
+    if (m_world.getNetwork()->initialized()){
         uint32_t numPlayers = m_world.getNetwork()->getNumPlayers();
         for (uint32_t i = 0; i < numPlayers; ++i){
             this->addNetworkPlayer();
         }
-    }
-    
+
+        m_world.getNetwork()->setGameActive(true);
+    }    
 
     if (!m_world.setupEntities()){
         throw std::exception("GameState entities reported uninitialized");
@@ -236,7 +240,7 @@ void GameState::handleNetEvents(void)
             break;
 
         case NetMessage::EndGame:
-            
+            m_world.getNetwork()->endGame();
             m_subject.notify(EngineNotification::Pop);
             break;
         }
@@ -264,6 +268,9 @@ void GameState::addNetworkPlayer(void)
     EntityPtr e = m_world.createEntity();
 
     m_world.attachComponent<ActorComponent>(e);
+    if (m_world.getNetwork()->getMode() == Network::Mode::Client){
+        e->getComponent<ActorComponent>()->setRemote(true);
+    }
     m_world.attachComponent<ModelComponent>(e)->init(
         m_world, "Cylinder.mesh");
 

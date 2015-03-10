@@ -49,7 +49,7 @@ public:
     virtual void update(World&) override;
 
     // Empty.
-    virtual void message(const ComponentMessage&) override;
+    virtual void message(ComponentMessage&) override;
 
     // Wires up needed Components with itself.
     virtual void onComponentAttached(ComponentPtr) override;
@@ -71,19 +71,19 @@ public:
     // Setters:
 
     // Sets position of Ogre::SceneNode.
-    void setPosition(const Ogre::Vector3& pos);
+    virtual void setPosition(const Ogre::Vector3& pos);
 
     // Sets position of Ogre::SceneNode. 
-    void setPosition(const Ogre::Real, const Ogre::Real, const Ogre::Real);
+    virtual void setPosition(const Ogre::Real, const Ogre::Real, const Ogre::Real);
 
     // Sets orientation of Ogre::SceneNode.
-    void setOrientation(const Ogre::Quaternion& orientation);
+    virtual void setOrientation(const Ogre::Quaternion& orientation);
 
     // Sets orientation of Ogre::SceneNode.
-    void setOrientation(const Ogre::Real w, 
-                        const Ogre::Real x, 
-                        const Ogre::Real y,
-                        const Ogre::Real z);
+    virtual void setOrientation(const Ogre::Real w,
+                                const Ogre::Real x, 
+                                const Ogre::Real y,
+                                const Ogre::Real z);
 
 private:
     Ogre::SceneNode* m_node;

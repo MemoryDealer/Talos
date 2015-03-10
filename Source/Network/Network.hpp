@@ -121,6 +121,8 @@ public:
 
     virtual void addPlayerEntity(EntityPtr entity) { }
 
+    virtual void setPlayerEntity(EntityPtr entity) { }
+
     // === //
 
     // Enqueues NetEvent.
@@ -140,6 +142,9 @@ public:
     // Returns true if Network service has been initialized.
     const bool initialized(void) const;
 
+    // Returns true if game is active (e.g., GameState is running).
+    const bool gameActive(void) const;
+
     // Returns username.
     const std::string getUsername(void) const;
 
@@ -150,6 +155,9 @@ public:
 
     // Sets internal initialization flag.
     void setInitialized(const bool initialized);
+
+    // Sets internal game active flag.
+    void setGameActive(const bool active);
 
     // Sets username.
     void setUsername(const std::string& username);
@@ -162,7 +170,7 @@ public:
 
 private:
     Mode m_mode;
-    bool m_initialized;
+    bool m_initialized, m_gameActive;
     std::string m_username;
 
     std::queue<NetEvent> m_events;
@@ -182,6 +190,10 @@ inline const bool Network::initialized(void) const{
     return m_initialized;
 }
 
+inline const bool Network::gameActive(void) const{
+    return m_gameActive;
+}
+
 inline const std::string Network::getUsername(void) const{
     return m_username;
 }
@@ -194,6 +206,10 @@ inline void Network::setMode(const Mode mode){
 
 inline void Network::setInitialized(const bool initialized){
     m_initialized = initialized;
+}
+
+inline void Network::setGameActive(const bool active){
+    m_gameActive = active;
 }
 
 inline void Network::setUsername(const std::string& username){

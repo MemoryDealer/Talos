@@ -134,7 +134,7 @@ void CollisionComponent::update(World& world)
 
 // ========================================================================= //
 
-void CollisionComponent::message(const ComponentMessage& msg)
+void CollisionComponent::message(ComponentMessage& msg)
 {
     switch (msg.type){
     default:

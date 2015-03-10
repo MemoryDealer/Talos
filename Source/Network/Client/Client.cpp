@@ -23,6 +23,7 @@
 
 #include "Client.hpp"
 #include "Command/Actor/Look.hpp"
+#include "Component/ComponentMessage.hpp"
 #include "Config/Config.hpp"
 #include "Network/NetData.hpp"
 
@@ -130,8 +131,8 @@ void Client::update(void)
                 e.s1 = reg.username.C_String();
                 this->pushEvent(e);
 
-                // Add to player list.
-                m_players[reg.id] = reg.username;
+                // Store ID.
+                m_id = reg.id;
             }
             break;
 
@@ -146,7 +147,7 @@ void Client::update(void)
 
                 // Notify UI to remove player name.
                 NetEvent e(NetMessage::ClientDisconnect);
-                e.s1 = m_players[id];
+                e.s1 = m_players[id].username;
                 this->pushEvent(e);
 
                 // Remove player entry.
@@ -167,7 +168,7 @@ void Client::update(void)
                 NetData::Chat chat;
                 chat.Serialize(false, &bs);
                 
-                e.s1 = m_players[chat.id] +
+                e.s1 = m_players[chat.id].username +
                     ": " +
                     chat.msg;
                 this->pushEvent(e);
@@ -195,7 +196,8 @@ void Client::update(void)
                     uint32_t id;
                     bs.Read(username);
                     bs.Read(id);
-                    m_players[id] = username.C_String();
+                    m_players[id].username = username.C_String();
+                    m_players[id].entity = nullptr;
 
                     NetEvent e(NetMessage::Register);
                     e.s1 = username.C_String();
@@ -210,6 +212,35 @@ void Client::update(void)
 
         case NetMessage::EndGame:
             this->pushEvent(NetEvent(NetMessage::EndGame));
+            break;
+
+        case NetMessage::PlayerUpdate:            
+            {
+                // Don't process this update if game is not active.
+                if (!this->gameActive()){
+                    break;
+                }
+
+                RakNet::BitStream bs(m_packet->data, m_packet->length, false);
+                bs.IgnoreBytes(sizeof(RakNet::MessageID));
+
+                // Get player ID.
+                uint32_t id = 0;
+                bs.Read(id);
+
+                Ogre::Vector3 pos;
+
+                // Read in position values.
+                bs.Read(pos.x);
+                bs.Read(pos.y);
+                bs.Read(pos.z);
+
+                // Apply updated position.
+                ComponentMessage msg(ComponentMessage::Type::SetPosition);
+                msg.data = pos;                
+                m_players[id].entity->message(msg);
+                printf("Received update for player ID %d\t(%.2f, %.2f)\n", id, pos.x, pos.z);
+            }
             break;
         }
     }
@@ -317,7 +348,40 @@ uint32_t Client::sendCommand(CommandPtr command, bool released)
 
 void Client::endGame(void)
 {
-    
+    this->setGameActive(false);
+
+    for (auto& i : m_players){
+        printf("ID: %d\teID: %d\n", i.first, i.second.entity->getID());
+    }
+}
+
+// ========================================================================= //
+
+const uint32_t Client::getNumPlayers(void) const
+{
+    return m_players.size();
+}
+
+// ========================================================================= //
+
+void Client::addPlayerEntity(EntityPtr entity)
+{
+    for (auto& i : m_players){
+        if (!i.second.entity){
+            i.second.entity = entity;
+            return;
+        }
+
+        
+    }
+}
+
+// ========================================================================= //
+
+void Client::setPlayerEntity(EntityPtr entity)
+{
+    m_players[m_id].username = this->getUsername().c_str();
+    m_players[m_id].entity = entity;
 }
 
 // ========================================================================= //

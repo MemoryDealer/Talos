@@ -95,6 +95,9 @@ public:
     // pointer.
     virtual void addPlayerEntity(EntityPtr entity) override;
 
+    // Sets player entity for user hosting the server.
+    virtual void setPlayerEntity(EntityPtr entity) override;
+
     // Getters:
 
     // === //
@@ -116,6 +119,7 @@ private:
     RakNet::RakPeerInterface* m_peer;
     RakNet::Packet* m_packet;
     unsigned int m_tickRate;
+    Ogre::Timer m_tick;
 
     // Player instance of user running server.
     std::shared_ptr<Player> m_host;

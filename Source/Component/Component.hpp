@@ -50,7 +50,7 @@ public:
     virtual void update(World&) = 0;
 
     // Handles a message received from parent Entity.
-    virtual void message(const ComponentMessage&) = 0;
+    virtual void message(ComponentMessage&) = 0;
 
     // Triggered for all attached components when a new component is 
     // attached to an Entity.

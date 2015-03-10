@@ -42,7 +42,8 @@ enum NetMessage{
     ClientCommandPressed,
     ClientCommandReleased,
     StartGame,
-    EndGame
+    EndGame,
+    PlayerUpdate
 };
 
 // ========================================================================= //

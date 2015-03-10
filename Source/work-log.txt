@@ -402,8 +402,13 @@
 * Added proper (at least visually) gravity for free fall.
 * Added jumping ability for KCC.
 * Created PScene::raycast() which uses the PScene::Ray struct.
+* Fixed server player updates sent to clients. 
 
 == TODO ==
+* IDs are all out of order on client/serv
+* Don'tt send player list every time a client disconnects'
+* Change server to use stack-based Player objects in player list and for host.
+* Add NetworkActorComponent for clients?
 * Add ability to specify box half extents directly in collision objects for invisible walls and such.
 * Add PhysX mesh (cooking) collision volumes for models.
 * Just add commands for pressed and released--it will make it easier for sending to the server and keeping lists of unprocessed commands.

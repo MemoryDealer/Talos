@@ -143,7 +143,7 @@ void PhysicsComponent::update(World& world)
 
 // ========================================================================= //
 
-void PhysicsComponent::message(const ComponentMessage&)
+void PhysicsComponent::message(ComponentMessage&)
 {
 
 }

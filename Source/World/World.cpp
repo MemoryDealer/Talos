@@ -434,6 +434,8 @@ void World::setPlayer(const EntityPtr player)
     m_player = player;
     m_mainCameraC = m_player->getComponent<CameraComponent>();
     m_hasPlayer = true;
+
+    m_network->setPlayerEntity(player);
 }
 
 // ========================================================================= //

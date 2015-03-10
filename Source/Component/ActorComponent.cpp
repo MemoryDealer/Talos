@@ -39,6 +39,7 @@ m_yawNode(nullptr),
 m_pitchNode(nullptr),
 m_rollNode(nullptr),
 m_speed(0.35f),
+m_remote(false),
 m_cc(CC::Kinematic),
 m_dcc(nullptr),
 m_kcc(nullptr),
@@ -108,6 +109,10 @@ void ActorComponent::destroy(World& world)
 
 void ActorComponent::update(World& world)
 {
+    if (m_remote){
+        return;
+    }
+
     Ogre::Vector3 translate(Ogre::Vector3::ZERO);
     const Ogre::Real move = 1.f;
     if (m_movingForward){
@@ -170,9 +175,23 @@ void ActorComponent::update(World& world)
 
 // ========================================================================= //
 
-void ActorComponent::message(const ComponentMessage& msg)
+void ActorComponent::message(ComponentMessage& msg)
 {
-    
+    switch (msg.type){
+    default:
+        break;
+
+    case ComponentMessage::Type::GetPosition:       
+        {
+            Ogre::Vector3 pos = m_rootNode->_getDerivedPosition();
+            msg.data = m_rootNode->_getDerivedPosition();
+        }
+        break;
+
+    case ComponentMessage::Type::SetPosition:
+        this->setPosition(boost::get<Ogre::Vector3>(msg.data));
+        break;
+    }
 }
 
 // ========================================================================= //
@@ -255,6 +274,14 @@ void ActorComponent::setMode(const Mode mode)
 
         break;
     }
+}
+
+// ========================================================================= //
+
+void ActorComponent::setPosition(const Ogre::Vector3& pos)
+{
+    SceneComponent::setPosition(pos);
+    m_kcc->setPosition(pos);
 }
 
 // ========================================================================= //

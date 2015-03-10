@@ -92,7 +92,7 @@ void Entity::detachComponent(const ComponentPtr component)
 
 // ========================================================================= //
 
-void Entity::message(const ComponentMessage& msg)
+void Entity::message(ComponentMessage& msg)
 {
     Assert(msg.type != ComponentMessage::Type::Null, "Null Entity message!");
 

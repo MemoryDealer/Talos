@@ -36,6 +36,8 @@ struct ComponentMessage{
     enum class Type{
         Null = 0,
 
+        GetPosition,
+        SetPosition,
         Translate,
 
         End

@@ -65,7 +65,7 @@ public:
     virtual void update(World& world) override;
 
     // Empty.
-    virtual void message(const ComponentMessage& msg) override;
+    virtual void message(ComponentMessage& msg) override;
 
     // Getters:
 
