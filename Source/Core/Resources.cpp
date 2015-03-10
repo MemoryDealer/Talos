@@ -71,14 +71,14 @@ void loadMeshes(void)
         createPlane("Plane/Board", 
         Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,                                  
         plane, 
-        150.f, 
-        150.f, 
+        100.f, 
+        100.f, 
         20, 
         20, 
         true, 
         1, 
-        22.f, 
-        22.f, 
+        28.f, 
+        28.f, 
         Ogre::Vector3::UNIT_Z);
 }
 

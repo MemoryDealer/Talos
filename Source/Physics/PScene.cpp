@@ -130,3 +130,18 @@ void PScene::addToDebugDrawer(PxRigidActor* actor,
 }
 
 // ========================================================================= //
+
+bool PScene::raycast(Ray& ray)
+{
+    PxQueryFilterData fd;
+    fd.flags |= ray.flags;
+
+    return m_scene->raycast(ray.origin,
+                            ray.dir,
+                            ray.dist,
+                            ray.hit,
+                            PxHitFlags(PxHitFlag::eDEFAULT),
+                            fd);
+}
+
+// ========================================================================= //

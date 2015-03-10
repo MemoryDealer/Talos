@@ -82,51 +82,36 @@ PxExtendedVec3 KCC::update(World& world,
                            const PxReal dy, 
                            const PxReal dz)
 {
-    const PxReal gravity = 0.0281f;
-    const PxReal maxY = -7.81f;
-   
-    
+    // Free-fall/gravity values.
+    const PxReal gravity = 0.0281f; // Amount to advance y-velocity down.
+    const PxReal maxY = -7.81f; // Maximum negative y-velocity.
 
+    // Apply gravity.
     m_yVel -= gravity;
+
+    // Lock velocity at max.
     if (m_yVel < maxY){
         m_yVel = maxY;
     }
 
-
-
-    PxControllerState state;
-    m_controller->getState(state);
-    if (state.touchedActor){
-       
-        
-        
-    }
-
-
+    // Move the kinematic actor.
     PxVec3 disp(dx, m_yVel, dz);
-    
     m_controller->move(disp, 0.001f, 1.f / Talos::MS_PER_UPDATE, 0);
-
-    const PxReal surfaceMax = 1.32f;
+ 
+    // Get position for raycast origin.
     PxExtendedVec3 pos = m_controller->getPosition();
-    PxVec3 origin(pos.x, pos.y, pos.z);
-    PxVec3 uDir = PxVec3(0.f, -1.f, 0.f);
-    PxReal maxDist = 99999.f;
-    PxRaycastBuffer hit;
-    PxQueryFilterData fd;
-    fd.flags |= PxQueryFlag::eANY_HIT;
-    bool status = world.getPScene()->getScene()->raycast(origin,
-                                                         uDir,
-                                                         maxDist,
-                                                         hit,
-                                                         PxHitFlags(PxHitFlag::eDEFAULT),
-                                                         fd);
-    if (status){
-        if (hit.hasBlock){
-            printf("Dist: %.2f", hit.block.distance);
-            printf("\t%s\n", hit.block.actor->getConcreteTypeName());
 
-            if (hit.block.distance <= surfaceMax){
+    // Perform a raycast straight down.
+    PScene::Ray ray;
+    ray.origin = PxVec3(pos.x, pos.y, pos.z);
+    bool status = world.getPScene()->raycast(ray);
+
+    // If there was a hit, process it.
+    if (status){
+        if (ray.hit.hasBlock){
+            // Determine if player is standing on a surface.
+            const PxReal surfaceMax = 1.32f; 
+            if (ray.hit.block.distance <= surfaceMax){
                 m_onSurface = true;
                 m_yVel = 0.f;
                 m_jumping = false;
@@ -136,10 +121,32 @@ PxExtendedVec3 KCC::update(World& world,
             }
         }
     }
+
+    // If jumping and the player hits a ceiling, stop the jump.
+    // @TODO: raycast still returns result if no hit (distance = 0.f)
+    //if (m_jumping){
+    //    // Cast ray upwards.
+    //    PScene::Ray ray;
+    //    ray.origin = PxVec3(pos.x, pos.y, pos.z);
+    //    ray.dir = PxVec3(0.f, 1.f, 0.f);
+    //    ray.flags = PxQueryFlag::eSTATIC | PxQueryFlag::eDYNAMIC;
+    //    bool status = world.getPScene()->raycast(ray);
+
+    //    if (status){
+    //        if (ray.hit.hasAnyHits()){
+    //            
+    //            printf("Ray dist: %.2f\n", ray.hit.block.distance);
+    //            // If a ceiling has been hit.
+    //            if (ray.hit.block.distance != 0.f && 
+    //                ray.hit.block.distance < 2.f){
+    //                m_yVel = -gravity;
+    //                m_jumping = false;
+    //            }
+    //        }
+    //    }
+    //}
     
-    // Get updated position.
-    pos = m_controller->getPosition();
-    // Adjust for head height.
+    // Adjust y-value for head height.
     pos.y += 0.8644f;
     return pos;
 }
@@ -148,29 +155,6 @@ PxExtendedVec3 KCC::update(World& world,
 
 void KCC::jump(void)
 {
-    // See if standing on a surface.
-    /*PxVec3 origin(pos.x, pos.y, pos.z);
-    PxVec3 uDir = PxVec3(0.f, -1.f, 0.f);
-    PxReal maxDist = 10.f;
-    PxRaycastBuffer hit;
-    PxQueryFilterData fd;
-    fd.flags |= PxQueryFlag::eANY_HIT;
-    bool status = world.getPScene()->getScene()->raycast(origin,
-                                                         uDir,
-                                                         maxDist,
-                                                         hit,
-                                                         PxHitFlags(PxHitFlag::eDEFAULT),
-                                                         fd);
-    if (status){
-        printf("Dist: %.2f\n", hit.block.distance);
-        if (hit.block.distance < 0.1f){
-            m_onSurface = true;
-        }
-        else{
-            m_onSurface = false;
-        }
-    }*/
-    //m_onSurface = true;
     if (!m_jumping){
         if (m_onSurface){
             m_jumping = true;

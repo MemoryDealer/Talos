@@ -49,6 +49,25 @@ public:
     // Adds the actor to the internal debug drawer.
     void addToDebugDrawer(PxRigidActor*, PxGeometry&);
 
+    // Raycasting:
+
+    struct Ray{
+        explicit Ray(void) :
+        origin(PxVec3(0.f, 0.f, 0.f)),
+        dir(PxVec3(0.f, -1.f, 0.f)),
+        dist(100.f),
+        hit(),
+        flags(PxQueryFlag::eANY_HIT) { }
+
+        PxVec3 origin;
+        PxVec3 dir;
+        PxReal dist;
+        PxRaycastBuffer hit;
+        PxQueryFlags flags;
+    };
+
+    bool raycast(Ray& ray);
+
     // Getters:
 
     PxPhysics* getSDK(void) const;

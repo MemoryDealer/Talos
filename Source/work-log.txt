@@ -401,9 +401,9 @@
 * Moved all linking together of components into SystemManager::processEntity(). There is no longer a need for Entity::setupComponents().
 * Added proper (at least visually) gravity for free fall.
 * Added jumping ability for KCC.
+* Created PScene::raycast() which uses the PScene::Ray struct.
 
 == TODO ==
-* Implement gravity for KCC.
 * Add ability to specify box half extents directly in collision objects for invisible walls and such.
 * Add PhysX mesh (cooking) collision volumes for models.
 * Just add commands for pressed and released--it will make it easier for sending to the server and keeping lists of unprocessed commands.
@@ -429,6 +429,8 @@
 * Refer to http://gameprogrammingpatterns.com/event-queue.html for Audio.
 
 == BUGS ==
+* Casting ray upwards with PhysX (PScene::raycast()) still returns a result if no hit.
+* Raycast doesn't hit dynamic actor.
 * Hydrax/SkyX need to be shared between states--make them world dependencies perhaps and add code to check if they are already initialized.
 * When client reconnects, a third client that was still connected can send a chat and the reconnected client will display the chat from their own username.
 * CEGUI disappears when resizing window.

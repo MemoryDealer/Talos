@@ -129,7 +129,7 @@ void PhysicsComponent::init(World& world, EntityPtr entity)
 
 void PhysicsComponent::destroy(World& world)
 {
-    Assert(m_rigidActor, "Null m_actor!");
+    Assert(m_rigidActor != nullptr, "Null m_actor!");
 
     world.getPScene()->getScene()->removeActor(*m_rigidActor);
 }
