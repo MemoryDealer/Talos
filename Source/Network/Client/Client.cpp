@@ -22,9 +22,10 @@
 // ========================================================================= //
 
 #include "Client.hpp"
-#include "Command/Actor/Look.hpp"
+#include "Command/Command.hpp"
 #include "Component/ComponentMessage.hpp"
 #include "Config/Config.hpp"
+#include "Entity/Entity.hpp"
 #include "Network/NetData.hpp"
 
 // ========================================================================= //
@@ -366,11 +367,18 @@ uint32_t Client::sendCommand(CommandPtr command, bool released)
         (released == false) ? NetMessage::ClientCommandPressed : 
         NetMessage::ClientCommandReleased));
     bs.Write(command->type);
-    if (command->type == CommandType::Look){
-        LookCommand* lc = static_cast<LookCommand*>(command);
-        bs.Write(lc->m_relx);
-        bs.Write(lc->m_rely);
-    }
+
+    return this->send(bs, HIGH_PRIORITY, RELIABLE_ORDERED);
+}
+
+// ========================================================================= //
+
+uint32_t Client::sendMouseMove(const int32_t relx, const int32_t rely)
+{
+    RakNet::BitStream bs;
+    bs.Write(static_cast<RakNet::MessageID>(NetMessage::ClientMouseMove));
+    bs.Write(relx);
+    bs.Write(rely);
 
     return this->send(bs, HIGH_PRIORITY, RELIABLE_ORDERED);
 }

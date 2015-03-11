@@ -41,6 +41,7 @@ enum NetMessage{
     PlayerList,
     ClientCommandPressed,
     ClientCommandReleased,
+    ClientMouseMove,
     StartGame,
     EndGame,
     PlayerUpdate

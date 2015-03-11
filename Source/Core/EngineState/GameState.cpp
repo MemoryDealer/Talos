@@ -177,18 +177,17 @@ void GameState::update(void)
 
             case SDL_MOUSEBUTTONDOWN:
             case SDL_MOUSEBUTTONUP:
-            case SDL_MOUSEMOTION:
             case SDL_KEYDOWN:
             case SDL_TEXTINPUT:
-                {
-                    // Temporary exit handling.
-                    if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE){
-                        m_world.getNetwork()->endGame();
-                        m_subject.notify(EngineNotification::Pop);
-                        return;
-                    }
+                // Temporary exit handling.
+                if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE){
+                    m_world.getNetwork()->endGame();
+                    m_subject.notify(EngineNotification::Pop);
+                    return;
+                }
 
-                    // Send input commands to the player.
+                // Send input commands to the player.
+                {
                     CommandPtr command = m_world.handleInput(e);
                     if (command){
                         command->execute(m_world.getPlayer());
@@ -198,12 +197,16 @@ void GameState::update(void)
                 break;
 
             case SDL_KEYUP:
+                m_world.handleInput(e);
+                break;
+
+            case SDL_MOUSEMOTION:
                 {
-                    CommandPtr command = m_world.handleInput(e);
-                    if (command){
-                        command->unexecute(m_world.getPlayer());
-                        m_world.getNetwork()->sendCommand(command, true);
-                    }
+                    MouseMove mm = m_world.getInput()->handleMouse(e);
+                    ComponentMessage msg(ComponentMessage::Type::Look);
+                    msg.data = mm;
+                    m_world.getPlayer()->message(msg);
+                    m_world.getNetwork()->sendMouseMove(mm.relx, mm.rely);
                 }
                 break;
 
@@ -211,6 +214,13 @@ void GameState::update(void)
                 m_subject.notify(EngineNotification::Pop);
                 return;
             }
+        }
+
+        m_world.getInput()->update();
+        while (m_world.getInput()->hasPendingCommand()){
+            CommandPtr command = m_world.getInput()->getNextCommand();
+            command->execute(m_world.getPlayer());
+            m_world.getNetwork()->sendCommand(command);
         }
 
         m_world.update();

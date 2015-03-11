@@ -23,7 +23,6 @@
 
 #include "Command/Command.hpp"
 #include "Command/CommandRepository.hpp"
-#include "Command/Actor/Look.hpp"
 #include "Component/ComponentMessage.hpp"
 #include "Config/Config.hpp"
 #include "Entity/Entity.hpp"
@@ -211,14 +210,6 @@ void Server::update(void)
                 CommandType type;
                 bs.Read(type);
                 CommandPtr command = m_commandRepo->getCommand(type);
-                if (type == CommandType::Look){
-                    command = static_cast<LookCommand*>(m_commandRepo->getCommand(type));
-                    int32_t relx, rely;
-                    bs.Read(relx);
-                    bs.Read(rely);
-
-                    static_cast<LookCommand*>(command)->setXY(relx, rely);
-                }
 
                 Network::Player player = this->getPlayer(m_clients[m_packet->guid]);
                 Assert(player.entity != nullptr, "Invalid entity for player");
@@ -231,6 +222,23 @@ void Server::update(void)
                 else{
                     command->unexecute(player.entity);
                 }
+            }
+            break;
+
+        case NetMessage::ClientMouseMove:
+            {
+                RakNet::BitStream bs(m_packet->data, m_packet->length, false);
+                bs.IgnoreBytes(sizeof(RakNet::MessageID));
+
+                // Get mouse move relative values.
+                MouseMove mm;
+                bs.Read(mm.relx);
+                bs.Read(mm.rely);
+
+                // Send the player's entity a look message.
+                ComponentMessage msg(ComponentMessage::Type::Look);
+                msg.data = mm;
+                this->getPlayer(m_clients[m_packet->guid]).entity->message(msg);
             }
             break;
         }

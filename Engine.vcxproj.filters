@@ -461,9 +461,6 @@
     <ClInclude Include="Source\Physics\PDebugDrawer.hpp">
       <Filter>Header Files\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Command\Actor\Look.hpp">
-      <Filter>Header Files\Command\Actor</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Component\LightComponent.hpp">
       <Filter>Header Files\Component</Filter>
     </ClInclude>

@@ -46,6 +46,7 @@ class EntityPool;
 class Environment;
 class Input;
 class KCC;
+struct MouseMove;
 class Network;
 class Ocean;
 class PDebugDrawer;

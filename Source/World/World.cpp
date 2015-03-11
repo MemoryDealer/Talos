@@ -422,9 +422,9 @@ void World::addEntityToSystem(EntityPtr entity)
 
 CommandPtr World::handleInput(const SDL_Event& e)
 {
-    CommandPtr command = m_input->handle(e);
+    m_input->handle(e);
     
-    return command;
+    return nullptr;
 }
 
 // ========================================================================= //

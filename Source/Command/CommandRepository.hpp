@@ -49,18 +49,8 @@ public:
     // Adds command into internal hash table.
     void addCommand(CommandPtr command);
 
-    CommandPtr getCommand(const CommandType type);
-
     // Returns pointer to Command of specified type, if in table.
-    /*template<typename T>
-    T* getCommand(void){
-        if (m_commands.count(&typeid(T)) != 0){
-            return static_cast<T*>(m_commands[&typeid(T)]);
-        }
-        else{
-            return nullptr;
-        }
-    }*/
+    CommandPtr getCommand(const CommandType type);
 
 private:
     CommandTable m_commands;

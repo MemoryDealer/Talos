@@ -31,6 +31,13 @@
 
 // ========================================================================= //
 
+struct MouseMove{
+    int32_t relx;
+    int32_t rely;
+};
+
+// ========================================================================= //
+
 struct ComponentMessage{
 
     enum class Type{
@@ -40,6 +47,8 @@ struct ComponentMessage{
         SetPosition,
         Translate,
 
+        Look,
+
         End
     };
 
@@ -47,7 +56,11 @@ struct ComponentMessage{
 
     Type type;
 
-    boost::variant<std::string, Ogre::Vector3> data;
+    boost::variant<
+        std::string, 
+        Ogre::Vector3,
+        MouseMove
+        > data;
 };
 
 // ========================================================================= //

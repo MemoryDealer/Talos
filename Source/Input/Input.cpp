@@ -22,13 +22,6 @@
 // ========================================================================= //
 
 #include "Command/CommandRepository.hpp"
-#include "Command/NullCommand.hpp"
-#include "Command/Actor/Look.hpp"
-#include "Command/Actor/MoveBackward.hpp"
-#include "Command/Actor/MoveForward.hpp"
-#include "Command/Actor/MoveLeft.hpp"
-#include "Command/Actor/MoveRight.hpp"
-#include "Command/Actor/Debug/Spectator.hpp"
 #include "Component/ComponentMessage.hpp"
 #include "Entity/Entity.hpp"
 #include "Input.hpp"
@@ -36,9 +29,14 @@
 
 // ========================================================================= //
 
+static const Uint8* keystate = SDL_GetKeyboardState(nullptr);
+
+// ========================================================================= //
+
 Input::Input(void) :
 m_commandRepo(new CommandRepository()),
 m_keymap(),
+m_commands(),
 m_mode(Mode::UI)
 {
     // @TODO: For every key on keyboard read from keymap file
@@ -49,6 +47,8 @@ m_mode(Mode::UI)
     }
     m_keymap[SDLK_LALT] = m_commandRepo->getCommand(CommandType::Null);
 
+    // @TODO: Store movement keys (and anything that must be held down in a 
+    // list for processing in update.
     m_keymap[SDLK_w] = m_commandRepo->getCommand(CommandType::MoveForward);
     m_keymap[SDLK_s] = m_commandRepo->getCommand(CommandType::MoveBackward);
     m_keymap[SDLK_a] = m_commandRepo->getCommand(CommandType::MoveLeft);
@@ -66,7 +66,7 @@ Input::~Input(void)
 
 // ========================================================================= //
 
-const CommandPtr Input::handle(const SDL_Event& e)
+void Input::handle(const SDL_Event& e)
 {
     ComponentMessage msg;
 
@@ -81,7 +81,7 @@ const CommandPtr Input::handle(const SDL_Event& e)
             CEGUI::MouseButton button;
             switch (e.button.button){
             default:
-                return m_commandRepo->getCommand(CommandType::Null);
+                break;
 
             case SDL_BUTTON_LEFT:
                 button = CEGUI::MouseButton::LeftButton;
@@ -111,37 +111,29 @@ const CommandPtr Input::handle(const SDL_Event& e)
         }
         break;
 
-    case SDL_MOUSEMOTION:
-        if (m_mode == Mode::UI){
-            CEGUI::System::getSingleton().getDefaultGUIContext().
-                injectMousePosition(static_cast<float>(e.motion.x), 
-                static_cast<float>(e.motion.y));
-        }
-        else{
-            // Return modified MouseMoveCommand.
-            LookCommand* lc = static_cast<LookCommand*>(
-                m_commandRepo->getCommand(CommandType::Look));
-            lc->setXY(e.motion.xrel, e.motion.yrel);
-            return lc;
-        }
-        break;
-
     case SDL_KEYDOWN:
         if (m_mode == Mode::UI){
             CEGUI::Key::Scan kc = SDLKeyToCEGUIKey(e.key.keysym.sym);
             CEGUI::System::getSingleton().getDefaultGUIContext().
                 injectKeyDown(kc);
-            
-            
         }
         else{
             switch (e.key.keysym.sym){
             default:
-                //return m_keymap.find(e.key.keysym.sym)->second;
-                return m_keymap[e.key.keysym.sym];
+                {
+                    CommandPtr command = m_keymap[e.key.keysym.sym];
+                    if (command){
+                        this->pushCommand(command);
+                    }
+                }
+                break;
 
+            case SDLK_w:
+            case SDLK_s:
+            case SDLK_a:
+            case SDLK_d:
             case SDLK_ESCAPE:
-                return nullptr;
+                break;
             }
         }
         break;
@@ -162,16 +154,72 @@ const CommandPtr Input::handle(const SDL_Event& e)
         else{
             switch (e.key.keysym.sym){
             default:
-                return m_keymap.find(e.key.keysym.sym)->second;
-
-            case SDLK_ESCAPE:
-                return nullptr;
+                break;
             }
         }
         break;
     }
+}
 
-    return nullptr;
+// ========================================================================= //
+
+const MouseMove Input::handleMouse(const SDL_Event& e)
+{
+    MouseMove mm;
+    mm.relx = mm.rely = 0;
+
+    if (m_mode == Mode::UI){
+        CEGUI::System::getSingleton().getDefaultGUIContext().
+            injectMousePosition(static_cast<float>(e.motion.x),
+            static_cast<float>(e.motion.y));
+    }
+    else{
+        mm.relx = e.motion.xrel;
+        mm.rely = e.motion.yrel;
+    }
+
+    return mm;
+}
+
+// ========================================================================= //
+
+void Input::update(void)
+{
+    if (keystate[SDL_SCANCODE_W]){
+        this->pushCommand(m_keymap[SDLK_w]);
+    }
+    if (keystate[SDL_SCANCODE_S]){
+        this->pushCommand(m_keymap[SDLK_s]);
+    }
+    if (keystate[SDL_SCANCODE_A]){
+        this->pushCommand(m_keymap[SDLK_a]);
+    }
+    if (keystate[SDL_SCANCODE_D]){
+        this->pushCommand(m_keymap[SDLK_d]);
+    }
+}
+
+// ========================================================================= //
+
+void Input::pushCommand(CommandPtr command)
+{
+    m_commands.push(command);
+}
+
+// ========================================================================= //
+
+const bool Input::hasPendingCommand(void) const
+{
+    return (m_commands.empty() == false);
+}
+
+// ========================================================================= //
+
+CommandPtr Input::getNextCommand(void)
+{
+    CommandPtr command = m_commands.front();
+    m_commands.pop();
+    return command;
 }
 
 // ========================================================================= //

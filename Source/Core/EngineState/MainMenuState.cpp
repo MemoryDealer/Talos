@@ -23,6 +23,7 @@
 
 #include "Command/Command.hpp"
 #include "Component/CameraComponent.hpp"
+#include "Component/ComponentMessage.hpp"
 #include "Component/LightComponent.hpp"
 #include "Component/SceneComponent.hpp"
 #include "Core/EngineNotifications.hpp"
@@ -126,7 +127,6 @@ void MainMenuState::update(void)
 
             case SDL_MOUSEBUTTONDOWN:
             case SDL_MOUSEBUTTONUP:
-            case SDL_MOUSEMOTION:
             case SDL_KEYDOWN:
             case SDL_TEXTINPUT:
                 {
@@ -143,8 +143,12 @@ void MainMenuState::update(void)
 
             case SDL_KEYUP:
                 {
-                    CommandPtr command = m_world.handleInput(e);
+                    m_world.handleInput(e);
                 }
+                break;
+
+            case SDL_MOUSEMOTION:
+                m_world.getInput()->handleMouse(e);
                 break;
 
             case SDL_QUIT:

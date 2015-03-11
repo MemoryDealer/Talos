@@ -412,8 +412,14 @@
 * GameState now retrieves the list of network players and iterates through them manually, adding entity pointers to each null instance. Both server and client set all entity pointers back to 
     nullptr when ending the game.
 * Added toString() and toRakString() in Network for cleaner conversions.
+* Changed mouse input to not use a command, rather there is the function Input::handleMouse() which returns a MouseMove struct, which has relative x & y movement. This can then be used to 
+    message the player entity move the camera using the "Look" message.
+    This makes it so I don't have to send "released" events from the client to the server, by setting the actor component's movement values to false each frame in its update function.
 
 == TODO ==
+* Move input update into world.
+* Add some kind of network component to handle client-side prediction & server reconciliation. Store input sequence values in Server::ClientInstance.
+* Remove Command::unexecute() and the released netmessage. Anything that must be held down to continue performing the action should be disabled every frame (input will detect it next frame if needed).
 * Change UI/Net events to use boost::variant.
 * Add NetworkActorComponent for clients?
 * Add ability to specify box half extents directly in collision objects for invisible walls and such.

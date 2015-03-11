@@ -74,6 +74,9 @@ public:
     virtual uint32_t sendCommand(CommandPtr command, 
                                  bool released = false) override;
 
+    virtual uint32_t sendMouseMove(const int32_t relx, 
+                                   const int32_t rely) override;
+
     // Sends disconnect notification to server.
     virtual void endGame(void) override;
 

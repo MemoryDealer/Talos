@@ -171,6 +171,8 @@ void ActorComponent::update(World& world)
         }
         break;
     }
+
+    m_movingForward = m_movingBack = m_movingLeft = m_movingRight = false;
 }
 
 // ========================================================================= //
@@ -190,6 +192,13 @@ void ActorComponent::message(ComponentMessage& msg)
 
     case ComponentMessage::Type::SetPosition:
         this->setPosition(boost::get<Ogre::Vector3>(msg.data));
+        break;
+
+    case ComponentMessage::Type::Look:
+        {
+            MouseMove mm = boost::get<MouseMove>(msg.data);
+            this->look(mm.relx, mm.rely);
+        }
         break;
     }
 }
@@ -212,6 +221,10 @@ void ActorComponent::attachCamera(Ogre::Camera* camera)
 
 void ActorComponent::look(const int relx, const int rely)
 {
+    if (relx == 0 && rely == 0){
+        return;
+    }
+
     const Ogre::Real sens = 0.2f;
 
     m_yawNode->yaw(Ogre::Degree(-Ogre::Real(relx) * sens));

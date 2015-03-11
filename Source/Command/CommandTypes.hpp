@@ -28,7 +28,6 @@
 
 enum class CommandType{
     Null = 0,
-    Look,
     MoveBackward,
     MoveForward,
     MoveLeft,

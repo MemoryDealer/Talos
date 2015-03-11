@@ -115,6 +115,10 @@ public:
         return 0; 
     }
 
+    virtual uint32_t sendMouseMove(const int32_t relx, const int32_t rely) {
+        return 0;
+    }
+
     // === //
 
     // A player in a networked game, including the local player.

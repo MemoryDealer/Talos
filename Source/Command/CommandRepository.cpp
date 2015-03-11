@@ -24,7 +24,6 @@
 #include "CommandRepository.hpp"
 #include "Command/NullCommand.hpp"
 #include "Command/Actor/Jump.hpp"
-#include "Command/Actor/Look.hpp"
 #include "Command/Actor/MoveBackward.hpp"
 #include "Command/Actor/MoveForward.hpp"
 #include "Command/Actor/MoveLeft.hpp"
@@ -39,9 +38,6 @@ m_commands()
     CommandPtr command = nullptr;
 
     command = new NullCommand();
-    this->addCommand(command);
-
-    command = new LookCommand();
     this->addCommand(command);
 
     command = new MoveBackwardCommand();
