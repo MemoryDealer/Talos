@@ -150,10 +150,10 @@ void Client::update(void)
                 reg.Serialize(false, &bs);
 
                 // Add player to list.
-                this->addPlayer(reg.id, std::string(reg.username));
+                this->addPlayer(reg.id, Network::toString(reg.username));
 
                 NetEvent e(NetMessage::Register);
-                e.s1 = reg.username.C_String();
+                e.s1 = Network::toString(reg.username);
                 this->pushEvent(e);
             }
             break;
@@ -197,7 +197,7 @@ void Client::update(void)
                 NetEvent e(NetMessage::Chat);
                 e.s1 = player.username +
                     ": " +
-                    std::string(chat.msg.C_String());
+                    Network::toString(chat.msg);
                 this->pushEvent(e);
             }
             break;
@@ -226,11 +226,11 @@ void Client::update(void)
                     }
 
                     // Insert the player into player list.
-                    this->addPlayer(id, std::string(username.C_String()));
+                    this->addPlayer(id, Network::toString(username));
 
                     // Notify engine state of new player.
                     NetEvent e(NetMessage::Register);
-                    e.s1 = username.C_String();
+                    e.s1 = Network::toString(username);
                     this->pushEvent(e);
                 }
             }
@@ -351,7 +351,7 @@ uint32_t Client::chat(const std::string& msg)
     RakNet::BitStream bs;
     NetData::Chat chat;    
     bs.Write(static_cast<RakNet::MessageID>(NetMessage::Chat));
-    chat.msg = msg.c_str();
+    chat.msg = Network::toRakString(msg);
     chat.Serialize(true, &bs);
 
     return this->send(bs, MEDIUM_PRIORITY, RELIABLE);
@@ -399,7 +399,7 @@ void Client::registerWithServer(void)
     RakNet::BitStream bs;
     bs.Write(static_cast<RakNet::MessageID>(NetMessage::Register));
     NetData::ClientRegistration reg;
-    reg.username = m_username.c_str();
+    reg.username = Network::toRakString(m_username);
     reg.Serialize(true, &bs);
 
     this->send(bs, HIGH_PRIORITY, RELIABLE);

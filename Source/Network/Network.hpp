@@ -37,7 +37,7 @@ struct NetEvent{
 
     uint32_t type;
 
-    std::string s1, s2, s3;
+    std::string s1;
 };
 
 // ========================================================================= //
@@ -185,6 +185,16 @@ public:
 
     // Unlocks event queue, allowing events to be popped.
     void unlockEventQueue(void);
+
+    // Conversion functions:
+
+    static std::string toString(const RakNet::RakString& rs){
+        return std::string(rs.C_String());
+    }
+
+    static RakNet::RakString toRakString(const std::string& str){
+        return RakNet::RakString(str.c_str());
+    }
 
 private:
     Mode m_mode;

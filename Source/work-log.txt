@@ -411,9 +411,9 @@
 * Server contains an additional table with a GUID->NetworkID key pair (m_clients). It can lookup a network ID from the GUID in a packet and get the Network::Player instance it needs.
 * GameState now retrieves the list of network players and iterates through them manually, adding entity pointers to each null instance. Both server and client set all entity pointers back to 
     nullptr when ending the game.
+* Added toString() and toRakString() in Network for cleaner conversions.
 
 == TODO ==
-* Use NetData for everything to be consistent. This should also help make string conversions easier between rakstrings and std::strings.
 * Change UI/Net events to use boost::variant.
 * Add NetworkActorComponent for clients?
 * Add ability to specify box half extents directly in collision objects for invisible walls and such.

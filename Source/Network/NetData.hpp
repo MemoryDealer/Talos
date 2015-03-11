@@ -38,7 +38,7 @@ namespace NetData
 // ========================================================================= //
 
 struct String{
-    RakNet::RakString str;
+    std::string str;
 
     void Serialize(const bool write, RakNet::BitStream* bs){
         bs->Serialize(write, str);

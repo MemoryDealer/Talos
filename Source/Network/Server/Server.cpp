@@ -198,7 +198,7 @@ void Server::update(void)
                 NetEvent e(NetMessage::Chat);
                 e.s1 = player.username +
                     ": " +
-                    std::string(chat.msg.C_String());
+                    Network::toString(chat.msg);
                 this->pushEvent(e);
             }
             break;
@@ -314,7 +314,7 @@ uint32_t Server::chat(const std::string& msg)
     RakNet::BitStream bs;
     NetData::Chat chat;
     bs.Write(static_cast<RakNet::MessageID>(NetMessage::Chat));
-    chat.msg = msg.c_str();
+    chat.msg = Network::toRakString(msg);
     chat.id = 0;
     chat.Serialize(true, &bs);
 
@@ -339,7 +339,7 @@ void Server::sendPlayerList(const RakNet::AddressOrGUID& identifier,
     // Write all player usernames and IDs.
     for (auto& i : players){
         bs.Write(i.first);
-        bs.Write(i.second.username.c_str());
+        bs.Write(Network::toRakString(i.second.username));
     }
 
     // Send with low priority since this has a potentially high overhead.
@@ -396,7 +396,7 @@ void Server::registerNewClient(void)
     // Insert player into player list.
     static NetworkID netIDCounter = 1; // Start at 1, server player is 0.
     NetworkID id = netIDCounter++;
-    this->addPlayer(id, std::string(reg.username.C_String()));
+    this->addPlayer(id, Network::toString(reg.username));
     this->addClientInstance(m_packet->guid, id);
 
     // Send registration confirmation to client.
@@ -418,7 +418,7 @@ void Server::registerNewClient(void)
 
     // Add event for engine state.
     NetEvent e(NetMessage::Register);
-    e.s1 = std::string(reg.username.C_String());
+    e.s1 = Network::toString(reg.username);
     this->pushEvent(e);
 }
 
