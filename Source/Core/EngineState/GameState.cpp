@@ -133,11 +133,7 @@ void GameState::enter(void)
 
     // Network game setup.
     if (m_world.getNetwork()->initialized()){
-        uint32_t numPlayers = m_world.getNetwork()->getNumPlayers();
-        for (uint32_t i = 0; i < numPlayers; ++i){
-            this->addNetworkPlayer();
-        }
-
+        this->addNetworkPlayers();
         m_world.getNetwork()->setGameActive(true);
     }    
 
@@ -239,6 +235,10 @@ void GameState::handleNetEvents(void)
         default:
             break;
 
+        case NetMessage::ClientDisconnect:
+            // @TODO: Remove entity from world.
+            break;
+
         case NetMessage::EndGame:
             m_world.getNetwork()->endGame();
             m_subject.notify(EngineNotification::Pop);
@@ -263,18 +263,28 @@ void GameState::handleUIEvents(void)
 
 // ========================================================================= //
 
-void GameState::addNetworkPlayer(void)
+void GameState::addNetworkPlayers(void)
 {
-    EntityPtr e = m_world.createEntity();
+    Network::PlayerList& players = m_world.getNetwork()->getPlayerList();
+    for (auto& i : players){
+        // Prevent assigning new entity to local player.
+        if (i.second.entity != nullptr){
+            continue;
+        }
 
-    m_world.attachComponent<ActorComponent>(e);
-    if (m_world.getNetwork()->getMode() == Network::Mode::Client){
-        e->getComponent<ActorComponent>()->setRemote(true);
+        // Create entity.
+        EntityPtr e = m_world.createEntity();
+
+        // Attach player components.
+        m_world.attachComponent<ActorComponent>(e);
+        if (m_world.getNetwork()->getMode() == Network::Mode::Client){
+            e->getComponent<ActorComponent>()->setRemote(true);
+        }
+        m_world.attachComponent<ModelComponent>(e)->init(
+            m_world, "Cylinder.mesh");
+
+        i.second.entity = e;
     }
-    m_world.attachComponent<ModelComponent>(e)->init(
-        m_world, "Cylinder.mesh");
-
-    m_world.getNetwork()->addPlayerEntity(e);
 }
 
 // ========================================================================= //

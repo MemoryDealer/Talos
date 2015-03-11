@@ -404,10 +404,17 @@
 * Created PScene::raycast() which uses the PScene::Ray struct.
 * Fixed server player updates sent to clients. 
 
+== 3/10/16 ==
+* Fixed client/server player updates. It scales to multiple clients now.
+* Removed the typedefs for the hash tables of players in Client and Server, and put it in Network. Now Network has an instance of the table to store every player, and it also has a pointer
+    to the local player instance. All server/client operations should use the single Network instance through its helper functions.
+* Server contains an additional table with a GUID->NetworkID key pair (m_clients). It can lookup a network ID from the GUID in a packet and get the Network::Player instance it needs.
+* GameState now retrieves the list of network players and iterates through them manually, adding entity pointers to each null instance. Both server and client set all entity pointers back to 
+    nullptr when ending the game.
+
 == TODO ==
-* IDs are all out of order on client/serv
-* Don'tt send player list every time a client disconnects'
-* Change server to use stack-based Player objects in player list and for host.
+* Use NetData for everything to be consistent. This should also help make string conversions easier between rakstrings and std::strings.
+* Change UI/Net events to use boost::variant.
 * Add NetworkActorComponent for clients?
 * Add ability to specify box half extents directly in collision objects for invisible walls and such.
 * Add PhysX mesh (cooking) collision volumes for models.

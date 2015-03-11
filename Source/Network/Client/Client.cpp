@@ -36,8 +36,8 @@ m_serverSystemAddr(),
 m_serverIP(),
 m_port(0),
 m_connected(false),
-m_id(0),
-m_players()
+m_localID(1),
+m_username("")
 {
     this->setMode(Network::Mode::Client);
 }
@@ -120,57 +120,84 @@ void Client::update(void)
             }
             break;
 
+        case NetMessage::ClientDisconnect:
+            {
+                RakNet::BitStream bs(m_packet->data, m_packet->length, false);
+                bs.IgnoreBytes(sizeof(RakNet::MessageID));
+
+                // Get the disconnected player's ID.
+                NetworkID id;
+                bs.Read(id);
+
+                Assert(id != 0, "Disconnect with ID 0");
+
+                // Notify engine state to remove player.
+                NetEvent e(NetMessage::ClientDisconnect);
+                e.s1 = this->getPlayer(id).username;
+                this->pushEvent(e);
+
+                // Remove player entry.
+                this->removePlayer(id);
+            }
+            break;
+
         case NetMessage::Register:
-            { 
+            {
+                // Another client has connected, process it.
                 NetData::ClientRegistration reg;
                 RakNet::BitStream bs(m_packet->data, m_packet->length, false);
                 bs.IgnoreBytes(sizeof(RakNet::MessageID));
                 reg.Serialize(false, &bs);
 
+                // Add player to list.
+                this->addPlayer(reg.id, std::string(reg.username));
+
                 NetEvent e(NetMessage::Register);
                 e.s1 = reg.username.C_String();
                 this->pushEvent(e);
-
-                // Store ID.
-                m_id = reg.id;
-            }
-            break;
-
-        case NetMessage::ClientDisconnect:
-            {
-                RakNet::BitStream bs(m_packet->data, m_packet->length, false);
-                bs.IgnoreBytes(sizeof(RakNet::MessageID));
-                int id = 0;
-                bs.Read(id);
-
-                Assert(id != 0, "Disconnect with ID 0");
-
-                // Notify UI to remove player name.
-                NetEvent e(NetMessage::ClientDisconnect);
-                e.s1 = m_players[id].username;
-                this->pushEvent(e);
-
-                // Remove player entry.
-                m_players.erase(id);
             }
             break;
 
         case NetMessage::RegistrationSuccessful:
-            m_connected = true;
-            this->pushEvent(NetEvent(NetMessage::RegistrationSuccessful));
+            {
+                // Get the ID assigned by server. Since registration was successful, now
+                // we can insert a Player instance for the local player into Network.
+                RakNet::BitStream bs(m_packet->data, m_packet->length, false);
+                bs.IgnoreBytes(sizeof(RakNet::MessageID));
+                NetworkID id;
+                bs.Read(id);
+
+                // Add local player instance.
+                this->addPlayer(id, m_username);
+
+                // Set local player pointer.
+                this->setLocalPlayer(&this->getPlayer(id));
+
+                // Store local ID.
+                m_localID = id;
+                
+                NetEvent e(NetMessage::RegistrationSuccessful);
+                e.s1 = m_username;
+                this->pushEvent(e);
+                m_connected = true;
+            }
             break;
 
         case NetMessage::Chat:
             {
-                NetEvent e(NetMessage::Chat);
                 RakNet::BitStream bs(m_packet->data, m_packet->length, false);
                 bs.IgnoreBytes(sizeof(RakNet::MessageID));
                 NetData::Chat chat;
                 chat.Serialize(false, &bs);
+
+                // Get player instance.
+                Network::Player player = this->getPlayer(chat.id);
                 
-                e.s1 = m_players[chat.id].username +
+                // Prepend username in front of message.
+                NetEvent e(NetMessage::Chat);
+                e.s1 = player.username +
                     ": " +
-                    chat.msg;
+                    std::string(chat.msg.C_String());
                 this->pushEvent(e);
             }
             break;
@@ -181,24 +208,27 @@ void Client::update(void)
                 RakNet::BitStream bs(m_packet->data, m_packet->length, false);
                 bs.IgnoreBytes(sizeof(RakNet::MessageID));
 
-                // Clear current player list.
-                m_players.clear();
-
-                // Notify state to clear player list in UI.
-                this->pushEvent(NetEvent(NetMessage::PlayerList));
-
-                // Read number of players and allocate space.
-                uint32_t num = 0;
+                // Get player list size.
+                uint32_t num;
                 bs.Read(num);
-                // Copy each string into local player list.
-                for (uint32_t i = 0; i < num; ++i){
-                    RakNet::RakString username;
-                    uint32_t id;
-                    bs.Read(username);
-                    bs.Read(id);
-                    m_players[id].username = username.C_String();
-                    m_players[id].entity = nullptr;
 
+                // Insert each player into player list.
+                for (uint32_t i = 0; i < num; ++i){
+                    NetworkID id;
+                    RakNet::RakString username;
+
+                    bs.Read(id);
+                    bs.Read(username);
+
+                    // Make sure this isn't the local player instance.
+                    if (id == m_localID){
+                        continue;
+                    }
+
+                    // Insert the player into player list.
+                    this->addPlayer(id, std::string(username.C_String()));
+
+                    // Notify engine state of new player.
                     NetEvent e(NetMessage::Register);
                     e.s1 = username.C_String();
                     this->pushEvent(e);
@@ -225,12 +255,11 @@ void Client::update(void)
                 bs.IgnoreBytes(sizeof(RakNet::MessageID));
 
                 // Get player ID.
-                uint32_t id = 0;
+                NetworkID id;
                 bs.Read(id);
 
-                Ogre::Vector3 pos;
-
                 // Read in position values.
+                Ogre::Vector3 pos;                
                 bs.Read(pos.x);
                 bs.Read(pos.y);
                 bs.Read(pos.z);
@@ -238,7 +267,10 @@ void Client::update(void)
                 // Apply updated position.
                 ComponentMessage msg(ComponentMessage::Type::SetPosition);
                 msg.data = pos;                
-                m_players[id].entity->message(msg);
+                Network::Player player = this->getPlayer(id);
+                Assert(player.entity != nullptr, "Null player entity");
+                player.entity->message(msg);
+
                 printf("Received update for player ID %d\t(%.2f, %.2f)\n", id, pos.x, pos.z);
             }
             break;
@@ -255,8 +287,7 @@ void Client::connect(const std::string& addr,
     if (m_connected == false){
         m_serverIP = addr;
         m_port = port;
-
-        this->setUsername(username);
+        m_username = username;
 
         m_peer->Connect(m_serverIP.c_str(), m_port, nullptr, 0);
     }
@@ -350,38 +381,11 @@ void Client::endGame(void)
 {
     this->setGameActive(false);
 
-    for (auto& i : m_players){
-        printf("ID: %d\teID: %d\n", i.first, i.second.entity->getID());
+    // Set all player entities to null to prepare for next game.
+    Network::PlayerList& players = this->getPlayerList();
+    for (auto& i : players){
+        i.second.entity = nullptr;
     }
-}
-
-// ========================================================================= //
-
-const uint32_t Client::getNumPlayers(void) const
-{
-    return m_players.size();
-}
-
-// ========================================================================= //
-
-void Client::addPlayerEntity(EntityPtr entity)
-{
-    for (auto& i : m_players){
-        if (!i.second.entity){
-            i.second.entity = entity;
-            return;
-        }
-
-        
-    }
-}
-
-// ========================================================================= //
-
-void Client::setPlayerEntity(EntityPtr entity)
-{
-    m_players[m_id].username = this->getUsername().c_str();
-    m_players[m_id].entity = entity;
 }
 
 // ========================================================================= //
@@ -395,7 +399,7 @@ void Client::registerWithServer(void)
     RakNet::BitStream bs;
     bs.Write(static_cast<RakNet::MessageID>(NetMessage::Register));
     NetData::ClientRegistration reg;
-    reg.username = this->getUsername().c_str();
+    reg.username = m_username.c_str();
     reg.Serialize(true, &bs);
 
     this->send(bs, HIGH_PRIORITY, RELIABLE);

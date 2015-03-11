@@ -29,7 +29,8 @@ Network::Network(void) :
 m_mode(Network::Mode::Null),
 m_initialized(false),
 m_gameActive(false),
-m_username(""),
+m_localPlayer(nullptr),
+m_players(),
 m_events(),
 m_immediateEvents(),
 m_eventQueueLocked(false)
@@ -91,6 +92,22 @@ const NetEvent Network::getNextEvent(void)
     NetEvent e = m_events.front();
     m_events.pop();
     return e;
+}
+
+// ========================================================================= //
+
+Network::Player& Network::addPlayer(const NetworkID id, const std::string& username)
+{
+    m_players[id].username = username;
+    m_players[id].entity = nullptr;
+    return m_players[id];
+}
+
+// ========================================================================= //
+
+void Network::removePlayer(const NetworkID id)
+{
+    m_players.erase(id);
 }
 
 // ========================================================================= //

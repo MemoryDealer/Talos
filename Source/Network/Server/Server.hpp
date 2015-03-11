@@ -62,6 +62,9 @@ public:
     // Receives and handles incoming packets on server port.
     virtual void update(void) override;
 
+    // Broadcasts update information for player.
+    void playerUpdate(const NetworkID id, EntityPtr entity);
+
     // Sends bitstream to client with corresponding GUID.
     uint32_t send(const RakNet::AddressOrGUID identifier,
                   const RakNet::BitStream& bs,
@@ -88,29 +91,15 @@ public:
     // Broadcasts end game message to all clients. Broadcasts player list.
     virtual void endGame(void) override;
 
-    // Returns number of connected clients.
-    virtual const uint32_t getNumPlayers(void) const override;
-
-    // Find next player with null EntityPtr and assigns it to the passed in
-    // pointer.
-    virtual void addPlayerEntity(EntityPtr entity) override;
-
-    // Sets player entity for user hosting the server.
-    virtual void setPlayerEntity(EntityPtr entity) override;
-
     // Getters:
 
     // === //
 
-    struct Player{
-        RakNet::RakString username;
-        RakNet::SystemAddress systemAddress;
-        uint32_t id;
-        EntityPtr entity;
-    };
+    // Store client connections using their GUID as a key, mapping to network ID.
+    typedef std::unordered_map<RakNet::RakNetGUID, NetworkID> ClientList;
 
-    typedef std::unordered_map<RakNet::RakNetGUID,
-        std::shared_ptr<Player>> PlayerList;
+    // Inserts client instance into client list.
+    void addClientInstance(RakNet::RakNetGUID guid, const NetworkID id);
 
 private:
     // Processes new client registration.
@@ -121,11 +110,8 @@ private:
     unsigned int m_tickRate;
     Ogre::Timer m_tick;
 
-    // Player instance of user running server.
-    std::shared_ptr<Player> m_host;
-
-    // Hash table of connected players.
-    PlayerList m_players;
+    // Hash table of connected clients.
+    ClientList m_clients;
 
     // Command repo for processing client inputs.
     std::shared_ptr<CommandRepository> m_commandRepo;

@@ -115,13 +115,22 @@ public:
         return 0; 
     }
 
-    virtual const uint32_t getNumPlayers(void) const { 
-        return 0; 
-    }
+    // === //
 
-    virtual void addPlayerEntity(EntityPtr entity) { }
+    // A player in a networked game, including the local player.
+    struct Player{
+        std::string username;
+        EntityPtr entity;
+    };
 
-    virtual void setPlayerEntity(EntityPtr entity) { }
+    // Table of active players, their server-assigned ID is the key.
+    typedef std::unordered_map<NetworkID, Player> PlayerList;
+
+    // Modifies key-value id in internal player list. Sets entity pointer to null.
+    Player& addPlayer(const NetworkID id, const std::string& username);
+
+    // Removes player instance from player list.
+    void removePlayer(const NetworkID id);
 
     // === //
 
@@ -145,8 +154,17 @@ public:
     // Returns true if game is active (e.g., GameState is running).
     const bool gameActive(void) const;
 
-    // Returns username.
-    const std::string getUsername(void) const;
+    // Returns local Player instance.
+    Player* getLocalPlayer(void) const;
+
+    // Returns true if player with id exists in player list.
+    const bool playerExists(const NetworkID id) const;
+
+    // Returns reference to Player with corresponding network ID.
+    Player& getPlayer(const NetworkID id);
+
+    // Returns active player list.
+    PlayerList& getPlayerList(void);
 
     // Setters:
 
@@ -159,8 +177,8 @@ public:
     // Sets internal game active flag.
     void setGameActive(const bool active);
 
-    // Sets username.
-    void setUsername(const std::string& username);
+    // Sets pointer to Player instance.
+    void setLocalPlayer(Player* player);
 
     // Locks event queue, preventing events from being popped.
     void lockEventQueue(void);
@@ -171,7 +189,8 @@ public:
 private:
     Mode m_mode;
     bool m_initialized, m_gameActive;
-    std::string m_username;
+    Player* m_localPlayer; // Local player, points to instance in PlayerList.
+    PlayerList m_players;
 
     std::queue<NetEvent> m_events;
     std::queue<NetEvent> m_immediateEvents; // Can't be locked.
@@ -194,8 +213,23 @@ inline const bool Network::gameActive(void) const{
     return m_gameActive;
 }
 
-inline const std::string Network::getUsername(void) const{
-    return m_username;
+inline Network::Player* Network::getLocalPlayer(void) const{
+    return m_localPlayer;
+}
+
+inline const bool Network::playerExists(const NetworkID id) const{
+    return (m_players.count(id) != 0);
+}
+
+inline Network::Player& Network::getPlayer(const NetworkID id){
+    Assert(m_players.count(id) != 0, "getPlayer(), ID invalid");
+    //if (m_players.count(id) != 0){
+        return m_players[id];
+    //}
+}
+
+inline Network::PlayerList& Network::getPlayerList(void){
+    return m_players;
 }
 
 // Setters:
@@ -212,8 +246,8 @@ inline void Network::setGameActive(const bool active){
     m_gameActive = active;
 }
 
-inline void Network::setUsername(const std::string& username){
-    m_username = username;
+inline void Network::setLocalPlayer(Player* player){
+    m_localPlayer = player;
 }
 
 inline void Network::lockEventQueue(void){

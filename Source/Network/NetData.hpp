@@ -49,7 +49,7 @@ struct String{
 
 struct ClientRegistration{
     RakNet::RakString username;
-    int id;
+    NetworkID id;
 
     void Serialize(const bool write, RakNet::BitStream* bs){
         bs->Serialize(write, username);
@@ -60,15 +60,9 @@ struct ClientRegistration{
 // ========================================================================= //
 
 struct RegistrationConfirmation{
-    std::vector<RakNet::RakString> players;
-    int size;
-    int id;
+    NetworkID id;
 
     void Serialize(const bool write, RakNet::BitStream* bs){
-        bs->Serialize(write, size);
-        for (int i = 0; i < players.size(); ++i){
-            bs->Serialize(write, *players[i].C_String());
-        }
         bs->Serialize(write, id);
     }
 };
@@ -77,7 +71,7 @@ struct RegistrationConfirmation{
 
 struct Chat{
     RakNet::RakString msg;
-    int id;
+    NetworkID id;
 
     void Serialize(const bool write, RakNet::BitStream* bs){
         bs->Serialize(write, msg);

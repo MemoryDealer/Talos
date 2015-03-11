@@ -79,11 +79,10 @@ void LobbyState::enter(void)
     m_ui->init();
 
     // Setup initial UI data.
-    if (m_world.getNetwork()->getMode() == Network::Mode::Server){
-        m_ui->insertListboxItem(
-            "PlayerList", m_world.getNetwork()->getUsername());
-    }
-    m_ui->setUsername(m_world.getNetwork()->getUsername());
+    m_ui->insertListboxItem("PlayerList", 
+        m_world.getNetwork()->getLocalPlayer()->username);
+    m_ui->setUsername(
+        m_world.getNetwork()->getLocalPlayer()->username);
 
     m_world.getNetwork()->unlockEventQueue();
 

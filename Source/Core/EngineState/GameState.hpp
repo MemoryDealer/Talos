@@ -58,8 +58,8 @@ public:
     // Processes UI events.
     void handleUIEvents(void);
 
-    // Creates new Entity for player and adds it to the Network object.
-    void addNetworkPlayer(void);
+    // Creates new Entities for players in Network.
+    void addNetworkPlayers(void);
 };
 
 // ========================================================================= //
