@@ -27,14 +27,15 @@
 #include "Config/Config.hpp"
 #include "Entity/Entity.hpp"
 #include "Network/NetData.hpp"
-#include "Server.hpp"
+#include "Network/Update.hpp"
+#include "Server.hpp""
 
 // ========================================================================= //
 
 Server::Server(void) :
 m_peer(nullptr),
 m_packet(nullptr),
-m_tickRate(100),
+m_tickRate(8),
 m_tick(),
 m_clients(),
 m_commandRepo(new CommandRepository())
@@ -127,20 +128,22 @@ void Server::update(void)
                     break;
                 }
 
+                NetworkID id = m_clients[m_packet->guid].id;
+
                 // Send notification to all connected clients.
                 RakNet::BitStream bs;
                 bs.Write(static_cast<RakNet::MessageID>(
                     NetMessage::ClientDisconnect));
-                bs.Write(m_clients[m_packet->guid]);
+                bs.Write(id);
                 this->broadcast(bs, MEDIUM_PRIORITY, RELIABLE);        
 
                 // Notify engine state to remove player.
                 NetEvent e(NetMessage::ClientDisconnect);
-                e.data = this->getPlayer(m_clients[m_packet->guid]).username;
+                e.data = this->getPlayer(id).username;
                 this->pushEvent(e);
 
                 // Remove player from player and client hash tables.
-                this->removePlayer(m_clients[m_packet->guid]);
+                this->removePlayer(id);
                 m_clients.erase(m_packet->guid);
             }
             break;
@@ -150,21 +153,23 @@ void Server::update(void)
                 // Manually close connection to client.
                 m_peer->CloseConnection(m_packet->guid, false);
 
+                NetworkID id = m_clients[m_packet->guid].id;
+
                 // Send notification to all connected clients.
                 RakNet::BitStream bs;
                 bs.Write(static_cast<RakNet::MessageID>(
                     NetMessage::ClientDisconnect));
                 // Write NetworkID.
-                bs.Write(m_clients[m_packet->guid]);
+                bs.Write(id);
                 this->broadcast(bs, MEDIUM_PRIORITY, RELIABLE);
                 
                 // Notify engine state to remove client.
                 NetEvent e(NetMessage::ClientDisconnect);
-                e.data = this->getPlayer(m_clients[m_packet->guid]).username;
+                e.data = this->getPlayer(id).username;
                 this->pushEvent(e);
 
                 // Remove player from player and client hash tables.
-                this->removePlayer(m_clients[m_packet->guid]);
+                this->removePlayer(id);
                 m_clients.erase(m_packet->guid);
             }
             break;
@@ -180,12 +185,14 @@ void Server::update(void)
                 NetData::Chat chat;
                 chat.Serialize(false, &bs);
 
+                NetworkID id = m_clients[m_packet->guid].id;
+
                 // Broadcast chat message to all other clients.
                 RakNet::BitStream bsOut;
                 NetData::Chat chatOut;
                 bsOut.Write(static_cast<RakNet::MessageID>(NetMessage::Chat));
                 chatOut.msg = chat.msg;
-                chatOut.id = m_clients[m_packet->guid];
+                chatOut.id = id;
                 chatOut.Serialize(true, &bsOut);
                 this->broadcast(bsOut, 
                                 MEDIUM_PRIORITY, 
@@ -193,7 +200,7 @@ void Server::update(void)
                                 m_packet->systemAddress);
 
                 // Notify engine state to show chat message.
-                Network::Player player = this->getPlayer(m_clients[m_packet->guid]);
+                Network::Player player = this->getPlayer(id);
                 NetEvent e(NetMessage::Chat);
                 e.data = player.username +
                     ": " +
@@ -202,15 +209,16 @@ void Server::update(void)
             }
             break;
 
-        case NetMessage::ClientCommandPressed:
+        case NetMessage::ClientCommand:
             {
                 RakNet::BitStream bs(m_packet->data, m_packet->length, false);
                 bs.IgnoreBytes(sizeof(RakNet::MessageID));
                 CommandType type;
                 bs.Read(type);
+                bs.Read(m_clients[m_packet->guid].lastCommandSequenceNumber);
                 CommandPtr command = m_commandRepo->getCommand(type);
 
-                Network::Player player = this->getPlayer(m_clients[m_packet->guid]);
+                Network::Player player = this->getPlayer(m_clients[m_packet->guid].id);
                 Assert(player.entity != nullptr, "Invalid entity for player");
                 
                 //printf("Received input from GUID: %d\tID: %d\n", m_packet->guid, m_players[m_packet->guid]->id);
@@ -232,7 +240,7 @@ void Server::update(void)
                 // Send the player's entity a look message.
                 ComponentMessage msg(ComponentMessage::Type::Look);
                 msg.data = mm;
-                this->getPlayer(m_clients[m_packet->guid]).entity->message(msg);
+                this->getPlayer(m_clients[m_packet->guid].id).entity->message(msg);
             }
             break;
         }
@@ -245,11 +253,13 @@ void Server::update(void)
     // Update clients.
     if (m_tick.getMilliseconds() > m_tickRate){
         // Send local player update.
-        this->playerUpdate(0, this->getLocalPlayer()->entity);
+        this->playerUpdate(0, 0, this->getLocalPlayer()->entity);
 
         // Send all other player updates.
         for (auto& i : m_clients){
-            this->playerUpdate(i.second, this->getPlayer(i.second).entity);
+            this->playerUpdate(i.second.id,
+                               i.second.lastCommandSequenceNumber,
+                               this->getPlayer(i.second.id).entity);
         }
 
         m_tick.reset();
@@ -258,13 +268,20 @@ void Server::update(void)
 
 // ========================================================================= //
 
-void Server::playerUpdate(const NetworkID id, EntityPtr entity)
+void Server::playerUpdate(const NetworkID id, 
+                          const uint32_t lastCommandSequence,
+                          EntityPtr entity)
 {
+    // @TODO: Only send lastCommandSequence to client needing it.
+
     RakNet::BitStream bs;
     bs.Write(static_cast<RakNet::MessageID>(NetMessage::PlayerUpdate));
 
     // ID.
     bs.Write(id);
+    
+    // Write the player's last processed input sequence number.
+    bs.Write(lastCommandSequence);
 
     // Transform data.
     ComponentMessage msg(ComponentMessage::Type::GetPosition);
@@ -374,7 +391,7 @@ void Server::endGame(void)
 
     // Reset all player's entity's to nullptr, to prepare for next game.
     for (auto& i : m_clients){
-        this->getPlayer(i.second).entity = nullptr;
+        this->getPlayer(i.second.id).entity = nullptr;
     }
 
     this->getLocalPlayer()->entity = nullptr;
@@ -428,7 +445,8 @@ void Server::registerNewClient(void)
 
 void Server::addClientInstance(RakNet::RakNetGUID guid, const NetworkID id)
 {
-    m_clients[guid] = id;
+    m_clients[guid].id = id;
+    m_clients[guid].lastCommandSequenceNumber = 0;
 }
 
 // ========================================================================= //

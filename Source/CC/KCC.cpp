@@ -147,7 +147,7 @@ PxExtendedVec3 KCC::update(World& world,
     //}
     
     // Adjust y-value for head height.
-    pos.y += 0.8644f;
+    //pos.y += 0.8644f;
     return pos;
 }
 

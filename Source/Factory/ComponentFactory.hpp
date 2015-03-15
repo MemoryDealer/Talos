@@ -48,6 +48,7 @@ public:
     CollisionComponentPtr createCollisionComponent(void);
     LightComponentPtr createLightComponent(void);
     ModelComponentPtr createModelComponent(void);
+    NetworkComponentPtr createNetworkComponent(void);
     PhysicsComponentPtr createPhysicsComponent(void);
     SceneComponentPtr createSceneComponent(void);
 
@@ -60,6 +61,7 @@ private:
     std::shared_ptr<Pool<CollisionComponent>> m_collisionComponentPool;
     std::shared_ptr<Pool<LightComponent>> m_lightComponentPool;
     std::shared_ptr<Pool<ModelComponent>> m_modelComponentPool;
+    std::shared_ptr<Pool<NetworkComponent>> m_networkComponentPool;
     std::shared_ptr<Pool<PhysicsComponent>> m_physicsComponentPool;
     std::shared_ptr<Pool<SceneComponent>> m_sceneComponentPool;
 };

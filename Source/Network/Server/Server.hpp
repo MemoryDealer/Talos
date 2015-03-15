@@ -63,7 +63,9 @@ public:
     virtual void update(void) override;
 
     // Broadcasts update information for player.
-    void playerUpdate(const NetworkID id, EntityPtr entity);
+    void playerUpdate(const NetworkID id, 
+                      const uint32_t lastCommandSequence,
+                      EntityPtr entity);
 
     // Sends bitstream to client with corresponding GUID.
     uint32_t send(const RakNet::AddressOrGUID identifier,
@@ -95,8 +97,14 @@ public:
 
     // === //
 
+    // An instance of a unique client connection.
+    struct ClientInstance{
+        NetworkID id;
+        uint32_t lastCommandSequenceNumber; // Last processed command.
+    };
+
     // Store client connections using their GUID as a key, mapping to network ID.
-    typedef std::unordered_map<RakNet::RakNetGUID, NetworkID> ClientList;
+    typedef std::unordered_map<RakNet::RakNetGUID, ClientInstance> ClientList;
 
     // Inserts client instance into client list.
     void addClientInstance(RakNet::RakNetGUID guid, const NetworkID id);

@@ -38,7 +38,8 @@ public:
     }
 
     virtual void execute(EntityPtr entity) override{
-        ComponentMessage msg(ComponentMessage::Type::Jump);
+        ComponentMessage msg(ComponentMessage::Type::Command);
+        msg.data = CommandType::Jump;
         entity->message(msg);
     }
 };

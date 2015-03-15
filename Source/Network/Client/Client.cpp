@@ -27,6 +27,7 @@
 #include "Config/Config.hpp"
 #include "Entity/Entity.hpp"
 #include "Network/NetData.hpp"
+#include "Network/Update.hpp"
 
 // ========================================================================= //
 
@@ -38,7 +39,8 @@ m_serverIP(),
 m_port(0),
 m_connected(false),
 m_localID(1),
-m_username("")
+m_username(""),
+m_lastInputSequenceNumber(0)
 {
     this->setMode(Network::Mode::Client);
 }
@@ -259,6 +261,10 @@ void Client::update(void)
                 NetworkID id;
                 bs.Read(id);
 
+                TransformUpdate transform;
+
+                bs.Read(transform.sequenceNumber);
+
                 // Read in position values.
                 Ogre::Vector3 pos;                
                 bs.Read(pos.x);
@@ -267,14 +273,16 @@ void Client::update(void)
 
                 // Notify engine state of player update.
                 NetEvent e(NetMessage::PlayerUpdate);
-                NetEvent::TransformUpdate transform;
+                
                 // Store EntityID for engine state to access from World.
                 transform.id = this->getPlayer(id).entity->getID();
                 transform.position = pos;
                 e.data = transform;
                 this->pushEvent(e);
 
-                printf("Received update for player ID %d\t(%.2f, %.2f)\n", id, pos.x, pos.z);
+                if (id == m_localID){
+                    printf("Updating local player \t(%.2f, %.2f, %.2f)\n", pos.x, pos.y, pos.z);
+                }
             }
             break;
         }
@@ -362,13 +370,12 @@ uint32_t Client::chat(const std::string& msg)
 
 // ========================================================================= //
 
-uint32_t Client::sendCommand(CommandPtr command, bool released)
+uint32_t Client::sendCommand(CommandPtr command)
 {
     RakNet::BitStream bs;
-    bs.Write(static_cast<RakNet::MessageID>(
-        (released == false) ? NetMessage::ClientCommandPressed : 
-        NetMessage::ClientCommandReleased));
+    bs.Write(static_cast<RakNet::MessageID>(NetMessage::ClientCommand));
     bs.Write(command->type);
+    bs.Write(m_lastInputSequenceNumber++);
 
     return this->send(bs, HIGH_PRIORITY, RELIABLE_ORDERED);
 }

@@ -33,10 +33,15 @@ class CameraComponent;
 class CollisionComponent;
 class LightComponent;
 class ModelComponent;
+class NetworkComponent;
 class PhysicsComponent;
 class SceneComponent;
+
 // Other forward declarations.
+
 struct ComponentMessage;
+
+// All component pointer typedefs.
 
 typedef Component* ComponentPtr;
 typedef ActorComponent* ActorComponentPtr;
@@ -44,9 +49,9 @@ typedef CameraComponent* CameraComponentPtr;
 typedef CollisionComponent* CollisionComponentPtr;
 typedef LightComponent* LightComponentPtr;
 typedef ModelComponent* ModelComponentPtr;
+typedef NetworkComponent* NetworkComponentPtr;
 typedef PhysicsComponent* PhysicsComponentPtr;
 typedef SceneComponent* SceneComponentPtr;
-
 
 // ========================================================================= //
 

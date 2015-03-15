@@ -58,6 +58,7 @@ class Sky;
 struct SkyPreset;
 class System;
 class SystemManager;
+struct TransformUpdate;
 class UI;
 class World;
 

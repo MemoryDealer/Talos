@@ -19,6 +19,7 @@
     <ClCompile Include="Source\Component\Component.cpp" />
     <ClCompile Include="Source\Component\LightComponent.cpp" />
     <ClCompile Include="Source\Component\ModelComponent.cpp" />
+    <ClCompile Include="Source\Component\NetworkComponent.cpp" />
     <ClCompile Include="Source\Component\PhysicsComponent.cpp" />
     <ClCompile Include="Source\Component\SceneComponent.cpp" />
     <ClCompile Include="Source\Config\Config.cpp" />
@@ -100,6 +101,7 @@
     <ClInclude Include="Source\Component\ComponentMessage.hpp" />
     <ClInclude Include="Source\Component\LightComponent.hpp" />
     <ClInclude Include="Source\Component\ModelComponent.hpp" />
+    <ClInclude Include="Source\Component\NetworkComponent.hpp" />
     <ClInclude Include="Source\Component\NullComponent.hpp" />
     <ClInclude Include="Source\Component\PhysicsComponent.hpp" />
     <ClInclude Include="Source\Component\SceneComponent.hpp" />
@@ -127,6 +129,7 @@
     <ClInclude Include="Source\Network\Network.hpp" />
     <ClInclude Include="Source\Network\NullNetwork.hpp" />
     <ClInclude Include="Source\Network\Server\Server.hpp" />
+    <ClInclude Include="Source\Network\Update.hpp" />
     <ClInclude Include="Source\Observer\Observer.hpp" />
     <ClInclude Include="Source\Observer\Subject.hpp" />
     <ClInclude Include="Source\Physics\PDebugDrawer.hpp" />

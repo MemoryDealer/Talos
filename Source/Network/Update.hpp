@@ -15,33 +15,26 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: MoveLeft.hpp
+// File: Update.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines MoveLeftCommand class.
+// Defines some structs needed for network updates.
 // ========================================================================= //
 
-#ifndef __MOVELEFT_HPP__
-#define __MOVELEFT_HPP__
-
-// ========================================================================= //
-
-#include "Command/Command.hpp"
+#ifndef __NETWORK_UPDATE_HPP__
+#define __NETWORK_UPDATE_HPP__
 
 // ========================================================================= //
 
-class MoveLeftCommand : public Command
-{
-public:
-    explicit MoveLeftCommand(void){
-        this->setType(CommandType::MoveLeft);
-    }
+#include "stdafx.hpp"
 
-    virtual void execute(EntityPtr entity) override{
-        ComponentMessage msg(ComponentMessage::Type::Command);
-        msg.data = CommandType::MoveLeft;
-        entity->message(msg);
-    }
+// ========================================================================= //
+
+struct TransformUpdate{
+    EntityID id;
+    uint32_t sequenceNumber;
+    Ogre::Vector3 position;
+    Ogre::Quaternion orientation;
 };
 
 // ========================================================================= //

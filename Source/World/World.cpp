@@ -26,6 +26,7 @@
 #include "Component/CollisionComponent.hpp"
 #include "Component/LightComponent.hpp"
 #include "Component/ModelComponent.hpp"
+#include "Component/NetworkComponent.hpp"
 #include "Component/PhysicsComponent.hpp"
 #include "Component/SceneComponent.hpp"
 #include "Entity/EntityPool.hpp"
@@ -320,7 +321,8 @@ template<> struct World::componentReturn<ActorComponent>{
     typedef ActorComponentPtr type; 
 };
 
-template<> World::componentReturn<ActorComponent>::type World::attachComponent<ActorComponent>(EntityPtr entity)
+template<> World::componentReturn<ActorComponent>::type 
+World::attachComponent<ActorComponent>(EntityPtr entity)
 {
     ActorComponentPtr c = m_componentFactory->createActorComponent();
     initComponent(c, entity, this);
@@ -333,7 +335,8 @@ template<> struct World::componentReturn<CameraComponent>{
     typedef CameraComponentPtr type; 
 };
 
-template<> World::componentReturn<CameraComponent>::type World::attachComponent<CameraComponent>(EntityPtr entity)
+template<> World::componentReturn<CameraComponent>::type 
+World::attachComponent<CameraComponent>(EntityPtr entity)
 {
     CameraComponentPtr c = m_componentFactory->createCameraComponent();
     initComponent(c, entity, this);
@@ -346,7 +349,8 @@ template<> struct World::componentReturn<CollisionComponent>{
     typedef CollisionComponentPtr type;
 };
 
-template<> World::componentReturn<CollisionComponent>::type World::attachComponent<CollisionComponent>(EntityPtr entity)
+template<> World::componentReturn<CollisionComponent>::type 
+World::attachComponent<CollisionComponent>(EntityPtr entity)
 {
     CollisionComponentPtr c = m_componentFactory->createCollisionComponent();
     initComponent(c, entity, this);
@@ -359,7 +363,8 @@ template<> struct World::componentReturn<LightComponent>{
     typedef LightComponentPtr type; 
 };
 
-template<> World::componentReturn<LightComponent>::type World::attachComponent<LightComponent>(EntityPtr entity)
+template<> World::componentReturn<LightComponent>::type 
+World::attachComponent<LightComponent>(EntityPtr entity)
 {
     LightComponentPtr c = m_componentFactory->createLightComponent();
     initComponent(c, entity, this);
@@ -369,12 +374,27 @@ template<> World::componentReturn<LightComponent>::type World::attachComponent<L
 // ========================================================================= //
 
 template<> struct World::componentReturn<ModelComponent>{ 
-        typedef ModelComponentPtr type; 
+    typedef ModelComponentPtr type; 
 };
 
-template<> World::componentReturn<ModelComponent>::type World::attachComponent<ModelComponent>(EntityPtr entity)
+template<> World::componentReturn<ModelComponent>::type 
+World::attachComponent<ModelComponent>(EntityPtr entity)
 {
     ModelComponentPtr c = m_componentFactory->createModelComponent();
+    initComponent(c, entity, this);
+    return c;
+}
+
+// ========================================================================= //
+
+template<> struct World::componentReturn<NetworkComponent>{
+    typedef NetworkComponentPtr type;
+};
+
+template<> World::componentReturn<NetworkComponent>::type 
+World::attachComponent<NetworkComponent>(EntityPtr entity)
+{
+    NetworkComponentPtr c = m_componentFactory->createNetworkComponent();
     initComponent(c, entity, this);
     return c;
 }
@@ -385,7 +405,8 @@ template<> struct World::componentReturn<PhysicsComponent>{
     typedef PhysicsComponentPtr type; 
 };
 
-template<> World::componentReturn<PhysicsComponent>::type World::attachComponent<PhysicsComponent>(EntityPtr entity)
+template<> World::componentReturn<PhysicsComponent>::type 
+World::attachComponent<PhysicsComponent>(EntityPtr entity)
 {
     PhysicsComponentPtr c = m_componentFactory->createPhysicsComponent();
     initComponent(c, entity, this);
@@ -398,7 +419,8 @@ template<> struct World::componentReturn<SceneComponent>{
     typedef SceneComponentPtr type; 
 };
 
-template<> World::componentReturn<SceneComponent>::type World::attachComponent<SceneComponent>(EntityPtr entity)
+template<> World::componentReturn<SceneComponent>::type 
+World::attachComponent<SceneComponent>(EntityPtr entity)
 {
     SceneComponentPtr c = m_componentFactory->createSceneComponent();
     initComponent(c, entity, this);

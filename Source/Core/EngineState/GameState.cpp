@@ -28,12 +28,14 @@
 #include "Component/ComponentMessage.hpp"
 #include "Component/LightComponent.hpp"
 #include "Component/ModelComponent.hpp"
+#include "Component/NetworkComponent.hpp"
 #include "Component/PhysicsComponent.hpp"
 #include "Component/SceneComponent.hpp"
 #include "Core/EngineNotifications.hpp"
 #include "GameState.hpp"
 #include "Input/Input.hpp"
 #include "Network/Network.hpp"
+#include "Network/Update.hpp"
 #include "Physics/PScene.hpp"
 #include "System/CollisionSystem.hpp"
 #include "System/PhysicsSystem.hpp"
@@ -69,11 +71,12 @@ void GameState::enter(void)
     EntityPtr player = m_world.createEntity();
     m_world.attachComponent<ActorComponent>(player);
     if (m_world.getNetwork()->getMode() == Network::Mode::Client){
-        player->getComponent<ActorComponent>()->setRemote(true);
+        //player->getComponent<ActorComponent>()->setRemote(true);
     }
     m_world.attachComponent<CameraComponent>(player);
     m_world.attachComponent<ModelComponent>(player)->init(
         m_world, "Cylinder.mesh");
+    m_world.attachComponent<NetworkComponent>(player);
 
     m_world.setPlayer(player);
 
@@ -216,16 +219,18 @@ void GameState::update(void)
             }
         }
 
+        
+
+        m_world.update();
+        if (m_world.getNetwork()->hasPendingEvent()){
+            this->handleNetEvents();
+        }
+
         m_world.getInput()->update();
         while (m_world.getInput()->hasPendingCommand()){
             CommandPtr command = m_world.getInput()->getNextCommand();
             command->execute(m_world.getPlayer());
             m_world.getNetwork()->sendCommand(command);
-        }
-
-        m_world.update();
-        if (m_world.getNetwork()->hasPendingEvent()){
-            this->handleNetEvents();
         }
         /*if (m_ui->update() == true){
             this->handleUIEvents();
@@ -256,19 +261,17 @@ void GameState::handleNetEvents(void)
 
         case NetMessage::PlayerUpdate:
             {
-                // Retrieve the transform update data.
-                NetEvent::TransformUpdate update = 
-                    boost::get<NetEvent::TransformUpdate>(e.data);
+                // Get player's EntityID.
+                EntityID id = boost::get<TransformUpdate>(e.data).id;
 
                 // Get the player's Entity.
-                EntityPtr entity = m_world.getEntityPtr(update.id);
+                EntityPtr entity = m_world.getEntityPtr(id);
                 Assert(entity != nullptr, 
                        "Null player entity in net player update");
 
                 // Send messages to player entity to update transform.
-                ComponentMessage msg(ComponentMessage::Type::SetPosition);
-                msg.data = update.position;
-
+                ComponentMessage msg(ComponentMessage::Type::TransformUpdate);
+                msg.data = boost::get<TransformUpdate>(e.data);
                 entity->message(msg);
             }
             break;

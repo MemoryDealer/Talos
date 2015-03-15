@@ -32,6 +32,7 @@ m_cameraComponentPool(nullptr),
 m_collisionComponentPool(nullptr),
 m_lightComponentPool(nullptr),
 m_modelComponentPool(nullptr),
+m_networkComponentPool(nullptr),
 m_physicsComponentPool(nullptr),
 m_sceneComponentPool(nullptr)
 {
@@ -56,6 +57,7 @@ void ComponentFactory::init(void)
     m_collisionComponentPool.reset(new Pool<CollisionComponent>(1024));
     m_lightComponentPool.reset(new Pool<LightComponent>(16));
     m_modelComponentPool.reset(new Pool<ModelComponent>(1024));
+    m_networkComponentPool.reset(new Pool<NetworkComponent>(256));
     m_physicsComponentPool.reset(new Pool<PhysicsComponent>(1024));
     m_sceneComponentPool.reset(new Pool<SceneComponent>(1024));
 }
@@ -97,6 +99,13 @@ LightComponentPtr ComponentFactory::createLightComponent(void)
 ModelComponentPtr ComponentFactory::createModelComponent(void)
 {
     return m_modelComponentPool->create();
+}
+
+// ========================================================================= //
+
+NetworkComponentPtr ComponentFactory::createNetworkComponent(void)
+{
+    return m_networkComponentPool->create();
 }
 
 // ========================================================================= //

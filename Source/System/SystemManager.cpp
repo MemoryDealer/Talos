@@ -26,6 +26,7 @@
 #include "Component/CameraComponent.hpp"
 #include "Component/LightComponent.hpp"
 #include "Component/ModelComponent.hpp"
+#include "Component/NetworkComponent.hpp"
 #include "Component/SceneComponent.hpp"
 #include "Entity/Entity.hpp"
 #include "PhysicsSystem.hpp"
@@ -84,7 +85,7 @@ void SystemManager::processEntity(EntityPtr entity)
         }
     }    
 
-    // Additional setup.
+    // Additional setup, linking component data together.
     if (entity->hasComponent<ActorComponent>() ||
         entity->hasComponent<SceneComponent>()){
         SceneComponentPtr sceneC = (entity->hasComponent<ActorComponent>()) ?
@@ -102,6 +103,17 @@ void SystemManager::processEntity(EntityPtr entity)
         if (entity->hasComponent<ModelComponent>()){
             sceneC->getSceneNode()->attachObject(
                 entity->getComponent<ModelComponent>()->getOgreEntity());
+        }
+        if (entity->hasComponent<NetworkComponent>()){
+            if (typeid(*sceneC) == typeid(SceneComponent)){
+                entity->getComponent<NetworkComponent>()->
+                    setSceneComponentPtr(sceneC);
+            }
+            else if (typeid(*sceneC) == typeid(ActorComponent)){
+                entity->getComponent<NetworkComponent>()->
+                    setActorComponentPtr(
+                    static_cast<ActorComponentPtr>(sceneC));
+            }
         }
     }
     

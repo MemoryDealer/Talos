@@ -360,6 +360,9 @@
     <ClCompile Include="Source\System\CollisionSystem.cpp">
       <Filter>Source Files\System</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Component\NetworkComponent.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\Engine.hpp">
@@ -637,6 +640,12 @@
     </ClInclude>
     <ClInclude Include="Source\Command\Actor\Jump.hpp">
       <Filter>Header Files\Command\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\NetworkComponent.hpp">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\Update.hpp">
+      <Filter>Header Files\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

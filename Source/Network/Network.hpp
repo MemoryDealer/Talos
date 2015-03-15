@@ -28,6 +28,7 @@
 
 #include "NetMessage.hpp"
 #include "stdafx.hpp"
+#include "Update.hpp"
 
 // ========================================================================= //
 
@@ -36,12 +37,6 @@ struct NetEvent{
     explicit NetEvent(const NetMessage msg) : type(msg) { }
 
     uint32_t type;
-
-    typedef struct{
-        EntityID id;
-        Ogre::Vector3 position;
-        Ogre::Quaternion orientation;
-    } TransformUpdate;
 
     boost::variant<
         std::string,
@@ -109,7 +104,7 @@ public:
         return 0;
     }
 
-    virtual uint32_t chat(const std::string& msg) { 
+    virtual uint32_t chat(const std::string& msg) {
         return 0; 
     }
 
@@ -120,8 +115,8 @@ public:
 
     virtual void endGame(void) { }
 
-    virtual uint32_t sendCommand(CommandPtr command, bool released = false) { 
-        return 0; 
+    virtual uint32_t sendCommand(CommandPtr command) {
+        return 0;
     }
 
     virtual uint32_t sendMouseMove(const int32_t relx, const int32_t rely) {

@@ -26,9 +26,13 @@
 
 // ========================================================================= //
 
+#include "Command/CommandTypes.hpp"
+#include "Network/Update.hpp"
 #include "stdafx.hpp"
 
 // ========================================================================= //
+
+// @TODO: Find a better place to put these structs.
 
 struct MouseMove{
     int32_t relx;
@@ -45,15 +49,10 @@ struct ComponentMessage{
         GetPosition,
         SetPosition,
         Translate,
-
         Look,
-
-        MoveForward,
-        MoveBack,
-        MoveRight,
-        MoveLeft,
-        Jump,
-
+        TransformUpdate,
+        Command,
+        
         End
     };
 
@@ -64,7 +63,9 @@ struct ComponentMessage{
     boost::variant<
         std::string, 
         Ogre::Vector3,
-        MouseMove
+        MouseMove,
+        CommandType,
+        TransformUpdate
         > data;
 };
 

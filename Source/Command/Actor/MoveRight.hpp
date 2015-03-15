@@ -38,7 +38,8 @@ public:
     }
 
     virtual void execute(EntityPtr entity) override{
-        ComponentMessage msg(ComponentMessage::Type::MoveRight);
+        ComponentMessage msg(ComponentMessage::Type::Command);
+        msg.data = CommandType::MoveRight;
         entity->message(msg);
     }
 };

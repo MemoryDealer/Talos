@@ -25,6 +25,7 @@
 #include "CameraComponent.hpp"
 #include "CC/DCC.hpp"
 #include "CC/KCC.hpp"
+#include "Command/CommandTypes.hpp"
 #include "ComponentMessage.hpp"
 #include "ModelComponent.hpp"
 #include "Physics/PScene.hpp"
@@ -112,7 +113,8 @@ void ActorComponent::update(World& world)
     if (m_remote){
         return;
     }
-
+    printf("ActorComponent before: (%.2f, %.2f, %.2f)\n", this->getPosition().x,
+           this->getPosition().y, this->getPosition().z);
     Ogre::Vector3 translate(Ogre::Vector3::ZERO);
     const Ogre::Real move = 1.f;
     if (m_movingForward){
@@ -172,6 +174,9 @@ void ActorComponent::update(World& world)
         break;
     }
 
+    printf("ActorComponent after: (%.2f, %.2f, %.2f)\n", this->getPosition().x,
+           this->getPosition().y, this->getPosition().z);
+
     // Reset data for next frame. This should be bit values for input that
     // must be held down, such as movement. 
     m_movingForward = m_movingBack = m_movingLeft = m_movingRight = false;
@@ -202,25 +207,46 @@ void ActorComponent::message(ComponentMessage& msg)
             this->look(mm.relx, mm.rely);
         }
         break;
+        
+    case ComponentMessage::Type::TransformUpdate:        
+        {
+            // Apply transform update.
+            TransformUpdate transform = 
+                boost::get<TransformUpdate>(msg.data);
 
-    case ComponentMessage::Type::MoveForward:
-        m_movingForward = true;
+            this->setPosition(transform.position);
+        }
         break;
 
-    case ComponentMessage::Type::MoveBack:
-        m_movingBack = true;
-        break;
+    case ComponentMessage::Type::Command:       
+        {
+            // Get command type and process it.
+            CommandType type = boost::get<CommandType>(msg.data);
+            switch (type){
+            default:
+                break;
 
-    case ComponentMessage::Type::MoveRight:
-        m_movingRight = true;
-        break;
+            case CommandType::MoveForward:
+                m_movingForward = true;
+                break;
 
-    case ComponentMessage::Type::MoveLeft:
-        m_movingLeft = true;
-        break;
+            case CommandType::MoveBackward:
+                m_movingBack = true;
+                break;
 
-    case ComponentMessage::Type::Jump:
-        m_kcc->jump();
+            case CommandType::MoveRight:
+                m_movingRight = true;
+                break;
+
+            case CommandType::MoveLeft:
+                m_movingLeft = true;
+                break;
+
+            case CommandType::Jump:
+                m_kcc->jump();
+                break;
+            }
+        }
         break;
     }
 }
