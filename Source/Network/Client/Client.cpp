@@ -134,7 +134,7 @@ void Client::update(void)
 
                 // Notify engine state to remove player.
                 NetEvent e(NetMessage::ClientDisconnect);
-                e.s1 = this->getPlayer(id).username;
+                e.data = this->getPlayer(id).username;
                 this->pushEvent(e);
 
                 // Remove player entry.
@@ -154,7 +154,7 @@ void Client::update(void)
                 this->addPlayer(reg.id, Network::toString(reg.username));
 
                 NetEvent e(NetMessage::Register);
-                e.s1 = Network::toString(reg.username);
+                e.data = Network::toString(reg.username);
                 this->pushEvent(e);
             }
             break;
@@ -178,7 +178,7 @@ void Client::update(void)
                 m_localID = id;
                 
                 NetEvent e(NetMessage::RegistrationSuccessful);
-                e.s1 = m_username;
+                e.data = m_username;
                 this->pushEvent(e);
                 m_connected = true;
             }
@@ -196,7 +196,7 @@ void Client::update(void)
                 
                 // Prepend username in front of message.
                 NetEvent e(NetMessage::Chat);
-                e.s1 = player.username +
+                e.data = player.username +
                     ": " +
                     Network::toString(chat.msg);
                 this->pushEvent(e);
@@ -231,7 +231,7 @@ void Client::update(void)
 
                     // Notify engine state of new player.
                     NetEvent e(NetMessage::Register);
-                    e.s1 = Network::toString(username);
+                    e.data = Network::toString(username);
                     this->pushEvent(e);
                 }
             }
@@ -265,12 +265,14 @@ void Client::update(void)
                 bs.Read(pos.y);
                 bs.Read(pos.z);
 
-                // Apply updated position.
-                ComponentMessage msg(ComponentMessage::Type::SetPosition);
-                msg.data = pos;                
-                Network::Player player = this->getPlayer(id);
-                Assert(player.entity != nullptr, "Null player entity");
-                player.entity->message(msg);
+                // Notify engine state of player update.
+                NetEvent e(NetMessage::PlayerUpdate);
+                NetEvent::TransformUpdate transform;
+                // Store EntityID for engine state to access from World.
+                transform.id = this->getPlayer(id).entity->getID();
+                transform.position = pos;
+                e.data = transform;
+                this->pushEvent(e);
 
                 printf("Received update for player ID %d\t(%.2f, %.2f)\n", id, pos.x, pos.z);
             }

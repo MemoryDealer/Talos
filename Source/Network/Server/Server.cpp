@@ -136,7 +136,7 @@ void Server::update(void)
 
                 // Notify engine state to remove player.
                 NetEvent e(NetMessage::ClientDisconnect);
-                e.s1 = this->getPlayer(m_clients[m_packet->guid]).username;
+                e.data = this->getPlayer(m_clients[m_packet->guid]).username;
                 this->pushEvent(e);
 
                 // Remove player from player and client hash tables.
@@ -160,7 +160,7 @@ void Server::update(void)
                 
                 // Notify engine state to remove client.
                 NetEvent e(NetMessage::ClientDisconnect);
-                e.s1 = this->getPlayer(m_clients[m_packet->guid]).username;
+                e.data = this->getPlayer(m_clients[m_packet->guid]).username;
                 this->pushEvent(e);
 
                 // Remove player from player and client hash tables.
@@ -195,7 +195,7 @@ void Server::update(void)
                 // Notify engine state to show chat message.
                 Network::Player player = this->getPlayer(m_clients[m_packet->guid]);
                 NetEvent e(NetMessage::Chat);
-                e.s1 = player.username +
+                e.data = player.username +
                     ": " +
                     Network::toString(chat.msg);
                 this->pushEvent(e);
@@ -203,7 +203,6 @@ void Server::update(void)
             break;
 
         case NetMessage::ClientCommandPressed:
-        case NetMessage::ClientCommandReleased:
             {
                 RakNet::BitStream bs(m_packet->data, m_packet->length, false);
                 bs.IgnoreBytes(sizeof(RakNet::MessageID));
@@ -216,12 +215,7 @@ void Server::update(void)
                 
                 //printf("Received input from GUID: %d\tID: %d\n", m_packet->guid, m_players[m_packet->guid]->id);
                 printf("EntityID: %d\n", player.entity->getID());
-                if (m_packet->data[0] == NetMessage::ClientCommandPressed){
-                    command->execute(player.entity);
-                }
-                else{
-                    command->unexecute(player.entity);
-                }
+                command->execute(player.entity);
             }
             break;
 
@@ -426,7 +420,7 @@ void Server::registerNewClient(void)
 
     // Add event for engine state.
     NetEvent e(NetMessage::Register);
-    e.s1 = Network::toString(reg.username);
+    e.data = Network::toString(reg.username);
     this->pushEvent(e);
 }
 

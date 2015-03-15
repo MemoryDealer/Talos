@@ -149,7 +149,7 @@ void LobbyState::update(void)
 
             case SDL_KEYUP:
                 {
-                    CommandPtr command = m_world.handleInput(e);
+                    m_world.handleInput(e);
                 }
                 break;
 
@@ -191,12 +191,14 @@ void LobbyState::handleNetEvents(void)
 
         case NetMessage::Register:
             {
-                m_ui->insertListboxItem("PlayerList", e.s1);
+                m_ui->insertListboxItem("PlayerList", 
+                                        boost::get<std::string>(e.data));
             }
             break;
 
         case NetMessage::ClientDisconnect:
-            m_ui->removeListboxItem("PlayerList", e.s1);
+            m_ui->removeListboxItem("PlayerList", 
+                                    boost::get<std::string>(e.data));
             break;
 
         case NetMessage::Chat:
@@ -204,7 +206,7 @@ void LobbyState::handleNetEvents(void)
                 CEGUI::Window* chat = m_ui->getWindow(
                     LobbyUI::Layer::Root, "Chat");
 
-                chat->appendText(e.s1);
+                chat->appendText(boost::get<std::string>(e.data));
             }
             break;
 

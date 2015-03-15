@@ -39,6 +39,9 @@
 #include <stack>
 #include <thread>
 
+// Boost.
+#include <boost/variant.hpp>
+
 // Ogre3D.
 #include <Ogre.h>
 

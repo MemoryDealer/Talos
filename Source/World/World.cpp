@@ -175,12 +175,14 @@ void World::resume(void)
 
 void World::update(void)
 {
+    // Update each world component.
+
     m_network->update();
 
     m_systemManager->update();
 
     for (int i = 0; i < m_entityPool->m_poolSize; ++i){
-        m_entityPool->m_pool[i].update(*this); // Dereference self.
+        m_entityPool->m_pool[i].update(*this);
     }
 
     if (m_usePhysics){

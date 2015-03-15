@@ -27,7 +27,6 @@
 // ========================================================================= //
 
 #include "Command/Command.hpp"
-#include "Component/ActorComponent.hpp"
 
 // ========================================================================= //
 
@@ -39,15 +38,8 @@ public:
     }
 
     virtual void execute(EntityPtr entity) override{
-        ActorComponentPtr actor = entity->getComponent<ActorComponent>();
-
-        actor->setMovingBack(true);
-    }
-
-    virtual void unexecute(EntityPtr entity) override{
-        ActorComponentPtr actor = entity->getComponent<ActorComponent>();
-
-        actor->setMovingBack(false);
+        ComponentMessage msg(ComponentMessage::Type::MoveBack);
+        entity->message(msg);
     }
 };
 

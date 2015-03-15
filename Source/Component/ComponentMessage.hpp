@@ -27,7 +27,6 @@
 // ========================================================================= //
 
 #include "stdafx.hpp"
-#include <boost/variant.hpp>
 
 // ========================================================================= //
 
@@ -48,6 +47,12 @@ struct ComponentMessage{
         Translate,
 
         Look,
+
+        MoveForward,
+        MoveBack,
+        MoveRight,
+        MoveLeft,
+        Jump,
 
         End
     };

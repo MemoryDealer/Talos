@@ -27,6 +27,7 @@
 // ========================================================================= //
 
 #include "CommandTypes.hpp"
+#include "Component/ComponentMessage.hpp"
 #include "Entity/Entity.hpp"
 
 // ========================================================================= //
@@ -38,7 +39,6 @@ public:
     virtual ~Command(void) { }
 
     virtual void execute(EntityPtr) = 0;
-    virtual void unexecute(EntityPtr) { }
 
     void setType(const CommandType _type);
 

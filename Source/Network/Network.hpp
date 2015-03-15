@@ -37,7 +37,16 @@ struct NetEvent{
 
     uint32_t type;
 
-    std::string s1;
+    typedef struct{
+        EntityID id;
+        Ogre::Vector3 position;
+        Ogre::Quaternion orientation;
+    } TransformUpdate;
+
+    boost::variant<
+        std::string,
+        TransformUpdate
+        > data;
 };
 
 // ========================================================================= //

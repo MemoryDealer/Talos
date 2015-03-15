@@ -172,6 +172,8 @@ void ActorComponent::update(World& world)
         break;
     }
 
+    // Reset data for next frame. This should be bit values for input that
+    // must be held down, such as movement. 
     m_movingForward = m_movingBack = m_movingLeft = m_movingRight = false;
 }
 
@@ -199,6 +201,26 @@ void ActorComponent::message(ComponentMessage& msg)
             MouseMove mm = boost::get<MouseMove>(msg.data);
             this->look(mm.relx, mm.rely);
         }
+        break;
+
+    case ComponentMessage::Type::MoveForward:
+        m_movingForward = true;
+        break;
+
+    case ComponentMessage::Type::MoveBack:
+        m_movingBack = true;
+        break;
+
+    case ComponentMessage::Type::MoveRight:
+        m_movingRight = true;
+        break;
+
+    case ComponentMessage::Type::MoveLeft:
+        m_movingLeft = true;
+        break;
+
+    case ComponentMessage::Type::Jump:
+        m_kcc->jump();
         break;
     }
 }
@@ -259,13 +281,6 @@ void ActorComponent::look(const int relx, const int rely)
             }
         }
     }
-}
-
-// ========================================================================= //
-
-void ActorComponent::jump(void)
-{
-    m_kcc->jump();
 }
 
 // ========================================================================= //

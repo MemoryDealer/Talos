@@ -115,8 +115,8 @@ void GameState::enter(void)
     
     
     // Setup visual scene settings.
-    //m_world.getEnvironment()->setAmbientLight(255.f, 255.f, 255.f);
-    //m_world.getEnvironment()->setSunColour(20.f, 17.5f, 18.9f);
+    m_world.getEnvironment()->setAmbientLight(255.f, 255.f, 255.f);
+    m_world.getEnvironment()->setSunColour(20.f, 17.5f, 18.9f);
     m_world.getEnvironment()->setMoonColour(.50f, .50f, 255.f);
 
     // Create Ocean.
@@ -252,6 +252,25 @@ void GameState::handleNetEvents(void)
         case NetMessage::EndGame:
             m_world.getNetwork()->endGame();
             m_subject.notify(EngineNotification::Pop);
+            break;
+
+        case NetMessage::PlayerUpdate:
+            {
+                // Retrieve the transform update data.
+                NetEvent::TransformUpdate update = 
+                    boost::get<NetEvent::TransformUpdate>(e.data);
+
+                // Get the player's Entity.
+                EntityPtr entity = m_world.getEntityPtr(update.id);
+                Assert(entity != nullptr, 
+                       "Null player entity in net player update");
+
+                // Send messages to player entity to update transform.
+                ComponentMessage msg(ComponentMessage::Type::SetPosition);
+                msg.data = update.position;
+
+                entity->message(msg);
+            }
             break;
         }
     }

@@ -43,12 +43,6 @@ public:
 
         actor->setMode(ActorComponent::Mode::Spectator);
     }
-
-    virtual void unexecute(EntityPtr entity) override{
-        ActorComponentPtr actor = entity->getComponent<ActorComponent>();
-
-        actor->setMode(ActorComponent::Mode::Player);
-    }
 };
 
 // ========================================================================= //
