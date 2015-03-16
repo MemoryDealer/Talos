@@ -26,8 +26,9 @@
 
 // ========================================================================= //
 
+#include "ActorComponent.hpp"
 #include "Command/CommandTypes.hpp"
-#include "Component.hpp"
+//#include "Component.hpp"
 #include "Network/Update.hpp"
 
 // ========================================================================= //
@@ -60,26 +61,29 @@ public:
     // Sets internal scene component pointer.
     void setSceneComponentPtr(const SceneComponentPtr sceneC);
 
+    // Sets internal World pointer.
+    void setWorld(World* world);
+
     // === //
 
     // An input the client has sent but not yet received an update for from the 
     // server.
     struct PendingCommand{
         CommandType type;
+        ActorState actorState;
         uint32_t sequenceNumber;
     };
 
 private:
     std::list<PendingCommand> m_pendingCommands;
     std::queue<TransformUpdate> m_serverUpdates;
-    uint32_t m_commandSequence; // A counter for each command sent to server.
 
     // Have direct access to sister components, the coupling here is acceptable.
     ActorComponentPtr m_actorC;
     SceneComponentPtr m_sceneC;
 
-    // Command repo for replaying pending commands.
-    std::shared_ptr<CommandRepository> m_commandRepo;
+    // Needed to access Client's last input sequence number.
+    World* m_world;
 };
 
 // ========================================================================= //
@@ -94,6 +98,10 @@ inline void NetworkComponent::setActorComponentPtr(
 inline void NetworkComponent::setSceneComponentPtr(
     const SceneComponentPtr sceneC){
     m_sceneC = sceneC;
+}
+
+inline void NetworkComponent::setWorld(World* world){
+    m_world = world;
 }
 
 // ========================================================================= //

@@ -96,7 +96,7 @@ PxExtendedVec3 KCC::update(World& world,
 
     // Move the kinematic actor.
     PxVec3 disp(dx, m_yVel, dz);
-    m_controller->move(disp, 0.001f, 1.f / Talos::MS_PER_UPDATE, 0);
+    m_controller->move(disp, 0.1f, 1.f / Talos::MS_PER_UPDATE, 0);
  
     // Get position for raycast origin.
     PxExtendedVec3 pos = m_controller->getPosition();

@@ -48,6 +48,8 @@ struct ComponentMessage{
 
         GetPosition,
         SetPosition,
+        GetOrientation,
+        SetOrientation,
         Translate,
         Look,
         TransformUpdate,
@@ -63,6 +65,7 @@ struct ComponentMessage{
     boost::variant<
         std::string, 
         Ogre::Vector3,
+        Ogre::Quaternion,
         MouseMove,
         CommandType,
         TransformUpdate

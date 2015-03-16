@@ -39,16 +39,13 @@ m_rootNode(nullptr),
 m_yawNode(nullptr),
 m_pitchNode(nullptr),
 m_rollNode(nullptr),
-m_speed(0.35f),
+m_speed(0.20f),
 m_remote(false),
 m_cc(CC::Kinematic),
 m_dcc(nullptr),
 m_kcc(nullptr),
 m_mode(Mode::Player),
-m_movingForward(false),
-m_movingBack(false),
-m_movingLeft(false),
-m_movingRight(false)
+m_state()
 {
     
 }
@@ -110,24 +107,28 @@ void ActorComponent::destroy(World& world)
 
 void ActorComponent::update(World& world)
 {
+    m_kcc->update(world, 0.f, 0.f, 0.f);
+    return;
+
     if (m_remote){
         return;
     }
-    printf("ActorComponent before: (%.2f, %.2f, %.2f)\n", this->getPosition().x,
-           this->getPosition().y, this->getPosition().z);
+
+    printf("Forward: %d\tBack: %d\n", m_state.input.forward, m_state.input.back);
+
     Ogre::Vector3 translate(Ogre::Vector3::ZERO);
     const Ogre::Real move = 1.f;
-    if (m_movingForward){
+    if (m_state.input.forward){
         translate.z = -move;
     }
-    else if (m_movingBack){
+    else if (m_state.input.back){
         translate.z = move;
     }
-    if (m_movingLeft){
-        translate.x = -move;
-    }
-    else if (m_movingRight){
+    if (m_state.input.right){
         translate.x = move;
+    }
+    else if (m_state.input.left){
+        translate.x = -move;
     }
 
     // Calculate movement vector.
@@ -174,12 +175,12 @@ void ActorComponent::update(World& world)
         break;
     }
 
-    printf("ActorComponent after: (%.2f, %.2f, %.2f)\n", this->getPosition().x,
-           this->getPosition().y, this->getPosition().z);
-
     // Reset data for next frame. This should be bit values for input that
     // must be held down, such as movement. 
-    m_movingForward = m_movingBack = m_movingLeft = m_movingRight = false;
+    /*m_state.input.back = m_state.input.forward =
+        m_state.input.right = m_state.input.left = false;
+    m_state.position = m_rollNode->_getDerivedPosition();
+    m_state.orientation = m_rollNode->_getDerivedOrientation();*/
 }
 
 // ========================================================================= //
@@ -191,14 +192,19 @@ void ActorComponent::message(ComponentMessage& msg)
         break;
 
     case ComponentMessage::Type::GetPosition:       
-        {
-            Ogre::Vector3 pos = m_rootNode->_getDerivedPosition();
-            msg.data = m_rootNode->_getDerivedPosition();
-        }
+        msg.data = m_rootNode->_getDerivedPosition();
         break;
 
     case ComponentMessage::Type::SetPosition:
         this->setPosition(boost::get<Ogre::Vector3>(msg.data));
+        break;
+
+    case ComponentMessage::Type::GetOrientation:
+        msg.data = m_rootNode->_getDerivedOrientation();
+        break;
+
+    case ComponentMessage::Type::SetOrientation:
+        this->setOrientation(boost::get<Ogre::Quaternion>(msg.data));
         break;
 
     case ComponentMessage::Type::Look:
@@ -214,7 +220,17 @@ void ActorComponent::message(ComponentMessage& msg)
             TransformUpdate transform = 
                 boost::get<TransformUpdate>(msg.data);
 
-            this->setPosition(transform.position);
+            /*Ogre::Vector3 src = this->getPosition();
+            Ogre::Vector3 dst = transform.position;         
+            const Ogre::Real max = 25.f;
+            printf("Squared dist: %.2f\n", src.squaredDistance(dst));
+            if (src.squaredDistance(dst) < max){
+                m_rootNode->translate((dst - src) * 0.1f);
+            }
+            else{*/
+                this->setPosition(transform.position);
+                //m_rootNode->_setDerivedOrientation(transform.orientation);
+            //}
         }
         break;
 
@@ -227,19 +243,37 @@ void ActorComponent::message(ComponentMessage& msg)
                 break;
 
             case CommandType::MoveForward:
-                m_movingForward = true;
+                m_state.input.forward = true;
+                {
+                    Ogre::Vector3 translate(Ogre::Vector3::ZERO);
+                    translate.z = -1.f;
+                    translate = m_yawNode->getOrientation() *
+                        m_pitchNode->getOrientation() *
+                        translate;
+                    translate.normalise();
+
+                    translate *= m_speed;
+
+                    PxExtendedVec3 pos = m_kcc->update(*m_world,
+                                                       translate.x,
+                                                       translate.y,
+                                                       translate.z);
+                    m_rootNode->setPosition(Ogre::Real(pos.x),
+                                            Ogre::Real(pos.y),
+                                            Ogre::Real(pos.z));
+                }
                 break;
 
             case CommandType::MoveBackward:
-                m_movingBack = true;
+                m_state.input.back = true;
                 break;
 
             case CommandType::MoveRight:
-                m_movingRight = true;
+                m_state.input.right = true;
                 break;
 
             case CommandType::MoveLeft:
-                m_movingLeft = true;
+                m_state.input.left = true;
                 break;
 
             case CommandType::Jump:
@@ -250,6 +284,8 @@ void ActorComponent::message(ComponentMessage& msg)
         break;
     }
 }
+
+
 
 // ========================================================================= //
 

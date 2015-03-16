@@ -191,16 +191,16 @@ void GameState::update(void)
 
                 // Send input commands to the player.
                 {
-                    CommandPtr command = m_world.handleInput(e);
+                    /*CommandPtr command = m_world.handleInput(e);
                     if (command){
                         command->execute(m_world.getPlayer());
                         m_world.getNetwork()->sendCommand(command);
-                    }
+                    }*/
                 }
                 break;
 
             case SDL_KEYUP:
-                m_world.handleInput(e);
+                //m_world.handleInput(e);
                 break;
 
             case SDL_MOUSEMOTION:
@@ -221,17 +221,41 @@ void GameState::update(void)
 
         
 
+        
+
         m_world.update();
         if (m_world.getNetwork()->hasPendingEvent()){
             this->handleNetEvents();
+            m_world.getPlayer()->getComponent<NetworkComponent>()->update(m_world);
+        }
+
+        // ^ ? //
+
+        m_world.getInput()->update();
+        while (m_world.getInput()->hasPendingCommand()){
+            CommandPtr command = m_world.getInput()->getNextCommand();
+            // Does this split up the commands into different frames on server?
+            m_world.getNetwork()->sendCommand(command);
+            command->execute(m_world.getPlayer());
+        }
+        m_world.getPlayer()->getComponent<ActorComponent>()->update(m_world);
+
+        /*m_world.update();
+        if (m_world.getNetwork()->hasPendingEvent()){
+            this->handleNetEvents();
+            m_world.getPlayer()->getComponent<NetworkComponent>()->update(m_world);
         }
 
         m_world.getInput()->update();
         while (m_world.getInput()->hasPendingCommand()){
             CommandPtr command = m_world.getInput()->getNextCommand();
-            command->execute(m_world.getPlayer());
             m_world.getNetwork()->sendCommand(command);
-        }
+            command->execute(m_world.getPlayer());
+
+        }*/
+
+        
+        
         /*if (m_ui->update() == true){
             this->handleUIEvents();
         } */
@@ -244,7 +268,7 @@ void GameState::handleNetEvents(void)
 {
     NetEvent e = m_world.getNetwork()->getNextEvent();
     for (; 
-         e.type != NetMessage::Null;
+         m_world.getNetwork()->hasPendingEvent();
          e = m_world.getNetwork()->getNextEvent()){
         switch (e.type){
         default:
@@ -272,7 +296,13 @@ void GameState::handleNetEvents(void)
                 // Send messages to player entity to update transform.
                 ComponentMessage msg(ComponentMessage::Type::TransformUpdate);
                 msg.data = boost::get<TransformUpdate>(e.data);
-                entity->message(msg);
+             
+                if (id == m_world.getPlayer()->getID()){
+                    entity->getComponent<NetworkComponent>()->message(msg);
+                }
+                else{
+                    entity->message(msg);
+                }
             }
             break;
         }

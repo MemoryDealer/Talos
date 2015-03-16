@@ -21,7 +21,6 @@
 // Implements OceanHighGraphics class.
 // ========================================================================= //
 
-#include "Component/ActorComponent.hpp"
 #include "Component/CameraComponent.hpp"
 #include "Entity/Entity.hpp"
 #include "OceanHighGraphics.hpp"

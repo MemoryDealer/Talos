@@ -73,6 +73,8 @@ public:
 
     virtual uint32_t sendCommand(CommandPtr command) override;
 
+    virtual const uint32_t getLastInputSequenceNumber(void) const override;
+
     virtual uint32_t sendMouseMove(const int32_t relx, 
                                    const int32_t rely) override;
 
@@ -93,6 +95,12 @@ private:
     std::string m_username;
     uint32_t m_lastInputSequenceNumber;
 };
+
+// ========================================================================= //
+
+inline const uint32_t Client::getLastInputSequenceNumber(void) const{
+    return m_lastInputSequenceNumber;
+}
 
 // ========================================================================= //
 

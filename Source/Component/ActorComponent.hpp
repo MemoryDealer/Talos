@@ -29,6 +29,23 @@
 #include "SceneComponent.hpp"
 
 // ========================================================================= //
+
+struct ActorState{
+    explicit ActorState(void) : 
+    position(Ogre::Vector3::ZERO),
+    orientation(Ogre::Quaternion::IDENTITY)
+    {
+        memset(&input, 0, sizeof(input));
+    }
+
+    Ogre::Vector3 position;
+    Ogre::Quaternion orientation;
+    struct{
+        bool forward, back, right, left;
+    } input;
+};
+
+// ========================================================================= //
 // Allows an Entity to be controlled by either: a player giving local input,
 // an AI, a networked player, or from a list of replay commands.
 class ActorComponent final : public SceneComponent
@@ -80,9 +97,13 @@ public:
 
     const Ogre::Quaternion& getOrientation(void) const;
 
+    const ActorState& getState(void) const;
+
     // Setters:
 
     virtual void setPosition(const Ogre::Vector3& pos) override;
+
+    void setState(const ActorState& state);
 
     // Sets the mode of the Actor, affecting controls/movement.
     void setMode(const Mode);
@@ -90,6 +111,10 @@ public:
     // Sets the internal remote flag. Should be set to true for any 
     // instance of a remote player on a client game.
     void setRemote(const bool remote);
+
+    void setWorld(World* world){
+        m_world = world;
+    }
 
 private:
     // Ogre3D.
@@ -108,10 +133,8 @@ private:
     };
 
     Mode m_mode;
-    bool m_movingForward;
-    bool m_movingBack;
-    bool m_movingLeft;
-    bool m_movingRight;
+    ActorState m_state;
+    World* m_world;
 };
 
 // ========================================================================= //
@@ -126,7 +149,15 @@ inline const Ogre::Quaternion& ActorComponent::getOrientation(void) const{
     return m_yawNode->getOrientation() * m_pitchNode->getOrientation();
 }
 
+inline const ActorState& ActorComponent::getState(void) const{
+    return m_state;
+}
+
 // Setters:
+
+inline void ActorComponent::setState(const ActorState& state){
+    m_state = state;
+}
 
 inline void ActorComponent::setRemote(const bool remote){
     m_remote = remote;

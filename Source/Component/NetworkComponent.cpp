@@ -25,16 +25,17 @@
 #include "Command/CommandRepository.hpp"
 #include "Component/ComponentMessage.hpp"
 #include "NetworkComponent.hpp"
+#include "Network/Network.hpp"
+#include "World/World.hpp"
 
 // ========================================================================= //
 
 NetworkComponent::NetworkComponent(void) :
 m_pendingCommands(),
 m_serverUpdates(),
-m_commandSequence(0),
 m_actorC(nullptr),
 m_sceneC(nullptr),
-m_commandRepo(nullptr)
+m_world(nullptr)
 {
 
 }
@@ -50,7 +51,7 @@ NetworkComponent::~NetworkComponent(void)
 
 void NetworkComponent::init(World& world)
 {
-    m_commandRepo.reset(new CommandRepository());
+    
 }
 
 // ========================================================================= //
@@ -68,9 +69,11 @@ void NetworkComponent::update(World& world)
     while (!m_serverUpdates.empty()){
         if (m_actorC){            
             TransformUpdate update = m_serverUpdates.front();
-            printf("Applying server update %d\n", update.sequenceNumber);
+            //printf("Applying server update %d\n", update.sequenceNumber);
 
-            m_actorC->setPosition(update.position);
+            ComponentMessage msg(ComponentMessage::Type::TransformUpdate);
+            msg.data = update;
+            m_actorC->message(msg);
 
             // Replay any updates not yet processed by server.
             auto i = std::begin(m_pendingCommands);
@@ -79,19 +82,24 @@ void NetworkComponent::update(World& world)
                     i = m_pendingCommands.erase(i);
                 }
                 else{
-                    printf("\tReplaying input %d\n", i->sequenceNumber);
+                    //printf("\tReplaying input %d\n", i->sequenceNumber);
                     ComponentMessage msg(ComponentMessage::Type::Command);
                     msg.data = i->type;
                     m_actorC->message(msg);
+                    //m_actorC->setState(i->actorState);
                     m_actorC->update(world);
+                    //  use an actor state
 
                     ++i;
                 }
             }
 
+            
+
             m_serverUpdates.pop();
         }
     }
+    //printf("NetworkComponent updated.\n");
 }
 
 // ========================================================================= //
@@ -106,7 +114,8 @@ void NetworkComponent::message(ComponentMessage& msg)
         {
             // Enqueue transform update for processing later.
             TransformUpdate transform = boost::get<TransformUpdate>(msg.data);
-            m_serverUpdates.push(transform);            
+            m_serverUpdates.push(transform);   
+            
         }
         break;
 
@@ -115,9 +124,11 @@ void NetworkComponent::message(ComponentMessage& msg)
             // Enqueue this command into the pending commands queue.
             PendingCommand command;
             command.type = boost::get<CommandType>(msg.data);
+            command.actorState = m_actorC->getState();
             // Assign a sequence number and increment the counter. This will be
             // used for knowing which commands to replay each frame.
-            command.sequenceNumber = m_commandSequence++;
+            command.sequenceNumber = 
+                m_world->getNetwork()->getLastInputSequenceNumber();
             
             m_pendingCommands.push_back(command);
         }

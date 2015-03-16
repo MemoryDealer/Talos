@@ -66,12 +66,12 @@ void Client::init(void)
     m_peer->Startup(1, &sd, 1);
 
     Talos::Config c("Data/Network/net.cfg");
-    bool simulate = c.parseBool("Simulator", "active");
+    bool simulate = c.parseBool("simulator", "active");
     if (simulate){
-        const float packetLoss = c.parseReal("Simulator", "packetLoss");
-        const int delay = c.parseInt("Simulator", "delay");
+        const float packetLoss = c.parseReal("simulator", "packetLoss");
+        const int delay = c.parseInt("simulator", "delay");
 
-        m_peer->ApplyNetworkSimulator(packetLoss, delay / 2, 0);
+        m_peer->ApplyNetworkSimulator(packetLoss, delay, 0);
     }
 
     this->setInitialized(true);
@@ -271,18 +271,22 @@ void Client::update(void)
                 bs.Read(pos.y);
                 bs.Read(pos.z);
 
+                // Read in orientation values.
+                /*Ogre::Quaternion orientation;
+                bs.Read(orientation.w);
+                bs.Read(orientation.x);
+                bs.Read(orientation.y);
+                bs.Read(orientation.z);*/
+
                 // Notify engine state of player update.
                 NetEvent e(NetMessage::PlayerUpdate);
                 
                 // Store EntityID for engine state to access from World.
                 transform.id = this->getPlayer(id).entity->getID();
                 transform.position = pos;
+                //transform.orientation = orientation;
                 e.data = transform;
                 this->pushEvent(e);
-
-                if (id == m_localID){
-                    printf("Updating local player \t(%.2f, %.2f, %.2f)\n", pos.x, pos.y, pos.z);
-                }
             }
             break;
         }
@@ -375,9 +379,9 @@ uint32_t Client::sendCommand(CommandPtr command)
     RakNet::BitStream bs;
     bs.Write(static_cast<RakNet::MessageID>(NetMessage::ClientCommand));
     bs.Write(command->type);
-    bs.Write(m_lastInputSequenceNumber++);
+    bs.Write(++m_lastInputSequenceNumber);
 
-    return this->send(bs, HIGH_PRIORITY, RELIABLE_ORDERED);
+    return this->send(bs, IMMEDIATE_PRIORITY, RELIABLE_ORDERED);
 }
 
 // ========================================================================= //
@@ -389,7 +393,7 @@ uint32_t Client::sendMouseMove(const int32_t relx, const int32_t rely)
     bs.Write(relx);
     bs.Write(rely);
 
-    return this->send(bs, HIGH_PRIORITY, RELIABLE_ORDERED);
+    return this->send(bs, IMMEDIATE_PRIORITY, RELIABLE_ORDERED);
 }
 
 // ========================================================================= //

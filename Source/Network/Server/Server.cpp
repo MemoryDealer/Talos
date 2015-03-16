@@ -28,7 +28,7 @@
 #include "Entity/Entity.hpp"
 #include "Network/NetData.hpp"
 #include "Network/Update.hpp"
-#include "Server.hpp""
+#include "Server.hpp"
 
 // ========================================================================= //
 
@@ -82,9 +82,8 @@ void Server::init(const int port, const std::string& username)
     m_peer->Startup(maxClients, &sd, 1);
     m_peer->SetMaximumIncomingConnections(maxClients);
     if (simulate){
-        // Apply network simulation for lag. Use half of delay since it will
-        // be applied to clients as well.
-        m_peer->ApplyNetworkSimulator(packetLoss, delay / 2, 0);
+        // Apply network simulation for lag.
+        m_peer->ApplyNetworkSimulator(packetLoss, delay, 0);
     }
 
     // Add local player instance.
@@ -222,7 +221,7 @@ void Server::update(void)
                 Assert(player.entity != nullptr, "Invalid entity for player");
                 
                 //printf("Received input from GUID: %d\tID: %d\n", m_packet->guid, m_players[m_packet->guid]->id);
-                printf("EntityID: %d\n", player.entity->getID());
+                //printf("EntityID: %d\n", player.entity->getID());
                 command->execute(player.entity);
             }
             break;
@@ -291,7 +290,15 @@ void Server::playerUpdate(const NetworkID id,
     bs.Write(pos.y);
     bs.Write(pos.z);
 
-    this->broadcast(bs, HIGH_PRIORITY, UNRELIABLE_SEQUENCED);
+    /*msg = ComponentMessage(ComponentMessage::Type::GetOrientation);
+    entity->message(msg);
+    Ogre::Quaternion orientation = boost::get<Ogre::Quaternion>(msg.data);
+    bs.Write(orientation.w);
+    bs.Write(orientation.x);
+    bs.Write(orientation.y);
+    bs.Write(orientation.z);*/
+
+    this->broadcast(bs, IMMEDIATE_PRIORITY, UNRELIABLE_SEQUENCED);
 }
 
 // ========================================================================= //

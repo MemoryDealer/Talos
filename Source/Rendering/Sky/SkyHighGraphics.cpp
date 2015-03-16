@@ -21,7 +21,6 @@
 // Implements SkyHighGraphics class.
 // ========================================================================= //
 
-#include "Component/ActorComponent.hpp"
 #include "Component/CameraComponent.hpp"
 #include "Entity/Entity.hpp"
 #include "Rendering/Ocean/OceanHighGraphics.hpp"

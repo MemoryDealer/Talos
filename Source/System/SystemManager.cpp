@@ -35,8 +35,9 @@
 
 // ========================================================================= //
 
-SystemManager::SystemManager(void) :
-m_systems()
+SystemManager::SystemManager(World* world) :
+m_systems(),
+m_world(world)
 {
 
 }
@@ -64,6 +65,7 @@ void SystemManager::destroy(void)
 void SystemManager::addSystem(System* system)
 {
     m_systems[&typeid(*system)] = system;
+    system->setWorld(m_world);
 }
 
 // ========================================================================= //
@@ -92,6 +94,10 @@ void SystemManager::processEntity(EntityPtr entity)
             entity->getComponent<ActorComponent>() :
             entity->getComponent<SceneComponent>();
 
+        if (entity->hasComponent<ActorComponent>()){
+            entity->getComponent<ActorComponent>()->setWorld(m_world);
+        }
+
         if (entity->hasComponent<CameraComponent>()){
             sceneC->attachCamera(
                 entity->getComponent<CameraComponent>()->getCamera());
@@ -105,6 +111,7 @@ void SystemManager::processEntity(EntityPtr entity)
                 entity->getComponent<ModelComponent>()->getOgreEntity());
         }
         if (entity->hasComponent<NetworkComponent>()){
+            entity->getComponent<NetworkComponent>()->setWorld(m_world);
             if (typeid(*sceneC) == typeid(SceneComponent)){
                 entity->getComponent<NetworkComponent>()->
                     setSceneComponentPtr(sceneC);

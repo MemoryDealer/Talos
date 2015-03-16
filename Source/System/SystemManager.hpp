@@ -38,7 +38,7 @@ class SystemManager final
 {
 public:
     // Default initializes SystemTable.
-    explicit SystemManager(void);
+    explicit SystemManager(World* world);
 
     // Empty destructor.
     ~SystemManager(void);
@@ -75,6 +75,7 @@ public:
 
 private:
     SystemTable m_systems;
+    World* m_world;
 };
 
 // ========================================================================= //

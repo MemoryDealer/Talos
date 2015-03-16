@@ -119,6 +119,10 @@ public:
         return 0;
     }
 
+    virtual const uint32_t getLastInputSequenceNumber(void) const{
+        return 0;
+    }
+
     virtual uint32_t sendMouseMove(const int32_t relx, const int32_t rely) {
         return 0;
     }

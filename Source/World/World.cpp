@@ -115,7 +115,7 @@ void World::init(const bool usePhysics)
     m_componentFactory.reset(new ComponentFactory());
     m_componentFactory->init();
 
-    m_systemManager.reset(new SystemManager());
+    m_systemManager.reset(new SystemManager(this));
 
     // Assign Network pointer if server or client is active.
     if (m_server->initialized()){
@@ -183,6 +183,11 @@ void World::update(void)
     m_systemManager->update();
 
     for (int i = 0; i < m_entityPool->m_poolSize; ++i){
+        if (m_player != nullptr){
+            if (m_entityPool->m_pool[i].getID() == m_player->getID()){
+                continue;
+            }
+        }
         m_entityPool->m_pool[i].update(*this);
     }
 
@@ -432,7 +437,6 @@ World::attachComponent<SceneComponent>(EntityPtr entity)
 void World::addSystem(System* system)
 {
     m_systemManager->addSystem(system);
-    system->setWorld(this);
 }
 
 // ========================================================================= //
