@@ -266,17 +266,22 @@ void Client::update(void)
                 bs.Read(transform.sequenceNumber);
 
                 // Read in position values.
-                Ogre::Vector3 pos;                
+                Ogre::Vector3 pos;
                 bs.Read(pos.x);
                 bs.Read(pos.y);
                 bs.Read(pos.z);
 
                 // Read in orientation values.
-                /*Ogre::Quaternion orientation;
+                Ogre::Quaternion orientation;
                 bs.Read(orientation.w);
                 bs.Read(orientation.x);
                 bs.Read(orientation.y);
-                bs.Read(orientation.z);*/
+                bs.Read(orientation.z);
+                Ogre::Quaternion orientation2;
+                bs.Read(orientation2.w);
+                bs.Read(orientation2.x);
+                bs.Read(orientation2.y);
+                bs.Read(orientation2.z);
 
                 // Notify engine state of player update.
                 NetEvent e(NetMessage::PlayerUpdate);
@@ -284,7 +289,8 @@ void Client::update(void)
                 // Store EntityID for engine state to access from World.
                 transform.id = this->getPlayer(id).entity->getID();
                 transform.position = pos;
-                //transform.orientation = orientation;
+                transform.orientation = orientation;
+                transform.orientation2 = orientation2;
                 e.data = transform;
                 this->pushEvent(e);
             }

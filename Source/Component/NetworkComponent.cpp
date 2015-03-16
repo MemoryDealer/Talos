@@ -82,10 +82,21 @@ void NetworkComponent::update(World& world)
                     i = m_pendingCommands.erase(i);
                 }
                 else{
-                    //printf("\tReplaying input %d\n", i->sequenceNumber);
-                    ComponentMessage msg(ComponentMessage::Type::Command);
-                    msg.data = i->type;
+                    // Reset orientation.
+                    /*ComponentMessage msg(ComponentMessage::Type::SetOrientation);
+                    msg.data = i->actorState.orientation;
                     m_actorC->message(msg);
+
+                    msg = ComponentMessage(ComponentMessage::Type::Set2ndOrientation);
+                    msg.data = i->actorState.orientation2;
+                    m_actorC->message(msg);*/
+
+                    //printf("\tReplaying input %d\n", i->sequenceNumber);
+                    ComponentMessage msg = ComponentMessage(ComponentMessage::Type::Command);
+                    msg.data = i->type;
+                    //m_actorC->setOrientation(i->actorState.orientation);
+                    m_actorC->message(msg);
+                    
                     //m_actorC->setState(i->actorState);
                     m_actorC->update(world);
                     //  use an actor state
@@ -93,9 +104,7 @@ void NetworkComponent::update(World& world)
                     ++i;
                 }
             }
-
             
-
             m_serverUpdates.pop();
         }
     }
@@ -124,7 +133,17 @@ void NetworkComponent::message(ComponentMessage& msg)
             // Enqueue this command into the pending commands queue.
             PendingCommand command;
             command.type = boost::get<CommandType>(msg.data);
-            command.actorState = m_actorC->getState();
+            
+            // Get orientations.
+            ComponentMessage msg(ComponentMessage::Type::GetOrientation);
+            m_actorC->message(msg);
+            command.actorState.orientation = boost::get<Ogre::Quaternion>(msg.data);
+            
+            msg = ComponentMessage(ComponentMessage::Type::Get2ndOrientation);
+            m_actorC->message(msg);
+            command.actorState.orientation2 = boost::get<Ogre::Quaternion>(msg.data);
+
+
             // Assign a sequence number and increment the counter. This will be
             // used for knowing which commands to replay each frame.
             command.sequenceNumber = 

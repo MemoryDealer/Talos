@@ -21,6 +21,7 @@
 // Implements KCC class.
 // ========================================================================= //
 
+#include "Command/CommandTypes.hpp"
 #include "KCC.hpp"
 #include "Physics/PScene.hpp"
 #include "Core/Talos.hpp"
@@ -77,10 +78,18 @@ void KCC::destroy(World& world)
 
 // ========================================================================= //
 
-PxExtendedVec3 KCC::update(World& world, 
-                           const PxReal dx, 
-                           const PxReal dy, 
-                           const PxReal dz)
+const PxExtendedVec3 KCC::move(const Ogre::Vector3& translate)
+{
+    PxVec3 disp(translate.x, translate.y, translate.z);
+    
+    m_controller->move(disp, 0.1f, 1.f / Talos::MS_PER_UPDATE, 0);
+
+    return m_controller->getPosition();
+}
+
+// ========================================================================= //
+
+const PxExtendedVec3 KCC::update(World& world)
 {
     // Free-fall/gravity values.
     const PxReal gravity = 0.0281f; // Amount to advance y-velocity down.
@@ -95,7 +104,7 @@ PxExtendedVec3 KCC::update(World& world,
     }
 
     // Move the kinematic actor.
-    PxVec3 disp(dx, m_yVel, dz);
+    PxVec3 disp(0.f, m_yVel, 0.f);
     m_controller->move(disp, 0.1f, 1.f / Talos::MS_PER_UPDATE, 0);
  
     // Get position for raycast origin.

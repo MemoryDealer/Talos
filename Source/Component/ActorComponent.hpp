@@ -26,6 +26,7 @@
 
 // ========================================================================= //
 
+#include "Command/CommandTypes.hpp"
 #include "SceneComponent.hpp"
 
 // ========================================================================= //
@@ -33,13 +34,14 @@
 struct ActorState{
     explicit ActorState(void) : 
     position(Ogre::Vector3::ZERO),
-    orientation(Ogre::Quaternion::IDENTITY)
+    orientation(Ogre::Quaternion::IDENTITY),
+    orientation2(Ogre::Quaternion::IDENTITY)
     {
         memset(&input, 0, sizeof(input));
     }
 
     Ogre::Vector3 position;
-    Ogre::Quaternion orientation;
+    Ogre::Quaternion orientation, orientation2;
     struct{
         bool forward, back, right, left;
     } input;
@@ -69,10 +71,6 @@ public:
     // Handles input messages.
     virtual void message(ComponentMessage& msg) override;
 
-    // Calls SceneComponent::onComponentAttached() and links camera if the
-    // type is CameraComponent.
-    virtual void onComponentAttached(ComponentPtr) override;
-
     // Attaches Ogre::Camera to roll node.
     virtual void attachCamera(Ogre::Camera* camera) override;
 
@@ -87,6 +85,8 @@ public:
         Kinematic = 0,
         Dynamic
     };
+
+    void applyInput(const CommandType& type);
 
     // Changes the actor's orientation based on relative x/y looking.
     void look(const int relx, const int rely);
@@ -140,14 +140,6 @@ private:
 // ========================================================================= //
 
 // Getters:
-
-inline const Ogre::Vector3& ActorComponent::getPosition(void) const{
-    return m_rootNode->getPosition();
-}
-
-inline const Ogre::Quaternion& ActorComponent::getOrientation(void) const{
-    return m_yawNode->getOrientation() * m_pitchNode->getOrientation();
-}
 
 inline const ActorState& ActorComponent::getState(void) const{
     return m_state;

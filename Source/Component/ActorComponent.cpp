@@ -25,7 +25,6 @@
 #include "CameraComponent.hpp"
 #include "CC/DCC.hpp"
 #include "CC/KCC.hpp"
-#include "Command/CommandTypes.hpp"
 #include "ComponentMessage.hpp"
 #include "ModelComponent.hpp"
 #include "Physics/PScene.hpp"
@@ -107,28 +106,134 @@ void ActorComponent::destroy(World& world)
 
 void ActorComponent::update(World& world)
 {
-    m_kcc->update(world, 0.f, 0.f, 0.f);
-    return;
+    switch (m_mode){
+    default:
+        break;
 
-    if (m_remote){
-        return;
+    case Mode::Spectator:
+        
+        break;
+
+    case Mode::Player:
+        {
+            if (m_cc == CC::Kinematic){
+                PxExtendedVec3 pos = m_kcc->update(world);
+                m_rootNode->setPosition(Ogre::Real(pos.x),
+                                          Ogre::Real(pos.y),
+                                          Ogre::Real(pos.z));
+            }
+        }
+        break;
     }
+}
 
-    printf("Forward: %d\tBack: %d\n", m_state.input.forward, m_state.input.back);
+// ========================================================================= //
 
+void ActorComponent::message(ComponentMessage& msg)
+{
+    switch (msg.type){
+    default:
+        break;
+
+    case ComponentMessage::Type::GetPosition:       
+        msg.data = m_rootNode->_getDerivedPosition();
+        break;
+
+    case ComponentMessage::Type::SetPosition:
+        this->setPosition(boost::get<Ogre::Vector3>(msg.data));
+        break;
+
+    case ComponentMessage::Type::GetOrientation:
+        //msg.data = m_yawNode->getOrientation();
+        msg.data = m_rootNode->_getDerivedOrientation();
+        break;
+
+    case ComponentMessage::Type::Get2ndOrientation:
+        msg.data = m_pitchNode->getOrientation();
+        break;
+
+    case ComponentMessage::Type::SetOrientation:
+        //this->setOrientation(boost::get<Ogre::Quaternion>(msg.data));
+        m_yawNode->setOrientation(boost::get<Ogre::Quaternion>(msg.data));
+        break;
+
+    case ComponentMessage::Type::Set2ndOrientation:
+        m_pitchNode->setOrientation(boost::get<Ogre::Quaternion>(msg.data));
+        break;
+
+    case ComponentMessage::Type::Look:
+        {
+            MouseMove mm = boost::get<MouseMove>(msg.data);
+            this->look(mm.relx, mm.rely);
+        }
+        break;
+        
+    case ComponentMessage::Type::TransformUpdate:        
+        {
+            // Apply transform update.
+            TransformUpdate transform = 
+                boost::get<TransformUpdate>(msg.data);
+
+            /*Ogre::Vector3 src = this->getPosition();
+            Ogre::Vector3 dst = transform.position;         
+            const Ogre::Real max = 25.f;
+            printf("Squared dist: %.2f\n", src.squaredDistance(dst));
+            if (src.squaredDistance(dst) < max){
+                m_rootNode->translate((dst - src) * 0.1f);
+            }
+            else{*/
+                this->setPosition(transform.position);
+                //m_rootNode->_setDerivedOrientation(transform.orientation);
+                //m_yawNode->setOrientation(transform.orientation);
+                //m_pitchNode->setOrientation(transform.orientation2);
+            //}
+        }
+        break;
+
+    case ComponentMessage::Type::Command:       
+        this->applyInput(boost::get<CommandType>(msg.data));
+        break;
+    }
+}
+
+// ========================================================================= //
+
+void ActorComponent::attachCamera(Ogre::Camera* camera)
+{
+    m_rollNode->attachObject(camera);
+}
+
+// ========================================================================= //
+
+void ActorComponent::applyInput(const CommandType& type)
+{
     Ogre::Vector3 translate(Ogre::Vector3::ZERO);
     const Ogre::Real move = 1.f;
-    if (m_state.input.forward){
+
+    // Determine which direction to move, or action to perform.
+    switch (type){
+    default:
+        break;
+
+    case CommandType::MoveForward:
         translate.z = -move;
-    }
-    else if (m_state.input.back){
+        break;
+
+    case CommandType::MoveBackward:
         translate.z = move;
-    }
-    if (m_state.input.right){
+        break;
+
+    case CommandType::MoveRight:
         translate.x = move;
-    }
-    else if (m_state.input.left){
+        break;
+
+    case CommandType::MoveLeft:
         translate.x = -move;
+        break;
+
+    case CommandType::Jump:
+        m_kcc->jump();
+        return;
     }
 
     // Calculate movement vector.
@@ -156,149 +261,22 @@ void ActorComponent::update(World& world)
     default:
         break;
 
+    case Mode::Player:
+        {
+            // Update kinematic controller.
+            PxExtendedVec3 pos = m_kcc->move(translate);
+
+            // Update scene node with controller's new position.
+            m_rootNode->setPosition(Ogre::Real(pos.x),
+                                    Ogre::Real(pos.y),
+                                    Ogre::Real(pos.z));
+        }
+        break;
+
     case Mode::Spectator:
         m_rootNode->translate(translate, Ogre::SceneNode::TS_LOCAL);
         break;
-
-    case Mode::Player:
-        {
-            if (m_cc == CC::Kinematic){
-                PxExtendedVec3 pos = m_kcc->update(world,
-                                                   translate.x,
-                                                   translate.y,
-                                                   translate.z);
-                m_rootNode->setPosition(Ogre::Real(pos.x),
-                                          Ogre::Real(pos.y),
-                                          Ogre::Real(pos.z));
-            }
-        }
-        break;
-    }
-
-    // Reset data for next frame. This should be bit values for input that
-    // must be held down, such as movement. 
-    /*m_state.input.back = m_state.input.forward =
-        m_state.input.right = m_state.input.left = false;
-    m_state.position = m_rollNode->_getDerivedPosition();
-    m_state.orientation = m_rollNode->_getDerivedOrientation();*/
-}
-
-// ========================================================================= //
-
-void ActorComponent::message(ComponentMessage& msg)
-{
-    switch (msg.type){
-    default:
-        break;
-
-    case ComponentMessage::Type::GetPosition:       
-        msg.data = m_rootNode->_getDerivedPosition();
-        break;
-
-    case ComponentMessage::Type::SetPosition:
-        this->setPosition(boost::get<Ogre::Vector3>(msg.data));
-        break;
-
-    case ComponentMessage::Type::GetOrientation:
-        msg.data = m_rootNode->_getDerivedOrientation();
-        break;
-
-    case ComponentMessage::Type::SetOrientation:
-        this->setOrientation(boost::get<Ogre::Quaternion>(msg.data));
-        break;
-
-    case ComponentMessage::Type::Look:
-        {
-            MouseMove mm = boost::get<MouseMove>(msg.data);
-            this->look(mm.relx, mm.rely);
-        }
-        break;
-        
-    case ComponentMessage::Type::TransformUpdate:        
-        {
-            // Apply transform update.
-            TransformUpdate transform = 
-                boost::get<TransformUpdate>(msg.data);
-
-            /*Ogre::Vector3 src = this->getPosition();
-            Ogre::Vector3 dst = transform.position;         
-            const Ogre::Real max = 25.f;
-            printf("Squared dist: %.2f\n", src.squaredDistance(dst));
-            if (src.squaredDistance(dst) < max){
-                m_rootNode->translate((dst - src) * 0.1f);
-            }
-            else{*/
-                this->setPosition(transform.position);
-                //m_rootNode->_setDerivedOrientation(transform.orientation);
-            //}
-        }
-        break;
-
-    case ComponentMessage::Type::Command:       
-        {
-            // Get command type and process it.
-            CommandType type = boost::get<CommandType>(msg.data);
-            switch (type){
-            default:
-                break;
-
-            case CommandType::MoveForward:
-                m_state.input.forward = true;
-                {
-                    Ogre::Vector3 translate(Ogre::Vector3::ZERO);
-                    translate.z = -1.f;
-                    translate = m_yawNode->getOrientation() *
-                        m_pitchNode->getOrientation() *
-                        translate;
-                    translate.normalise();
-
-                    translate *= m_speed;
-
-                    PxExtendedVec3 pos = m_kcc->update(*m_world,
-                                                       translate.x,
-                                                       translate.y,
-                                                       translate.z);
-                    m_rootNode->setPosition(Ogre::Real(pos.x),
-                                            Ogre::Real(pos.y),
-                                            Ogre::Real(pos.z));
-                }
-                break;
-
-            case CommandType::MoveBackward:
-                m_state.input.back = true;
-                break;
-
-            case CommandType::MoveRight:
-                m_state.input.right = true;
-                break;
-
-            case CommandType::MoveLeft:
-                m_state.input.left = true;
-                break;
-
-            case CommandType::Jump:
-                m_kcc->jump();
-                break;
-            }
-        }
-        break;
-    }
-}
-
-
-
-// ========================================================================= //
-
-void ActorComponent::onComponentAttached(ComponentPtr component)
-{
-    
-}
-
-// ========================================================================= //
-
-void ActorComponent::attachCamera(Ogre::Camera* camera)
-{
-    m_rollNode->attachObject(camera);
+    }    
 }
 
 // ========================================================================= //
@@ -344,6 +322,21 @@ void ActorComponent::look(const int relx, const int rely)
         }
     }
 }
+
+// ========================================================================= //
+
+const Ogre::Vector3& ActorComponent::getPosition(void) const{
+    return m_rootNode->getPosition();
+}
+
+// ========================================================================= //
+
+const Ogre::Quaternion& ActorComponent::getOrientation(void) const{
+    return m_rootNode->_getDerivedOrientation();
+    
+}
+
+// ========================================================================= //
 
 // ========================================================================= //
 

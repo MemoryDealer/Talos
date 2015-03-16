@@ -45,10 +45,9 @@ public:
 
     void destroy(World&);
 
-    PxExtendedVec3 update(World& world, 
-                          const PxReal, 
-                          const PxReal, 
-                          const PxReal);
+    const PxExtendedVec3 move(const Ogre::Vector3& translate);
+
+    const PxExtendedVec3 update(World& world);
 
     void jump(void);
 

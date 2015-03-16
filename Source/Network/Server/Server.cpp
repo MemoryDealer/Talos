@@ -290,13 +290,21 @@ void Server::playerUpdate(const NetworkID id,
     bs.Write(pos.y);
     bs.Write(pos.z);
 
-    /*msg = ComponentMessage(ComponentMessage::Type::GetOrientation);
+    msg = ComponentMessage(ComponentMessage::Type::GetOrientation);
     entity->message(msg);
     Ogre::Quaternion orientation = boost::get<Ogre::Quaternion>(msg.data);
     bs.Write(orientation.w);
     bs.Write(orientation.x);
     bs.Write(orientation.y);
-    bs.Write(orientation.z);*/
+    bs.Write(orientation.z);
+
+    msg = ComponentMessage(ComponentMessage::Type::Get2ndOrientation);
+    entity->message(msg);
+    Ogre::Quaternion orientation2 = boost::get<Ogre::Quaternion>(msg.data);
+    bs.Write(orientation2.w);
+    bs.Write(orientation2.x);
+    bs.Write(orientation2.y);
+    bs.Write(orientation2.z);
 
     this->broadcast(bs, IMMEDIATE_PRIORITY, UNRELIABLE_SEQUENCED);
 }

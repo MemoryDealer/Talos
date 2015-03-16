@@ -190,13 +190,7 @@ void GameState::update(void)
                 }
 
                 // Send input commands to the player.
-                {
-                    /*CommandPtr command = m_world.handleInput(e);
-                    if (command){
-                        command->execute(m_world.getPlayer());
-                        m_world.getNetwork()->sendCommand(command);
-                    }*/
-                }
+                m_world.handleInput(e);
                 break;
 
             case SDL_KEYUP:
