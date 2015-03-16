@@ -94,10 +94,6 @@ void SystemManager::processEntity(EntityPtr entity)
             entity->getComponent<ActorComponent>() :
             entity->getComponent<SceneComponent>();
 
-        if (entity->hasComponent<ActorComponent>()){
-            entity->getComponent<ActorComponent>()->setWorld(m_world);
-        }
-
         if (entity->hasComponent<CameraComponent>()){
             sceneC->attachCamera(
                 entity->getComponent<CameraComponent>()->getCamera());

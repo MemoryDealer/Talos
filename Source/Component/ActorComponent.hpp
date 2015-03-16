@@ -97,6 +97,10 @@ public:
 
     const Ogre::Quaternion& getOrientation(void) const;
 
+    const Ogre::Quaternion& getYawOrientation(void) const;
+
+    const Ogre::Quaternion& getPitchOrientation(void) const;
+
     const ActorState& getState(void) const;
 
     // Setters:
@@ -112,9 +116,8 @@ public:
     // instance of a remote player on a client game.
     void setRemote(const bool remote);
 
-    void setWorld(World* world){
-        m_world = world;
-    }
+    Ogre::Quaternion m_yawOrientation;
+    Ogre::Quaternion m_pitchOrientation;
 
 private:
     // Ogre3D.
@@ -125,6 +128,8 @@ private:
     Ogre::Real m_speed;
     bool m_remote; // Is this actor remote (for clients).
 
+    
+
     // Character controller.
     CC m_cc;
     union{
@@ -134,7 +139,6 @@ private:
 
     Mode m_mode;
     ActorState m_state;
-    World* m_world;
 };
 
 // ========================================================================= //

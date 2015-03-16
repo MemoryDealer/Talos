@@ -70,7 +70,8 @@ public:
     // server.
     struct PendingCommand{
         CommandType type;
-        ActorState actorState;
+        Ogre::Quaternion yawOrientation;
+        Ogre::Quaternion pitchOrientation;
         uint32_t sequenceNumber;
     };
 

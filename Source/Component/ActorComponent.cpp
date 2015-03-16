@@ -237,8 +237,9 @@ void ActorComponent::applyInput(const CommandType& type)
     }
 
     // Calculate movement vector.
-    translate = m_yawNode->getOrientation() *
-        m_pitchNode->getOrientation() *
+    translate = /*m_yawNode->getOrientation() *
+        m_pitchNode->getOrientation() **/
+        m_yawOrientation * m_pitchOrientation *
         translate;
 
     // Calculate the forwards vector and use it to keep the player moving at
@@ -321,6 +322,9 @@ void ActorComponent::look(const int relx, const int rely)
             }
         }
     }
+
+    m_yawOrientation = m_yawNode->getOrientation();
+    m_pitchOrientation = m_pitchNode->getOrientation();
 }
 
 // ========================================================================= //
@@ -334,6 +338,20 @@ const Ogre::Vector3& ActorComponent::getPosition(void) const{
 const Ogre::Quaternion& ActorComponent::getOrientation(void) const{
     return m_rootNode->_getDerivedOrientation();
     
+}
+
+// ========================================================================= //
+
+const Ogre::Quaternion& ActorComponent::getYawOrientation(void) const
+{
+    return m_yawNode->getOrientation();
+}
+
+// ========================================================================= //
+
+const Ogre::Quaternion& ActorComponent::getPitchOrientation(void) const
+{
+    return m_pitchNode->getOrientation();
 }
 
 // ========================================================================= //

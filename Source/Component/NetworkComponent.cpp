@@ -91,6 +91,9 @@ void NetworkComponent::update(World& world)
                     msg.data = i->actorState.orientation2;
                     m_actorC->message(msg);*/
 
+                    m_actorC->m_yawOrientation = i->yawOrientation;
+                    m_actorC->m_pitchOrientation = i->pitchOrientation;
+
                     //printf("\tReplaying input %d\n", i->sequenceNumber);
                     ComponentMessage msg = ComponentMessage(ComponentMessage::Type::Command);
                     msg.data = i->type;
@@ -135,14 +138,8 @@ void NetworkComponent::message(ComponentMessage& msg)
             command.type = boost::get<CommandType>(msg.data);
             
             // Get orientations.
-            ComponentMessage msg(ComponentMessage::Type::GetOrientation);
-            m_actorC->message(msg);
-            command.actorState.orientation = boost::get<Ogre::Quaternion>(msg.data);
-            
-            msg = ComponentMessage(ComponentMessage::Type::Get2ndOrientation);
-            m_actorC->message(msg);
-            command.actorState.orientation2 = boost::get<Ogre::Quaternion>(msg.data);
-
+            command.yawOrientation = m_actorC->getYawOrientation();
+            command.pitchOrientation = m_actorC->getPitchOrientation();
 
             // Assign a sequence number and increment the counter. This will be
             // used for knowing which commands to replay each frame.
