@@ -162,6 +162,7 @@ void ActorComponent::message(ComponentMessage& msg)
     case ComponentMessage::Type::TransformUpdate:        
         {
             // Apply transform update.
+            // @TODO: Interpolate.                                                    
             TransformUpdate transform = 
                 boost::get<TransformUpdate>(msg.data);
 

@@ -454,6 +454,7 @@
 * Refer to http://gameprogrammingpatterns.com/event-queue.html for Audio.
 
 == BUGS ==
+* Moving diagonally is faster, due to changes in input system. Fix in KCC or ActorComponent.
 * Casting ray upwards with PhysX (PScene::raycast()) still returns a result if no hit.
 * Raycast doesn't hit dynamic actor.
 * Hydrax/SkyX need to be shared between states--make them world dependencies perhaps and add code to check if they are already initialized.

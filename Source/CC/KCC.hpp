@@ -59,6 +59,7 @@ public:
 
 private:
     PxController* m_controller;
+    PxVec3 m_lastMove;
     PxReal m_yVel;
     bool m_onSurface;
     bool m_jumping;

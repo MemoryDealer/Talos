@@ -70,9 +70,7 @@ void NetworkComponent::update(World& world)
         TransformUpdate update = m_serverUpdates.front();
 
         // Set the transform of the actor to this update from the past.
-        ComponentMessage msg(ComponentMessage::Type::TransformUpdate);
-        msg.data = update;
-        m_actorC->message(msg);
+        m_actorC->setPosition(update.position);
 
         // Process pending commands (those not applied by server yet).
         auto i = std::begin(m_pendingCommands);
@@ -92,14 +90,13 @@ void NetworkComponent::update(World& world)
                 ComponentMessage msg = 
                     ComponentMessage(ComponentMessage::Type::Command);
                 msg.data = i->type;
-                m_actorC->message(msg);  
-
-                    
-                m_actorC->update(world);
+                m_actorC->message(msg);                                      
 
                 ++i;
             }
         }
+
+        m_actorC->update(world);
             
         m_serverUpdates.pop();
     }

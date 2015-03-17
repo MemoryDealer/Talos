@@ -31,6 +31,7 @@
 
 KCC::KCC(void) :
 m_controller(nullptr),
+m_lastMove(0.f, 0.f, 0.f),
 m_yVel(0.f),
 m_onSurface(false),
 m_jumping(false)
@@ -80,7 +81,8 @@ void KCC::destroy(World& world)
 
 const PxExtendedVec3 KCC::move(const Ogre::Vector3& translate)
 {
-    PxVec3 disp(translate.x, translate.y, translate.z);
+    PxVec3 disp(translate.x, 0.f, translate.z);
+    m_lastMove += disp;
     
     m_controller->move(disp, 0.1f, 1.f / Talos::MS_PER_UPDATE, 0);
 
@@ -103,8 +105,8 @@ const PxExtendedVec3 KCC::update(World& world)
         m_yVel = maxY;
     }
 
-    // Move the kinematic actor.
     PxVec3 disp(0.f, m_yVel, 0.f);
+    // Move the kinematic actor.
     m_controller->move(disp, 0.1f, 1.f / Talos::MS_PER_UPDATE, 0);
  
     // Get position for raycast origin.
