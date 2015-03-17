@@ -28,38 +28,36 @@
 
 #include "ActorComponent.hpp"
 #include "Command/CommandTypes.hpp"
-//#include "Component.hpp"
 #include "Network/Update.hpp"
 
 // ========================================================================= //
-// Handles client-side network needs such as client-side prediction, server
-// reconciliation, and interpolation.
+// Handles client-side network needs such as client-side prediction, and
+// server reconciliation.
 class NetworkComponent : public Component
 {
 public:
+    // Default initializes member data.
     explicit NetworkComponent(void);
 
+    // Empty.
     virtual ~NetworkComponent(void) override;
 
-    // 
+    // Empty.
     virtual void init(World& world) override;
 
-    // 
+    // Empty.
     virtual void destroy(World& world) override;
 
-    //
+    // Applies server reconciliation to associated actor component.
     virtual void update(World& world) override;
 
-    // Handles input and transform update messages.
+    // Handles command and transform update messages.
     virtual void message(ComponentMessage& msg) override;
 
     // Setters:
 
     // Sets internal actor component pointer.
     void setActorComponentPtr(const ActorComponentPtr actorC);
-
-    // Sets internal scene component pointer.
-    void setSceneComponentPtr(const SceneComponentPtr sceneC);
 
     // Sets internal World pointer.
     void setWorld(World* world);
@@ -76,12 +74,13 @@ public:
     };
 
 private:
+    // Commands not yet applied by server.
     std::list<PendingCommand> m_pendingCommands;
+    // Pending server updates that need to be applied locally.
     std::queue<TransformUpdate> m_serverUpdates;
 
-    // Have direct access to sister components, the coupling here is acceptable.
+    // Have direct access to actor component, the coupling here is acceptable.
     ActorComponentPtr m_actorC;
-    SceneComponentPtr m_sceneC;
 
     // Needed to access Client's last input sequence number.
     World* m_world;
@@ -94,11 +93,6 @@ private:
 inline void NetworkComponent::setActorComponentPtr(
     const ActorComponentPtr actorC){
     m_actorC = actorC;
-}
-
-inline void NetworkComponent::setSceneComponentPtr(
-    const SceneComponentPtr sceneC){
-    m_sceneC = sceneC;
 }
 
 inline void NetworkComponent::setWorld(World* world){

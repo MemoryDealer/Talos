@@ -416,23 +416,23 @@
     message the player entity move the camera using the "Look" message.
     This makes it so I don't have to send "released" events from the client to the server, by setting the actor component's movement values to false each frame in its update function.
 
-== 3/15/16 ==
+== 3/14/16 ==
 * Changed Command's execute() functions to send messages to the entity rather than accessing components directly (except spectator, which is temporary).
 * Made NetEvent use boost::variant, Server now notifies engine state of player updates, which the game state then retrieves the entity from the world using the		
 	entity ID saved in the TransformUpdate struct by the Server.
 * Removed ActorComponent's setMovingForward() etc. and it is now handled with messaging.
 * Added NetworkComponent for client-side prediction. Doesn't work yet, jumps around too much.
 
+== 3/15/16 ==
+* Fixed client-side prediction--the input processing needed to be changed. Rather than setting bit values when the movement keys are pressed, the actor should just be translated immediately,
+    which eliminates the problem of the server not moving the client's actor the frame after receiving a move command, since the bit values were being reset.
+* The above re-introduced the problem of moving faster when going diagonal, since the normalised vector is just the movement vector for one direction and not both.
+
 == TODO ==
 * Move input update into world.
-* Add some kind of network component to handle client-side prediction & server reconciliation. Store input sequence values in Server::ClientInstance.
-* Remove Command::unexecute() and the released netmessage. Anything that must be held down to continue performing the action should be disabled every frame (input will detect it next frame if needed).
 * Change UI/Net events to use boost::variant.
-* Add NetworkActorComponent for clients?
 * Add ability to specify box half extents directly in collision objects for invisible walls and such.
 * Add PhysX mesh (cooking) collision volumes for models.
-* Just add commands for pressed and released--it will make it easier for sending to the server and keeping lists of unprocessed commands.
-* GameState for networked games. Add jumping & sprinting.
 * Popup error box when trying to connect while previous connection is being closed.
 * Client should test timestamp of update packets to ensure no out of order updates.
 * Create EventQueue system to deal with network and UI. Pass World into network classes and have something like World::handleNetworkEvent().

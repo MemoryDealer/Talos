@@ -277,11 +277,6 @@ void Client::update(void)
                 bs.Read(orientation.x);
                 bs.Read(orientation.y);
                 bs.Read(orientation.z);
-                Ogre::Quaternion orientation2;
-                bs.Read(orientation2.w);
-                bs.Read(orientation2.x);
-                bs.Read(orientation2.y);
-                bs.Read(orientation2.z);
 
                 // Notify engine state of player update.
                 NetEvent e(NetMessage::PlayerUpdate);
@@ -290,7 +285,6 @@ void Client::update(void)
                 transform.id = this->getPlayer(id).entity->getID();
                 transform.position = pos;
                 transform.orientation = orientation;
-                transform.orientation2 = orientation2;
                 e.data = transform;
                 this->pushEvent(e);
             }

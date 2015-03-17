@@ -30,24 +30,6 @@
 #include "SceneComponent.hpp"
 
 // ========================================================================= //
-
-struct ActorState{
-    explicit ActorState(void) : 
-    position(Ogre::Vector3::ZERO),
-    orientation(Ogre::Quaternion::IDENTITY),
-    orientation2(Ogre::Quaternion::IDENTITY)
-    {
-        memset(&input, 0, sizeof(input));
-    }
-
-    Ogre::Vector3 position;
-    Ogre::Quaternion orientation, orientation2;
-    struct{
-        bool forward, back, right, left;
-    } input;
-};
-
-// ========================================================================= //
 // Allows an Entity to be controlled by either: a player giving local input,
 // an AI, a networked player, or from a list of replay commands.
 class ActorComponent final : public SceneComponent
@@ -76,16 +58,17 @@ public:
 
     // Modes the actor can be in.
     enum class Mode{
-        Spectator = 0,
-        Player
+        Player,
+        Spectator        
     };
 
     // Two types of character controllers.
     enum class CC{
-        Kinematic = 0,
+        Kinematic,
         Dynamic
     };
 
+    // Applies a translation or action to the actor based on type of input.
     void applyInput(const CommandType& type);
 
     // Changes the actor's orientation based on relative x/y looking.
@@ -93,71 +76,67 @@ public:
 
     // Getters:
 
+    // Returns position of actor's root scene node.
     const Ogre::Vector3& getPosition(void) const;
 
+    // Returns derived orientation of actor's roll node.
     const Ogre::Quaternion& getOrientation(void) const;
 
+    // Returns orientation of yaw node.
     const Ogre::Quaternion& getYawOrientation(void) const;
 
+    // Returns orientation of pitch node.
     const Ogre::Quaternion& getPitchOrientation(void) const;
-
-    const ActorState& getState(void) const;
 
     // Setters:
 
+    // Sets position of actor's root node and character controller's position.
     virtual void setPosition(const Ogre::Vector3& pos) override;
 
-    void setState(const ActorState& state);
+    // Sets derived orientation of roll node.
+    virtual void setOrientation(const Ogre::Quaternion& orientation) override;
+
+    // Sets yaw node's orientation.
+    void setYawOrientation(const Ogre::Quaternion& orientation);
+
+    // Sets pitch node's orientation.
+    void setPitchOrientation(const Ogre::Quaternion& orientation);
 
     // Sets the mode of the Actor, affecting controls/movement.
-    void setMode(const Mode);
-
-    // Sets the internal remote flag. Should be set to true for any 
-    // instance of a remote player on a client game.
-    void setRemote(const bool remote);
-
-    Ogre::Quaternion m_yawOrientation;
-    Ogre::Quaternion m_pitchOrientation;
+    void setMode(const Mode mode);    
 
 private:
-    // Ogre3D.
+    // Scene node created from parent scene component.
     Ogre::SceneNode* m_rootNode;
+
+    // Three axis nodes for camera movement.
     Ogre::SceneNode* m_yawNode;
     Ogre::SceneNode* m_pitchNode;
     Ogre::SceneNode* m_rollNode;
+
+    // Store yaw/pitch for applying input from network component.
+    Ogre::Quaternion m_yawOrientation;
+    Ogre::Quaternion m_pitchOrientation;
+
+    // The amount the actor move each frame.
+    Ogre::Vector3 m_translate;
+
+    // Speed multiplier for affecting movement.
     Ogre::Real m_speed;
-    bool m_remote; // Is this actor remote (for clients).
 
-    
-
-    // Character controller.
+    // Character controller type.
     CC m_cc;
+
+    // Use either a kinematic or dynamic character controller.
+    // @TODO: use an interface.
     union{
         DCC* m_dcc;
         KCC* m_kcc;
     };
 
+    // Current mode of actor.
     Mode m_mode;
-    ActorState m_state;
 };
-
-// ========================================================================= //
-
-// Getters:
-
-inline const ActorState& ActorComponent::getState(void) const{
-    return m_state;
-}
-
-// Setters:
-
-inline void ActorComponent::setState(const ActorState& state){
-    m_state = state;
-}
-
-inline void ActorComponent::setRemote(const bool remote){
-    m_remote = remote;
-}
 
 // ========================================================================= //
 

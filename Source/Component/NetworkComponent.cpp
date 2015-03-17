@@ -34,7 +34,6 @@ NetworkComponent::NetworkComponent(void) :
 m_pendingCommands(),
 m_serverUpdates(),
 m_actorC(nullptr),
-m_sceneC(nullptr),
 m_world(nullptr)
 {
 
@@ -65,53 +64,45 @@ void NetworkComponent::destroy(World& world)
 
 void NetworkComponent::update(World& world)
 {
-    // Apply pending updates from server.
+    // Apply pending updates from server (server reconciliation).
     while (!m_serverUpdates.empty()){
-        if (m_actorC){            
-            TransformUpdate update = m_serverUpdates.front();
-            //printf("Applying server update %d\n", update.sequenceNumber);
+        // Get next server update.
+        TransformUpdate update = m_serverUpdates.front();
 
-            ComponentMessage msg(ComponentMessage::Type::TransformUpdate);
-            msg.data = update;
-            m_actorC->message(msg);
+        // Set the transform of the actor to this update from the past.
+        ComponentMessage msg(ComponentMessage::Type::TransformUpdate);
+        msg.data = update;
+        m_actorC->message(msg);
 
-            // Replay any updates not yet processed by server.
-            auto i = std::begin(m_pendingCommands);
-            while (i != std::end(m_pendingCommands)){
-                if (i->sequenceNumber <= update.sequenceNumber){
-                    i = m_pendingCommands.erase(i);
-                }
-                else{
-                    // Reset orientation.
-                    /*ComponentMessage msg(ComponentMessage::Type::SetOrientation);
-                    msg.data = i->actorState.orientation;
-                    m_actorC->message(msg);
-
-                    msg = ComponentMessage(ComponentMessage::Type::Set2ndOrientation);
-                    msg.data = i->actorState.orientation2;
-                    m_actorC->message(msg);*/
-
-                    m_actorC->m_yawOrientation = i->yawOrientation;
-                    m_actorC->m_pitchOrientation = i->pitchOrientation;
-
-                    //printf("\tReplaying input %d\n", i->sequenceNumber);
-                    ComponentMessage msg = ComponentMessage(ComponentMessage::Type::Command);
-                    msg.data = i->type;
-                    //m_actorC->setOrientation(i->actorState.orientation);
-                    m_actorC->message(msg);
-                    
-                    //m_actorC->setState(i->actorState);
-                    m_actorC->update(world);
-                    //  use an actor state
-
-                    ++i;
-                }
+        // Process pending commands (those not applied by server yet).
+        auto i = std::begin(m_pendingCommands);
+        while (i != std::end(m_pendingCommands)){
+            // This command has been applied, remove it from the list.
+            if (i->sequenceNumber <= update.sequenceNumber){
+                i = m_pendingCommands.erase(i);
             }
-            
-            m_serverUpdates.pop();
+            // Replay this command since the server has yet to send 
+            // an update for it.
+            else{
+                // Set orientation to that of the time of this command.
+                m_actorC->setYawOrientation(i->yawOrientation);
+                m_actorC->setPitchOrientation(i->pitchOrientation);
+
+                // Execute the command on the actor.
+                ComponentMessage msg = 
+                    ComponentMessage(ComponentMessage::Type::Command);
+                msg.data = i->type;
+                m_actorC->message(msg);  
+
+                    
+                m_actorC->update(world);
+
+                ++i;
+            }
         }
+            
+        m_serverUpdates.pop();
     }
-    //printf("NetworkComponent updated.\n");
 }
 
 // ========================================================================= //
@@ -123,12 +114,8 @@ void NetworkComponent::message(ComponentMessage& msg)
         break;
 
     case ComponentMessage::Type::TransformUpdate:
-        {
-            // Enqueue transform update for processing later.
-            TransformUpdate transform = boost::get<TransformUpdate>(msg.data);
-            m_serverUpdates.push(transform);   
-            
-        }
+        // Enqueue transform update for processing later.
+        m_serverUpdates.push(boost::get<TransformUpdate>(msg.data));
         break;
 
     case ComponentMessage::Type::Command:
@@ -137,12 +124,12 @@ void NetworkComponent::message(ComponentMessage& msg)
             PendingCommand command;
             command.type = boost::get<CommandType>(msg.data);
             
-            // Get orientations.
+            // Save current orientation of actor.
             command.yawOrientation = m_actorC->getYawOrientation();
             command.pitchOrientation = m_actorC->getPitchOrientation();
 
-            // Assign a sequence number and increment the counter. This will be
-            // used for knowing which commands to replay each frame.
+            // Assign the sequence number. This will be  used for knowing 
+            // which commands to replay each frame.
             command.sequenceNumber = 
                 m_world->getNetwork()->getLastInputSequenceNumber();
             

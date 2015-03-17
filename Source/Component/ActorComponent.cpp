@@ -38,13 +38,14 @@ m_rootNode(nullptr),
 m_yawNode(nullptr),
 m_pitchNode(nullptr),
 m_rollNode(nullptr),
+m_yawOrientation(Ogre::Quaternion::IDENTITY),
+m_pitchOrientation(Ogre::Quaternion::IDENTITY),
+m_translate(Ogre::Vector3::ZERO),
 m_speed(0.20f),
-m_remote(false),
 m_cc(CC::Kinematic),
 m_dcc(nullptr),
 m_kcc(nullptr),
-m_mode(Mode::Player),
-m_state()
+m_mode(Mode::Player)
 {
     
 }
@@ -136,7 +137,7 @@ void ActorComponent::message(ComponentMessage& msg)
         break;
 
     case ComponentMessage::Type::GetPosition:       
-        msg.data = m_rootNode->_getDerivedPosition();
+        msg.data = this->getPosition();
         break;
 
     case ComponentMessage::Type::SetPosition:
@@ -144,21 +145,11 @@ void ActorComponent::message(ComponentMessage& msg)
         break;
 
     case ComponentMessage::Type::GetOrientation:
-        //msg.data = m_yawNode->getOrientation();
-        msg.data = m_rootNode->_getDerivedOrientation();
-        break;
-
-    case ComponentMessage::Type::Get2ndOrientation:
-        msg.data = m_pitchNode->getOrientation();
+        msg.data = this->getOrientation();
         break;
 
     case ComponentMessage::Type::SetOrientation:
-        //this->setOrientation(boost::get<Ogre::Quaternion>(msg.data));
-        m_yawNode->setOrientation(boost::get<Ogre::Quaternion>(msg.data));
-        break;
-
-    case ComponentMessage::Type::Set2ndOrientation:
-        m_pitchNode->setOrientation(boost::get<Ogre::Quaternion>(msg.data));
+        this->setOrientation(boost::get<Ogre::Quaternion>(msg.data));
         break;
 
     case ComponentMessage::Type::Look:
@@ -237,10 +228,7 @@ void ActorComponent::applyInput(const CommandType& type)
     }
 
     // Calculate movement vector.
-    translate = /*m_yawNode->getOrientation() *
-        m_pitchNode->getOrientation() **/
-        m_yawOrientation * m_pitchOrientation *
-        translate;
+    translate = m_yawOrientation * m_pitchOrientation * translate;
 
     // Calculate the forwards vector and use it to keep the player moving at
     // the same velocity despite the pitch of the camera.
@@ -256,6 +244,7 @@ void ActorComponent::applyInput(const CommandType& type)
     // Prevent faster movement when moving diagonally.
     translate.normalise();
 
+    // Apply actor's speed.
     translate *= m_speed;
 
     switch (m_mode){
@@ -265,6 +254,7 @@ void ActorComponent::applyInput(const CommandType& type)
     case Mode::Player:
         {
             // Update kinematic controller.
+            translate.y = 0.f;
             PxExtendedVec3 pos = m_kcc->move(translate);
 
             // Update scene node with controller's new position.
@@ -323,9 +313,14 @@ void ActorComponent::look(const int relx, const int rely)
         }
     }
 
+    // Store orientations for next call to applyInput().
     m_yawOrientation = m_yawNode->getOrientation();
     m_pitchOrientation = m_pitchNode->getOrientation();
 }
+
+// ========================================================================= //
+
+// Getters:
 
 // ========================================================================= //
 
@@ -336,8 +331,7 @@ const Ogre::Vector3& ActorComponent::getPosition(void) const{
 // ========================================================================= //
 
 const Ogre::Quaternion& ActorComponent::getOrientation(void) const{
-    return m_rootNode->_getDerivedOrientation();
-    
+    return m_rollNode->_getDerivedOrientation();    
 }
 
 // ========================================================================= //
@@ -355,6 +349,37 @@ const Ogre::Quaternion& ActorComponent::getPitchOrientation(void) const
 }
 
 // ========================================================================= //
+
+// Setters:
+
+// ========================================================================= //
+
+void ActorComponent::setPosition(const Ogre::Vector3& pos)
+{
+    SceneComponent::setPosition(pos);
+    m_kcc->setPosition(pos);
+}
+
+// ========================================================================= //
+
+void ActorComponent::setOrientation(const Ogre::Quaternion& orientation)
+{
+    m_rollNode->_setDerivedOrientation(orientation);
+}
+
+// ========================================================================= //
+
+void ActorComponent::setYawOrientation(const Ogre::Quaternion& orientation)
+{
+    m_yawOrientation = orientation;
+}
+
+// ========================================================================= //
+
+void ActorComponent::setPitchOrientation(const Ogre::Quaternion& orientation)
+{
+    m_pitchOrientation = orientation;
+}
 
 // ========================================================================= //
 
@@ -375,14 +400,6 @@ void ActorComponent::setMode(const Mode mode)
 
         break;
     }
-}
-
-// ========================================================================= //
-
-void ActorComponent::setPosition(const Ogre::Vector3& pos)
-{
-    SceneComponent::setPosition(pos);
-    m_kcc->setPosition(pos);
 }
 
 // ========================================================================= //

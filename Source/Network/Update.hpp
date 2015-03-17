@@ -35,7 +35,6 @@ struct TransformUpdate{
     uint32_t sequenceNumber;
     Ogre::Vector3 position;
     Ogre::Quaternion orientation;
-    Ogre::Quaternion orientation2;
 };
 
 // ========================================================================= //

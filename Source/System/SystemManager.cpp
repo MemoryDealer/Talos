@@ -94,29 +94,32 @@ void SystemManager::processEntity(EntityPtr entity)
             entity->getComponent<ActorComponent>() :
             entity->getComponent<SceneComponent>();
 
+        // Link camera to scene component.
         if (entity->hasComponent<CameraComponent>()){
             sceneC->attachCamera(
                 entity->getComponent<CameraComponent>()->getCamera());
         }
+
+        // Link light to scene component.
         if (entity->hasComponent<LightComponent>()){
             sceneC->getSceneNode()->attachObject(
                 entity->getComponent<LightComponent>()->getLight());
         }
+
+        // Link mesh to scene component.
         if (entity->hasComponent<ModelComponent>()){
             sceneC->getSceneNode()->attachObject(
                 entity->getComponent<ModelComponent>()->getOgreEntity());
         }
+
+        // Link actor to its associated network component.
         if (entity->hasComponent<NetworkComponent>()){
+            // Set the world pointer (needed for client input sequence number).
             entity->getComponent<NetworkComponent>()->setWorld(m_world);
-            if (typeid(*sceneC) == typeid(SceneComponent)){
-                entity->getComponent<NetworkComponent>()->
-                    setSceneComponentPtr(sceneC);
-            }
-            else if (typeid(*sceneC) == typeid(ActorComponent)){
-                entity->getComponent<NetworkComponent>()->
-                    setActorComponentPtr(
-                    static_cast<ActorComponentPtr>(sceneC));
-            }
+
+            entity->getComponent<NetworkComponent>()->
+                setActorComponentPtr(
+                static_cast<ActorComponentPtr>(sceneC));
         }
     }
     

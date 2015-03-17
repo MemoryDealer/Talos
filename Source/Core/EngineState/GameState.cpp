@@ -228,7 +228,6 @@ void GameState::update(void)
         m_world.getInput()->update();
         while (m_world.getInput()->hasPendingCommand()){
             CommandPtr command = m_world.getInput()->getNextCommand();
-            // Does this split up the commands into different frames on server?
             m_world.getNetwork()->sendCommand(command);
             command->execute(m_world.getPlayer());
         }
@@ -333,9 +332,6 @@ void GameState::addNetworkPlayers(void)
 
         // Attach player components.
         m_world.attachComponent<ActorComponent>(e);
-        if (m_world.getNetwork()->getMode() == Network::Mode::Client){
-            e->getComponent<ActorComponent>()->setRemote(true);
-        }
         m_world.attachComponent<ModelComponent>(e)->init(
             m_world, "Cylinder.mesh");
 
