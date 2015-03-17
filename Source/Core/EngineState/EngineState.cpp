@@ -22,12 +22,13 @@
 // ========================================================================= //
 
 #include "EngineState.hpp"
+#include "World/World.hpp"
 
 // ========================================================================= //
 
 EngineState::EngineState(void) :
 m_subject(),
-m_world(),
+m_world(new World()),
 m_ui(nullptr),
 m_active(false)
 {

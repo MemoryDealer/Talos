@@ -83,7 +83,7 @@ protected:
     Subject m_subject;
 
     // State data.
-    World m_world;
+    std::shared_ptr<World> m_world;
     std::shared_ptr<UI> m_ui;
     bool m_active;
 

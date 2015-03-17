@@ -458,7 +458,6 @@
 * Casting ray upwards with PhysX (PScene::raycast()) still returns a result if no hit.
 * Raycast doesn't hit dynamic actor.
 * Hydrax/SkyX need to be shared between states--make them world dependencies perhaps and add code to check if they are already initialized.
-* When client reconnects, a third client that was still connected can send a chat and the reconnected client will display the chat from their own username.
 * CEGUI disappears when resizing window.
 ** Hydrax underwater is sped up, fix. (E:\Engine\Ogre3D\Hydrax-v0.5.1\Hydrax\Hydrax.vcproj to recompile).
 
