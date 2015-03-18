@@ -87,19 +87,16 @@ void NetworkComponent::update(World& world)
                 m_actorC->setPitchOrientation(i->pitchOrientation);
 
                 // Execute the command on the actor.
-                ComponentMessage msg = 
-                    ComponentMessage(ComponentMessage::Type::Command);
-                msg.data = i->type;
-                m_actorC->message(msg);                                      
-
+                m_actorC->applyInput(i->type);
+                m_actorC->update(world);
                 ++i;
             }
         }
-
-        m_actorC->update(world);
             
         m_serverUpdates.pop();
     }
+
+    
 }
 
 // ========================================================================= //

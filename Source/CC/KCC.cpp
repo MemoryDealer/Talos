@@ -84,7 +84,7 @@ const PxExtendedVec3 KCC::move(const Ogre::Vector3& translate)
     PxVec3 disp(translate.x, 0.f, translate.z);
     m_lastMove += disp;
     
-    //m_controller->move(disp, 0.1f, 1.f / Talos::MS_PER_UPDATE, 0);
+    m_controller->move(disp, 0.1f, 1.f / Talos::MS_PER_UPDATE, 0);
 
     return m_controller->getPosition();
 }
@@ -105,15 +105,17 @@ const PxExtendedVec3 KCC::update(World& world)
         m_yVel = maxY;
     }
 
-    PxVec3 disp(m_lastMove.x, m_yVel, m_lastMove.z);
-    disp.normalize();
-    disp *= 0.25f;
-    /*const PxReal mag = m_lastMove.magnitudeSquared();
-    printf("mag: %.2f\n", mag);
+    PxVec3 disp(0.f, m_yVel, 0.f);
+    /*disp.normalize();
+    disp *= 0.25f;*/
+    const PxReal mag = m_lastMove.magnitudeSquared();
+    //printf("mag: %.2f\n", mag);
     if (mag > 0.04f){
-        disp.x = -m_lastMove.x;
-        disp.z = -m_lastMove.z;
-    }*/
+        const PxReal f = 5.f;
+        disp.x = -m_lastMove.x * mag * f;
+        disp.z = -m_lastMove.z * mag * f;
+        printf("Adjusting: %.2f, %.2f\n", disp.x, disp.z);
+    }
     
 
     m_lastMove.x = m_lastMove.y = m_lastMove.z = 0.f;

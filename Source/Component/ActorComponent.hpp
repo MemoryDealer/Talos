@@ -105,6 +105,8 @@ public:
     // Sets the mode of the Actor, affecting controls/movement.
     void setMode(const Mode mode);    
 
+    World* m_world;
+
 private:
     // Scene node created from parent scene component.
     Ogre::SceneNode* m_rootNode;

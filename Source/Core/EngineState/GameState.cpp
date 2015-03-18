@@ -69,7 +69,7 @@ void GameState::enter(void)
 
     // Create player.
     EntityPtr player = m_world.createEntity();
-    m_world.attachComponent<ActorComponent>(player);
+    m_world.attachComponent<ActorComponent>(player)->m_world = &m_world;
     if (m_world.getNetwork()->getMode() == Network::Mode::Client){
         //player->getComponent<ActorComponent>()->setRemote(true);
     }
@@ -230,8 +230,13 @@ void GameState::update(void)
             CommandPtr command = m_world.getInput()->getNextCommand();
             m_world.getNetwork()->sendCommand(command);
             command->execute(m_world.getPlayer());
+            /*if (m_world.getNetwork()->getMode() == Network::Mode::Client){
+                m_world.getPlayer()->getComponent<ActorComponent>()->update(m_world);
+            }*/
         }
-        m_world.getPlayer()->getComponent<ActorComponent>()->update(m_world);
+
+        //m_world.getPlayer()->getComponent<ActorComponent>()->update(m_world);
+        m_world.getPlayer()->update(m_world);
 
         /*m_world.update();
         if (m_world.getNetwork()->hasPendingEvent()){
@@ -274,6 +279,10 @@ void GameState::handleNetEvents(void)
         case NetMessage::EndGame:
             m_world.getNetwork()->endGame();
             m_subject.notify(EngineNotification::Pop);
+            break;
+
+        case NetMessage::ClientCommand:
+            boost::get<EntityPtr>(e.data)->getComponent<ActorComponent>()->update(m_world);
             break;
 
         case NetMessage::PlayerUpdate:
@@ -331,7 +340,7 @@ void GameState::addNetworkPlayers(void)
         EntityPtr e = m_world.createEntity();
 
         // Attach player components.
-        m_world.attachComponent<ActorComponent>(e);
+        m_world.attachComponent<ActorComponent>(e)->m_world = &m_world;
         m_world.attachComponent<ModelComponent>(e)->init(
             m_world, "Cylinder.mesh");
 

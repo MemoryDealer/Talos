@@ -23,12 +23,14 @@
 
 #include "Command/Command.hpp"
 #include "Command/CommandRepository.hpp"
+#include "Component/ActorComponent.hpp"
 #include "Component/ComponentMessage.hpp"
 #include "Config/Config.hpp"
 #include "Entity/Entity.hpp"
 #include "Network/NetData.hpp"
 #include "Network/Update.hpp"
 #include "Server.hpp"
+#include "World/World.hpp"
 
 // ========================================================================= //
 
@@ -223,6 +225,9 @@ void Server::update(void)
                 //printf("Received input from GUID: %d\tID: %d\n", m_packet->guid, m_players[m_packet->guid]->id);
                 //printf("EntityID: %d\n", player.entity->getID());
                 command->execute(player.entity);
+                
+                World w;
+                player.entity->getComponent<ActorComponent>()->update(w);
             }
             break;
 

@@ -118,7 +118,7 @@ void ActorComponent::update(World& world)
     case Mode::Player:
         {
             if (m_cc == CC::Kinematic){
-                PxExtendedVec3 pos = m_kcc->update(world);
+                PxExtendedVec3 pos = m_kcc->update(*m_world);
                 m_rootNode->setPosition(Ogre::Real(pos.x),
                                           Ogre::Real(pos.y),
                                           Ogre::Real(pos.z));

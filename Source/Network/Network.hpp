@@ -40,7 +40,8 @@ struct NetEvent{
 
     boost::variant<
         std::string,
-        TransformUpdate
+        TransformUpdate,
+        EntityPtr
         > data;
 };
 
