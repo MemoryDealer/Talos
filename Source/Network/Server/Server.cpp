@@ -100,6 +100,9 @@ void Server::destroy(void)
 {
     RakNet::RakPeerInterface::DestroyInstance(m_peer);
 
+    this->clearPlayerList();
+    m_clients.clear();
+
     this->setInitialized(false);
 }
 

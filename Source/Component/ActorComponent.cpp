@@ -355,9 +355,7 @@ void ActorComponent::action(void)
         if (dist > 0.f && dist < 3.f){
             // Get the EntityID of what was hit, stored in the actor's user data.
             const EntityID id = reinterpret_cast<const EntityID>(
-                static_cast<void*>(ray.hit.block.actor->userData));
-
-            printf("Action hit: %.2f\tEntityID: %d\n", dist, id);
+                static_cast<void*>(ray.hit.block.actor->userData));           
 
             // Get EntityPtr from world.
             EntityPtr entity = this->getWorld()->getEntityPtr(id);
@@ -367,6 +365,7 @@ void ActorComponent::action(void)
             // Send entity an action message.
             ComponentMessage msg(ComponentMessage::Type::Action);
             entity->message(msg);
+            printf("Action hit: %.2f\tEntityID: %d\n", dist, id);
         }
     }
 }

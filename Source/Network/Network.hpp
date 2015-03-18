@@ -144,6 +144,9 @@ public:
     // Removes player instance from player list.
     void removePlayer(const NetworkID id);
 
+    // Clears entire player list.
+    void clearPlayerList(void);
+
     // === //
 
     // Enqueues NetEvent.

@@ -99,6 +99,13 @@ void GameState::enter(void)
     msg.data = Ogre::Vector3(75.f, 0.f, 0.f);
     plane->message(msg);
 
+    EntityPtr house = m_world->createEntity();
+    m_world->attachComponent<SceneComponent>(house);
+    m_world->attachComponent<ModelComponent>(house)->setMesh("tudorhouse.mesh", "Board");
+    m_world->attachComponent<CollisionComponent>(house);
+    msg.data = Ogre::Vector3(-750.f, 0.f, 0.f);
+    house->message(msg);
+
     // Create ball.
     EntityPtr ball = m_world->createEntity();
     m_world->attachComponent<SceneComponent>(ball);
@@ -184,6 +191,17 @@ void GameState::update(void)
                     m_world->getNetwork()->endGame();
                     m_subject.notify(EngineNotification::Pop);
                     return;
+                }
+                else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_b){
+                    static bool bb = false;
+                    bb = !bb;
+
+                    Ogre::SceneNode::ChildNodeIterator itr = 
+                        m_world->getSceneManager()->getRootSceneNode()->getChildIterator();
+                    for (; itr.hasMoreElements();){
+                        Ogre::SceneNode* child = static_cast<Ogre::SceneNode*>(itr.getNext());
+                        child->showBoundingBox(bb);
+                    }
                 }
 
                 // Send input commands to the player.

@@ -119,6 +119,18 @@ void NetworkComponent::message(ComponentMessage& msg)
             // Enqueue this command into the pending commands queue.
             PendingCommand command;
             command.type = boost::get<CommandType>(msg.data);
+
+            // Only queue certain commands.
+            switch (command.type){
+            default:
+                return;
+
+            case CommandType::MoveForward:
+            case CommandType::MoveBackward:
+            case CommandType::MoveRight:
+            case CommandType::MoveLeft:
+                break;
+            }
             
             // Save current orientation of actor.
             command.yawOrientation = m_actorC->getYawOrientation();

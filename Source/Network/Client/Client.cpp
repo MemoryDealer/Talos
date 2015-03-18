@@ -328,6 +328,8 @@ void Client::disconnect(void)
 
         std::thread t(&Client::_shutdown, this);
         t.detach();
+
+        this->clearPlayerList();
     }
 }
 
