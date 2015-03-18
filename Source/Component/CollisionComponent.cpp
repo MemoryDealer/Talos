@@ -149,6 +149,10 @@ void CollisionComponent::message(ComponentMessage& msg)
             m_rigidActor->setGlobalPose(transform);
         }
         break;
+
+    case ComponentMessage::Type::Action:
+        printf("CollisionComponent received Action!!!\n");
+        break;
     }
 }
 

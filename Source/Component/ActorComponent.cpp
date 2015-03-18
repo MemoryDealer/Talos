@@ -26,6 +26,7 @@
 #include "CC/DCC.hpp"
 #include "CC/KCC.hpp"
 #include "ComponentMessage.hpp"
+#include "Entity/Entity.hpp"
 #include "ModelComponent.hpp"
 #include "Physics/PScene.hpp"
 #include "World/World.hpp"
@@ -229,9 +230,13 @@ void ActorComponent::applyInput(const CommandType& type)
         translate.x = -move;
         break;
 
+    case CommandType::Action:
+        this->action();
+        return;
+
     case CommandType::Jump:
         m_kcc->jump();
-        return;
+        return;        
     }
 
     // Calculate movement vector.
@@ -323,6 +328,47 @@ void ActorComponent::look(const int relx, const int rely)
     // Store orientations for next call to applyInput().
     m_yawOrientation = m_yawNode->getOrientation();
     m_pitchOrientation = m_pitchNode->getOrientation();
+}
+
+// ========================================================================= //
+
+void ActorComponent::action(void)
+{    
+    // Construct a direction from the player's origin going forward in the 
+    // direction they are looking.
+    Ogre::Vector3 dir = this->getPosition() +
+        (m_yawNode->getOrientation() * m_pitchNode->getOrientation() *
+        Ogre::Vector3::NEGATIVE_UNIT_Z) * 10000.f;
+
+    // Setup raycast data.
+    PScene::Ray ray;
+    ray.dir = Physics::toPx(dir);
+    ray.dir.normalize();
+    ray.dist = 100.f;
+    ray.origin = Physics::toPx(this->getPosition());
+
+    // Run the raycast and check results.
+    bool status = this->getWorld()->getPScene()->raycast(ray);
+    const PxReal minDistance = 3.f;
+    if (status){
+        const PxReal dist = ray.hit.block.distance;
+        if (dist > 0.f && dist < 3.f){
+            // Get the EntityID of what was hit, stored in the actor's user data.
+            const EntityID id = reinterpret_cast<const EntityID>(
+                static_cast<void*>(ray.hit.block.actor->userData));
+
+            printf("Action hit: %.2f\tEntityID: %d\n", dist, id);
+
+            // Get EntityPtr from world.
+            EntityPtr entity = this->getWorld()->getEntityPtr(id);
+            Assert(entity != nullptr, 
+                   "Invalid EntityPtr retrieved from World in action");
+
+            // Send entity an action message.
+            ComponentMessage msg(ComponentMessage::Type::Action);
+            entity->message(msg);
+        }
+    }
 }
 
 // ========================================================================= //

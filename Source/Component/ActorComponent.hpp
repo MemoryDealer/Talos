@@ -78,6 +78,10 @@ public:
     // Changes the actor's orientation based on relative x/y looking.
     void look(const int relx, const int rely);
 
+    // Casts a ray forward from the player, sending an action message to the 
+    // receiving entity, if one is hit and within range.
+    void action(void);
+
     // Getters:
 
     // Returns position of actor's root scene node.

@@ -647,6 +647,9 @@
     <ClInclude Include="Source\Network\Update.hpp">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Command\Actor\Action.hpp">
+      <Filter>Header Files\Command\Actor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Source\work-log.txt">

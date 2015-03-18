@@ -52,6 +52,7 @@ struct ComponentMessage{
         SetOrientation,
         Translate,
         Look,
+        Action,
         TransformUpdate,
         Command,
         

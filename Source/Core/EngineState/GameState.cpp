@@ -210,18 +210,16 @@ void GameState::update(void)
             }
         }
 
-        
-
-        
-
+        // Step through all World components.
         m_world->update();
+        // Process network updates.
         if (m_world->getNetwork()->hasPendingEvent()){
             this->handleNetEvents();
+            // Process server reconciliation if needed.
             m_world->getPlayer()->getComponent<NetworkComponent>()->update();
         }
 
-        // ^ ? //
-
+        // Process local player input.
         m_world->getInput()->update();
         while (m_world->getInput()->hasPendingCommand()){
             CommandPtr command = m_world->getInput()->getNextCommand();
@@ -229,23 +227,7 @@ void GameState::update(void)
             command->execute(m_world->getPlayer());
         }
         m_world->getPlayer()->getComponent<ActorComponent>()->update();
-
-        /*m_world->update();
-        if (m_world->getNetwork()->hasPendingEvent()){
-            this->handleNetEvents();
-            m_world->getPlayer()->getComponent<NetworkComponent>()->update(m_world);
-        }
-
-        m_world->getInput()->update();
-        while (m_world->getInput()->hasPendingCommand()){
-            CommandPtr command = m_world->getInput()->getNextCommand();
-            m_world->getNetwork()->sendCommand(command);
-            command->execute(m_world->getPlayer());
-
-        }*/
-
-        
-        
+                
         /*if (m_ui->update() == true){
             this->handleUIEvents();
         } */

@@ -432,6 +432,9 @@
 * Completely restructed how the World object is managed. Before it was stack allocated in EngineState, but now it's a smart pointer and passed everywhere. 
 * Also eliminated the need for passing World into Component init, update, and destroy methods. Component now just stores a smart pointer to the World. 
 
+== 3/18/16 ==
+* Added player action ability; pressing e casts a ray forward and sends an action message to the Entity that was hit. This will be used for interacting with world objects.
+
 == TODO ==
 * Add PScene::addActor()
 * Move input update into world.

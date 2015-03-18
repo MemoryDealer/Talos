@@ -15,26 +15,33 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: CommandTypes.hpp
+// File: Action.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Enumerates types for Commands.
+// Defines ActionCommand class.
 // ========================================================================= //
 
-#ifndef __COMMANDTYPES_HPP__
-#define __COMMANDTYPES_HPP__
+#ifndef __ACTION_HPP__
+#define __ACTION_HPP__
 
 // ========================================================================= //
 
-enum class CommandType{
-    Null = 0,
-    MoveBackward,
-    MoveForward,
-    MoveLeft,
-    MoveRight,
-    Action,
-    Jump,
-    Spectator
+#include "Command/Command.hpp"
+
+// ========================================================================= //
+
+class ActionCommand : public Command
+{
+public:
+    explicit ActionCommand(void){
+        this->setType(CommandType::Action);
+    }
+
+    virtual void execute(EntityPtr entity) override{
+        ComponentMessage msg(ComponentMessage::Type::Command);
+        msg.data = CommandType::Action;
+        entity->message(msg);
+    }
 };
 
 // ========================================================================= //
