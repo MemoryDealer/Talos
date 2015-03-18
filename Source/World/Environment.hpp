@@ -34,7 +34,7 @@ class Environment final
 {
 public:
     // Assigns Ogre::SceneManager* pointer, initializes data to nullptr.
-    explicit Environment(World*, Graphics&);
+    explicit Environment(std::shared_ptr<World> world, Graphics& graphics);
 
     // Empty destructor.
     ~Environment(void);
@@ -56,7 +56,7 @@ public:
     void update(void);
 
     // Allocates Ocean object according to graphics settings.
-    void loadOcean(const std::string&);
+    void loadOcean(const std::string& cfg);
 
     // Allocates Sky object, uses config file passed in for settings.
     void loadSky(const std::string& = "");
@@ -64,7 +64,7 @@ public:
     // Getters:
 
     // Returns pointer to the World that created it.
-    World* getWorld(void) const;
+    std::shared_ptr<World> getWorld(void) const;
 
     // Returns pointer to active Ocean object.
     std::shared_ptr<Ocean> getOcean(void) const;
@@ -134,7 +134,7 @@ private:
     Ogre::Light* m_moon;
     Ogre::ColourValue m_moonColour;
 
-    World* m_world;
+    std::shared_ptr<World> m_world;
     Graphics m_graphics;
 
     // Water and Sky.
@@ -148,7 +148,7 @@ private:
 
 // Getters:
 
-inline World* Environment::getWorld(void) const{
+inline std::shared_ptr<World> Environment::getWorld(void) const{
     return m_world;
 }
 

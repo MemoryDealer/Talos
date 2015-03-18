@@ -43,7 +43,9 @@ public:
     virtual ~OceanHighGraphics(void) override;
 
     // Create Hydrax
-    void init(World*, const std::string&, const Graphics::Setting);
+    void init(std::shared_ptr<World> world, 
+              const std::string& cfg, 
+              const Graphics::Setting setting);
 
     // Removes Hydrax and clears the memory it allocated.
     virtual void destroy(void) override;

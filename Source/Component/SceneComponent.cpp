@@ -43,24 +43,24 @@ SceneComponent::~SceneComponent(void)
 
 // ========================================================================= //
 
-void SceneComponent::init(World& world)
+void SceneComponent::init(void)
 {
     Assert(m_node == nullptr, "init() called more than once!");
 
-    m_node = world.getSceneManager()->getRootSceneNode()->
+    m_node = this->getWorld()->getSceneManager()->getRootSceneNode()->
         createChildSceneNode();
 }
 
 // ========================================================================= //
 
-void SceneComponent::destroy(World& world)
+void SceneComponent::destroy(void)
 {
-    world.getSceneManager()->destroySceneNode(m_node);
+    this->getWorld()->getSceneManager()->destroySceneNode(m_node);
 }
 
 // ========================================================================= //
 
-void SceneComponent::update(World&)
+void SceneComponent::update(void)
 {
     
 }
@@ -103,6 +103,17 @@ void SceneComponent::attachCamera(Ogre::Camera* camera)
 
 // ========================================================================= //
 
+// Getters:
+
+// ========================================================================= //
+
+Ogre::SceneNode* SceneComponent::getSceneNode(void) const
+{
+    return m_node;
+}
+
+// ========================================================================= //
+
 const Ogre::Vector3 SceneComponent::getPosition(void) const
 {
     return m_node->getPosition();
@@ -114,6 +125,10 @@ const Ogre::Quaternion SceneComponent::getOrientation(void) const
 {
     return m_node->getOrientation();
 }
+
+// ========================================================================= //
+
+// Setters:
 
 // ========================================================================= //
 

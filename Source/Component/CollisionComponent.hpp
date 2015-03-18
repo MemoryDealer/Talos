@@ -51,18 +51,17 @@ public:
     };
 
     // Empty.
-    virtual void init(World& world) override;
+    virtual void init(void) override;
 
     // Initializes PhysX actor, adds to World's PxScene.
-    virtual void init(World& world,
-                      EntityPtr entity);
+    virtual void init(EntityPtr entity);
 
     // Removes PhysX actor from World's PxScene.
-    virtual void destroy(World& world) override;
+    virtual void destroy(void) override;
 
     // Retrieves the actor's position and orientation, applies them to the
     // attached SceneComponent for rendering.
-    virtual void update(World& world) override;
+    virtual void update(void) override;
 
     // Empty.
     virtual void message(ComponentMessage& msg) override;
@@ -85,14 +84,6 @@ private:
     Type m_type;
     EntityID m_entityID;
 };
-
-// ========================================================================= //
-
-// Setters:
-
-inline void CollisionComponent::setType(const Type& type){
-    m_type = type;
-}
 
 // ========================================================================= //
 

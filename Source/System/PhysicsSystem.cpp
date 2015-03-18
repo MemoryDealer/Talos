@@ -47,7 +47,7 @@ void PhysicsSystem::onEntityAttached(EntityPtr entity)
     PhysicsComponentPtr physicsC =
         entity->getComponent<PhysicsComponent>();
 
-    physicsC->init(*m_world, entity);
+    physicsC->init(entity);
 }
 
 // ========================================================================= //

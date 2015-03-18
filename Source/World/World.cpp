@@ -100,7 +100,7 @@ void World::init(const bool usePhysics)
     m_scene = m_root->createSceneManager(Ogre::ST_GENERIC);
 
     // Initialize environment.
-    m_environment.reset(new Environment(this, m_graphics));
+    m_environment.reset(new Environment(shared_from_this(), m_graphics));
     m_environment->init();
     
     if (usePhysics){
@@ -115,7 +115,7 @@ void World::init(const bool usePhysics)
     m_componentFactory.reset(new ComponentFactory());
     m_componentFactory->init();
 
-    m_systemManager.reset(new SystemManager(this));
+    m_systemManager.reset(new SystemManager(shared_from_this()));
 
     // Assign Network pointer if server or client is active.
     if (m_server->initialized()){
@@ -136,7 +136,7 @@ void World::destroy(void)
     m_environment->destroy();
 
     for (int i = 0; i < m_entityPool->m_poolSize; ++i){
-        m_entityPool->m_pool[i].destroy(*this);
+        m_entityPool->m_pool[i].destroy();
     }
     m_entityIDMap.clear();
 
@@ -188,7 +188,7 @@ void World::update(void)
                 continue;
             }
         }
-        m_entityPool->m_pool[i].update(*this);
+        m_entityPool->m_pool[i].update();
     }
 
     if (m_usePhysics){
@@ -310,9 +310,10 @@ typename World::componentReturn<T>::type World::attachComponent(EntityPtr entity
 // Called by all World::attachComponent<T> specializations.
 static void initComponent(ComponentPtr component, 
                           EntityPtr entity, 
-                          World* world)
+                          std::shared_ptr<World> world)
 {
-    component->init(*world);
+    component->setWorld(world);
+    component->init();
     entity->attachComponent(component);
 }
 
@@ -330,7 +331,7 @@ template<> World::componentReturn<ActorComponent>::type
 World::attachComponent<ActorComponent>(EntityPtr entity)
 {
     ActorComponentPtr c = m_componentFactory->createActorComponent();
-    initComponent(c, entity, this);
+    initComponent(c, entity, shared_from_this());
     return c;
 }
 
@@ -344,7 +345,7 @@ template<> World::componentReturn<CameraComponent>::type
 World::attachComponent<CameraComponent>(EntityPtr entity)
 {
     CameraComponentPtr c = m_componentFactory->createCameraComponent();
-    initComponent(c, entity, this);
+    initComponent(c, entity, shared_from_this());
     return c;
 }
 
@@ -358,7 +359,7 @@ template<> World::componentReturn<CollisionComponent>::type
 World::attachComponent<CollisionComponent>(EntityPtr entity)
 {
     CollisionComponentPtr c = m_componentFactory->createCollisionComponent();
-    initComponent(c, entity, this);
+    initComponent(c, entity, shared_from_this());
     return c;
 }
 
@@ -372,7 +373,7 @@ template<> World::componentReturn<LightComponent>::type
 World::attachComponent<LightComponent>(EntityPtr entity)
 {
     LightComponentPtr c = m_componentFactory->createLightComponent();
-    initComponent(c, entity, this);
+    initComponent(c, entity, shared_from_this());
     return c;
 }
 
@@ -386,7 +387,7 @@ template<> World::componentReturn<ModelComponent>::type
 World::attachComponent<ModelComponent>(EntityPtr entity)
 {
     ModelComponentPtr c = m_componentFactory->createModelComponent();
-    initComponent(c, entity, this);
+    initComponent(c, entity, shared_from_this());
     return c;
 }
 
@@ -400,7 +401,7 @@ template<> World::componentReturn<NetworkComponent>::type
 World::attachComponent<NetworkComponent>(EntityPtr entity)
 {
     NetworkComponentPtr c = m_componentFactory->createNetworkComponent();
-    initComponent(c, entity, this);
+    initComponent(c, entity, shared_from_this());
     return c;
 }
 
@@ -414,7 +415,7 @@ template<> World::componentReturn<PhysicsComponent>::type
 World::attachComponent<PhysicsComponent>(EntityPtr entity)
 {
     PhysicsComponentPtr c = m_componentFactory->createPhysicsComponent();
-    initComponent(c, entity, this);
+    initComponent(c, entity, shared_from_this());
     return c;
 }
 
@@ -428,7 +429,7 @@ template<> World::componentReturn<SceneComponent>::type
 World::attachComponent<SceneComponent>(EntityPtr entity)
 {
     SceneComponentPtr c = m_componentFactory->createSceneComponent();
-    initComponent(c, entity, this);
+    initComponent(c, entity, shared_from_this());
     return c;
 }
 

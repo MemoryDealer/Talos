@@ -48,13 +48,13 @@ public:
     ~Entity(void);
 
     // Calls init() on all attached components.
-    void init(World& world);
+    void init(void);
 
     // Calls destroy() on all attached components.
-    void destroy(World& world);
+    void destroy(void);
 
     // Calls update() on all attached components.
-    void update(World& world);
+    void update(void);
 
     // Registers Component with the entity. Returns a pointer to the newly
     // attached Component for convenience.

@@ -37,13 +37,13 @@ public:
 
     virtual ~NullComponent(void) override { }
 
-    virtual void init(World&) override { }
+    virtual void init(void) override { }
 
-    virtual void destroy(World&) override { }
+    virtual void destroy(void) override { }
 
-    virtual void update(World&) override { }
+    virtual void update(void) override { }
 
-    virtual void message(ComponentMessage&) override { }
+    virtual void message(ComponentMessage& msg) override { }
 };
 
 // ========================================================================= //

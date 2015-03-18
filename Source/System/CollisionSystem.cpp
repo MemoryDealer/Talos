@@ -47,7 +47,7 @@ void CollisionSystem::onEntityAttached(EntityPtr entity)
     CollisionComponentPtr collisionC = 
         entity->getComponent<CollisionComponent>();
 
-    collisionC->init(*m_world, entity);
+    collisionC->init(entity);
 }
 
 // ========================================================================= //

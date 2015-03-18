@@ -38,7 +38,7 @@ class SystemManager final
 {
 public:
     // Default initializes SystemTable.
-    explicit SystemManager(World* world);
+    explicit SystemManager(std::shared_ptr<World> world);
 
     // Empty destructor.
     ~SystemManager(void);
@@ -75,7 +75,7 @@ public:
 
 private:
     SystemTable m_systems;
-    World* m_world;
+    std::shared_ptr<World> m_world;
 };
 
 // ========================================================================= //

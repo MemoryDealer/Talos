@@ -34,9 +34,9 @@
 class LightComponent : public Component
 {
 public:
-    enum Type{
-        POINT = 0,
-        SPOTLIGHT
+    enum class Type{
+        Point = 0,
+        Spotlight
     };
 
     // Sets type.
@@ -45,30 +45,30 @@ public:
     // Empty destructor.
     virtual ~LightComponent(void) override;
 
-    // Empty.
-    virtual void init(World&) override;
+    // Creates Ogre::Light and sets to point light by default.
+    virtual void init(void) override;
 
     // Destroys Ogre::Light using World's Ogre::SceneManager.
-    virtual void destroy(World&) override;
+    virtual void destroy(void) override;
 
     // Empty.
-    virtual void update(World&) override;
+    virtual void update(void) override;
 
     // Empty.
-    virtual void message(ComponentMessage&) override;
+    virtual void message(ComponentMessage& msg) override;
 
     // Light functions:
 
     // Sets type of the light.
-    void setType(const Type);
+    void setType(const Type& type);
 
     // Sets colour of light.
-    void setColour(const Ogre::Real, const Ogre::Real, const Ogre::Real);
+    void setColour(const Ogre::Real r, 
+                   const Ogre::Real g, 
+                   const Ogre::Real b);
 
     // Sets range of light using linear and quadratic values internally.
-    void setRange(const Ogre::Real);
-
-    
+    void setRange(const Ogre::Real range);
 
     // Getters:
 
@@ -79,14 +79,6 @@ private:
     Ogre::Light* m_light;
     Ogre::Real m_intensity;
 };
-
-// ========================================================================= //
-
-// Getters:
-
-inline Ogre::Light* LightComponent::getLight(void) const{
-    return m_light;
-}
 
 // ========================================================================= //
 

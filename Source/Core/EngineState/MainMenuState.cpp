@@ -52,39 +52,39 @@ MainMenuState::~MainMenuState(void)
 
 void MainMenuState::enter(void)
 {
-    m_world.init();
-    m_world.getInput()->setMode(Input::Mode::UI);
+    m_world->init();
+    m_world->getInput()->setMode(Input::Mode::UI);
 
     // Setup visual scene settings.
-    m_world.getEnvironment()->setAmbientLight(255.f, 255.f, 255.f);
-    m_world.getEnvironment()->setSunColour(200.f, 175.f, 189.f);
-    m_world.getEnvironment()->setMoonColour(.50f, .50f, 255.f);
+    m_world->getEnvironment()->setAmbientLight(255.f, 255.f, 255.f);
+    m_world->getEnvironment()->setSunColour(200.f, 175.f, 189.f);
+    m_world->getEnvironment()->setMoonColour(.50f, .50f, 255.f);
     
     // Create camera.
-    EntityPtr camera = m_world.createEntity();
-    m_world.attachComponent<SceneComponent>(camera);
-    m_world.attachComponent<CameraComponent>(camera);
+    EntityPtr camera = m_world->createEntity();
+    m_world->attachComponent<SceneComponent>(camera);
+    m_world->attachComponent<CameraComponent>(camera);
 
-    m_world.setMainCamera(camera->getComponent<CameraComponent>());
+    m_world->setMainCamera(camera->getComponent<CameraComponent>());
 
     // Create Ocean.
 #ifdef _DEBUG
-    m_world.getEnvironment()->loadOcean("Ocean2_HLSL_GLSL");
+    m_world->getEnvironment()->loadOcean("Ocean2_HLSL_GLSL");
 #else
-    m_world.getEnvironment()->loadOcean("HydraxDemo.hdx");
+    m_world->getEnvironment()->loadOcean("HydraxDemo.hdx");
 #endif
 
-    m_world.getEnvironment()->setOceanPosition(0.f, -100.f, 0.f);
+    m_world->getEnvironment()->setOceanPosition(0.f, -100.f, 0.f);
 
 
     // Create sky.
-    m_world.getEnvironment()->loadSky();
+    m_world->getEnvironment()->loadSky();
 
     // Load GUI.
     m_ui.reset(new MainMenuUI());
     m_ui->init();
 
-    if (!m_world.setupEntities()){
+    if (!m_world->setupEntities()){
         throw std::exception("MainMenu entities reported uninitialized");
     }
 }
@@ -94,14 +94,14 @@ void MainMenuState::enter(void)
 void MainMenuState::exit(void)
 {
     m_ui->destroy(); // m_ui deallocated automatically.
-    m_world.destroy();
+    m_world->destroy();
 }
 
 // ========================================================================= //
 
 void MainMenuState::pause(void)
 {
-    m_world.pause();
+    m_world->pause();
     m_ui->setVisible(false);
 }
 
@@ -109,8 +109,8 @@ void MainMenuState::pause(void)
 
 void MainMenuState::resume(void)
 {
-    m_world.getInput()->setMode(Input::Mode::UI);
-    m_world.resume();
+    m_world->getInput()->setMode(Input::Mode::UI);
+    m_world->resume();
     m_ui->setVisible(true);
 }
 
@@ -137,18 +137,18 @@ void MainMenuState::update(void)
                     }
 
                     // Send input commands to the player.
-                    m_world.handleInput(e);
+                    m_world->handleInput(e);
                 }
                 break;
 
             case SDL_KEYUP:
                 {
-                    m_world.handleInput(e);
+                    m_world->handleInput(e);
                 }
                 break;
 
             case SDL_MOUSEMOTION:
-                m_world.getInput()->handleMouse(e);
+                m_world->getInput()->handleMouse(e);
                 break;
 
             case SDL_QUIT:
@@ -157,8 +157,8 @@ void MainMenuState::update(void)
             }
         }
 
-        m_world.update();
-        if (m_world.getNetwork()->hasPendingEvent()){
+        m_world->update();
+        if (m_world->getNetwork()->hasPendingEvent()){
             this->handleNetEvents();
         }
         if (m_ui->update()){
@@ -171,10 +171,10 @@ void MainMenuState::update(void)
 
 void MainMenuState::handleNetEvents(void)
 {
-    NetEvent e = m_world.getNetwork()->getNextEvent();
+    NetEvent e = m_world->getNetwork()->getNextEvent();
     for (; 
          e.type != NetMessage::Null; 
-         e = m_world.getNetwork()->getNextEvent()){
+         e = m_world->getNetwork()->getNextEvent()){
         switch (e.type){
         default:
             break;
@@ -211,22 +211,22 @@ void MainMenuState::handleUIEvents(void)
 
         case MainMenuUI::Event::HostGame:
             // Setup server.
-            m_world.initServer(e.field.x, e.s1);
+            m_world->initServer(e.field.x, e.s1);
 
             m_subject.notify(EngineNotification::Push, EngineStateID::Lobby);
             break;
 
         case MainMenuUI::Event::JoinGame:
             // Allocate client if it has not been allocated already.
-            if (m_world.getNetwork()->getMode() == Network::Mode::Null){
-                m_world.initClient();
+            if (m_world->getNetwork()->getMode() == Network::Mode::Null){
+                m_world->initClient();
             }
             // Initialize client if it's still not intialized.
-            else if (!m_world.getNetwork()->initialized()){
-                m_world.getNetwork()->init();
+            else if (!m_world->getNetwork()->initialized()){
+                m_world->getNetwork()->init();
             }
             // Connect to server.
-            m_world.getNetwork()->connect(e.s2, e.field.x, e.s1);
+            m_world->getNetwork()->connect(e.s2, e.field.x, e.s1);
             break;
         }
     }

@@ -39,7 +39,7 @@ typedef std::unordered_map<EntityID, EntityPtr> EntityIDMap;
 // collection of Entities (which have pointers to the needed Components).
 // Entities and Components are retrieved from pools in the World allocated
 // during World::init().
-class World final
+class World final : public std::enable_shared_from_this<World>
 {
 public:
     // Default initializes member data.
@@ -50,7 +50,7 @@ public:
 
     // Passes needed dependencies into World.
     struct Dependencies;
-    void injectDependencies(const Dependencies&);
+    void injectDependencies(const Dependencies& deps);
 
     // Allocates the Ogre::SceneManager.
     void init(const bool usePhysics = false);
@@ -75,7 +75,7 @@ public:
     EntityPtr createEntity(void);
 
     // Calls destroy on Entity.
-    void destroyEntity(EntityPtr);
+    void destroyEntity(EntityPtr entity);
 
     // Checks if each Entity's Components have been initialized and linked. 
     // Returns true if they all have. Should be called after initial scene 

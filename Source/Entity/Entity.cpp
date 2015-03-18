@@ -44,26 +44,26 @@ Entity::~Entity(void)
 
 // ========================================================================= //
 
-void Entity::init(World& world)
+void Entity::init(void)
 {
     
 }
 
 // ========================================================================= //
 
-void Entity::destroy(World& world)
+void Entity::destroy(void)
 {
     for (auto& itr : m_components){
-        itr.second->destroy(world);
+        itr.second->destroy();
     }
 }
 
 // ========================================================================= //
 
-void Entity::update(World& world)
+void Entity::update(void)
 {
     for (auto& itr : m_components){
-        itr.second->update(world);
+        itr.second->update();
     }
 }
 

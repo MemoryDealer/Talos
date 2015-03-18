@@ -33,8 +33,7 @@
 NetworkComponent::NetworkComponent(void) :
 m_pendingCommands(),
 m_serverUpdates(),
-m_actorC(nullptr),
-m_world(nullptr)
+m_actorC(nullptr)
 {
 
 }
@@ -48,21 +47,21 @@ NetworkComponent::~NetworkComponent(void)
 
 // ========================================================================= //
 
-void NetworkComponent::init(World& world)
+void NetworkComponent::init(void)
 {
     
 }
 
 // ========================================================================= //
 
-void NetworkComponent::destroy(World& world)
+void NetworkComponent::destroy(void)
 {
 
 }
 
 // ========================================================================= //
 
-void NetworkComponent::update(World& world)
+void NetworkComponent::update(void)
 {
     // Apply pending updates from server (server reconciliation).
     while (!m_serverUpdates.empty()){
@@ -96,7 +95,7 @@ void NetworkComponent::update(World& world)
             }
         }
 
-        m_actorC->update(world);
+        m_actorC->update();
             
         m_serverUpdates.pop();
     }
@@ -128,12 +127,23 @@ void NetworkComponent::message(ComponentMessage& msg)
             // Assign the sequence number. This will be  used for knowing 
             // which commands to replay each frame.
             command.sequenceNumber = 
-                m_world->getNetwork()->getLastInputSequenceNumber();
+                this->getWorld()->getNetwork()->getLastInputSequenceNumber();
             
             m_pendingCommands.push_back(command);
         }
         break;
     }
+}
+
+// ========================================================================= //
+
+// Setters:
+
+// ========================================================================= //
+
+void NetworkComponent::setActorComponentPtr(const ActorComponentPtr actorC)
+{
+    m_actorC = actorC;
 }
 
 // ========================================================================= //

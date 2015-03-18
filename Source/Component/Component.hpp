@@ -41,25 +41,53 @@ public:
     virtual ~Component(void) = 0;
 
     // Interface function for initialization.
-    virtual void init(World&) = 0;
+    virtual void init(void) = 0;
 
     // Interface function for destruction.
-    virtual void destroy(World&) = 0;
+    virtual void destroy(void) = 0;
 
     // Interface function for updating.
-    virtual void update(World&) = 0;
+    virtual void update(void) = 0;
 
     // Handles a message received from parent Entity.
-    virtual void message(ComponentMessage&) = 0;
+    virtual void message(ComponentMessage& msg) = 0;
 
     // Triggered for all attached components when a new component is 
     // attached to an Entity.
-    virtual void onComponentAttached(ComponentPtr) { }
+    virtual void onComponentAttached(ComponentPtr component) { }
 
     // Triggered for all attached components when a component is 
     // detached from an Entity.
-    virtual void onComponentDetached(ComponentPtr) { }
+    virtual void onComponentDetached(ComponentPtr component) { }
+
+    // Getters:
+
+    // Returns pointer to world that created it.
+    std::shared_ptr<World> getWorld(void) const;
+
+    // Setters:
+
+    // Sets pointer to world that created it.
+    void setWorld(std::shared_ptr<World> world);
+
+private:
+    // Keep a pointer to the world that created it.
+    std::shared_ptr<World> m_world;
 };
+
+// ========================================================================= //
+
+// Getters:
+
+inline std::shared_ptr<World> Component::getWorld(void) const{
+    return m_world;
+}
+
+// Setters:
+
+inline void Component::setWorld(std::shared_ptr<World> world){
+    m_world = world;
+}
 
 // ========================================================================= //
 

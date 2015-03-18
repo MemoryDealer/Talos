@@ -42,9 +42,9 @@ public:
     virtual ~SkyHighGraphics(void) override;
 
     // Creates SkyX object with default settings.
-    void init(World* world,
-              const Graphics::Setting,
-              const std::string&);
+    void init(std::shared_ptr<World> world,
+              const std::string& cfg,
+              const Graphics::Setting setting);
 
     // Applies a SkyPreset's data to SkyX.
     virtual void loadPreset(const SkyPreset&) override;
@@ -77,7 +77,7 @@ private:
     bool m_day;
     Ogre::Real m_sunrise, m_sunset;
     
-    World* m_world;
+    std::shared_ptr<World> m_world;
     Graphics::Setting m_graphicsSetting;
 };
 

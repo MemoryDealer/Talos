@@ -44,15 +44,15 @@ CameraComponent::~CameraComponent(void)
 
 // ========================================================================= //
 
-void CameraComponent::init(World& world)
+void CameraComponent::init(void)
 {
     // Create the camera object.
-    m_camera = world.getSceneManager()->createCamera("PlayerCam");
+    m_camera = this->getWorld()->getSceneManager()->createCamera("PlayerCam");
     m_camera->setNearClipDistance(0.1f);
     m_camera->setFarClipDistance(0.f);
 
     // Setup viewport aspect ratio and assign camera to viewport.
-    Ogre::Viewport* viewport = world.getViewport();
+    Ogre::Viewport* viewport = this->getWorld()->getViewport();
     m_camera->setAspectRatio(Ogre::Real(viewport->getActualWidth()) /
                              Ogre::Real(viewport->getActualHeight()));
     viewport->setCamera(m_camera);
@@ -60,14 +60,14 @@ void CameraComponent::init(World& world)
 
 // ========================================================================= //
 
-void CameraComponent::destroy(World& world)
+void CameraComponent::destroy(void)
 {
-    world.getSceneManager()->destroyCamera(m_camera);
+    this->getWorld()->getSceneManager()->destroyCamera(m_camera);
 }
 
 // ========================================================================= //
 
-void CameraComponent::update(World& world)
+void CameraComponent::update(void)
 {
     
 }
@@ -77,6 +77,17 @@ void CameraComponent::update(World& world)
 void CameraComponent::message(ComponentMessage& msg)
 {
 
+}
+
+// ========================================================================= //
+
+// Getters:
+
+// ========================================================================= //
+
+Ogre::Camera* CameraComponent::getCamera(void) const
+{
+    return m_camera;
 }
 
 // ========================================================================= //

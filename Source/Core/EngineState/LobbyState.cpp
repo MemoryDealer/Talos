@@ -55,24 +55,24 @@ LobbyState::~LobbyState(void)
 
 void LobbyState::enter(void)
 {
-    m_world.init();
-    m_world.getInput()->setMode(Input::Mode::UI);
+    m_world->init();
+    m_world->getInput()->setMode(Input::Mode::UI);
 
     // Setup visual scene settings.
-    m_world.getEnvironment()->setAmbientLight(255.f, 255.f, 255.f);
-    m_world.getEnvironment()->setSunColour(200.f, 175.f, 189.f);
-    m_world.getEnvironment()->setMoonColour(.50f, .50f, 255.f);
+    m_world->getEnvironment()->setAmbientLight(255.f, 255.f, 255.f);
+    m_world->getEnvironment()->setSunColour(200.f, 175.f, 189.f);
+    m_world->getEnvironment()->setMoonColour(.50f, .50f, 255.f);
 
     // Create camera.
-    EntityPtr camera = m_world.createEntity();
-    m_world.attachComponent<SceneComponent>(camera);
-    m_world.attachComponent<CameraComponent>(camera);
+    EntityPtr camera = m_world->createEntity();
+    m_world->attachComponent<SceneComponent>(camera);
+    m_world->attachComponent<CameraComponent>(camera);
 
-    m_world.setMainCamera(camera->getComponent<CameraComponent>());
+    m_world->setMainCamera(camera->getComponent<CameraComponent>());
 
     // Create sky.
-    m_world.getEnvironment()->loadSky();
-    m_world.getEnvironment()->getSky()->loadPreset(
+    m_world->getEnvironment()->loadSky();
+    m_world->getEnvironment()->getSky()->loadPreset(
         SkyPresets[SkyPreset::Thunderstorm1]);
 
     // Load UI.
@@ -81,13 +81,13 @@ void LobbyState::enter(void)
 
     // Setup initial UI data.
     m_ui->insertListboxItem("PlayerList", 
-        m_world.getNetwork()->getLocalPlayer()->username);
+        m_world->getNetwork()->getLocalPlayer()->username);
     m_ui->setUsername(
-        m_world.getNetwork()->getLocalPlayer()->username);
+        m_world->getNetwork()->getLocalPlayer()->username);
 
-    m_world.getNetwork()->unlockEventQueue();
+    m_world->getNetwork()->unlockEventQueue();
 
-    if (!m_world.setupEntities()){
+    if (!m_world->setupEntities()){
         throw std::exception("LobbyState entities reported uninitialized");
     }
 }
@@ -97,17 +97,17 @@ void LobbyState::enter(void)
 void LobbyState::exit(void)
 {
     // Close network connections.
-    m_world.getNetwork()->destroy();
+    m_world->getNetwork()->destroy();
 
     m_ui->destroy();
-    m_world.destroy();
+    m_world->destroy();
 }
 
 // ========================================================================= //
 
 void LobbyState::pause(void)
 {
-    m_world.pause();
+    m_world->pause();
     m_ui->setVisible(false);
 }
 
@@ -115,8 +115,8 @@ void LobbyState::pause(void)
 
 void LobbyState::resume(void)
 {
-    m_world.getInput()->setMode(Input::Mode::UI);
-    m_world.resume();
+    m_world->getInput()->setMode(Input::Mode::UI);
+    m_world->resume();
     m_ui->setVisible(true);
 }
 
@@ -143,18 +143,18 @@ void LobbyState::update(void)
                     }
 
                     // Send input commands to the player.
-                    m_world.handleInput(e);
+                    m_world->handleInput(e);
                 }
                 break;
 
             case SDL_KEYUP:
                 {
-                    m_world.handleInput(e);
+                    m_world->handleInput(e);
                 }
                 break;
 
             case SDL_MOUSEMOTION:
-                m_world.getInput()->handleMouse(e);
+                m_world->getInput()->handleMouse(e);
                 break;
 
             case SDL_QUIT:
@@ -163,8 +163,8 @@ void LobbyState::update(void)
             }
         }
 
-        m_world.update();
-        if (m_world.getNetwork()->hasPendingEvent()){
+        m_world->update();
+        if (m_world->getNetwork()->hasPendingEvent()){
             this->handleNetEvents();
         }
         if (m_ui->update()){
@@ -177,10 +177,10 @@ void LobbyState::update(void)
 
 void LobbyState::handleNetEvents(void)
 {
-    NetEvent e = m_world.getNetwork()->getNextEvent();
+    NetEvent e = m_world->getNetwork()->getNextEvent();
     for (;
          e.type != NetMessage::Null;
-         e = m_world.getNetwork()->getNextEvent()){
+         e = m_world->getNetwork()->getNextEvent()){
         switch (e.type){
         default:
             break;
@@ -238,12 +238,12 @@ void LobbyState::handleUIEvents(void)
             break;
 
         case LobbyUI::Event::Chat:
-            m_world.getNetwork()->chat(e.s1);
+            m_world->getNetwork()->chat(e.s1);
             break;
 
         case LobbyUI::Event::Start:
-            if (m_world.getNetwork()->getMode() == Network::Mode::Server){
-                m_world.getNetwork()->startGame();
+            if (m_world->getNetwork()->getMode() == Network::Mode::Server){
+                m_world->getNetwork()->startGame();
                 m_subject.notify(EngineNotification::Push, EngineStateID::Game);
             }
             break;

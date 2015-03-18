@@ -64,7 +64,7 @@ public:
     Subject& getSubject(void);
 
     // Returns World for injecting dependencies in Engine.
-    World& getWorld(void);
+    std::shared_ptr<World> getWorld(void);
 
     // Returns engine state ID.
     const EngineStateID getID(void) const;
@@ -99,7 +99,7 @@ inline Subject& EngineState::getSubject(void){
     return m_subject;
 }
 
-inline World& EngineState::getWorld(void){
+inline std::shared_ptr<World> EngineState::getWorld(void){
     return m_world;
 }
 

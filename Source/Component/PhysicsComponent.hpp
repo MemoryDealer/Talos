@@ -50,35 +50,32 @@ public:
     };
 
     // Empty destructor.
-    virtual void init(World&) override;
+    virtual void init(void) override;
 
     // Initializes PhysX actor, adds to World's PxScene.
-    virtual void init(World& world, EntityPtr entity);
+    virtual void init(EntityPtr entity);
 
     // Removes PhysX actor from World's PxScene.
-    virtual void destroy(World&) override;
+    virtual void destroy(void) override;
 
     // Retrieves the actor's position and orientation, applies them to the
     // attached SceneComponent for rendering.
-    virtual void update(World&) override;
+    virtual void update(void) override;
 
     // Empty.
-    virtual void message(ComponentMessage&) override;
+    virtual void message(ComponentMessage& msg) override;
 
     // Component functions:
 
-    // Sets PhysX pose position to these coordinates.
-    void setPosition(const PxReal, const PxReal, const PxReal);
-
-    // Sets PhysX pose orientation to this quaternion.
-    void setOrientation(const PxReal, const PxReal, const PxReal, 
-                        const PxReal);
-
     // Translates the PhysX pose directly.
-    void translate(const PxReal, const PxReal, const PxReal);
+    void translate(const PxReal dx, 
+                   const PxReal dy, 
+                   const PxReal dz);
 
     // Rotates the PhysX pose by this vector.
-    void rotate(const PxReal, const PxReal, const PxReal);
+    void rotate(const PxReal rx, 
+                const PxReal ry, 
+                const PxReal rz);
 
     // Getters:
 
@@ -92,6 +89,17 @@ public:
     PxRigidDynamic* getRigidActor(void) const;
 
     // Setters:
+
+    // Sets PhysX pose position to these coordinates.
+    void setPosition(const PxReal x,
+                     const PxReal y,
+                     const PxReal z);
+
+    // Sets PhysX pose orientation to this quaternion.
+    void setOrientation(const PxReal w,
+                        const PxReal x,
+                        const PxReal y,
+                        const PxReal z);
 
     // Sets collision volume type.
     void setType(const Type& type);
@@ -111,24 +119,6 @@ private:
     PxMaterial* m_mat;
     PxReal m_density;
 };
-
-// ========================================================================= //
-
-// Getters:
-
-inline PxRigidDynamic* PhysicsComponent::getRigidActor(void) const{
-    return m_rigidActor;
-}
-
-// Setters:
-
-inline void PhysicsComponent::setType(const Type& type){
-    m_type = type;
-}
-
-inline void PhysicsComponent::setDensity(const PxReal density){
-    m_density = density;
-}
 
 // ========================================================================= //
 

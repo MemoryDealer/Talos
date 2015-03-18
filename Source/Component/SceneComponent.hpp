@@ -40,19 +40,19 @@ public:
     virtual ~SceneComponent(void) override;
 
     // Creates a Ogre::SceneNode within the world.
-    virtual void init(World&) override;
+    virtual void init(void) override;
 
     // Destroys the internal Ogre::SceneNode.
-    virtual void destroy(World&) override;
+    virtual void destroy(void) override;
 
     // Empty.
-    virtual void update(World&) override;
+    virtual void update(void) override;
 
     // Empty.
-    virtual void message(ComponentMessage&) override;
+    virtual void message(ComponentMessage& msg) override;
 
     // Wires up needed Components with itself.
-    virtual void onComponentAttached(ComponentPtr) override;
+    virtual void onComponentAttached(ComponentPtr component) override;
 
     // Attaches Ogre::Camera to scene node.
     virtual void attachCamera(Ogre::Camera* camera);
@@ -88,12 +88,6 @@ public:
 private:
     Ogre::SceneNode* m_node;
 };
-
-// ========================================================================= //
-
-inline Ogre::SceneNode* SceneComponent::getSceneNode(void) const{
-    return m_node;
-}
 
 // ========================================================================= //
 

@@ -428,7 +428,12 @@
     which eliminates the problem of the server not moving the client's actor the frame after receiving a move command, since the bit values were being reset.
 * The above re-introduced the problem of moving faster when going diagonal, since the normalised vector is just the movement vector for one direction and not both.
 
+== 3/17/16 ==
+* Completely restructed how the World object is managed. Before it was stack allocated in EngineState, but now it's a smart pointer and passed everywhere. 
+* Also eliminated the need for passing World into Component init, update, and destroy methods. Component now just stores a smart pointer to the World. 
+
 == TODO ==
+* Add PScene::addActor()
 * Move input update into world.
 * Change UI/Net events to use boost::variant.
 * Add ability to specify box half extents directly in collision objects for invisible walls and such.

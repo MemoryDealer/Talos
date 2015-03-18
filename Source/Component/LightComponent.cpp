@@ -41,23 +41,24 @@ LightComponent::~LightComponent(void)
 
 // ========================================================================= //
 
-void LightComponent::init(World& world)
+void LightComponent::init(void)
 {
-    m_light = world.getSceneManager()->createLight();
+    m_light = this->getWorld()->getSceneManager()->createLight();
+
     // Set to point light by default.
     m_light->setType(Ogre::Light::LT_POINT);
 }
 
 // ========================================================================= //
 
-void LightComponent::destroy(World& world)
+void LightComponent::destroy(void)
 {
-    world.getSceneManager()->destroyLight(m_light);
+    this->getWorld()->getSceneManager()->destroyLight(m_light);
 }
 
 // ========================================================================= //
 
-void LightComponent::update(World& world)
+void LightComponent::update(void)
 {
 
 }
@@ -71,9 +72,9 @@ void LightComponent::message(ComponentMessage&)
 
 // ========================================================================= //
 
-void LightComponent::setType(const Type type)
+void LightComponent::setType(const Type& type)
 {
-    m_light->setType((type == Type::POINT) ? Ogre::Light::LT_POINT :
+    m_light->setType((type == Type::Point) ? Ogre::Light::LT_POINT :
                      Ogre::Light::LT_SPOTLIGHT);
 }
 
@@ -103,6 +104,17 @@ void LightComponent::setRange(const Ogre::Real range)
         m_light->setSpotlightRange(Ogre::Degree(range - 15),
                                    Ogre::Degree(range));
     }
+}
+
+// ========================================================================= //
+
+// Getters:
+
+// ========================================================================= //
+
+Ogre::Light* LightComponent::getLight(void) const
+{
+    return m_light;
 }
 
 // ========================================================================= //

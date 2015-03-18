@@ -48,18 +48,18 @@ PhysicsComponent::~PhysicsComponent(void)
 
 // ========================================================================= //
 
-void PhysicsComponent::init(World&)
+void PhysicsComponent::init(void)
 {
     
 }
 
 // ========================================================================= //
 
-void PhysicsComponent::init(World& world, EntityPtr entity)
+void PhysicsComponent::init(EntityPtr entity)
 {
     // If no custom material has been assigned, use the default.
     if (!m_mat){
-        m_mat = world.getPScene()->getDefaultMaterial();
+        m_mat = this->getWorld()->getPScene()->getDefaultMaterial();
     }
 
     // Get Ogre::Entity for mesh data.
@@ -106,7 +106,7 @@ void PhysicsComponent::init(World& world, EntityPtr entity)
     }
 
     // Create dynamic actor.
-    m_rigidActor = PxCreateDynamic(*world.getPScene()->getSDK(),
+    m_rigidActor = PxCreateDynamic(*this->getWorld()->getPScene()->getSDK(),
                                    PxTransform(pos),
                                    *geometry,
                                    *m_mat,
@@ -117,69 +117,40 @@ void PhysicsComponent::init(World& world, EntityPtr entity)
         static_cast<const EntityID>(entity->getID()));
 
     // Add actor to PhysX scene.
-    world.getPScene()->getScene()->addActor(*m_rigidActor);   
+    this->getWorld()->getPScene()->getScene()->addActor(*m_rigidActor);
 
     // Add to debug drawer if activated.
-    if (world.getPScene()->isUsingDebugDrawer()){
-        world.getPScene()->addToDebugDrawer(m_rigidActor, *geometry);
+    if (this->getWorld()->getPScene()->isUsingDebugDrawer()){
+        this->getWorld()->getPScene()->addToDebugDrawer(m_rigidActor, *geometry);
     }
 }
 
 // ========================================================================= //
 
-void PhysicsComponent::destroy(World& world)
+void PhysicsComponent::destroy(void)
 {
     Assert(m_rigidActor != nullptr, "Null m_actor!");
 
-    world.getPScene()->getScene()->removeActor(*m_rigidActor);
+    this->getWorld()->getPScene()->getScene()->removeActor(*m_rigidActor);
 }
 
 // ========================================================================= //
 
-void PhysicsComponent::update(World& world)
+void PhysicsComponent::update(void)
 {
     
 }
 
 // ========================================================================= //
 
-void PhysicsComponent::message(ComponentMessage&)
+void PhysicsComponent::message(ComponentMessage& msg)
 {
 
 }
 
 // ========================================================================= //
 
-void PhysicsComponent::setPosition(const PxReal x, 
-                                   const PxReal y , 
-                                   const PxReal z)
-{
-    PxTransform transform = m_rigidActor->getGlobalPose();
-
-    transform.p.x = x;
-    transform.p.y = y;
-    transform.p.z = z;
-
-    m_rigidActor->setGlobalPose(transform, true);
-}
-
-// ========================================================================= //
-
-// Sets PhysX pose orientation to this quaternion.
-void PhysicsComponent::setOrientation(const PxReal w, 
-                                      const PxReal x, 
-                                      const PxReal y,
-                                      const PxReal z)
-{
-    PxTransform transform = m_rigidActor->getGlobalPose();
-
-    transform.q.w = w;
-    transform.q.x = x;
-    transform.q.y = y;
-    transform.q.z = z;
-
-    m_rigidActor->setGlobalPose(transform, true);
-}
+// Component functions:
 
 // ========================================================================= //
 
@@ -198,19 +169,23 @@ void PhysicsComponent::translate(const PxReal dx,
 
 // ========================================================================= //
 
-void PhysicsComponent::rotate(const PxReal dx,
-                              const PxReal dy,
-                              const PxReal dz)
+void PhysicsComponent::rotate(const PxReal rx,
+                              const PxReal ry,
+                              const PxReal rz)
 {
     // @TODO: This doesn't worK!
     PxTransform transform = m_rigidActor->getGlobalPose();
 
-    PxVec3 v(dx, dy, dz);
+    PxVec3 v(rx, ry, rz);
     //v.normalize();
     transform.rotate(v);
 
     m_rigidActor->setGlobalPose(transform, true);
 }
+
+// ========================================================================= //
+
+// Getters:
 
 // ========================================================================= //
 
@@ -237,6 +212,57 @@ const Ogre::Quaternion PhysicsComponent::getOrientation(void) const
 
 // ========================================================================= //
 
+inline PxRigidDynamic* PhysicsComponent::getRigidActor(void) const
+{
+    return m_rigidActor;
+}
+
+// ========================================================================= //
+
+// Setters:
+
+// ========================================================================= //
+
+void PhysicsComponent::setPosition(const PxReal x,
+                                   const PxReal y,
+                                   const PxReal z)
+{
+    PxTransform transform = m_rigidActor->getGlobalPose();
+
+    transform.p.x = x;
+    transform.p.y = y;
+    transform.p.z = z;
+
+    m_rigidActor->setGlobalPose(transform, true);
+}
+
+// ========================================================================= //
+
+// Sets PhysX pose orientation to this quaternion.
+void PhysicsComponent::setOrientation(const PxReal w,
+                                      const PxReal x,
+                                      const PxReal y,
+                                      const PxReal z)
+{
+    PxTransform transform = m_rigidActor->getGlobalPose();
+
+    transform.q.w = w;
+    transform.q.x = x;
+    transform.q.y = y;
+    transform.q.z = z;
+
+    m_rigidActor->setGlobalPose(transform, true);
+}
+
+// ========================================================================= //
+
+void PhysicsComponent::setType(const Type& type)
+{
+    m_type = type;
+}
+
+// ========================================================================= //
+
 void PhysicsComponent::setMaterial(World& world,
                                    const PxReal staticFriction,
                                    const PxReal dynamicFriction,
@@ -245,6 +271,13 @@ void PhysicsComponent::setMaterial(World& world,
     m_mat = world.getPScene()->getSDK()->createMaterial(staticFriction,
                                                         dynamicFriction,
                                                         restitution);
+}
+
+// ========================================================================= //
+
+void PhysicsComponent::setDensity(const PxReal density)
+{
+    m_density = density;
 }
 
 // ========================================================================= //

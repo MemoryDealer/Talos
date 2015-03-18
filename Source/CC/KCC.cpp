@@ -48,19 +48,19 @@ KCC::~KCC(void)
 
 // ========================================================================= //
 
-bool KCC::init(World& world)
+bool KCC::init(std::shared_ptr<World> world)
 {
     PxCapsuleControllerDesc desc;
     desc.position = PxExtendedVec3(0.f, 0.f, 0.f);
     desc.height = 1.8288f;
     desc.radius = 0.3048f;
 
-    PxMaterial* mat = world.getPScene()->getSDK()->createMaterial(0.5f,
+    PxMaterial* mat = world->getPScene()->getSDK()->createMaterial(0.5f,
                                                                   0.5f,
                                                                   0.1f);
     desc.material = mat;
 
-    m_controller = world.getPScene()->getControllerManager()->
+    m_controller = world->getPScene()->getControllerManager()->
         createController(desc);
 
     if (!m_controller){
@@ -72,7 +72,7 @@ bool KCC::init(World& world)
 
 // ========================================================================= //
 
-void KCC::destroy(World& world)
+void KCC::destroy(std::shared_ptr<World> world)
 {
     // ?
 }
@@ -91,7 +91,7 @@ const PxExtendedVec3 KCC::move(const Ogre::Vector3& translate)
 
 // ========================================================================= //
 
-const PxExtendedVec3 KCC::update(World& world)
+const PxExtendedVec3 KCC::update(std::shared_ptr<World> world)
 {
     // Free-fall/gravity values.
     const PxReal gravity = 0.0281f; // Amount to advance y-velocity down.
@@ -115,7 +115,7 @@ const PxExtendedVec3 KCC::update(World& world)
     // Perform a raycast straight down.
     PScene::Ray ray;
     ray.origin = PxVec3(pos.x, pos.y, pos.z);
-    bool status = world.getPScene()->raycast(ray);
+    bool status = world->getPScene()->raycast(ray);
 
     // If there was a hit, process it.
     if (status){
@@ -172,6 +172,22 @@ void KCC::jump(void)
             m_yVel = 0.8f;
         }
     }
+}
+
+// ========================================================================= //
+
+void KCC::setPosition(const PxReal x,
+                      const PxReal y,
+                      const PxReal z)
+{
+    m_controller->setPosition(PxExtendedVec3(x, y, z));
+}
+
+// ========================================================================= //
+
+void KCC::setPosition(const Ogre::Vector3& p)
+{
+    this->setPosition(p.x, p.y, p.z);
 }
 
 // ========================================================================= //

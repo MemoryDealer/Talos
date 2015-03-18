@@ -28,7 +28,6 @@
 // ========================================================================= //
 
 ModelComponent::ModelComponent(void) :
-Component(),
 m_entity(nullptr)
 {
     
@@ -43,26 +42,14 @@ ModelComponent::~ModelComponent(void)
 
 // ========================================================================= //
 
-void ModelComponent::init(World& world)
+void ModelComponent::init(void)
 {
     
 }
 
 // ========================================================================= //
 
-void ModelComponent::init(World& world,
-                          const std::string& meshName,
-                          const std::string& matName)
-{
-    m_entity = world.getSceneManager()->createEntity(meshName);
-    if (matName != ""){
-        m_entity->setMaterialName(matName);
-    }
-}
-
-// ========================================================================= //
-
-void ModelComponent::destroy(World& world)
+void ModelComponent::destroy(void)
 {
     m_entity->detachFromParent();
     m_entity = nullptr;
@@ -70,7 +57,7 @@ void ModelComponent::destroy(World& world)
 
 // ========================================================================= //
 
-void ModelComponent::update(World& world)
+void ModelComponent::update(void)
 {
 
 }
@@ -80,6 +67,44 @@ void ModelComponent::update(World& world)
 void ModelComponent::message(ComponentMessage& msg)
 {
 
+}
+
+// ========================================================================= //
+
+void ModelComponent::setMesh(const std::string& mesh,
+                             const std::string& mat)
+{
+    // Create Ogre::Entity (assigns mesh).
+    m_entity = this->getWorld()->getSceneManager()->createEntity(mesh);
+
+    // Assign a material if specified.
+    if (mat != ""){
+        m_entity->setMaterialName(mat);
+    }
+}
+
+// ========================================================================= //
+
+// Getters:
+
+// ========================================================================= //
+
+Ogre::Entity* ModelComponent::getOgreEntity(void) const
+{
+    return m_entity;
+}
+
+// ========================================================================= //
+
+// Setters:
+
+// ========================================================================= //
+
+void ModelComponent::setMaterialName(const std::string& name){
+    Assert(m_entity != nullptr,
+           "ModelComponent::setMaterialName() call on null Ogre::Entity");
+
+    m_entity->setMaterialName(name);
 }
 
 // ========================================================================= //

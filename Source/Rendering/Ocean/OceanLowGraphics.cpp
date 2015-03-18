@@ -40,7 +40,8 @@ OceanLowGraphics::~OceanLowGraphics(void)
 
 // ========================================================================= //
 
-void OceanLowGraphics::init(World* world, const std::string& material)
+void OceanLowGraphics::init(std::shared_ptr<World> world, 
+                            const std::string& material)
 {
     m_world = world;
 

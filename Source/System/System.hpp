@@ -59,18 +59,18 @@ public:
     // Setters:
 
     // Sets internal World pointer.
-    void setWorld(World* world);
+    void setWorld(std::shared_ptr<World> world);
 
 protected:
     EntityHashTable m_entities;
-    World* m_world;
+    std::shared_ptr<World> m_world;
 };
 
 // ========================================================================= //
 
 // Setters:
 
-inline void System::setWorld(World* world){
+inline void System::setWorld(std::shared_ptr<World> world){
     m_world = world;
 }
 

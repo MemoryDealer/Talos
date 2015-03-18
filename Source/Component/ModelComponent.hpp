@@ -39,20 +39,21 @@ public:
     // Empty destructor.
     virtual ~ModelComponent(void) override;
 
-    // Loads Ogre::Entity from scene manager using scene manager.
-    virtual void init(World&) override;
-    virtual void init(World&, 
-                      const std::string&, 
-                      const std::string& matName = "");
+    // Empty.
+    virtual void init(void) override;
+
+    // Detaches Ogre::Entity from parent scene node. Sets to null.
+    virtual void destroy(void) override;
 
     // Empty.
-    virtual void destroy(World&) override;
+    virtual void update(void) override;
 
     // Empty.
-    virtual void update(World&) override;
+    virtual void message(ComponentMessage& msg) override;
 
-    // Empty.
-    virtual void message(ComponentMessage&) override;
+    // Loads Ogre::Entity with mesh and material.
+    virtual void setMesh(const std::string& mesh,
+                         const std::string& mat = "");
 
     // Getters:
 
@@ -67,23 +68,6 @@ public:
 private:
     Ogre::Entity* m_entity;
 };
-
-// ========================================================================= //
-
-// Getters:
-
-inline Ogre::Entity* ModelComponent::getOgreEntity(void) const{
-    return m_entity;
-}
-
-// Setters:
-
-inline void ModelComponent::setMaterialName(const std::string& name){
-    Assert(m_entity != nullptr, 
-           "ModelComponent::setMaterialName() call on null Ogre::Entity");
-
-    m_entity->setMaterialName(name);
-}
 
 // ========================================================================= //
 

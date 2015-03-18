@@ -32,7 +32,7 @@
 
 // ========================================================================= //
 
-Environment::Environment(World* world, Graphics& graphics) :
+Environment::Environment(std::shared_ptr<World> world, Graphics& graphics) :
 m_world(world),
 m_sun(nullptr),
 m_sunColour(Ogre::ColourValue::Black),
@@ -54,7 +54,7 @@ m_skyCfg("")
 
 Environment::~Environment(void)
 {
-
+    
 }
 
 // ========================================================================= //
@@ -171,9 +171,9 @@ void Environment::loadSky(const std::string& cfg)
 
     case Graphics::Setting::High:
         m_sky.reset(new SkyHighGraphics());
-        static_cast<SkyHighGraphics*>(m_sky.get())->init(m_world,
-                                                         m_graphics.sky,
-                                                         cfg);
+        static_cast<SkyHighGraphics*>(m_sky.get())->init(m_world,                                                         
+                                                         cfg,
+                                                         m_graphics.sky);
         break;
     }
 

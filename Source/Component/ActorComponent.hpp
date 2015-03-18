@@ -42,19 +42,18 @@ public:
     virtual ~ActorComponent(void) override;
 
     // Creates all needed scene nodes for controlling first person camera.
-    virtual void init(World& world) override;
+    virtual void init(void) override;
 
     // Destroys the internal scene nodes for the camera.
-    virtual void destroy(World& world) override;
+    virtual void destroy(void) override;
 
     // Empty.
-    virtual void update(World& world) override;
+    virtual void update(void) override;
 
     // Handles input messages.
     virtual void message(ComponentMessage& msg) override;
 
-    // Attaches Ogre::Camera to roll node.
-    virtual void attachCamera(Ogre::Camera* camera) override;
+    // Enums:
 
     // Modes the actor can be in.
     enum class Mode{
@@ -67,6 +66,11 @@ public:
         Kinematic,
         Dynamic
     };
+
+    // Component functions:
+
+    // Attaches Ogre::Camera to roll node.
+    virtual void attachCamera(Ogre::Camera* camera) override;
 
     // Applies a translation or action to the actor based on type of input.
     void applyInput(const CommandType& type);
@@ -103,7 +107,7 @@ public:
     void setPitchOrientation(const Ogre::Quaternion& orientation);
 
     // Sets the mode of the Actor, affecting controls/movement.
-    void setMode(const Mode mode);    
+    void setMode(const Mode& mode);
 
 private:
     // Scene node created from parent scene component.

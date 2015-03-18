@@ -43,13 +43,13 @@ public:
     virtual ~NetworkComponent(void) override;
 
     // Empty.
-    virtual void init(World& world) override;
+    virtual void init(void) override;
 
     // Empty.
-    virtual void destroy(World& world) override;
+    virtual void destroy(void) override;
 
     // Applies server reconciliation to associated actor component.
-    virtual void update(World& world) override;
+    virtual void update(void) override;
 
     // Handles command and transform update messages.
     virtual void message(ComponentMessage& msg) override;
@@ -58,9 +58,6 @@ public:
 
     // Sets internal actor component pointer.
     void setActorComponentPtr(const ActorComponentPtr actorC);
-
-    // Sets internal World pointer.
-    void setWorld(World* world);
 
     // === //
 
@@ -81,23 +78,7 @@ private:
 
     // Have direct access to actor component, the coupling here is acceptable.
     ActorComponentPtr m_actorC;
-
-    // Needed to access Client's last input sequence number.
-    World* m_world;
 };
-
-// ========================================================================= //
-
-// Setters:
-
-inline void NetworkComponent::setActorComponentPtr(
-    const ActorComponentPtr actorC){
-    m_actorC = actorC;
-}
-
-inline void NetworkComponent::setWorld(World* world){
-    m_world = world;
-}
 
 // ========================================================================= //
 

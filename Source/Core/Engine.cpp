@@ -285,7 +285,7 @@ void Engine::registerState(const EngineStateID id)
     deps.graphics = m_graphics;
     deps.server = m_server;
     deps.client = m_client;
-    state->getWorld().injectDependencies(deps);
+    state->getWorld()->injectDependencies(deps);
 
     // Add self as an Observer to listen for events.
     state->getSubject().addObserver(this);

@@ -46,7 +46,7 @@ OceanHighGraphics::~OceanHighGraphics(void)
 
 // ========================================================================= //
 
-void OceanHighGraphics::init(World* world,
+void OceanHighGraphics::init(std::shared_ptr<World> world,
                              const std::string& cfg,
                              const Graphics::Setting graphicsSetting)
 {

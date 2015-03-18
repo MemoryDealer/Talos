@@ -48,14 +48,14 @@ CollisionComponent::~CollisionComponent(void)
 
 // ========================================================================= //
 
-void CollisionComponent::init(World& world)
+void CollisionComponent::init(void)
 {
     
 }
 
 // ========================================================================= //
 
-void CollisionComponent::init(World& world, EntityPtr entity)
+void CollisionComponent::init(EntityPtr entity)
 {
     // Get the Ogre::Entity for mesh data.
     Ogre::Entity* e = entity->getComponent<ModelComponent>()->getOgreEntity();
@@ -91,43 +91,43 @@ void CollisionComponent::init(World& world, EntityPtr entity)
         break;
 
     case Type::Plane:
-        /*PxRigidStatic* p = PxCreatePlane(*m_world.getPScene()->m_physx,
+        /*PxRigidStatic* p = PxCreatePlane(*m_world->getPScene()->m_physx,
         PxPlane(PxVec3(0.f, 1.f, 0.f), 50.f),
         *mat);*/
         break;
     }
 
     // Create PhysX static actor with geometry.
-    m_rigidActor = PxCreateStatic(*world.getPScene()->getSDK(),
+    m_rigidActor = PxCreateStatic(*this->getWorld()->getPScene()->getSDK(),
                                   PxTransform(pos),
                                   *geometry,
-                                  *world.getPScene()->getDefaultMaterial());
+                                  *this->getWorld()->getPScene()->getDefaultMaterial());
 
     // Assign actor's user data to EntityID.
     m_rigidActor->userData = reinterpret_cast<void*>(
         static_cast<const EntityID>(entity->getID()));
 
     // Add actor to PhysX scene.
-    world.getPScene()->getScene()->addActor(*m_rigidActor);
+    this->getWorld()->getPScene()->getScene()->addActor(*m_rigidActor);
 
     // Add to debug drawer if activated.
-    if (world.getPScene()->isUsingDebugDrawer()){
-        world.getPScene()->addToDebugDrawer(m_rigidActor, *geometry);
+    if (this->getWorld()->getPScene()->isUsingDebugDrawer()){
+        this->getWorld()->getPScene()->addToDebugDrawer(m_rigidActor, *geometry);
     }
 }
 
 // ========================================================================= //
 
-void CollisionComponent::destroy(World& world)
+void CollisionComponent::destroy(void)
 {
     Assert(m_rigidActor != nullptr, "Null m_actor!");
 
-    world.getPScene()->getScene()->removeActor(*m_rigidActor);
+    this->getWorld()->getPScene()->getScene()->removeActor(*m_rigidActor);
 }
 
 // ========================================================================= //
 
-void CollisionComponent::update(World& world)
+void CollisionComponent::update(void)
 {
 
 }
@@ -154,6 +154,9 @@ void CollisionComponent::message(ComponentMessage& msg)
 
 // ========================================================================= //
 
+// Getters:
+
+// ========================================================================= //
 
 const Ogre::Vector3 CollisionComponent::getPosition(void) const
 {
@@ -174,6 +177,17 @@ const Ogre::Quaternion CollisionComponent::getOrientation(void) const
                             transform.q.x,
                             transform.q.y,
                             transform.q.z);
+}
+
+// ========================================================================= //
+
+// Setters:
+
+// ========================================================================= //
+
+void CollisionComponent::setType(const Type& type)
+{
+    m_type = type;
 }
 
 // ========================================================================= //

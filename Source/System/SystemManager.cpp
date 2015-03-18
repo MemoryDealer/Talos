@@ -35,7 +35,7 @@
 
 // ========================================================================= //
 
-SystemManager::SystemManager(World* world) :
+SystemManager::SystemManager(std::shared_ptr<World> world) :
 m_systems(),
 m_world(world)
 {

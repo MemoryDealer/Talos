@@ -59,88 +59,85 @@ GameState::~GameState(void)
 
 void GameState::enter(void)
 {
-    m_world.init(true);
-    m_world.getInput()->setMode(Input::Mode::Player);
-    //m_world.getPScene()->loadDebugDrawer();
+    m_world->init(true);
+    m_world->getInput()->setMode(Input::Mode::Player);
+    //m_world->getPScene()->loadDebugDrawer();
 
     // Add systems.
-    m_world.addSystem(new CollisionSystem());
-    m_world.addSystem(new PhysicsSystem());
+    m_world->addSystem(new CollisionSystem());
+    m_world->addSystem(new PhysicsSystem());
 
     // Create player.
-    EntityPtr player = m_world.createEntity();
-    m_world.attachComponent<ActorComponent>(player);
-    if (m_world.getNetwork()->getMode() == Network::Mode::Client){
-        //player->getComponent<ActorComponent>()->setRemote(true);
-    }
-    m_world.attachComponent<CameraComponent>(player);
-    m_world.attachComponent<ModelComponent>(player)->init(
-        m_world, "Cylinder.mesh");
-    m_world.attachComponent<NetworkComponent>(player);
+    EntityPtr player = m_world->createEntity();
+    m_world->attachComponent<ActorComponent>(player);
 
-    m_world.setPlayer(player);
+    m_world->attachComponent<CameraComponent>(player);
+    m_world->attachComponent<ModelComponent>(player)->setMesh("Cylinder.mesh");
+    m_world->attachComponent<NetworkComponent>(player);
+
+    m_world->setPlayer(player);
 
     LightComponentPtr lightC = nullptr;
     ModelComponentPtr modelC = nullptr;
     PhysicsComponentPtr physicsC = nullptr;
 
     // Create basic plane.
-    EntityPtr plane = m_world.createEntity();
-    m_world.attachComponent<SceneComponent>(plane);
-    modelC = m_world.attachComponent<ModelComponent>(plane);
-    modelC->init(m_world, "Plane/Board", "Board");      
-    m_world.attachComponent<CollisionComponent>(plane);
+    EntityPtr plane = m_world->createEntity();
+    m_world->attachComponent<SceneComponent>(plane);
+    modelC = m_world->attachComponent<ModelComponent>(plane);
+    modelC->setMesh("Plane/Board", "Board");      
+    m_world->attachComponent<CollisionComponent>(plane);
     ComponentMessage msg(ComponentMessage::Type::Translate);
     msg.data = Ogre::Vector3(0.f, -50.f, 0.f);
     plane->message(msg);
 
-    plane = m_world.createEntity();
-    m_world.attachComponent<SceneComponent>(plane);
-    modelC = m_world.attachComponent<ModelComponent>(plane);
-    modelC->init(m_world, "Plane/Board", "Board");
-    m_world.attachComponent<CollisionComponent>(plane);
+    plane = m_world->createEntity();
+    m_world->attachComponent<SceneComponent>(plane);
+    modelC = m_world->attachComponent<ModelComponent>(plane);
+    modelC->setMesh("Plane/Board", "Board");
+    m_world->attachComponent<CollisionComponent>(plane);
     msg.data = Ogre::Vector3(75.f, 0.f, 0.f);
     plane->message(msg);
 
     // Create ball.
-    EntityPtr ball = m_world.createEntity();
-    m_world.attachComponent<SceneComponent>(ball);
-    modelC = m_world.attachComponent<ModelComponent>(ball);
-    modelC->init(m_world, "icosphere.mesh");
-    lightC = m_world.attachComponent<LightComponent>(ball);
-    lightC->setType(LightComponent::Type::POINT);
+    EntityPtr ball = m_world->createEntity();
+    m_world->attachComponent<SceneComponent>(ball);
+    m_world->attachComponent<ModelComponent>(ball)->setMesh(
+        "icosphere.mesh");
+    lightC = m_world->attachComponent<LightComponent>(ball);
+    lightC->setType(LightComponent::Type::Point);
     lightC->setColour(50.f, 0.f, 50.f);
     lightC->setRange(175.f);
-    physicsC = m_world.attachComponent<PhysicsComponent>(ball);
+    physicsC = m_world->attachComponent<PhysicsComponent>(ball);
     physicsC->setType(PhysicsComponent::Type::Sphere);
     msg.data = Ogre::Vector3(10.f, 0.f, 0.f);
     ball->message(msg);
     
     
     // Setup visual scene settings.
-    m_world.getEnvironment()->setAmbientLight(255.f, 255.f, 255.f);
-    m_world.getEnvironment()->setSunColour(20.f, 17.5f, 18.9f);
-    m_world.getEnvironment()->setMoonColour(.50f, .50f, 255.f);
+    m_world->getEnvironment()->setAmbientLight(255.f, 255.f, 255.f);
+    m_world->getEnvironment()->setSunColour(20.f, 17.5f, 18.9f);
+    m_world->getEnvironment()->setMoonColour(.50f, .50f, 255.f);
 
     // Create Ocean.
 #ifdef _DEBUG
-    m_world.getEnvironment()->loadOcean("Ocean2_HLSL_GLSL");
+    m_world->getEnvironment()->loadOcean("Ocean2_HLSL_GLSL");
 #else
-    m_world.getEnvironment()->loadOcean("HydraxDemo.hdx");
+    m_world->getEnvironment()->loadOcean("HydraxDemo.hdx");
 #endif
 
-    m_world.getEnvironment()->setOceanPosition(0.f, -100.f, 0.f);
+    m_world->getEnvironment()->setOceanPosition(0.f, -100.f, 0.f);
 
     // Create sky.
-    m_world.getEnvironment()->loadSky();
+    m_world->getEnvironment()->loadSky();
 
     // Network game setup.
-    if (m_world.getNetwork()->initialized()){
+    if (m_world->getNetwork()->initialized()){
         this->addNetworkPlayers();
-        m_world.getNetwork()->setGameActive(true);
+        m_world->getNetwork()->setGameActive(true);
     }    
 
-    if (!m_world.setupEntities()){
+    if (!m_world->setupEntities()){
         throw std::exception("GameState entities reported uninitialized");
     }
 }
@@ -149,7 +146,7 @@ void GameState::enter(void)
 
 void GameState::exit(void)
 {
-    m_world.destroy();
+    m_world->destroy();
     
 }
 
@@ -157,14 +154,14 @@ void GameState::exit(void)
 
 void GameState::pause(void)
 {
-    m_world.pause();
+    m_world->pause();
 }
 
 // ========================================================================= //
 
 void GameState::resume(void)
 {
-    m_world.resume();
+    m_world->resume();
 }
 
 // ========================================================================= //
@@ -184,26 +181,26 @@ void GameState::update(void)
             case SDL_TEXTINPUT:
                 // Temporary exit handling.
                 if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE){
-                    m_world.getNetwork()->endGame();
+                    m_world->getNetwork()->endGame();
                     m_subject.notify(EngineNotification::Pop);
                     return;
                 }
 
                 // Send input commands to the player.
-                m_world.handleInput(e);
+                m_world->handleInput(e);
                 break;
 
             case SDL_KEYUP:
-                //m_world.handleInput(e);
+                //m_world->handleInput(e);
                 break;
 
             case SDL_MOUSEMOTION:
                 {
-                    MouseMove mm = m_world.getInput()->handleMouse(e);
+                    MouseMove mm = m_world->getInput()->handleMouse(e);
                     ComponentMessage msg(ComponentMessage::Type::Look);
                     msg.data = mm;
-                    m_world.getPlayer()->message(msg);
-                    m_world.getNetwork()->sendMouseMove(mm.relx, mm.rely);
+                    m_world->getPlayer()->message(msg);
+                    m_world->getNetwork()->sendMouseMove(mm.relx, mm.rely);
                 }
                 break;
 
@@ -217,33 +214,33 @@ void GameState::update(void)
 
         
 
-        m_world.update();
-        if (m_world.getNetwork()->hasPendingEvent()){
+        m_world->update();
+        if (m_world->getNetwork()->hasPendingEvent()){
             this->handleNetEvents();
-            m_world.getPlayer()->getComponent<NetworkComponent>()->update(m_world);
+            m_world->getPlayer()->getComponent<NetworkComponent>()->update();
         }
 
         // ^ ? //
 
-        m_world.getInput()->update();
-        while (m_world.getInput()->hasPendingCommand()){
-            CommandPtr command = m_world.getInput()->getNextCommand();
-            m_world.getNetwork()->sendCommand(command);
-            command->execute(m_world.getPlayer());
+        m_world->getInput()->update();
+        while (m_world->getInput()->hasPendingCommand()){
+            CommandPtr command = m_world->getInput()->getNextCommand();
+            m_world->getNetwork()->sendCommand(command);
+            command->execute(m_world->getPlayer());
         }
-        m_world.getPlayer()->getComponent<ActorComponent>()->update(m_world);
+        m_world->getPlayer()->getComponent<ActorComponent>()->update();
 
-        /*m_world.update();
-        if (m_world.getNetwork()->hasPendingEvent()){
+        /*m_world->update();
+        if (m_world->getNetwork()->hasPendingEvent()){
             this->handleNetEvents();
-            m_world.getPlayer()->getComponent<NetworkComponent>()->update(m_world);
+            m_world->getPlayer()->getComponent<NetworkComponent>()->update(m_world);
         }
 
-        m_world.getInput()->update();
-        while (m_world.getInput()->hasPendingCommand()){
-            CommandPtr command = m_world.getInput()->getNextCommand();
-            m_world.getNetwork()->sendCommand(command);
-            command->execute(m_world.getPlayer());
+        m_world->getInput()->update();
+        while (m_world->getInput()->hasPendingCommand()){
+            CommandPtr command = m_world->getInput()->getNextCommand();
+            m_world->getNetwork()->sendCommand(command);
+            command->execute(m_world->getPlayer());
 
         }*/
 
@@ -259,10 +256,10 @@ void GameState::update(void)
 
 void GameState::handleNetEvents(void)
 {
-    NetEvent e = m_world.getNetwork()->getNextEvent();
+    NetEvent e = m_world->getNetwork()->getNextEvent();
     for (; 
-         m_world.getNetwork()->hasPendingEvent();
-         e = m_world.getNetwork()->getNextEvent()){
+         m_world->getNetwork()->hasPendingEvent();
+         e = m_world->getNetwork()->getNextEvent()){
         switch (e.type){
         default:
             break;
@@ -272,7 +269,7 @@ void GameState::handleNetEvents(void)
             break;
 
         case NetMessage::EndGame:
-            m_world.getNetwork()->endGame();
+            m_world->getNetwork()->endGame();
             m_subject.notify(EngineNotification::Pop);
             break;
 
@@ -282,7 +279,7 @@ void GameState::handleNetEvents(void)
                 EntityID id = boost::get<TransformUpdate>(e.data).id;
 
                 // Get the player's Entity.
-                EntityPtr entity = m_world.getEntityPtr(id);
+                EntityPtr entity = m_world->getEntityPtr(id);
                 Assert(entity != nullptr, 
                        "Null player entity in net player update");
 
@@ -290,7 +287,7 @@ void GameState::handleNetEvents(void)
                 ComponentMessage msg(ComponentMessage::Type::TransformUpdate);
                 msg.data = boost::get<TransformUpdate>(e.data);
              
-                if (id == m_world.getPlayer()->getID()){
+                if (id == m_world->getPlayer()->getID()){
                     entity->getComponent<NetworkComponent>()->message(msg);
                 }
                 else{
@@ -320,7 +317,7 @@ void GameState::handleUIEvents(void)
 
 void GameState::addNetworkPlayers(void)
 {
-    Network::PlayerList& players = m_world.getNetwork()->getPlayerList();
+    Network::PlayerList& players = m_world->getNetwork()->getPlayerList();
     for (auto& i : players){
         // Prevent assigning new entity to local player.
         if (i.second.entity != nullptr){
@@ -328,12 +325,11 @@ void GameState::addNetworkPlayers(void)
         }
 
         // Create entity.
-        EntityPtr e = m_world.createEntity();
+        EntityPtr e = m_world->createEntity();
 
         // Attach player components.
-        m_world.attachComponent<ActorComponent>(e);
-        m_world.attachComponent<ModelComponent>(e)->init(
-            m_world, "Cylinder.mesh");
+        m_world->attachComponent<ActorComponent>(e);
+        m_world->attachComponent<ModelComponent>(e)->setMesh("Cylinder.mesh");
 
         i.second.entity = e;
     }

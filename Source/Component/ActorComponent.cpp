@@ -59,9 +59,9 @@ ActorComponent::~ActorComponent(void)
 
 // ========================================================================= //
 
-void ActorComponent::init(World& world)
+void ActorComponent::init(void)
 {
-    SceneComponent::init(world);
+    SceneComponent::init();
 
     // Acquire the camera node from the parent SceneComponent class.
     m_rootNode = this->getSceneNode();
@@ -83,13 +83,13 @@ void ActorComponent::init(World& world)
     // Create PhysX character controller.
     if (m_cc == CC::Kinematic){
         m_kcc = new KCC();
-        m_kcc->init(world);
+        m_kcc->init(this->getWorld());
     }
 }
 
 // ========================================================================= //
 
-void ActorComponent::destroy(World& world)
+void ActorComponent::destroy(void)
 {
     // Destroy character controller.
     if (m_cc == CC::Kinematic){
@@ -99,13 +99,15 @@ void ActorComponent::destroy(World& world)
         delete m_dcc;
     }
 
-    world.getSceneManager()->destroySceneNode(m_yawNode);
-    SceneComponent::destroy(world);
+    this->getWorld()->getSceneManager()->destroySceneNode(m_yawNode);
+    this->getWorld()->getSceneManager()->destroySceneNode(m_pitchNode);
+    this->getWorld()->getSceneManager()->destroySceneNode(m_rollNode);
+    SceneComponent::destroy();
 }
 
 // ========================================================================= //
 
-void ActorComponent::update(World& world)
+void ActorComponent::update(void)
 {
     switch (m_mode){
     default:
@@ -118,7 +120,7 @@ void ActorComponent::update(World& world)
     case Mode::Player:
         {
             if (m_cc == CC::Kinematic){
-                PxExtendedVec3 pos = m_kcc->update(world);
+                PxExtendedVec3 pos = m_kcc->update(this->getWorld());
                 m_rootNode->setPosition(Ogre::Real(pos.x),
                                           Ogre::Real(pos.y),
                                           Ogre::Real(pos.z));
@@ -187,6 +189,10 @@ void ActorComponent::message(ComponentMessage& msg)
         break;
     }
 }
+
+// ========================================================================= //
+
+// Component functions:
 
 // ========================================================================= //
 
@@ -384,7 +390,7 @@ void ActorComponent::setPitchOrientation(const Ogre::Quaternion& orientation)
 
 // ========================================================================= //
 
-void ActorComponent::setMode(const Mode mode)
+void ActorComponent::setMode(const Mode& mode)
 {
     m_mode = mode;
 

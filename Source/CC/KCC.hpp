@@ -41,21 +41,23 @@ public:
 
     ~KCC(void);
 
-    bool init(World&);
+    bool init(std::shared_ptr<World> world);
 
-    void destroy(World&);
+    void destroy(std::shared_ptr<World> world);
 
     const PxExtendedVec3 move(const Ogre::Vector3& translate);
 
-    const PxExtendedVec3 update(World& world);
+    const PxExtendedVec3 update(std::shared_ptr<World> world);
 
     void jump(void);
 
     // Setters:
 
-    void setPosition(const PxReal, const PxReal, const PxReal);
+    void setPosition(const PxReal x, 
+                     const PxReal y, 
+                     const PxReal z);
 
-    void setPosition(const Ogre::Vector3&);
+    void setPosition(const Ogre::Vector3& pos);
 
 private:
     PxController* m_controller;
@@ -64,20 +66,6 @@ private:
     bool m_onSurface;
     bool m_jumping;
 };
-
-// ========================================================================= //
-
-// Setters:
-
-inline void KCC::setPosition(const PxReal x, 
-                             const PxReal y, 
-                             const PxReal z){
-    m_controller->setPosition(PxExtendedVec3(x, y, z));
-}
-
-inline void KCC::setPosition(const Ogre::Vector3& p){
-    this->setPosition(p.x, p.y, p.z);
-}
 
 // ========================================================================= //
 

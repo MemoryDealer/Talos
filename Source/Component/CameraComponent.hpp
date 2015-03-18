@@ -41,16 +41,16 @@ public:
 
     // Creates Ogre::Camera object, sets its clip distance, sets the aspect
     // ratio, wires up the camera to the viewport.
-    virtual void init(World&) override;
+    virtual void init(void) override;
 
     // Destroys the Ogre::Camera object.
-    virtual void destroy(World&) override;
+    virtual void destroy(void) override;
 
     // Empty.
-    virtual void update(World&) override;
+    virtual void update(void) override;
 
     // Empty.
-    virtual void message(ComponentMessage&) override;
+    virtual void message(ComponentMessage& msg) override;
 
     // Getters: 
 
@@ -60,12 +60,6 @@ public:
 private:
     Ogre::Camera* m_camera;
 };
-
-// ========================================================================= //
-
-inline Ogre::Camera* CameraComponent::getCamera(void) const{
-    return m_camera;
-}
 
 // ========================================================================= //
 

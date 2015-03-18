@@ -38,7 +38,8 @@ public:
 
     virtual ~OceanLowGraphics(void) override;
 
-    void init(World*, const std::string&);
+    void init(std::shared_ptr<World> world, 
+              const std::string& material);
 
     virtual void destroy(void) override;
 
@@ -56,7 +57,7 @@ private:
     Ogre::Entity* m_entity;
     Ogre::Plane m_plane;
 
-    World* m_world;
+    std::shared_ptr<World> m_world;
 };
 
 // ========================================================================= //

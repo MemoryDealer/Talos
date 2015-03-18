@@ -52,14 +52,14 @@ SkyHighGraphics::~SkyHighGraphics(void)
 
 // ========================================================================= //
 
-void SkyHighGraphics::init(World* world,
-                           const Graphics::Setting graphicsSetting,
-                           const std::string& cfg)
+void SkyHighGraphics::init(std::shared_ptr<World> world,
+                           const std::string& cfg,
+                           const Graphics::Setting setting)
 {
     // Assign World pointer.
     m_world = world;
 
-    m_graphicsSetting = graphicsSetting;
+    m_graphicsSetting = setting;
 
     // Create SkyX controller.
     m_basicController = new SkyX::BasicController();

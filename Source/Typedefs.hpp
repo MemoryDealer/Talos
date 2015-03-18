@@ -68,6 +68,7 @@ typedef std::shared_ptr<EngineState> EngineStatePtr;
 typedef uint32_t EntityID;
 typedef Entity* EntityPtr;
 typedef uint32_t NetworkID;
+typedef std::shared_ptr<World> WorldPtr;
 
 // ========================================================================= //
 
