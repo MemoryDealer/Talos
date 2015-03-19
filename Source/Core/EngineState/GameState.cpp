@@ -88,9 +88,16 @@ void GameState::enter(void)
     modelC = m_world->attachComponent<ModelComponent>(plane);
     modelC->setMesh("Plane/Board", "Board");      
     m_world->attachComponent<CollisionComponent>(plane);
+    m_world->attachComponent<RotationComponent>(plane)->addRotation(
+        Ogre::Vector3::UNIT_Y, 0.1f);
     ComponentMessage msg(ComponentMessage::Type::Translate);
     msg.data = Ogre::Vector3(0.f, -50.f, 0.f);
     plane->message(msg);
+
+    EntityPtr gun = m_world->createEntity();
+    m_world->attachComponent<SceneComponent>(gun);
+    m_world->attachComponent<ModelComponent>(gun)->setMesh("laserrifle.mesh");
+
 
     plane = m_world->createEntity();
     m_world->attachComponent<SceneComponent>(plane);
@@ -105,7 +112,7 @@ void GameState::enter(void)
     m_world->attachComponent<ModelComponent>(house)->setMesh("tudorhouse.mesh", "Board");
     m_world->attachComponent<CollisionComponent>(house);
     m_world->attachComponent<RotationComponent>(house)->addRotation(
-        Ogre::Vector3::UNIT_Y, Ogre::Degree(1.f));
+        Ogre::Vector3::UNIT_Y, 1.f);
     msg.data = Ogre::Vector3(-750.f, 0.f, 0.f);
     house->message(msg);
 

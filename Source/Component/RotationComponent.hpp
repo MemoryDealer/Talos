@@ -55,7 +55,7 @@ public:
 
     // Adds a new rotation to the list of rotations to process each frame.
     void addRotation(const Ogre::Vector3& axis,
-                     const Ogre::Degree& amount,
+                     const Ogre::Real& amount,
                      const std::string& nodeName = "");
 
     // Assigns scene nodes to each rotation based on names.

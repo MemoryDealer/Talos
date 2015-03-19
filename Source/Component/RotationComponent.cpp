@@ -77,13 +77,13 @@ void RotationComponent::message(ComponentMessage& msg)
 // ========================================================================= //
 
 void RotationComponent::addRotation(const Ogre::Vector3& axis,
-                                    const Ogre::Degree& angle,
+                                    const Ogre::Real& angle,
                                     const std::string& nodeName)
 {
     Rotation rotation;
     rotation.node = nullptr; // Will be assigned in setup().
     rotation.axis = axis;
-    rotation.angle = angle.valueRadians();
+    rotation.angle = Ogre::Degree(angle).valueRadians();
     m_rotations.push_back(rotation);
 
     m_nodeNames.push_back(nodeName);
