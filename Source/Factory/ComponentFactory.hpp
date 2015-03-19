@@ -50,6 +50,7 @@ public:
     ModelComponentPtr createModelComponent(void);
     NetworkComponentPtr createNetworkComponent(void);
     PhysicsComponentPtr createPhysicsComponent(void);
+    RotationComponentPtr createRotationComponent(void);
     SceneComponentPtr createSceneComponent(void);
 
 private:
@@ -63,6 +64,7 @@ private:
     std::shared_ptr<Pool<ModelComponent>> m_modelComponentPool;
     std::shared_ptr<Pool<NetworkComponent>> m_networkComponentPool;
     std::shared_ptr<Pool<PhysicsComponent>> m_physicsComponentPool;
+    std::shared_ptr<Pool<RotationComponent>> m_rotationComponentPool;
     std::shared_ptr<Pool<SceneComponent>> m_sceneComponentPool;
 };
 

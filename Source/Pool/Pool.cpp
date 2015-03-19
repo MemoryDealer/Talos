@@ -28,6 +28,7 @@
 #include "Component/ModelComponent.hpp"
 #include "Component/NetworkComponent.hpp"
 #include "Component/PhysicsComponent.hpp"
+#include "Component/RotationComponent.hpp"
 #include "Component/SceneComponent.hpp"
 #include "Pool.hpp"
 
@@ -41,6 +42,7 @@ template class Pool<LightComponent>;
 template class Pool<ModelComponent>;
 template class Pool<NetworkComponent>;
 template class Pool<PhysicsComponent>;
+template class Pool<RotationComponent>;
 template class Pool<SceneComponent>;
 
 // ========================================================================= //

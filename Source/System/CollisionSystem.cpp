@@ -60,9 +60,9 @@ void CollisionSystem::update(void)
         SceneComponentPtr sceneC =
             i.second->getComponent<SceneComponent>();
 
-        // Update SceneComponent's position and orientaiton.
-        sceneC->setPosition(collisionC->getPosition());
-        sceneC->setOrientation(collisionC->getOrientation());
+        // Update collision component's position and orientaiton.
+        collisionC->setPosition(sceneC->getPosition());
+        collisionC->setOrientation(sceneC->getOrientation());
     }
 }
 

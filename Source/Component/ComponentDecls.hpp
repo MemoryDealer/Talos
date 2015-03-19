@@ -35,6 +35,7 @@ class LightComponent;
 class ModelComponent;
 class NetworkComponent;
 class PhysicsComponent;
+class RotationComponent;
 class SceneComponent;
 
 // Other forward declarations.
@@ -51,6 +52,7 @@ typedef LightComponent* LightComponentPtr;
 typedef ModelComponent* ModelComponentPtr;
 typedef NetworkComponent* NetworkComponentPtr;
 typedef PhysicsComponent* PhysicsComponentPtr;
+typedef RotationComponent* RotationComponentPtr;
 typedef SceneComponent* SceneComponentPtr;
 
 // ========================================================================= //

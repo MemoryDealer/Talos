@@ -140,6 +140,14 @@ void CollisionComponent::message(ComponentMessage& msg)
     default:
         break;
 
+    case ComponentMessage::Type::SetPosition:
+
+        break;
+
+    case ComponentMessage::Type::SetOrientation:
+
+        break;
+
     case ComponentMessage::Type::Translate:
         if (m_rigidActor){
             Ogre::Vector3 translate = boost::get<Ogre::Vector3>(msg.data);
@@ -182,6 +190,26 @@ const Ogre::Quaternion CollisionComponent::getOrientation(void) const
 // ========================================================================= //
 
 // Setters:
+
+// ========================================================================= //
+
+void CollisionComponent::setPosition(const Ogre::Vector3& pos)
+{
+    PxTransform transform = m_rigidActor->getGlobalPose();
+
+    transform.p = Physics::toPx(pos);
+    m_rigidActor->setGlobalPose(transform);
+}
+
+// ========================================================================= //
+
+void CollisionComponent::setOrientation(const Ogre::Quaternion& orientation)
+{
+    PxTransform transform = m_rigidActor->getGlobalPose();
+
+    transform.q = Physics::toPx(orientation);
+    m_rigidActor->setGlobalPose(transform);
+}
 
 // ========================================================================= //
 

@@ -363,6 +363,9 @@
     <ClCompile Include="Source\Component\NetworkComponent.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Component\RotationComponent.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\Engine.hpp">
@@ -649,6 +652,9 @@
     </ClInclude>
     <ClInclude Include="Source\Command\Actor\Action.hpp">
       <Filter>Header Files\Command\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\RotationComponent.hpp">
+      <Filter>Header Files\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -30,6 +30,7 @@
 #include "Component/ModelComponent.hpp"
 #include "Component/NetworkComponent.hpp"
 #include "Component/PhysicsComponent.hpp"
+#include "Component/RotationComponent.hpp"
 #include "Component/SceneComponent.hpp"
 #include "Core/EngineNotifications.hpp"
 #include "GameState.hpp"
@@ -103,6 +104,8 @@ void GameState::enter(void)
     m_world->attachComponent<SceneComponent>(house);
     m_world->attachComponent<ModelComponent>(house)->setMesh("tudorhouse.mesh", "Board");
     m_world->attachComponent<CollisionComponent>(house);
+    m_world->attachComponent<RotationComponent>(house)->addRotation(
+        Ogre::Vector3::UNIT_Y, Ogre::Degree(1.f));
     msg.data = Ogre::Vector3(-750.f, 0.f, 0.f);
     house->message(msg);
 

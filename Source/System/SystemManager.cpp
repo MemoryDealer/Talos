@@ -27,6 +27,7 @@
 #include "Component/LightComponent.hpp"
 #include "Component/ModelComponent.hpp"
 #include "Component/NetworkComponent.hpp"
+#include "Component/RotationComponent.hpp"
 #include "Component/SceneComponent.hpp"
 #include "Entity/Entity.hpp"
 #include "PhysicsSystem.hpp"
@@ -120,6 +121,11 @@ void SystemManager::processEntity(EntityPtr entity)
             entity->getComponent<NetworkComponent>()->
                 setActorComponentPtr(
                 static_cast<ActorComponentPtr>(sceneC));
+        }
+
+        // Setup rotation component.
+        if (entity->hasComponent<RotationComponent>()){
+            entity->getComponent<RotationComponent>()->setup(sceneC);
         }
     }
     

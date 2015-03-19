@@ -228,11 +228,8 @@ void PhysicsComponent::setPosition(const PxReal x,
                                    const PxReal z)
 {
     PxTransform transform = m_rigidActor->getGlobalPose();
-
-    transform.p.x = x;
-    transform.p.y = y;
-    transform.p.z = z;
-
+    
+    transform.p = Physics::toPx(Ogre::Vector3(x, y, z));
     m_rigidActor->setGlobalPose(transform, true);
 }
 
@@ -246,11 +243,7 @@ void PhysicsComponent::setOrientation(const PxReal w,
 {
     PxTransform transform = m_rigidActor->getGlobalPose();
 
-    transform.q.w = w;
-    transform.q.x = x;
-    transform.q.y = y;
-    transform.q.z = z;
-
+    transform.q = Physics::toPx(Ogre::Quaternion(w, x, y, z));
     m_rigidActor->setGlobalPose(transform, true);
 }
 

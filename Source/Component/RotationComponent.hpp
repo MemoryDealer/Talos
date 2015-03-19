@@ -15,80 +15,63 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: CollisionComponent.hpp
+// File: RotationComponent.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines CollisionComponent class.
+// Defines RotationComponent class.
 // ========================================================================= //
 
-#ifndef __COLLISIONCOMPONENT_HPP__
-#define __COLLISIONCOMPONENT_HPP__
+#ifndef __ROTATIONCOMPONENT_HPP__
+#define __ROTATIONCOMPONENT_HPP__
 
 // ========================================================================= //
 
 #include "Component.hpp"
 
 // ========================================================================= //
-
-using namespace physx;
-
-// ========================================================================= //
-// A static collision object in the physics simulation.
-class CollisionComponent : public Component
+// Rotates scene nodes each frame by specified value on specified axis.
+class RotationComponent : public Component
 {
 public:
     // Default initializes member data.
-    explicit CollisionComponent(void);
+    explicit RotationComponent(void);
 
     // Empty destructor.
-    virtual ~CollisionComponent(void) override;
-
-    // Methods of creating collision volume.
-    enum class Type{
-        Box,
-        Mesh,
-        Plane
-    };
+    virtual ~RotationComponent(void) override;
 
     // Empty.
     virtual void init(void) override;
 
-    // Initializes PhysX actor, adds to World's PxScene.
-    virtual void init(EntityPtr entity);
-
-    // Removes PhysX actor from World's PxScene.
+    // Empty.
     virtual void destroy(void) override;
 
-    // Retrieves the actor's position and orientation, applies them to the
-    // attached SceneComponent for rendering.
+    // Applies all rotations.
     virtual void update(void) override;
 
-    // Empty.
+    // Handles messages.
     virtual void message(ComponentMessage& msg) override;
 
-    // Getters:
+    // Component functions:
 
-    // Returns position in form of Ogre::Vector3.
-    const Ogre::Vector3 getPosition(void) const;
+    // Adds a new rotation to the list of rotations to process each frame.
+    void addRotation(const Ogre::Vector3& axis,
+                     const Ogre::Degree& amount,
+                     const std::string& nodeName = "");
 
-    // Returns position in form of Ogre::Quaternion.
-    const Ogre::Quaternion getOrientation(void) const;
+    // Assigns scene nodes to each rotation based on names.
+    void setup(SceneComponentPtr sceneC);
 
-    // Setters:
+    // === //
 
-    // Sets position of global pose.
-    void setPosition(const Ogre::Vector3& pos);
-
-    // Sets orientation of global pose.
-    void setOrientation(const Ogre::Quaternion& orientation);
-
-    // Sets type of collision
-    void setType(const Type& type);
+    struct Rotation{
+        Ogre::SceneNode* node;
+        Ogre::Vector3 axis;
+        Ogre::Radian angle;
+    };
 
 private:
-    PxRigidStatic* m_rigidActor;
-    Type m_type;
-    EntityID m_entityID;
+    std::vector<Rotation> m_rotations;
+    std::vector<std::string> m_nodeNames;
 };
 
 // ========================================================================= //

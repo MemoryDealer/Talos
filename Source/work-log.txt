@@ -435,6 +435,7 @@
 == 3/18/16 ==
 * Added player action ability; pressing e casts a ray forward and sends an action message to the Entity that was hit. This will be used for interacting with world objects.
 * Server wasn't clearing player & client list on destruction, fixed that.
+* Added RotationComponent which rotates a scene node every frame. It can handle mutliple nodes that are part of a mesh; a helicopter for instance.
 
 == TODO ==
 * Add PScene::addActor()

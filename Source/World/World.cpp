@@ -28,6 +28,7 @@
 #include "Component/ModelComponent.hpp"
 #include "Component/NetworkComponent.hpp"
 #include "Component/PhysicsComponent.hpp"
+#include "Component/RotationComponent.hpp"
 #include "Component/SceneComponent.hpp"
 #include "Entity/EntityPool.hpp"
 #include "Environment.hpp"
@@ -415,6 +416,20 @@ template<> World::componentReturn<PhysicsComponent>::type
 World::attachComponent<PhysicsComponent>(EntityPtr entity)
 {
     PhysicsComponentPtr c = m_componentFactory->createPhysicsComponent();
+    initComponent(c, entity, shared_from_this());
+    return c;
+}
+
+// ========================================================================= //
+
+template<> struct World::componentReturn<RotationComponent>{
+    typedef RotationComponentPtr type;
+};
+
+template<> World::componentReturn<RotationComponent>::type
+World::attachComponent<RotationComponent>(EntityPtr entity)
+{
+    RotationComponentPtr c = m_componentFactory->createRotationComponent();
     initComponent(c, entity, shared_from_this());
     return c;
 }
