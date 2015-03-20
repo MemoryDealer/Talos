@@ -122,6 +122,17 @@ void GameState::enter(void)
     track = m_world->attachComponent<TrackComponent>(door);
     track->addKeyFrame(0.f, Ogre::Vector3(75.f, 0.f, 0.f));
     track->addKeyFrame(5000.f, Ogre::Vector3(75.f, -75.f, 0.f));
+    track->setLocked(true);
+
+    // Create switch to door.
+    EntityPtr link = m_world->createEntity();
+    m_world->attachComponent<SceneComponent>(link);
+    m_world->attachComponent<ModelComponent>(link)->setMesh("cylinder.mesh");
+    m_world->attachComponent<CollisionComponent>(link);
+    m_world->attachComponent<LinkComponent>(link)->addLinkID(door->getID());
+    track = m_world->attachComponent<TrackComponent>(link);
+    track->addKeyFrame(0.f, Ogre::Vector3(0.f, -50.f, 0.f));
+    track->addKeyFrame(5000.f, Ogre::Vector3(0.f, -60.f, 0.f));
 
     // Create ball.
     EntityPtr ball = m_world->createEntity();
@@ -219,8 +230,6 @@ void GameState::update(void)
                         Ogre::SceneNode* child = static_cast<Ogre::SceneNode*>(itr.getNext());
                         child->showBoundingBox(bb);
                     }
-
-                    m_world->getEntityPtr(5)->getComponent<TrackComponent>()->reverse();
                 }
 
                 // Send input commands to the player.

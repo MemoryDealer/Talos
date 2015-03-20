@@ -32,12 +32,14 @@ class ActorComponent;
 class CameraComponent;
 class CollisionComponent;
 class LightComponent;
+class LinkComponent;
 class ModelComponent;
 class NetworkComponent;
 class PhysicsComponent;
 class RotationComponent;
 class SceneComponent;
 class TrackComponent;
+class WeaponComponent;
 
 // Other forward declarations.
 
@@ -50,12 +52,14 @@ typedef ActorComponent* ActorComponentPtr;
 typedef CameraComponent* CameraComponentPtr;
 typedef CollisionComponent* CollisionComponentPtr;
 typedef LightComponent* LightComponentPtr;
+typedef LinkComponent* LinkComponentPtr;
 typedef ModelComponent* ModelComponentPtr;
 typedef NetworkComponent* NetworkComponentPtr;
 typedef PhysicsComponent* PhysicsComponentPtr;
 typedef RotationComponent* RotationComponentPtr;
 typedef SceneComponent* SceneComponentPtr;
 typedef TrackComponent* TrackComponentPtr;
+typedef WeaponComponent* WeaponComponentPtr;
 
 // ========================================================================= //
 

@@ -36,7 +36,8 @@ m_keyFrames(),
 m_enabled(false),
 m_loop(false),
 m_reversalLoop(false),
-m_forward(true)
+m_forward(true),
+m_locked(false)
 {
 
 }
@@ -59,7 +60,11 @@ void TrackComponent::init(void)
 
 void TrackComponent::destroy(void)
 {
+    Ogre::SceneManager* scene = this->getWorld()->getSceneManager();
 
+    m_track->removeAllKeyFrames();
+    m_animation->destroyAllNodeTracks();
+    scene->destroyAnimation(m_animation->getName());
 }
 
 // ========================================================================= //
@@ -91,9 +96,19 @@ void TrackComponent::message(ComponentMessage& msg)
         break;
 
     case ComponentMessage::Type::Action:
+        if (!m_locked){
+            if (!m_loop && !m_reversalLoop){
+                this->reverse();
+            }
+        }
+        break;
+
+    case ComponentMessage::Type::LinkActivate:
+        m_locked = false;
         if (!m_loop && !m_reversalLoop){
             this->reverse();
         }
+        m_locked = true;
         break;
     }
 }
@@ -163,6 +178,9 @@ void TrackComponent::setup(Ogre::SceneNode* node)
     if (!m_loop){
         m_animationState->setLoop(false);
     }
+
+    // Free temporary key frame storage.
+    m_keyFrames.clear();
 }
 
 // ========================================================================= //
@@ -179,12 +197,19 @@ void TrackComponent::setEnabled(const bool enabled)
 
 void TrackComponent::reverse(void)
 {
+    // Don't do anything if this track is locked.
+    if (m_locked){
+        return;
+    }
+
+    // If the animation has never been enabled, reset its time to 0.f and start.
     if (!m_animationState->getEnabled()){
         m_animationState->setTimePosition(0.f);
         m_animationState->setEnabled(true);
         return;
     }
 
+    // Reverse direction of animation.
     m_forward = !m_forward;
 }
 
@@ -204,6 +229,13 @@ void TrackComponent::setLoop(const bool loop)
 void TrackComponent::setReversalLoop(const bool loop)
 {
     m_reversalLoop = loop;
+}
+
+// ========================================================================= //
+
+void TrackComponent::setLocked(const bool locked)
+{
+    m_locked = locked;
 }
 
 // ========================================================================= //

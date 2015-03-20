@@ -366,6 +366,9 @@
     <ClCompile Include="Source\Component\TrackComponent.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Component\LinkComponent.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\Engine.hpp">
@@ -657,6 +660,9 @@
       <Filter>Header Files\Component</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\AllComponents.hpp">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\LinkComponent.hpp">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
   </ItemGroup>

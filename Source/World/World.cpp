@@ -113,6 +113,8 @@ void World::init(const bool usePhysics)
         new Pool<CollisionComponent>(common));
     m_componentPools[&typeid(LightComponent)].reset(
         new Pool<LightComponent>(16));
+    m_componentPools[&typeid(LinkComponent)].reset(
+        new Pool<LinkComponent>(common));
     m_componentPools[&typeid(ModelComponent)].reset(
         new Pool<ModelComponent>(common));
     m_componentPools[&typeid(NetworkComponent)].reset(
@@ -386,7 +388,7 @@ World::attachComponent<CollisionComponent>(EntityPtr entity)
 // ========================================================================= //
 
 template<> struct World::componentReturn<LightComponent>{ 
-    typedef LightComponentPtr type; 
+    typedef LightComponentPtr type;
 };
 
 template<> World::componentReturn<LightComponent>::type 
@@ -396,6 +398,23 @@ World::attachComponent<LightComponent>(EntityPtr entity)
         m_componentPools[&typeid(LightComponent)].get());
 
     LightComponentPtr c = pool->create();
+    initComponent(c, entity, shared_from_this());
+    return c;
+}
+
+// ========================================================================= //
+
+template<> struct World::componentReturn<LinkComponent>{
+    typedef LinkComponentPtr type;
+};
+
+template<> World::componentReturn<LinkComponent>::type
+World::attachComponent<LinkComponent>(EntityPtr entity)
+{
+    Pool<LinkComponent>* pool = static_cast<Pool<LinkComponent>*>(
+        m_componentPools[&typeid(LinkComponent)].get());
+
+    LinkComponentPtr c = pool->create();
     initComponent(c, entity, shared_from_this());
     return c;
 }

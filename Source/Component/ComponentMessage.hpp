@@ -53,6 +53,7 @@ struct ComponentMessage{
         Translate,
         Look,
         Action,
+        LinkActivate,
         TransformUpdate,
         Command,
         

@@ -15,51 +15,48 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: Pool.hpp
+// File: LinkComponent.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines Pool class.
+// Defines LinkComponent class.
 // ========================================================================= //
 
-#ifndef __POOL_HPP__
-#define __POOL_HPP__
+#ifndef __LINKCOMPONENT_HPP__
+#define __LINKCOMPONENT_HPP__
 
 // ========================================================================= //
 
-class AbstractPool
+#include "Component.hpp"
+
+// ========================================================================= //
+// Can be used to link an entity to another, for things such as buttons, 
+// switches, levers, etc.
+class LinkComponent : public Component
 {
 public:
-    virtual ~AbstractPool(void) = 0 { }    
-};
+    explicit LinkComponent(void);
 
-// ========================================================================= //
-// Generic class for pooling objects in contiguous memory.
-template<typename T>
-class Pool : public AbstractPool
-{
-public:
-    // Allocates pool and in use bits.
-    explicit Pool(const uint32_t size);
+    virtual ~LinkComponent(void) override;
 
-    // Frees pool and in use bits.
-    virtual ~Pool(void) override;
+    // Empty.
+    virtual void init(void) override;
 
-    // Returns next available object from pool.
-    T* create(void);
+    // Empty.
+    virtual void destroy(void) override;
 
-    // Getters:
+    // Empty.
+    virtual void update(void) override;
 
-    // Returns size of pool.
-    const uint32_t getSize(void) const;
+    // Handles action messages, routes them to linked entity.
+    virtual void message(ComponentMessage& msg);
 
-    // Returns internal pool.
-    T* getPool(void) const;
+    // Component functions:
+
+    // Adds an EntityID to link this entity to.
+    void addLinkID(const EntityID id);
 
 private:
-    T* m_pool;
-    bool* m_inUse;
-    uint32_t m_numActive;
-    uint32_t m_size;
+    std::vector<EntityID> m_linkedIDs;
 };
 
 // ========================================================================= //

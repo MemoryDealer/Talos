@@ -18,6 +18,7 @@
     <ClCompile Include="Source\Component\CollisionComponent.cpp" />
     <ClCompile Include="Source\Component\Component.cpp" />
     <ClCompile Include="Source\Component\LightComponent.cpp" />
+    <ClCompile Include="Source\Component\LinkComponent.cpp" />
     <ClCompile Include="Source\Component\ModelComponent.cpp" />
     <ClCompile Include="Source\Component\NetworkComponent.cpp" />
     <ClCompile Include="Source\Component\PhysicsComponent.cpp" />
@@ -103,6 +104,7 @@
     <ClInclude Include="Source\Component\ComponentDecls.hpp" />
     <ClInclude Include="Source\Component\ComponentMessage.hpp" />
     <ClInclude Include="Source\Component\LightComponent.hpp" />
+    <ClInclude Include="Source\Component\LinkComponent.hpp" />
     <ClInclude Include="Source\Component\ModelComponent.hpp" />
     <ClInclude Include="Source\Component\NetworkComponent.hpp" />
     <ClInclude Include="Source\Component\NullComponent.hpp" />

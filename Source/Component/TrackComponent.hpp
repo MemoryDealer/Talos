@@ -40,6 +40,7 @@ public:
     // Empty destructor.
     virtual ~TrackComponent(void) override;
 
+    // Empty.
     virtual void init(void) override;
 
     // Frees any track data.
@@ -76,6 +77,9 @@ public:
     // Sets track animation to continuously loop back and forth if true.
     void setReversalLoop(const bool loop);
 
+    // Sets to locked if true (only a switch can activate it).
+    void setLocked(const bool locked);
+
     // === //
 
     struct KeyFrame{
@@ -92,6 +96,7 @@ private:
     bool m_enabled;
     bool m_loop, m_reversalLoop;
     bool m_forward; // Direction the animation is progressing.
+    bool m_locked;
 };
 
 // ========================================================================= //

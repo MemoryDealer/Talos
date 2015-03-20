@@ -15,55 +15,82 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: Pool.hpp
+// File: LinkComponent.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines Pool class.
+// Implements LinkComponent class.
 // ========================================================================= //
 
-#ifndef __POOL_HPP__
-#define __POOL_HPP__
+#include "ComponentMessage.hpp"
+#include "Entity/Entity.hpp"
+#include "LinkComponent.hpp"
+#include "World/World.hpp"
 
 // ========================================================================= //
 
-class AbstractPool
+LinkComponent::LinkComponent(void) :
+m_linkedIDs()
 {
-public:
-    virtual ~AbstractPool(void) = 0 { }    
-};
+
+}
 
 // ========================================================================= //
-// Generic class for pooling objects in contiguous memory.
-template<typename T>
-class Pool : public AbstractPool
+
+LinkComponent::~LinkComponent(void)
 {
-public:
-    // Allocates pool and in use bits.
-    explicit Pool(const uint32_t size);
 
-    // Frees pool and in use bits.
-    virtual ~Pool(void) override;
-
-    // Returns next available object from pool.
-    T* create(void);
-
-    // Getters:
-
-    // Returns size of pool.
-    const uint32_t getSize(void) const;
-
-    // Returns internal pool.
-    T* getPool(void) const;
-
-private:
-    T* m_pool;
-    bool* m_inUse;
-    uint32_t m_numActive;
-    uint32_t m_size;
-};
+}
 
 // ========================================================================= //
 
-#endif
+void LinkComponent::init(void)
+{
+
+}
+
+// ========================================================================= //
+
+void LinkComponent::destroy(void)
+{
+
+}
+
+// ========================================================================= //
+
+void LinkComponent::update(void)
+{
+
+}
+
+// ========================================================================= //
+
+void LinkComponent::message(ComponentMessage& msg)
+{
+    switch (msg.type){
+    default:
+        break;
+
+    case ComponentMessage::Type::Action:
+        {
+            // Link activate all linked entities.
+            ComponentMessage linkActivate(ComponentMessage::Type::LinkActivate);
+            for (auto& i : m_linkedIDs){
+                this->getWorld()->getEntityPtr(i)->message(linkActivate);
+            }
+        }
+        break;
+    }
+}
+
+// ========================================================================= //
+
+// Component functions:
+
+// ========================================================================= //
+
+void LinkComponent::addLinkID(const EntityID id)
+{
+    m_linkedIDs.push_back(id);
+}
 
 // ========================================================================= //

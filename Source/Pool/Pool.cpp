@@ -31,6 +31,7 @@ template class Pool<ActorComponent>;
 template class Pool<CameraComponent>;
 template class Pool<CollisionComponent>;
 template class Pool<LightComponent>;
+template class Pool<LinkComponent>;
 template class Pool<ModelComponent>;
 template class Pool<NetworkComponent>;
 template class Pool<PhysicsComponent>;

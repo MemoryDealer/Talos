@@ -30,6 +30,7 @@
 #include "CameraComponent.hpp"
 #include "CollisionComponent.hpp"
 #include "LightComponent.hpp"
+#include "LinkComponent.hpp"
 #include "ModelComponent.hpp"
 #include "NetworkComponent.hpp"
 #include "PhysicsComponent.hpp"
