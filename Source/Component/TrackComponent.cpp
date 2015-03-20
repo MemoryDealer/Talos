@@ -21,6 +21,7 @@
 // Implements TrackComponent class.
 // ========================================================================= //
 
+#include "ComponentMessage.hpp"
 #include "Core/Talos.hpp"
 #include "TrackComponent.hpp"
 #include "World/World.hpp"
@@ -32,6 +33,7 @@ m_animation(nullptr),
 m_animationState(nullptr),
 m_track(nullptr),
 m_keyFrames(),
+m_enabled(false),
 m_loop(false),
 m_reversalLoop(false),
 m_forward(true)
@@ -84,7 +86,16 @@ void TrackComponent::update(void)
 
 void TrackComponent::message(ComponentMessage& msg)
 {
+    switch (msg.type){
+    default:
+        break;
 
+    case ComponentMessage::Type::Action:
+        if (!m_loop && !m_reversalLoop){
+            this->reverse();
+        }
+        break;
+    }
 }
 
 // ========================================================================= //
@@ -136,13 +147,17 @@ void TrackComponent::setup(Ogre::SceneNode* node)
         if (i.orientation != Ogre::Quaternion::IDENTITY){
             kf->setRotation(i.orientation);
         }
+        else{
+            kf->setRotation(node->_getDerivedOrientation());
+        }
     }
 
     // Create the animation state for controlling the animation.
     m_animationState = scene->createAnimationState(name);
 
-    // lbjaljdfivaoii
-    m_animationState->setEnabled(true);
+    if (m_enabled){
+        m_animationState->setEnabled(true);
+    }
     
     // Turn off looping if not set.
     if (!m_loop){
@@ -152,8 +167,24 @@ void TrackComponent::setup(Ogre::SceneNode* node)
 
 // ========================================================================= //
 
+void TrackComponent::setEnabled(const bool enabled)
+{
+    m_enabled = enabled;
+    if (m_animationState){
+        m_animationState->setEnabled(enabled);
+    }
+}
+
+// ========================================================================= //
+
 void TrackComponent::reverse(void)
 {
+    if (!m_animationState->getEnabled()){
+        m_animationState->setTimePosition(0.f);
+        m_animationState->setEnabled(true);
+        return;
+    }
+
     m_forward = !m_forward;
 }
 

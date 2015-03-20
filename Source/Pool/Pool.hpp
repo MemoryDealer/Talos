@@ -38,17 +38,28 @@ template<typename T>
 class Pool : public AbstractPool
 {
 public:
-    explicit Pool(const int size);
+    // Allocates pool and in use bits.
+    explicit Pool(const uint32_t size);
 
+    // Frees pool and in use bits.
     virtual ~Pool(void) override;
 
+    // Returns next available object from pool.
     T* create(void);
+
+    // Getters:
+
+    // Returns size of pool.
+    const uint32_t getSize(void) const;
+
+    // Returns internal pool.
+    T* getPool(void) const;
 
 private:
     T* m_pool;
     bool* m_inUse;
     int m_numActive;
-    int m_size;
+    uint32_t m_size;
 };
 
 // ========================================================================= //

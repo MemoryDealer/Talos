@@ -104,7 +104,7 @@ void World::init(const bool usePhysics)
     m_entityPool.reset(new EntityPool(256));
 
     // Allocate component pools.
-    const int common = 1024;
+    const uint32_t common = 1024;
     m_componentPools[&typeid(ActorComponent)].reset(
         new Pool<ActorComponent>(common));
     m_componentPools[&typeid(CameraComponent)].reset(

@@ -429,7 +429,7 @@
 * The above re-introduced the problem of moving faster when going diagonal, since the normalised vector is just the movement vector for one direction and not both.
 
 == 3/17/16 ==
-* Completely restructed how the World object is managed. Before it was stack allocated in EngineState, but now it's a smart pointer and passed everywhere. 
+* Completely restructured how the World object is managed. Before it was stack allocated in EngineState, but now it's a smart pointer and passed everywhere. 
 * Also eliminated the need for passing World into Component init, update, and destroy methods. Component now just stores a smart pointer to the World. 
 
 == 3/18/16 ==
@@ -441,10 +441,12 @@
 * Eliminated ComponentFactory as it was needlessly redundant, moved all pools to World.
 * Created TrackComponent, which animates entities along a set of points with time, position, and orientation. Can be looped if desired.
     This can be used for doors by calling the reverse() method, to open/close it.
+* Made a working door.
 
 == TODO ==
 * Add PScene::addActor()
 * Move input update into world.
+* Changed all resources to single directory (e.g., point exe in debug/release directories to directory above for finding resources).
 * Change UI/Net events to use boost::variant.
 * Add ability to specify box half extents directly in collision objects for invisible walls and such.
 * Add PhysX mesh (cooking) collision volumes for models.

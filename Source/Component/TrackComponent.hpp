@@ -62,6 +62,9 @@ public:
     // Creates node animation track on specified node.
     void setup(Ogre::SceneNode* node);
 
+    // Sets the animation state to enabled if true.
+    void setEnabled(const bool enabled);
+
     // Reverses direction of animation.
     void reverse(void);
 
@@ -86,6 +89,7 @@ private:
     Ogre::AnimationState* m_animationState;
     Ogre::NodeAnimationTrack* m_track;
     std::vector<KeyFrame> m_keyFrames;
+    bool m_enabled;
     bool m_loop, m_reversalLoop;
     bool m_forward; // Direction the animation is progressing.
 };

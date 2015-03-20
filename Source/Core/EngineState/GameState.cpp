@@ -110,7 +110,18 @@ void GameState::enter(void)
     TrackComponentPtr track = m_world->attachComponent<TrackComponent>(house);
     track->addKeyFrame(0.f, Ogre::Vector3(-750.f, 0.f, 1500.f));
     track->addKeyFrame(1000.f, Ogre::Vector3(-750.f, 0.f, -2000.f));
-    //track->setLoop(true);
+    track->setReversalLoop(true);
+    track->setEnabled(true);
+
+    EntityPtr door = m_world->createEntity();
+    m_world->attachComponent<SceneComponent>(door);
+    m_world->attachComponent<ModelComponent>(door)->setMesh("Plane/Board", "Board");
+    m_world->attachComponent<CollisionComponent>(door);
+    door->getComponent<SceneComponent>()->getSceneNode()->rotate(Ogre::Vector3::UNIT_Z, Ogre::Degree(90.f));
+    door->getComponent<SceneComponent>()->getSceneNode()->translate(75.f, 0.f, 0.f);
+    track = m_world->attachComponent<TrackComponent>(door);
+    track->addKeyFrame(0.f, Ogre::Vector3(75.f, 0.f, 0.f));
+    track->addKeyFrame(5000.f, Ogre::Vector3(75.f, -75.f, 0.f));
 
     // Create ball.
     EntityPtr ball = m_world->createEntity();
@@ -209,7 +220,7 @@ void GameState::update(void)
                         child->showBoundingBox(bb);
                     }
 
-                    m_world->getEntityPtr(4)->getComponent<TrackComponent>()->reverse();
+                    m_world->getEntityPtr(5)->getComponent<TrackComponent>()->reverse();
                 }
 
                 // Send input commands to the player.

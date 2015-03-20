@@ -41,7 +41,7 @@ template class Pool<TrackComponent>;
 // ========================================================================= //
 
 template<typename T>
-Pool<T>::Pool(const int size) :
+Pool<T>::Pool(const uint32_t size) :
 m_pool(new T[size]),
 m_inUse(new bool[size]),
 m_numActive(0),
@@ -50,11 +50,16 @@ m_size(size)
     
 }
 
+// ========================================================================= //
+
 template<typename T>
 Pool<T>::~Pool(void)
 {
     delete[] m_pool;
+    delete[] m_inUse;
 }
+
+// ========================================================================= //
 
 template<typename T>
 T* Pool<T>::create(void)
@@ -62,6 +67,26 @@ T* Pool<T>::create(void)
     Assert(m_numActive < m_size, "Pool overflow!");
 
     return &m_pool[m_numActive++];
+}
+
+// ========================================================================= //
+
+// Getters:
+
+// ========================================================================= //
+
+template<typename T>
+const uint32_t Pool<T>::getSize(void) const
+{
+    return m_size;
+}
+
+// ========================================================================= //
+
+template<typename T>
+T* Pool<T>::getPool(void) const
+{
+    return m_pool;
 }
 
 // ========================================================================= //
