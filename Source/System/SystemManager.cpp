@@ -22,13 +22,7 @@
 // ========================================================================= //
 
 #include "CollisionSystem.hpp"
-#include "Component/ActorComponent.hpp"
-#include "Component/CameraComponent.hpp"
-#include "Component/LightComponent.hpp"
-#include "Component/ModelComponent.hpp"
-#include "Component/NetworkComponent.hpp"
-#include "Component/RotationComponent.hpp"
-#include "Component/SceneComponent.hpp"
+#include "Component/AllComponents.hpp"
 #include "Entity/Entity.hpp"
 #include "PhysicsSystem.hpp"
 #include "System.hpp"
@@ -126,6 +120,12 @@ void SystemManager::processEntity(EntityPtr entity)
         // Setup rotation component.
         if (entity->hasComponent<RotationComponent>()){
             entity->getComponent<RotationComponent>()->setup(sceneC);
+        }
+
+        // Setup track animation component.
+        if (entity->hasComponent<TrackComponent>()){
+            entity->getComponent<TrackComponent>()->setup(
+                sceneC->getSceneNode());
         }
     }
     

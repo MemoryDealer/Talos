@@ -23,6 +23,7 @@
     <ClCompile Include="Source\Component\PhysicsComponent.cpp" />
     <ClCompile Include="Source\Component\RotationComponent.cpp" />
     <ClCompile Include="Source\Component\SceneComponent.cpp" />
+    <ClCompile Include="Source\Component\TrackComponent.cpp" />
     <ClCompile Include="Source\Config\Config.cpp" />
     <ClCompile Include="Source\Core\Assert.cpp" />
     <ClCompile Include="Source\Core\Engine.cpp" />
@@ -95,6 +96,7 @@
     <ClInclude Include="Source\Command\CommandTypes.hpp" />
     <ClInclude Include="Source\Command\NullCommand.hpp" />
     <ClInclude Include="Source\Component\ActorComponent.hpp" />
+    <ClInclude Include="Source\Component\AllComponents.hpp" />
     <ClInclude Include="Source\Component\CameraComponent.hpp" />
     <ClInclude Include="Source\Component\CollisionComponent.hpp" />
     <ClInclude Include="Source\Component\Component.hpp" />
@@ -107,6 +109,7 @@
     <ClInclude Include="Source\Component\PhysicsComponent.hpp" />
     <ClInclude Include="Source\Component\RotationComponent.hpp" />
     <ClInclude Include="Source\Component\SceneComponent.hpp" />
+    <ClInclude Include="Source\Component\TrackComponent.hpp" />
     <ClInclude Include="Source\Config\Config.hpp" />
     <ClInclude Include="Source\Core\Assert.hpp" />
     <ClInclude Include="Source\Core\Engine.hpp" />

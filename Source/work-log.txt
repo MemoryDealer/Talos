@@ -439,6 +439,8 @@
 
 == 3/19/16 ==
 * Eliminated ComponentFactory as it was needlessly redundant, moved all pools to World.
+* Created TrackComponent, which animates entities along a set of points with time, position, and orientation. Can be looped if desired.
+    This can be used for doors by calling the reverse() method, to open/close it.
 
 == TODO ==
 * Add PScene::addActor()

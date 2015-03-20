@@ -21,15 +21,7 @@
 // Implements World class.
 // ========================================================================= //
 
-#include "Component/ActorComponent.hpp"
-#include "Component/CameraComponent.hpp"
-#include "Component/CollisionComponent.hpp"
-#include "Component/LightComponent.hpp"
-#include "Component/ModelComponent.hpp"
-#include "Component/NetworkComponent.hpp"
-#include "Component/PhysicsComponent.hpp"
-#include "Component/RotationComponent.hpp"
-#include "Component/SceneComponent.hpp"
+#include "Component/AllComponents.hpp"
 #include "Entity/EntityPool.hpp"
 #include "Environment.hpp"
 #include "Input/Input.hpp"
@@ -113,15 +105,26 @@ void World::init(const bool usePhysics)
 
     // Allocate component pools.
     const int common = 1024;
-    m_componentPools[&typeid(ActorComponent)].reset(new Pool<ActorComponent>(common));
-    m_componentPools[&typeid(CameraComponent)].reset(new Pool<CameraComponent>(5));
-    m_componentPools[&typeid(CollisionComponent)].reset(new Pool<CollisionComponent>(common));
-    m_componentPools[&typeid(LightComponent)].reset(new Pool<LightComponent>(16));
-    m_componentPools[&typeid(ModelComponent)].reset(new Pool<ModelComponent>(common));
-    m_componentPools[&typeid(NetworkComponent)].reset(new Pool<NetworkComponent>(4));
-    m_componentPools[&typeid(PhysicsComponent)].reset(new Pool<PhysicsComponent>(common));
-    m_componentPools[&typeid(RotationComponent)].reset(new Pool<RotationComponent>(common));
-    m_componentPools[&typeid(SceneComponent)].reset(new Pool<SceneComponent>(common));
+    m_componentPools[&typeid(ActorComponent)].reset(
+        new Pool<ActorComponent>(common));
+    m_componentPools[&typeid(CameraComponent)].reset(
+        new Pool<CameraComponent>(5));
+    m_componentPools[&typeid(CollisionComponent)].reset(
+        new Pool<CollisionComponent>(common));
+    m_componentPools[&typeid(LightComponent)].reset(
+        new Pool<LightComponent>(16));
+    m_componentPools[&typeid(ModelComponent)].reset(
+        new Pool<ModelComponent>(common));
+    m_componentPools[&typeid(NetworkComponent)].reset(
+        new Pool<NetworkComponent>(4));
+    m_componentPools[&typeid(PhysicsComponent)].reset(
+        new Pool<PhysicsComponent>(common));
+    m_componentPools[&typeid(RotationComponent)].reset(
+        new Pool<RotationComponent>(common));
+    m_componentPools[&typeid(SceneComponent)].reset(
+        new Pool<SceneComponent>(common));
+    m_componentPools[&typeid(TrackComponent)].reset(
+        new Pool<TrackComponent>(common));
 
     m_systemManager.reset(new SystemManager(shared_from_this()));
 
@@ -478,6 +481,23 @@ World::attachComponent<SceneComponent>(EntityPtr entity)
         m_componentPools[&typeid(SceneComponent)].get());
 
     SceneComponentPtr c = pool->create();
+    initComponent(c, entity, shared_from_this());
+    return c;
+}
+
+// ========================================================================= //
+
+template<> struct World::componentReturn<TrackComponent>{
+    typedef TrackComponentPtr type;
+};
+
+template<> World::componentReturn<TrackComponent>::type 
+World::attachComponent<TrackComponent>(EntityPtr entity)
+{
+    Pool<TrackComponent>* pool = static_cast<Pool<TrackComponent>*>(
+        m_componentPools[&typeid(TrackComponent)].get());
+
+    TrackComponentPtr c = pool->create();
     initComponent(c, entity, shared_from_this());
     return c;
 }

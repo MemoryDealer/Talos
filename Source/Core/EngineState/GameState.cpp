@@ -22,16 +22,7 @@
 // ========================================================================= //
 
 #include "Command/Command.hpp"
-#include "Component/ActorComponent.hpp"
-#include "Component/CameraComponent.hpp"
-#include "Component/CollisionComponent.hpp"
-#include "Component/ComponentMessage.hpp"
-#include "Component/LightComponent.hpp"
-#include "Component/ModelComponent.hpp"
-#include "Component/NetworkComponent.hpp"
-#include "Component/PhysicsComponent.hpp"
-#include "Component/RotationComponent.hpp"
-#include "Component/SceneComponent.hpp"
+#include "Component/AllComponents.hpp"
 #include "Core/EngineNotifications.hpp"
 #include "GameState.hpp"
 #include "Input/Input.hpp"
@@ -87,7 +78,7 @@ void GameState::enter(void)
     m_world->attachComponent<SceneComponent>(plane);
     modelC = m_world->attachComponent<ModelComponent>(plane);
     modelC->setMesh("Plane/Board", "Board");      
-    m_world->attachComponent<CollisionComponent>(plane);
+    m_world->attachComponent<PhysicsComponent>(plane)->setKinematic(true);
     m_world->attachComponent<RotationComponent>(plane)->addRotation(
         Ogre::Vector3::UNIT_Y, 0.1f);
     ComponentMessage msg(ComponentMessage::Type::Translate);
@@ -111,10 +102,15 @@ void GameState::enter(void)
     m_world->attachComponent<SceneComponent>(house);
     m_world->attachComponent<ModelComponent>(house)->setMesh("tudorhouse.mesh", "Board");
     m_world->attachComponent<CollisionComponent>(house);
-    m_world->attachComponent<RotationComponent>(house)->addRotation(
-        Ogre::Vector3::UNIT_Y, 1.f);
+   /* m_world->attachComponent<RotationComponent>(house)->addRotation(
+        Ogre::Vector3::UNIT_Y, 1.f);*/
     msg.data = Ogre::Vector3(-750.f, 0.f, 0.f);
     house->message(msg);
+
+    TrackComponentPtr track = m_world->attachComponent<TrackComponent>(house);
+    track->addKeyFrame(0.f, Ogre::Vector3(-750.f, 0.f, 1500.f));
+    track->addKeyFrame(1000.f, Ogre::Vector3(-750.f, 0.f, -2000.f));
+    //track->setLoop(true);
 
     // Create ball.
     EntityPtr ball = m_world->createEntity();
@@ -212,6 +208,8 @@ void GameState::update(void)
                         Ogre::SceneNode* child = static_cast<Ogre::SceneNode*>(itr.getNext());
                         child->showBoundingBox(bb);
                     }
+
+                    m_world->getEntityPtr(4)->getComponent<TrackComponent>()->reverse();
                 }
 
                 // Send input commands to the player.

@@ -96,6 +96,9 @@ public:
     // Returns orientation of pitch node.
     const Ogre::Quaternion& getPitchOrientation(void) const;
 
+    // Returns pointer to kinematic character controller.
+    KCC* getKCC(void) const;
+
     // Setters:
 
     // Sets position of actor's root node and character controller's position.

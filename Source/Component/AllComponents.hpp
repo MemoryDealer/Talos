@@ -15,39 +15,27 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: PhysicsSystem.hpp
+// File: AllComponents.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines PhysicsSystem class.
+// Simply includes all component classes for easy access when needed.
 // ========================================================================= //
 
-#ifndef __PHYSICS_SYSTEM_HPP__
-#define __PHYSICS_SYSTEM_HPP__
+#ifndef __ALLCOMPONENTS_HPP__
+#define __ALLCOMPONENTS_HPP__
 
 // ========================================================================= //
 
-#include "System.hpp"
-#include <characterkinematic/PxControllerObstacles.h>
-
-// ========================================================================= //
-// Updates SceneComponents from PhysicsComponents.
-class PhysicsSystem : public System
-{
-public:
-    // Empty constructor.
-    explicit PhysicsSystem(void);
-
-    // Empty destructor.
-    virtual ~PhysicsSystem(void) override;
-
-    virtual void onEntityAttached(EntityPtr entity) override;
-
-    // Gets transform from PhysicsComponent and applies it to SceneComponent.
-    virtual void update(void) override;
-
-private:
-    physx::ObstacleHandle m_oHandles[32];
-};
+#include "ActorComponent.hpp"
+#include "CameraComponent.hpp"
+#include "CollisionComponent.hpp"
+#include "LightComponent.hpp"
+#include "ModelComponent.hpp"
+#include "NetworkComponent.hpp"
+#include "PhysicsComponent.hpp"
+#include "RotationComponent.hpp"
+#include "SceneComponent.hpp"
+#include "TrackComponent.hpp"
 
 // ========================================================================= //
 
