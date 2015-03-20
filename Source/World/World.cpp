@@ -32,7 +32,6 @@
 #include "Component/SceneComponent.hpp"
 #include "Entity/EntityPool.hpp"
 #include "Environment.hpp"
-#include "Factory/ComponentFactory.hpp"
 #include "Input/Input.hpp"
 #include "Network/NullNetwork.hpp"
 #include "Network/Client/Client.hpp"
@@ -63,7 +62,7 @@ m_server(nullptr),
 m_client(nullptr),
 m_entityPool(nullptr),
 m_entityIDMap(),
-m_componentFactory(nullptr),
+m_componentPools(),
 m_systemManager(nullptr),
 m_player(nullptr),
 m_hasPlayer(false),
@@ -103,7 +102,7 @@ void World::init(const bool usePhysics)
     // Initialize environment.
     m_environment.reset(new Environment(shared_from_this(), m_graphics));
     m_environment->init();
-    
+
     if (usePhysics){
         this->initPhysics();
     }
@@ -112,9 +111,17 @@ void World::init(const bool usePhysics)
     // @TODO: Read pool size from config file.
     m_entityPool.reset(new EntityPool(256));
 
-    // Allocate component factory (component pools).
-    m_componentFactory.reset(new ComponentFactory());
-    m_componentFactory->init();
+    // Allocate component pools.
+    const int common = 1024;
+    m_componentPools[&typeid(ActorComponent)].reset(new Pool<ActorComponent>(common));
+    m_componentPools[&typeid(CameraComponent)].reset(new Pool<CameraComponent>(5));
+    m_componentPools[&typeid(CollisionComponent)].reset(new Pool<CollisionComponent>(common));
+    m_componentPools[&typeid(LightComponent)].reset(new Pool<LightComponent>(16));
+    m_componentPools[&typeid(ModelComponent)].reset(new Pool<ModelComponent>(common));
+    m_componentPools[&typeid(NetworkComponent)].reset(new Pool<NetworkComponent>(4));
+    m_componentPools[&typeid(PhysicsComponent)].reset(new Pool<PhysicsComponent>(common));
+    m_componentPools[&typeid(RotationComponent)].reset(new Pool<RotationComponent>(common));
+    m_componentPools[&typeid(SceneComponent)].reset(new Pool<SceneComponent>(common));
 
     m_systemManager.reset(new SystemManager(shared_from_this()));
 
@@ -331,7 +338,10 @@ template<> struct World::componentReturn<ActorComponent>{
 template<> World::componentReturn<ActorComponent>::type 
 World::attachComponent<ActorComponent>(EntityPtr entity)
 {
-    ActorComponentPtr c = m_componentFactory->createActorComponent();
+    Pool<ActorComponent>* pool = static_cast<Pool<ActorComponent>*>(
+        m_componentPools[&typeid(ActorComponent)].get());
+
+    ActorComponentPtr c = pool->create();
     initComponent(c, entity, shared_from_this());
     return c;
 }
@@ -345,7 +355,10 @@ template<> struct World::componentReturn<CameraComponent>{
 template<> World::componentReturn<CameraComponent>::type 
 World::attachComponent<CameraComponent>(EntityPtr entity)
 {
-    CameraComponentPtr c = m_componentFactory->createCameraComponent();
+    Pool<CameraComponent>* pool = static_cast<Pool<CameraComponent>*>(
+        m_componentPools[&typeid(CameraComponent)].get());
+
+    CameraComponentPtr c = pool->create();
     initComponent(c, entity, shared_from_this());
     return c;
 }
@@ -359,7 +372,10 @@ template<> struct World::componentReturn<CollisionComponent>{
 template<> World::componentReturn<CollisionComponent>::type 
 World::attachComponent<CollisionComponent>(EntityPtr entity)
 {
-    CollisionComponentPtr c = m_componentFactory->createCollisionComponent();
+    Pool<CollisionComponent>* pool = static_cast<Pool<CollisionComponent>*>(
+        m_componentPools[&typeid(CollisionComponent)].get());
+
+    CollisionComponentPtr c = pool->create();
     initComponent(c, entity, shared_from_this());
     return c;
 }
@@ -373,7 +389,10 @@ template<> struct World::componentReturn<LightComponent>{
 template<> World::componentReturn<LightComponent>::type 
 World::attachComponent<LightComponent>(EntityPtr entity)
 {
-    LightComponentPtr c = m_componentFactory->createLightComponent();
+    Pool<LightComponent>* pool = static_cast<Pool<LightComponent>*>(
+        m_componentPools[&typeid(LightComponent)].get());
+
+    LightComponentPtr c = pool->create();
     initComponent(c, entity, shared_from_this());
     return c;
 }
@@ -387,7 +406,10 @@ template<> struct World::componentReturn<ModelComponent>{
 template<> World::componentReturn<ModelComponent>::type 
 World::attachComponent<ModelComponent>(EntityPtr entity)
 {
-    ModelComponentPtr c = m_componentFactory->createModelComponent();
+    Pool<ModelComponent>* pool = static_cast<Pool<ModelComponent>*>(
+        m_componentPools[&typeid(ModelComponent)].get());
+
+    ModelComponentPtr c = pool->create();
     initComponent(c, entity, shared_from_this());
     return c;
 }
@@ -401,7 +423,10 @@ template<> struct World::componentReturn<NetworkComponent>{
 template<> World::componentReturn<NetworkComponent>::type 
 World::attachComponent<NetworkComponent>(EntityPtr entity)
 {
-    NetworkComponentPtr c = m_componentFactory->createNetworkComponent();
+    Pool<NetworkComponent>* pool = static_cast<Pool<NetworkComponent>*>(
+        m_componentPools[&typeid(NetworkComponent)].get());
+
+    NetworkComponentPtr c = pool->create();
     initComponent(c, entity, shared_from_this());
     return c;
 }
@@ -415,7 +440,10 @@ template<> struct World::componentReturn<PhysicsComponent>{
 template<> World::componentReturn<PhysicsComponent>::type 
 World::attachComponent<PhysicsComponent>(EntityPtr entity)
 {
-    PhysicsComponentPtr c = m_componentFactory->createPhysicsComponent();
+    Pool<PhysicsComponent>* pool = static_cast<Pool<PhysicsComponent>*>(
+        m_componentPools[&typeid(PhysicsComponent)].get());
+
+    PhysicsComponentPtr c = pool->create();
     initComponent(c, entity, shared_from_this());
     return c;
 }
@@ -429,7 +457,10 @@ template<> struct World::componentReturn<RotationComponent>{
 template<> World::componentReturn<RotationComponent>::type
 World::attachComponent<RotationComponent>(EntityPtr entity)
 {
-    RotationComponentPtr c = m_componentFactory->createRotationComponent();
+    Pool<RotationComponent>* pool = static_cast<Pool<RotationComponent>*>(
+        m_componentPools[&typeid(RotationComponent)].get());
+
+    RotationComponentPtr c = pool->create();
     initComponent(c, entity, shared_from_this());
     return c;
 }
@@ -443,7 +474,10 @@ template<> struct World::componentReturn<SceneComponent>{
 template<> World::componentReturn<SceneComponent>::type 
 World::attachComponent<SceneComponent>(EntityPtr entity)
 {
-    SceneComponentPtr c = m_componentFactory->createSceneComponent();
+    Pool<SceneComponent>* pool = static_cast<Pool<SceneComponent>*>(
+        m_componentPools[&typeid(SceneComponent)].get());
+
+    SceneComponentPtr c = pool->create();
     initComponent(c, entity, shared_from_this());
     return c;
 }

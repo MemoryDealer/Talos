@@ -88,12 +88,21 @@ public:
     // Returns pointer to PxRigidActor.
     PxRigidDynamic* getRigidActor(void) const;
 
+    // Returns true if dynamic actor is kinematic.
+    const bool isKinematic(void) const;
+
     // Setters:
+
+    // Sets PhysX pose position.
+    void setPosition(const Ogre::Vector3& pos);
 
     // Sets PhysX pose position to these coordinates.
     void setPosition(const PxReal x,
                      const PxReal y,
                      const PxReal z);
+
+    // Sets PhysX pose orientation.
+    void setOrientation(const Ogre::Quaternion& orientation);
 
     // Sets PhysX pose orientation to this quaternion.
     void setOrientation(const PxReal w,
@@ -113,11 +122,15 @@ public:
     // Sets density value for dynamic actor.
     void setDensity(const PxReal density);
 
+    // Sets internal boolean for kinematic actor during creation.
+    void setKinematic(const bool kinematic);
+
 private:
     PxRigidDynamic* m_rigidActor;
     Type m_type;
     PxMaterial* m_mat;
     PxReal m_density;
+    bool m_kinematic;
 };
 
 // ========================================================================= //

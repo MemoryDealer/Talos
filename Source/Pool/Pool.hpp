@@ -25,14 +25,22 @@
 #define __POOL_HPP__
 
 // ========================================================================= //
+
+class AbstractPool
+{
+public:
+    virtual ~AbstractPool(void) = 0 { }    
+};
+
+// ========================================================================= //
 // Generic class for pooling objects in contiguous memory.
 template<typename T>
-class Pool
+class Pool : public AbstractPool
 {
 public:
     explicit Pool(const int size);
 
-    ~Pool(void);
+    virtual ~Pool(void) override;
 
     T* create(void);
 

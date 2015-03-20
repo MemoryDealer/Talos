@@ -31,8 +31,12 @@
 
 // ========================================================================= //
 
+class AbstractPool;
+
 // Hash table for fast Entity lookup.
 typedef std::unordered_map<EntityID, EntityPtr> EntityIDMap;
+typedef std::unordered_map<const std::type_info*, 
+    std::shared_ptr<AbstractPool>> PoolTable;
 
 // ========================================================================= //
 // Represents everything in the physical game world. The World holds a
@@ -224,8 +228,8 @@ private:
     std::shared_ptr<EntityPool> m_entityPool;
     EntityIDMap m_entityIDMap;
 
-    // Component factory used by attachComponent<T>().
-    std::shared_ptr<ComponentFactory> m_componentFactory;
+    // Component pools for creating all components.
+    PoolTable m_componentPools;
 
     // System manager for entity-component management.
     std::shared_ptr<SystemManager> m_systemManager;

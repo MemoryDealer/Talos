@@ -61,8 +61,14 @@ void PhysicsSystem::update(void)
             i.second->getComponent<SceneComponent>();
 
         // Update SceneComponent's position and orientaiton.
-        sceneC->setPosition(physicsC->getPosition());
-        sceneC->setOrientation(physicsC->getOrientation());
+        if (physicsC->isKinematic()){
+            physicsC->setPosition(sceneC->getPosition());
+            physicsC->setOrientation(sceneC->getOrientation());
+        }
+        else{
+            sceneC->setPosition(physicsC->getPosition());
+            sceneC->setOrientation(physicsC->getOrientation());
+        }
     }
 }
 

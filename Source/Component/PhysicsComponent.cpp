@@ -34,7 +34,8 @@ PhysicsComponent::PhysicsComponent(void) :
 m_rigidActor(nullptr),
 m_type(Type::Box),
 m_mat(nullptr),
-m_density(1.f)
+m_density(1.f),
+m_kinematic(false)
 {
     
 }
@@ -115,6 +116,12 @@ void PhysicsComponent::init(EntityPtr entity)
     // Assign actor's user data to EntityID.
     m_rigidActor->userData = reinterpret_cast<void*>(
         static_cast<const EntityID>(entity->getID()));
+
+    // Set this actor to kinematic if specified.
+    if (m_kinematic){
+        m_rigidActor->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, true);
+        
+    }
 
     // Add actor to PhysX scene.
     this->getWorld()->getPScene()->getScene()->addActor(*m_rigidActor);
@@ -212,9 +219,16 @@ const Ogre::Quaternion PhysicsComponent::getOrientation(void) const
 
 // ========================================================================= //
 
-inline PxRigidDynamic* PhysicsComponent::getRigidActor(void) const
+PxRigidDynamic* PhysicsComponent::getRigidActor(void) const
 {
     return m_rigidActor;
+}
+
+// ========================================================================= //
+
+const bool PhysicsComponent::isKinematic(void) const
+{
+    return m_kinematic;
 }
 
 // ========================================================================= //
@@ -223,28 +237,41 @@ inline PxRigidDynamic* PhysicsComponent::getRigidActor(void) const
 
 // ========================================================================= //
 
-void PhysicsComponent::setPosition(const PxReal x,
-                                   const PxReal y,
-                                   const PxReal z)
+void PhysicsComponent::setPosition(const Ogre::Vector3& pos)
 {
     PxTransform transform = m_rigidActor->getGlobalPose();
-    
-    transform.p = Physics::toPx(Ogre::Vector3(x, y, z));
+
+    transform.p = Physics::toPx(pos);
     m_rigidActor->setGlobalPose(transform, true);
 }
 
 // ========================================================================= //
 
-// Sets PhysX pose orientation to this quaternion.
+void PhysicsComponent::setPosition(const PxReal x,
+                                   const PxReal y,
+                                   const PxReal z)
+{
+    this->setPosition(Ogre::Vector3(x, y, z));
+}
+
+// ========================================================================= //
+
+void PhysicsComponent::setOrientation(const Ogre::Quaternion& orientation)
+{
+    PxTransform transform = m_rigidActor->getGlobalPose();
+
+    transform.q = Physics::toPx(orientation);
+    m_rigidActor->setGlobalPose(transform, true);
+}
+
+// ========================================================================= //
+
 void PhysicsComponent::setOrientation(const PxReal w,
                                       const PxReal x,
                                       const PxReal y,
                                       const PxReal z)
 {
-    PxTransform transform = m_rigidActor->getGlobalPose();
-
-    transform.q = Physics::toPx(Ogre::Quaternion(w, x, y, z));
-    m_rigidActor->setGlobalPose(transform, true);
+    this->setOrientation(Ogre::Quaternion(w, x, y, z));
 }
 
 // ========================================================================= //
@@ -271,6 +298,13 @@ void PhysicsComponent::setMaterial(World& world,
 void PhysicsComponent::setDensity(const PxReal density)
 {
     m_density = density;
+}
+
+// ========================================================================= //
+
+void PhysicsComponent::setKinematic(const bool kinematic)
+{
+    m_kinematic = kinematic;
 }
 
 // ========================================================================= //

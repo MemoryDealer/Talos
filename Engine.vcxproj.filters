@@ -345,9 +345,6 @@
     <ClCompile Include="Source\System\PhysicsSystem.cpp">
       <Filter>Source Files\System</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Factory\ComponentFactory.cpp">
-      <Filter>Source Files\Factory</Filter>
-    </ClCompile>
     <ClCompile Include="Source\System\SystemManager.cpp">
       <Filter>Source Files\System</Filter>
     </ClCompile>
@@ -616,9 +613,6 @@
     </ClInclude>
     <ClInclude Include="Source\System\PhysicsSystem.hpp">
       <Filter>Header Files\System</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Factory\ComponentFactory.hpp">
-      <Filter>Header Files\Factory</Filter>
     </ClInclude>
     <ClInclude Include="Source\System\SystemManager.hpp">
       <Filter>Header Files\System</Filter>

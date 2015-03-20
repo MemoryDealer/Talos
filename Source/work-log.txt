@@ -437,6 +437,9 @@
 * Server wasn't clearing player & client list on destruction, fixed that.
 * Added RotationComponent which rotates a scene node every frame. It can handle mutliple nodes that are part of a mesh; a helicopter for instance.
 
+== 3/19/16 ==
+* Eliminated ComponentFactory as it was needlessly redundant, moved all pools to World.
+
 == TODO ==
 * Add PScene::addActor()
 * Move input update into world.
