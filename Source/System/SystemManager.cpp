@@ -97,8 +97,23 @@ void SystemManager::processEntity(EntityPtr entity)
 
         // Link light to scene component.
         if (entity->hasComponent<LightComponent>()){
-            sceneC->getSceneNode()->attachObject(
-                entity->getComponent<LightComponent>()->getLight());
+            LightComponentPtr light = entity->getComponent<LightComponent>();
+            // Check if this is a flashlight for an actor.
+            if (entity->hasComponent<ActorComponent>()){
+                // Attach flashlight to the actor.
+                if (light->getType() == LightComponent::Type::Spotlight){
+                    entity->getComponent<ActorComponent>()->
+                        attachFlashlight(light->getLight());
+                }
+                else{
+                    // Attach light to scene component node.
+                    sceneC->getSceneNode()->attachObject(light->getLight());
+                }
+            }
+            else{
+                // Attach light to scene component node.
+                sceneC->getSceneNode()->attachObject(light->getLight());
+            }
         }
 
         // Link mesh to scene component.

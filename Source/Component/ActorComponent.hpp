@@ -72,6 +72,9 @@ public:
     // Attaches Ogre::Camera to roll node.
     virtual void attachCamera(Ogre::Camera* camera) override;
 
+    // Attaches Ogre::Light to roll node.
+    void attachFlashlight(Ogre::Light* light);
+
     // Applies a translation or action to the actor based on type of input.
     void applyInput(const CommandType& type);
 

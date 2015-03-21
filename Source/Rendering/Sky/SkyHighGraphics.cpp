@@ -90,6 +90,7 @@ void SkyHighGraphics::init(std::shared_ptr<World> world,
     m_skyX->getVCloudsManager()->getVClouds()->registerCamera(m_camera);
 
     //this->loadPreset(SkyPresets[SkyPreset::Thunderstorm2]);
+    m_basicController->setTime(Ogre::Vector3(m_sunset - 1.f, m_sunrise, m_sunset));
 }
 
 // ========================================================================= //

@@ -1,0 +1,80 @@
+vertex_program diffuse_bump_vs cg
+{
+    source bump.cg
+    profiles vs_1_1 arbvp1
+    entry_point diffuse_bump_vs
+
+    default_params
+    {
+      param_named_auto worldViewProjMatrix      worldviewproj_matrix
+   }
+}
+
+fragment_program diffuse_bump_ps cg
+{
+    source bump.cg
+    profiles ps_2_x arbfp1
+    entry_point diffuse_bump_ps
+
+    default_params
+    {
+        param_named_auto lightDif0          light_diffuse_colour 0
+        param_named_auto lightSpec0       light_specular_colour 0      
+        param_named_auto lightAtt0          light_attenuation 0
+        param_named_auto spotlightParams    spotlight_params 0      
+
+       param_named_auto spotlightDir       light_direction_object_space 0   //object space
+      param_named_auto lightPos0         light_position_object_space 0 //object space
+      param_named_auto eyePosition      camera_position_object_space  //object space
+      //param_named_auto spotlightDir    light_direction 0 //world space
+      //param_named_auto lightPos0      light_position 0 //world space
+      //param_named_auto eyePosition      camera_position  //world space
+    }
+}
+
+material diffuse_template_bump
+{
+   technique lighting
+   {
+       scheme lighting
+
+       pass
+       {
+            ambient  1 1 1
+            diffuse  0 0 0
+            specular 0 0 0 0
+            emissive 0 0 0
+
+            vertex_program_ref ambient_vs{}
+            fragment_program_ref ambient_ps{}
+			
+            texture_unit ambient_tex
+			{
+				
+			}
+       }
+      pass
+      {
+          max_lights 8
+         scene_blend add
+            iteration once_per_light
+
+            ambient  0 0 0
+            diffuse  1 1 1
+            specular 1 1 1 128
+
+            vertex_program_ref diffuse_bump_vs{}
+            fragment_program_ref diffuse_bump_ps{}
+
+         texture_unit diffuse_tex
+         {
+            
+         }
+
+         texture_unit bump_tex
+         {
+            
+         }
+      }
+   }
+}

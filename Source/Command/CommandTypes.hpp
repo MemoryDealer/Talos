@@ -34,6 +34,7 @@ enum class CommandType{
     MoveRight,
     Action,
     Jump,
+    Flashlight,
     Spectator
 };
 

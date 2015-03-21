@@ -1,0 +1,264 @@
+vertex_program HLSL/Ocean2VS hlsl
+{
+	source Ocean2HLSL_Cg.vert
+	entry_point main
+	target vs_1_1
+
+
+	default_params
+	{
+		param_named_auto WorldViewProj worldviewproj_matrix
+		param_named_auto eyePosition camera_position_object_space
+	}
+}
+
+fragment_program HLSL/Ocean2FS hlsl
+{
+	source Ocean2HLSL_Cg.frag
+	entry_point main
+	target ps_2_0
+
+}
+
+vertex_program HLSL4/Ocean2VS hlsl
+{
+	source Ocean2HLSL_Cg.vert
+	entry_point main
+	target vs_4_0 vs_4_0_level_9_1 vs_4_0_level_9_3
+  enable_backwards_compatibility true
+
+	default_params
+	{
+		param_named_auto WorldViewProj worldviewproj_matrix
+		param_named_auto eyePosition camera_position_object_space
+	}
+}
+
+fragment_program HLSL4/Ocean2FS hlsl
+{
+	source Ocean2HLSL_Cg.frag
+	entry_point main
+	target ps_4_0 ps_4_0_level_9_1 ps_4_0_level_9_3
+  enable_backwards_compatibility true
+}
+
+vertex_program GLSL/Ocean2VS glsl
+{
+	source Ocean2GLSL.vert
+
+}
+
+fragment_program GLSL/Ocean2FS glsl
+{
+	source Ocean2GLSL.frag
+}
+
+vertex_program GLSLES/Ocean2VS glsles
+{
+	source Ocean2GLSLES.vert
+}
+
+fragment_program GLSLES/Ocean2FS glsles
+{
+   	source Ocean2GLSLES.frag
+   	default_params
+   	{
+   		param_named NormalMap int 0
+   		param_named EnvironmentMap int 1
+   	}
+}
+
+material Ocean2_HLSL_GLSL
+{
+	technique HLSL
+	{
+		pass
+		{
+			vertex_program_ref HLSL/Ocean2VS
+			{
+				param_named BumpScale float 0.2
+				param_named textureScale float2 25 26
+				param_named bumpSpeed float2 0.0015 0.005
+				param_named_auto time time_0_x 8.0
+				param_named waveFreq float 0.028
+				param_named waveAmp float 1.8
+			}
+
+			fragment_program_ref HLSL/Ocean2FS
+			{
+				param_named deepColor float4 0 0.3 0.5 1.0
+				param_named shallowColor float4 0 1 1 1.0
+				param_named reflectionColor float4 0.95 1 1 1.0
+				param_named reflectionAmount float 1.0
+				param_named reflectionBlur float 0.0
+				param_named waterAmount float 0.3
+				param_named fresnelPower float 5.0
+				param_named fresnelBias float 0.328
+				param_named hdrMultiplier float 0.471
+			}
+
+			texture_unit
+			{
+				texture waves2.dds
+				tex_coord_set 0
+				filtering linear linear linear
+			}
+
+			//texture_unit
+			//{
+			//	cubic_texture morning.jpg combinedUVW
+			//	tex_address_mode clamp
+			//	filtering linear linear linear
+			//	tex_coord_set 1
+			//}
+
+		}
+
+	}
+
+	technique HLSL4
+	{
+		pass
+		{
+			vertex_program_ref HLSL4/Ocean2VS
+			{
+				param_named BumpScale float 0.2
+				param_named textureScale float2 25 26
+				param_named bumpSpeed float2 0.015 0.005
+				param_named_auto time time_0_x 1.0
+				param_named waveFreq float 0.028
+				param_named waveAmp float 1.8
+			}
+
+			fragment_program_ref HLSL4/Ocean2FS
+			{
+				param_named deepColor float4 0 0.3 0.5 1.0
+				param_named shallowColor float4 0 1 1 1.0
+				param_named reflectionColor float4 0.95 1 1 1.0
+				param_named reflectionAmount float 100.0
+				param_named reflectionBlur float 0.0
+				param_named waterAmount float 0.3
+				param_named fresnelPower float 5.0
+				param_named fresnelBias float 0.328
+				param_named hdrMultiplier float 0.471
+			}
+
+			texture_unit
+			{
+				texture waves2.dds
+				tex_coord_set 0
+				filtering linear linear linear
+			}
+
+			//texture_unit
+			//{
+			//	cubic_texture morning.jpg combinedUVW
+			//	tex_address_mode clamp
+			//	filtering linear linear linear
+			//	tex_coord_set 1
+			//}
+
+		}
+
+	}
+
+	technique GLSL
+	{
+		pass
+		{
+			vertex_program_ref GLSL/Ocean2VS
+			{
+				param_named_auto worldViewProj worldviewproj_matrix
+				param_named_auto eyePosition camera_position_object_space
+				param_named_auto time time_0_x 100.0
+				param_named BumpScale float 0.2
+				param_named textureScale float2 25 26
+				param_named bumpSpeed float2 0.015 0.005
+				param_named waveFreq float 0.028
+				param_named waveAmp float 1.8
+			}
+
+			fragment_program_ref GLSL/Ocean2FS
+			{
+				param_named deepColor float4 0 0.3 0.5 1.0
+				param_named shallowColor float4 0 1 1 1.0
+				param_named reflectionColor float4 0.95 1 1 1.0
+				param_named reflectionAmount float 1.0
+				param_named reflectionBlur float 0.0
+				param_named waterAmount float 0.3
+				param_named fresnelPower float 5.0
+				param_named fresnelBias float 0.328
+				param_named hdrMultiplier float 0.471
+				param_named NormalMap int 0
+				param_named EnvironmentMap int 1
+			}
+
+			texture_unit
+			{
+				texture waves2.dds
+				tex_coord_set 0
+				filtering linear linear linear
+			}
+
+			//texture_unit
+			//{
+			//	cubic_texture morning.jpg combinedUVW
+			//	tex_address_mode clamp
+			//	tex_coord_set 1
+			//	filtering linear linear linear
+			//}
+
+		}
+
+	}
+
+	technique GLSLES
+	{
+		pass
+		{
+			vertex_program_ref GLSLES/Ocean2VS
+			{
+				param_named_auto worldViewProj worldviewproj_matrix
+				param_named_auto eyePosition camera_position_object_space
+				param_named_auto time time_0_x 100.0
+				param_named BumpScale float 0.2
+				param_named textureScale float2 25 26
+				param_named bumpSpeed float2 0.015 0.005
+				param_named waveFreq float 0.028
+				param_named waveAmp float 1.8
+			}
+
+			fragment_program_ref GLSLES/Ocean2FS
+			{
+				param_named deepColor float4 0 0.3 0.5 1.0
+				param_named shallowColor float4 0 1 1 1.0
+				param_named reflectionColor float4 0.95 1 1 1.0
+				param_named reflectionAmount float 1.0
+				param_named reflectionBlur float 0.0
+				param_named waterAmount float 0.3
+				param_named fresnelPower float 5.0
+				param_named fresnelBias float 0.328
+				param_named hdrMultiplier float 0.471
+				param_named NormalMap int 0
+				param_named EnvironmentMap int 1
+			}
+
+			texture_unit
+			{
+				texture waves2.dds
+				tex_coord_set 0
+				filtering linear linear linear
+			}
+
+			//texture_unit
+			//{
+			//	cubic_texture morning.jpg combinedUVW
+			//	tex_address_mode clamp
+			//	tex_coord_set 1
+			//	filtering linear linear linear
+			//}
+
+		}
+
+	}
+}

@@ -1,0 +1,17 @@
+material Sparks/shadow_caster
+{
+    technique
+    {
+        // all this will do is write depth and depth^2 to red and green
+        pass
+        {
+            vertex_program_ref sparks_shadow_caster_vs
+            {
+            }
+
+            fragment_program_ref sparks_shadow_caster_ps
+            {
+            }
+        }
+    }
+}

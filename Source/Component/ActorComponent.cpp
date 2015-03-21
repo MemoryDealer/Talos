@@ -204,6 +204,20 @@ void ActorComponent::attachCamera(Ogre::Camera* camera)
 
 // ========================================================================= //
 
+void ActorComponent::attachFlashlight(Ogre::Light* light)
+{
+    Assert(light->getType() == Ogre::Light::LT_SPOTLIGHT,
+           "Non-spotlight added as flashlight");
+
+    Ogre::SceneNode* flashlight = m_rollNode->createChildSceneNode();
+    flashlight->translate(0.5f, -0.45f, 0.f);
+
+    light->setDirection(Ogre::Vector3::NEGATIVE_UNIT_Z);
+    flashlight->attachObject(light);
+}
+
+// ========================================================================= //
+
 void ActorComponent::applyInput(const CommandType& type)
 {
     Ogre::Vector3 translate(Ogre::Vector3::ZERO);
@@ -212,7 +226,7 @@ void ActorComponent::applyInput(const CommandType& type)
     // Determine which direction to move, or action to perform.
     switch (type){
     default:
-        break;
+        return;
 
     case CommandType::MoveForward:
         translate.z = -move;

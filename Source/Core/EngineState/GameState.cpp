@@ -59,28 +59,31 @@ void GameState::enter(void)
     m_world->addSystem(new CollisionSystem());
     m_world->addSystem(new PhysicsSystem());
 
-    // Create player.
-    EntityPtr player = m_world->createEntity();
-    m_world->attachComponent<ActorComponent>(player);
-
-    m_world->attachComponent<CameraComponent>(player);
-    m_world->attachComponent<ModelComponent>(player)->setMesh("Cylinder.mesh");
-    m_world->attachComponent<NetworkComponent>(player);
-
-    m_world->setPlayer(player);
-
     LightComponentPtr lightC = nullptr;
     ModelComponentPtr modelC = nullptr;
     PhysicsComponentPtr physicsC = nullptr;
 
+    // Create player.
+    EntityPtr player = m_world->createEntity();
+    m_world->attachComponent<ActorComponent>(player);
+    m_world->attachComponent<CameraComponent>(player);
+    m_world->attachComponent<ModelComponent>(player)->setMesh("Cylinder.mesh");
+    m_world->attachComponent<NetworkComponent>(player);
+    lightC = m_world->attachComponent<LightComponent>(player);
+    lightC->setType(LightComponent::Type::Spotlight);
+    lightC->setColour(1.f, 1.f, 1.f);
+    lightC->setRange(125.f);
+
+    m_world->setPlayer(player);
+    
     // Create basic plane.
     EntityPtr plane = m_world->createEntity();
     m_world->attachComponent<SceneComponent>(plane);
     modelC = m_world->attachComponent<ModelComponent>(plane);
     modelC->setMesh("Plane/Board", "Board");      
-    m_world->attachComponent<PhysicsComponent>(plane)->setKinematic(true);
-    m_world->attachComponent<RotationComponent>(plane)->addRotation(
-        Ogre::Vector3::UNIT_Y, 0.1f);
+    m_world->attachComponent<CollisionComponent>(plane);
+    /*m_world->attachComponent<RotationComponent>(plane)->addRotation(
+        Ogre::Vector3::UNIT_Y, 0.1f);*/
     ComponentMessage msg(ComponentMessage::Type::Translate);
     msg.data = Ogre::Vector3(0.f, -50.f, 0.f);
     plane->message(msg);
@@ -89,14 +92,6 @@ void GameState::enter(void)
     m_world->attachComponent<SceneComponent>(gun);
     m_world->attachComponent<ModelComponent>(gun)->setMesh("laserrifle.mesh");
 
-
-    plane = m_world->createEntity();
-    m_world->attachComponent<SceneComponent>(plane);
-    modelC = m_world->attachComponent<ModelComponent>(plane);
-    modelC->setMesh("Plane/Board", "Board");
-    m_world->attachComponent<CollisionComponent>(plane);
-    msg.data = Ogre::Vector3(75.f, 0.f, 0.f);
-    plane->message(msg);
 
     EntityPtr house = m_world->createEntity();
     m_world->attachComponent<SceneComponent>(house);
@@ -127,22 +122,23 @@ void GameState::enter(void)
     // Create switch to door.
     EntityPtr link = m_world->createEntity();
     m_world->attachComponent<SceneComponent>(link);
-    m_world->attachComponent<ModelComponent>(link)->setMesh("cylinder.mesh");
+    m_world->attachComponent<ModelComponent>(link)->setMesh("cylinder.mesh", "Board");
     m_world->attachComponent<CollisionComponent>(link);
     m_world->attachComponent<LinkComponent>(link)->addLinkID(door->getID());
     track = m_world->attachComponent<TrackComponent>(link);
-    track->addKeyFrame(0.f, Ogre::Vector3(0.f, -50.f, 0.f));
-    track->addKeyFrame(5000.f, Ogre::Vector3(0.f, -60.f, 0.f));
+    link->getComponent<SceneComponent>()->setPosition(0.f, -45.f, 0.f);
+    track->addKeyFrame(0.f, Ogre::Vector3(0.f, -45.f, 0.f));
+    track->addKeyFrame(2500.f, Ogre::Vector3(0.f, -46.f, 0.f));
+    lightC = m_world->attachComponent<LightComponent>(link);
+    lightC->setType(LightComponent::Type::Point);
+    lightC->setColour(1.f, 0.f, 1.f);
+    lightC->setRange(30.f);
 
     // Create ball.
     EntityPtr ball = m_world->createEntity();
     m_world->attachComponent<SceneComponent>(ball);
     m_world->attachComponent<ModelComponent>(ball)->setMesh(
-        "icosphere.mesh");
-    lightC = m_world->attachComponent<LightComponent>(ball);
-    lightC->setType(LightComponent::Type::Point);
-    lightC->setColour(50.f, 0.f, 50.f);
-    lightC->setRange(175.f);
+        "icosphere.mesh", "Board");
     physicsC = m_world->attachComponent<PhysicsComponent>(ball);
     physicsC->setType(PhysicsComponent::Type::Sphere);
     msg.data = Ogre::Vector3(10.f, 0.f, 0.f);
@@ -150,9 +146,9 @@ void GameState::enter(void)
     
     
     // Setup visual scene settings.
-    m_world->getEnvironment()->setAmbientLight(255.f, 255.f, 255.f);
-    m_world->getEnvironment()->setSunColour(20.f, 17.5f, 18.9f);
-    m_world->getEnvironment()->setMoonColour(.50f, .50f, 255.f);
+    m_world->getEnvironment()->setAmbientLight(5.f, 5.f, 5.f);
+    //m_world->getEnvironment()->setSunColour(2.f, 1.75f, 1.89f);
+    //m_world->getEnvironment()->setMoonColour(.50f, .50f, 5.f);
 
     // Create Ocean.
 #ifdef _DEBUG
@@ -358,6 +354,11 @@ void GameState::addNetworkPlayers(void)
         // Attach player components.
         m_world->attachComponent<ActorComponent>(e);
         m_world->attachComponent<ModelComponent>(e)->setMesh("Cylinder.mesh");
+        LightComponentPtr lightC = 
+            m_world->attachComponent<LightComponent>(e);
+        lightC->setType(LightComponent::Type::Spotlight);
+        lightC->setColour(1.f, 1.f, 1.f);
+        lightC->setRange(1000.f);
 
         i.second.entity = e;
     }

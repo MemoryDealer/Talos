@@ -76,9 +76,6 @@ void Environment::init(void)
     m_moon->setDiffuseColour(Ogre::ColourValue::Black);
     m_moon->setSpecularColour(Ogre::ColourValue::Black);
     m_moon->setDirection(Ogre::Vector3::NEGATIVE_UNIT_Y);
-
-    // Shadows.
-    m_world->getSceneManager()->setShadowTechnique(Ogre::SHADOWTYPE_NONE);
 }
 
 // ========================================================================= //

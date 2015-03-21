@@ -15,50 +15,33 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: LinkComponent.hpp
+// File: Flashlight.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines LinkComponent class.
+// Defines FlashlightCommand class.
 // ========================================================================= //
 
-#ifndef __LINKCOMPONENT_HPP__
-#define __LINKCOMPONENT_HPP__
+#ifndef __FLASHLIGHT_HPP__
+#define __FLASHLIGHT_HPP__
 
 // ========================================================================= //
 
-#include "Component.hpp"
+#include "Command/Command.hpp"
 
 // ========================================================================= //
-// Can be used to link an entity to another, for things such as buttons, 
-// switches, levers, etc.
-class LinkComponent : public Component
+
+class FlashlightCommand : public Command
 {
 public:
-    // Default initializes member data.
-    explicit LinkComponent(void);
+    explicit FlashlightCommand(void){
+        this->setType(CommandType::Flashlight);
+    }
 
-    // Empty destructor.
-    virtual ~LinkComponent(void) override;
-
-    // Empty.
-    virtual void init(void) override;
-
-    // Empty.
-    virtual void destroy(void) override;
-
-    // Empty.
-    virtual void update(void) override;
-
-    // Handles action messages, routes them to linked entity.
-    virtual void message(ComponentMessage& msg);
-
-    // Component functions:
-
-    // Adds an EntityID to link this entity to.
-    void addLinkID(const EntityID id);
-
-private:
-    std::vector<EntityID> m_linkedIDs;
+    virtual void execute(EntityPtr entity){
+        ComponentMessage msg(ComponentMessage::Type::Command);
+        msg.data = CommandType::Flashlight;
+        entity->message(msg);
+    }
 };
 
 // ========================================================================= //

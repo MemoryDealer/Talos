@@ -87,6 +87,7 @@
     <ClInclude Include="Source\CC\KCC.hpp" />
     <ClInclude Include="Source\Command\Actor\Action.hpp" />
     <ClInclude Include="Source\Command\Actor\Debug\Spectator.hpp" />
+    <ClInclude Include="Source\Command\Actor\Flashlight.hpp" />
     <ClInclude Include="Source\Command\Actor\Jump.hpp" />
     <ClInclude Include="Source\Command\Actor\MoveBackward.hpp" />
     <ClInclude Include="Source\Command\Actor\MoveForward.hpp" />

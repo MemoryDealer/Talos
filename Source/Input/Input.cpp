@@ -54,6 +54,7 @@ m_mode(Mode::UI)
     m_keymap[SDLK_a] = m_commandRepo->getCommand(CommandType::MoveLeft);
     m_keymap[SDLK_d] = m_commandRepo->getCommand(CommandType::MoveRight);
     m_keymap[SDLK_e] = m_commandRepo->getCommand(CommandType::Action);
+    m_keymap[SDLK_f] = m_commandRepo->getCommand(CommandType::Flashlight);
     m_keymap[SDLK_SPACE] = m_commandRepo->getCommand(CommandType::Jump);
     m_keymap[SDLK_LSHIFT] = m_commandRepo->getCommand(CommandType::Spectator);
 }

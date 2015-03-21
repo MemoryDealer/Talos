@@ -1,13 +1,7 @@
-material Board
+import diffuse_template from "diffuse.material"
+
+material Board : diffuse_template
 {
-    technique
-    {
-        pass
-        {
-            texture_unit
-            {
-                texture Board.jpg
-            }
-        }
-    }
+	set_texture_alias ambient_tex board.jpg
+	set_texture_alias diffuse_tex board.jpg
 }

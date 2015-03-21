@@ -91,6 +91,44 @@ void World::init(const bool usePhysics)
     // Create Ogre scene for rendering.
     m_scene = m_root->createSceneManager(Ogre::ST_GENERIC);
 
+    switch (m_graphics.shadows){
+    default:
+    case Graphics::Off:
+        m_scene->setShadowTechnique(Ogre::ShadowTechnique::SHADOWTYPE_NONE);
+        break;
+
+    case Graphics::High:
+        m_scene->setShadowTextureSelfShadow(true);
+        
+        // Set shadow shader.
+        m_scene->setShadowTextureCasterMaterial("Sparks/shadow_caster");
+
+        // Setup shadow texture settings.
+        m_scene->setShadowTextureCount(8);
+        m_scene->setShadowTextureSize(1024);
+
+        // Using float16 for R and G channels.
+        m_scene->setShadowTexturePixelFormat(Ogre::PF_FLOAT16_RGB);
+
+        // VSM doesn't need biasing, this would be worthless.
+        m_scene->setShadowCasterRenderBackFaces(false);
+
+        // Use integrated additive shadows with these shaders.
+        m_scene->setShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_ADDITIVE_INTEGRATED);
+
+        m_scene->setShadowTextureFSAA(16);
+
+        /*const uint32_t rtts = m_scene->getShadowTextureCount();
+        for (uint32_t i = 0; i < rtts; ++i){
+            Ogre::TexturePtr tex = m_scene->getShadowTexture(i);
+            Ogre::Viewport* vp = 
+                tex->getBuffer()->getRenderTarget()->getViewport(0);
+            vp->setBackgroundColour(Ogre::ColourValue(1.f, 1.f, 1.f, 1.f));
+            vp->setClearEveryFrame(true);
+        }*/
+        break;
+    }
+
     // Initialize environment.
     m_environment.reset(new Environment(shared_from_this(), m_graphics));
     m_environment->init();

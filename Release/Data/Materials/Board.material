@@ -1,0 +1,13 @@
+material Board
+{
+    technique
+    {
+        pass
+        {
+            texture_unit
+            {
+                texture Board.jpg
+            }
+        }
+    }
+}

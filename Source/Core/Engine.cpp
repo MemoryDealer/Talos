@@ -150,13 +150,15 @@ bool Engine::init(void)
     // @TODO: Load from config file.
     m_graphics.meshes = Graphics::Setting::High;
     m_graphics.textures = Graphics::Setting::High;
-    m_graphics.shadows = Graphics::Setting::Off;
+    m_graphics.shadows = Graphics::Setting::High;
 #ifdef _DEBUG
     m_graphics.ocean = Graphics::Setting::Low;
 #else
     m_graphics.ocean = Graphics::Setting::High;
 #endif
     m_graphics.sky = Graphics::Setting::High;
+
+    Ogre::MaterialManager::getSingleton().setDefaultTextureFiltering(Ogre::TFO_ANISOTROPIC);
 
     // === //
 
@@ -240,6 +242,8 @@ void Engine::start(const EngineStateID id)
 
                 lag -= Talos::MS_PER_UPDATE;
             }
+
+            //m_root->getRenderSystem()->clearFrameBuffer(Ogre::FBT_COLOUR | Ogre::FBT_DEPTH);
 
             // Render the updated frame, compensating for lag.
             m_root->renderOneFrame(lag / Talos::MS_PER_UPDATE);

@@ -665,6 +665,9 @@
     <ClInclude Include="Source\Component\LinkComponent.hpp">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Command\Actor\Flashlight.hpp">
+      <Filter>Header Files\Command\Actor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Source\work-log.txt">

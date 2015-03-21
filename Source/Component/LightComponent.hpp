@@ -54,10 +54,18 @@ public:
     // Empty.
     virtual void update(void) override;
 
-    // Empty.
+    // Handles activation messages.
     virtual void message(ComponentMessage& msg) override;
 
-    // Light functions:
+    // Getters:
+
+    // Returns type of light.
+    const Type& getType(void) const;
+
+    // Returns pointer to internal Ogre::Light.
+    Ogre::Light* getLight(void) const;
+
+    // Setters:
 
     // Sets type of the light.
     void setType(const Type& type);
@@ -70,14 +78,13 @@ public:
     // Sets range of light using linear and quadratic values internally.
     void setRange(const Ogre::Real range);
 
-    // Getters:
-
-    // Returns pointer to internal Ogre::Light.
-    Ogre::Light* getLight(void) const;
+    // Turns light on if true.
+    void setEnabled(const bool enabled);
 
 private:
     Ogre::Light* m_light;
     Ogre::Real m_intensity;
+    Type m_type;
 };
 
 // ========================================================================= //

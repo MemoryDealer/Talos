@@ -21,13 +21,16 @@
 // Implements LightComponent class.
 // ========================================================================= //
 
+#include "ComponentMessage.hpp"
 #include "LightComponent.hpp"
 #include "World/World.hpp"
 
 // ========================================================================= //
 
 LightComponent::LightComponent(void) :
-m_light(nullptr)
+m_light(nullptr),
+m_intensity(1.f),
+m_type(Type::Point)
 {
     
 }
@@ -44,9 +47,13 @@ LightComponent::~LightComponent(void)
 void LightComponent::init(void)
 {
     m_light = this->getWorld()->getSceneManager()->createLight();
+    m_light->setCastShadows(true);
 
     // Set to point light by default.
     m_light->setType(Ogre::Light::LT_POINT);
+
+    // Set default range of 50.f.
+    this->setRange(50.f);
 }
 
 // ========================================================================= //
@@ -65,10 +72,42 @@ void LightComponent::update(void)
 
 // ========================================================================= //
 
-void LightComponent::message(ComponentMessage&)
+void LightComponent::message(ComponentMessage& msg)
 {
+    switch (msg.type){
+    default:
+        break;
 
+    case ComponentMessage::Type::Command:
+        if (boost::get<CommandType>(msg.data) == CommandType::Flashlight){
+            // Switch the light on/off.
+            m_light->setVisible(!m_light->getVisible());
+        }
+        break;
+    }
 }
+
+// ========================================================================= //
+
+// Getters:
+
+// ========================================================================= //
+
+const LightComponent::Type& LightComponent::getType(void) const
+{
+    return m_type;
+}
+
+// ========================================================================= //
+
+Ogre::Light* LightComponent::getLight(void) const
+{
+    return m_light;
+}
+
+// ========================================================================= //
+
+// Setters:
 
 // ========================================================================= //
 
@@ -76,6 +115,12 @@ void LightComponent::setType(const Type& type)
 {
     m_light->setType((type == Type::Point) ? Ogre::Light::LT_POINT :
                      Ogre::Light::LT_SPOTLIGHT);
+    
+    m_type = type;
+
+    if (m_type == Type::Spotlight){
+        m_light->setCastShadows(true);
+    }
 }
 
 // ========================================================================= //
@@ -101,20 +146,18 @@ void LightComponent::setRange(const Ogre::Real range)
                                 0.f);
     }
     else{
-        m_light->setSpotlightRange(Ogre::Degree(range - 15),
-                                   Ogre::Degree(range));
+        
+        m_light->setAttenuation(range, 1.f, 1.f, 1.f);
+        m_light->setSpotlightRange(Ogre::Degree(5.f), Ogre::Degree(21.f));
+        //m_light->setSpotlightFalloff(5.f);
     }
 }
 
 // ========================================================================= //
 
-// Getters:
-
-// ========================================================================= //
-
-Ogre::Light* LightComponent::getLight(void) const
+void LightComponent::setEnabled(const bool enabled)
 {
-    return m_light;
+    m_light->setVisible(enabled);
 }
 
 // ========================================================================= //

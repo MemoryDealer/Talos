@@ -443,6 +443,14 @@
     This can be used for doors by calling the reverse() method, to open/close it.
 * Made a working door.
 
+== 3/20/16 ==
+* Created LinkComponent which can be used for buttons/switches to activate other entities.
+* Added per-pixel lighting using some soft shadow shaders. Had to for the ambient ambient lighting colour down by 10% in ambient.cg (ambient_vs), because otherwise 
+    textures would just be rendered as the ambient colour.
+    This limits the maximum ambient light however (roughly 20.f for each value), which isn't really a big deal with the per-pixel lighting.
+    Also directional lights perpendicular to materials using make it completely white. So either the shader must be fixed or a different material used for scenes where it's needed.
+* Added shadow support; soft shadows. Only spotlights work well with these. Point lights can work but they are glitchy.
+
 == TODO ==
 * Add PScene::addActor()
 * Move input update into world.
@@ -472,6 +480,8 @@
 
 == BUGS ==
 * Moving diagonally is faster, due to changes in input system. Fix in KCC or ActorComponent.
+* With soft shadows, pointing a spotlight at an object with a point light near it casts a black square on nearby objects.
+* Directional lights perpendicular to diffuse_materials make it appear entirely white (or the colour of the light) if ambient shaders are used.
 * Casting ray upwards with PhysX (PScene::raycast()) still returns a result if no hit.
 * Raycast doesn't hit dynamic actor.
 * Hydrax/SkyX need to be shared between states--make them world dependencies perhaps and add code to check if they are already initialized.
