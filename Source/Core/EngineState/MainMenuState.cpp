@@ -55,6 +55,9 @@ void MainMenuState::enter(void)
     m_world->init();
     m_world->getInput()->setMode(Input::Mode::UI);
 
+    // Add any gamepads that are already connected.
+    m_world->getInput()->addAllConnectedGamepads();
+
     // Setup visual scene settings.
     m_world->getEnvironment()->setAmbientLight(255.f, 255.f, 255.f);
     m_world->getEnvironment()->setSunColour(200.f, 175.f, 189.f);
@@ -149,6 +152,14 @@ void MainMenuState::update(void)
 
             case SDL_MOUSEMOTION:
                 m_world->getInput()->handleMouse(e);
+                break;
+
+            case SDL_CONTROLLERDEVICEADDED:
+                m_world->getInput()->addGamepad(e.cdevice.which);
+                break;
+
+            case SDL_CONTROLLERDEVICEREMOVED:
+                m_world->getInput()->removeGamepad(e.cdevice.which);
                 break;
 
             case SDL_QUIT:

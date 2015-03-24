@@ -37,6 +37,7 @@ Input::Input(void) :
 m_commandRepo(new CommandRepository()),
 m_keymap(),
 m_commands(),
+m_gamepads(),
 m_mode(Mode::UI)
 {
     // @TODO: For every key on keyboard read from keymap file
@@ -57,6 +58,11 @@ m_mode(Mode::UI)
     m_keymap[SDLK_f] = m_commandRepo->getCommand(CommandType::Flashlight);
     m_keymap[SDLK_SPACE] = m_commandRepo->getCommand(CommandType::Jump);
     m_keymap[SDLK_LSHIFT] = m_commandRepo->getCommand(CommandType::Spectator);
+
+    // Gamepad map.
+    m_gamepadMap[0] = m_commandRepo->getCommand(CommandType::Jump);
+    m_gamepadMap[2] = m_commandRepo->getCommand(CommandType::Action);
+    m_gamepadMap[10] = m_commandRepo->getCommand(CommandType::Flashlight);
 }
 
 // ========================================================================= //
@@ -160,6 +166,18 @@ void Input::handle(const SDL_Event& e)
             }
         }
         break;
+
+    case SDL_CONTROLLERBUTTONDOWN:
+        printf("Controller: %d\n", e.cbutton.button);        
+        {
+            CommandPtr command = m_gamepadMap[e.cbutton.button];
+            this->pushCommand(command);
+        }
+        break;
+
+    case SDL_CONTROLLERBUTTONUP:
+
+        break;
     }
 }
 
@@ -185,9 +203,39 @@ const MouseMove Input::handleMouse(const SDL_Event& e)
 
 // ========================================================================= //
 
+const ControllerAxisMotion Input::handleControllerAxisMotion(const SDL_Event& e)
+{
+    ControllerAxisMotion m;
+    m.x1 = m.y1 = m.x2 = m.y2 = 0;
+
+    Assert(m_gamepads.count(e.cdevice.which) != 0, "Invalid controller input");
+
+    // Get the connected gamepad instance.
+    SDL_GameController* controller = m_gamepads[e.cdevice.which].controller;
+    
+
+    if (m_mode == Mode::UI){
+
+    }
+    else{
+        m.x1 = SDL_GameControllerGetAxis(controller,
+                                        static_cast<SDL_GameControllerAxis>(0));
+        m.y1 = SDL_GameControllerGetAxis(controller,
+                                        static_cast<SDL_GameControllerAxis>(1));
+        m.x2 = SDL_GameControllerGetAxis(controller,
+                                         static_cast<SDL_GameControllerAxis>(2));
+        m.y2 = SDL_GameControllerGetAxis(controller,
+                                         static_cast<SDL_GameControllerAxis>(3));
+    }
+
+    return m;
+}
+
+// ========================================================================= //
+
 void Input::update(void)
 {
-    if (keystate[SDL_SCANCODE_W]){
+    /*if (keystate[SDL_SCANCODE_W]){
         this->pushCommand(m_keymap[SDLK_w]);
     }
     if (keystate[SDL_SCANCODE_S]){
@@ -198,8 +246,12 @@ void Input::update(void)
     }
     if (keystate[SDL_SCANCODE_D]){
         this->pushCommand(m_keymap[SDLK_d]);
-    }
+    }*/
 }
+
+// ========================================================================= //
+
+// Command queue:
 
 // ========================================================================= //
 
@@ -223,6 +275,56 @@ CommandPtr Input::getNextCommand(void)
     m_commands.pop();
     return command;
 }
+
+// ========================================================================= //
+
+// Gamepads:
+
+// ========================================================================= //
+
+void Input::addGamepad(const Sint32 id)
+{
+    // See if this is a gamepad.
+    if (SDL_IsGameController(id)){
+        Gamepad pad;
+
+        pad.controller = SDL_GameControllerOpen(id);
+        if (pad.controller){
+            // Get the instance ID to store.
+            SDL_Joystick* joy = SDL_JoystickOpen(id);
+            pad.id = SDL_JoystickInstanceID(joy);
+
+            // Insert into gamepad table.
+            m_gamepads[id] = pad;
+
+            Talos::Log::getSingleton().log("Added gamepad with ID " + 
+                                           toString(pad.id));
+        }
+    }
+}
+
+// ========================================================================= //
+
+void Input::removeGamepad(const Sint32 id)
+{
+    if (m_gamepads.count(id) != 0){
+        SDL_GameControllerClose(m_gamepads[id].controller);
+        m_gamepads.erase(id);
+    }
+}
+
+// ========================================================================= //
+
+void Input::addAllConnectedGamepads(void)
+{
+    for (Sint32 i = 0; i < SDL_NumJoysticks(); ++i){
+        this->addGamepad(i);
+    }
+}
+
+// ========================================================================= //
+
+// Setters:
 
 // ========================================================================= //
 

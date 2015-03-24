@@ -78,8 +78,11 @@ public:
     // Applies a translation or action to the actor based on type of input.
     void applyInput(const CommandType& type);
 
+    // Moves actor according to joystick input.
+    void move(const Sint16 x, const Sint16 y);
+
     // Changes the actor's orientation based on relative x/y looking.
-    void look(const int relx, const int rely);
+    void look(const Sint16 relx, const Sint16 rely);
 
     // Casts a ray forward from the player, sending an action message to the 
     // receiving entity, if one is hit and within range.
@@ -150,6 +153,8 @@ private:
 
     // Current mode of actor.
     Mode m_mode;
+
+    std::shared_ptr<ControllerAxisMotion> m_controllerAxis;
 };
 
 // ========================================================================= //

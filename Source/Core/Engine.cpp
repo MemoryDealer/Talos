@@ -92,7 +92,9 @@ bool Engine::init(void)
     m_root->initialise(false);
 
     // Initialize SDL.
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) != 0){
+    if (SDL_Init(SDL_INIT_VIDEO | 
+        SDL_INIT_GAMECONTROLLER | 
+        SDL_INIT_JOYSTICK) != 0){
         return false;
     }   
 

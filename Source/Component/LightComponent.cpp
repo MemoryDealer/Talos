@@ -148,8 +148,7 @@ void LightComponent::setRange(const Ogre::Real range)
     else{
         
         m_light->setAttenuation(range, 1.f, 1.f, 1.f);
-        m_light->setSpotlightRange(Ogre::Degree(5.f), Ogre::Degree(21.f));
-        //m_light->setSpotlightFalloff(5.f);
+        m_light->setSpotlightRange(Ogre::Degree(5.f), Ogre::Degree(21.f), 3.f);
     }
 }
 

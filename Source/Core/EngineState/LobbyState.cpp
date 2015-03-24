@@ -157,6 +157,14 @@ void LobbyState::update(void)
                 m_world->getInput()->handleMouse(e);
                 break;
 
+            case SDL_CONTROLLERDEVICEADDED:
+                m_world->getInput()->addGamepad(e.cdevice.which);
+                break;
+
+            case SDL_CONTROLLERDEVICEREMOVED:
+                m_world->getInput()->removeGamepad(e.cdevice.which);
+                break;
+
             case SDL_QUIT:
                 m_subject.notify(EngineNotification::Pop);
                 return;

@@ -38,6 +38,7 @@ class Client;
 class Command;
 class CommandRepository;
 class ComponentFactory;
+struct ControllerAxisMotion;
 class DCC;
 class DynamicLines;
 class EngineState;

@@ -46,7 +46,8 @@ m_speed(0.20f),
 m_cc(CC::Kinematic),
 m_dcc(nullptr),
 m_kcc(nullptr),
-m_mode(Mode::Player)
+m_mode(Mode::Player),
+m_controllerAxis(new ControllerAxisMotion())
 {
     
 }
@@ -110,6 +111,37 @@ void ActorComponent::destroy(void)
 
 void ActorComponent::update(void)
 {
+    Ogre::Vector3 translate(Ogre::Vector3::ZERO);
+    translate.x = m_controllerAxis->x1;
+    translate.z = m_controllerAxis->y1;
+
+    // Calculate movement vector.
+    translate = m_yawOrientation * m_pitchOrientation * translate;
+
+    // Calculate the forwards vector and use it to keep the player moving at
+    // the same velocity despite the pitch of the camera.
+    Ogre::Vector3 right, up, forwards;
+    m_rollNode->_getDerivedOrientation().ToAxes(right, up, forwards);
+    up.crossProduct(right);
+    up.normalise();
+
+    // Modify original movement vector.
+    translate.x /= up.y;
+    translate.z /= up.y;
+
+    // Prevent faster movement when moving diagonally.
+    //translate.normalise();
+
+    // Apply actor's speed.
+    translate *= m_speed * 0.0001f;
+
+    const Ogre::Real mag = translate.length();
+    //printf("Mag: %.2f\n", mag);
+    const Ogre::Real max = 0.275f;
+    if (mag > max){
+        translate *= max / mag;
+    }
+
     switch (m_mode){
     default:
         break;
@@ -121,6 +153,11 @@ void ActorComponent::update(void)
     case Mode::Player:
         {
             if (m_cc == CC::Kinematic){
+                // Update kinematic controller.
+                translate.y = 0.f;
+                m_kcc->move(translate);
+
+                // Update scene node with controller's new position.
                 PxExtendedVec3 pos = m_kcc->update(this->getWorld());
                 m_rootNode->setPosition(Ogre::Real(pos.x),
                                           Ogre::Real(pos.y),
@@ -129,6 +166,65 @@ void ActorComponent::update(void)
         }
         break;
     }
+
+    Ogre::Real x = static_cast<Ogre::Real>(m_controllerAxis->x2);
+    Ogre::Real y = static_cast<Ogre::Real>(m_controllerAxis->y2);
+
+    x *= 0.0001f;
+    y *= 0.0001f;
+
+    const Ogre::Real deadzone = 0.60f;
+    if (std::abs(x) < deadzone){
+        x = 0.f;
+    }
+    if (std::abs(y) < deadzone){
+        y = 0.f;
+    }
+
+    if (x == 0.f && y == 0.f){
+        return;
+    }
+
+    printf("look: %.2f, %.2f\n", x, y);
+
+    const Ogre::Real sens = 0.70f;
+
+    m_yawNode->yaw(Ogre::Degree(-x * sens));
+    m_pitchNode->pitch(Ogre::Degree(y * sens * 0.75f));
+    {
+        // Prevent the camera from pitching upside down.
+        Ogre::Real pitchAngle = 0.f;
+        Ogre::Real pitchAngleParity = 0.f;
+
+        // Get the angle of rotation around the x-axis.
+        pitchAngle = (2.f * Ogre::Degree(Ogre::Math::ACos(
+            m_pitchNode->getOrientation().w)).valueDegrees());
+
+        pitchAngleParity = m_pitchNode->getOrientation().x;
+
+        // Limit pitch.
+        // @TODO: Define this in data.
+        if (pitchAngle > 80.f){
+            if (pitchAngleParity > 0){
+                m_pitchNode->setOrientation(Ogre::Quaternion(
+                    Ogre::Math::Sqrt(0.5f),
+                    Ogre::Math::Sqrt(0.5f) - 0.115f,
+                    0.f,
+                    0.f));
+            }
+            else if (pitchAngleParity < 0){
+                m_pitchNode->setOrientation(Ogre::Quaternion(
+                    Ogre::Math::Sqrt(0.5f),
+                    -Ogre::Math::Sqrt(0.5f) + 0.115f,
+                    0.f,
+                    0.f));
+            }
+        }
+    }
+
+    // Store orientations for next call to applyInput().
+    m_yawOrientation = m_yawNode->getOrientation();
+    m_pitchOrientation = m_pitchNode->getOrientation();
 }
 
 // ========================================================================= //
@@ -153,6 +249,24 @@ void ActorComponent::message(ComponentMessage& msg)
 
     case ComponentMessage::Type::SetOrientation:
         this->setOrientation(boost::get<Ogre::Quaternion>(msg.data));
+        break;
+
+    case ComponentMessage::Type::Move:
+        {
+            ControllerAxisMotion m = 
+                boost::get<ControllerAxisMotion>(msg.data);
+
+            this->move(m.x1, m.y1);
+            static auto lastX2 = 0.f, lastY2 = 0.f;
+            //m.x2 *= 0.0001f;
+            //m.y2 *= 0.0001f;
+
+            m_controllerAxis->x2 = m.x2;
+            m_controllerAxis->y2 = m.y2;
+
+            
+            //this->look(m.x2, m.y2);
+        }
         break;
 
     case ComponentMessage::Type::Look:
@@ -298,7 +412,60 @@ void ActorComponent::applyInput(const CommandType& type)
 
 // ========================================================================= //
 
-void ActorComponent::look(const int relx, const int rely)
+void ActorComponent::move(const Sint16 x, const Sint16 y)
+{
+    const Sint16 deadzone = 5000;
+    if (std::abs(x) > deadzone){
+        m_controllerAxis->x1 = x;
+    }
+    else{
+        m_controllerAxis->x1 = 0;
+    }
+    if (std::abs(y) > deadzone){
+        m_controllerAxis->y1 = y;
+    }
+    else{
+        m_controllerAxis->y1 = 0;
+    }
+
+    //Ogre::Vector3 translate(Ogre::Vector3::ZERO);
+    //translate.x = x;
+    //translate.z = y;
+    ////translate.normalise();
+
+    //// Calculate movement vector.
+    //translate = m_yawOrientation * m_pitchOrientation * translate;
+
+    //// Calculate the forwards vector and use it to keep the player moving at
+    //// the same velocity despite the pitch of the camera.
+    //Ogre::Vector3 right, up, forwards;
+    //m_rollNode->_getDerivedOrientation().ToAxes(right, up, forwards);
+    //up.crossProduct(right);
+    //up.normalise();
+
+    //// Modify original movement vector.
+    //translate.x /= up.y;
+    //translate.z /= up.y;
+
+    //// Prevent faster movement when moving diagonally.
+    //translate.normalise();
+
+    //// Apply actor's speed.
+    //translate *= m_speed;
+
+    //// Update kinematic controller.
+    //translate.y = 0.f;
+    //PxExtendedVec3 pos = m_kcc->move(translate);
+
+    //// Update scene node with controller's new position.
+    //m_rootNode->setPosition(Ogre::Real(pos.x),
+    //                        Ogre::Real(pos.y),
+    //                        Ogre::Real(pos.z));
+}
+
+// ========================================================================= //
+
+void ActorComponent::look(const Sint16 relx, const Sint16 rely)
 {
     if (relx == 0 && rely == 0){
         return;

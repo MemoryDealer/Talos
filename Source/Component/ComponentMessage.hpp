@@ -15,10 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: Message.hpp
+// File: ComponentMessage.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines Message struct for Components.
+// Defines ComponentMessage struct for Components.
 // ========================================================================= //
 
 #ifndef __COMPONENTMESSAGE_HPP__
@@ -34,11 +34,18 @@
 
 // @TODO: Find a better place to put these structs.
 
+struct ControllerAxisMotion{
+    Sint16 x1; // x-position of left joystick.
+    Sint16 y1; // y-position of left joystick.
+    Sint16 x2; // x-position of right joystick.
+    Sint16 y2; // y-position of right joystick.
+};
+
+
 struct MouseMove{
     int32_t relx;
     int32_t rely;
 };
-
 // ========================================================================= //
 
 struct ComponentMessage{
@@ -46,16 +53,22 @@ struct ComponentMessage{
     enum class Type{
         Null = 0,
 
+        // Direct positional functions.
         GetPosition,
         SetPosition,
         GetOrientation,
         SetOrientation,
         Translate,
+        TransformUpdate,
+
+        // Player-world interaction functions (input driven).
+        Move,
         Look,
         Action,
-        LinkActivate,
-        TransformUpdate,
         Command,
+
+        // Entity-world interaction functions.
+        LinkActivate,                
         
         End
     };
@@ -68,6 +81,7 @@ struct ComponentMessage{
         std::string, 
         Ogre::Vector3,
         Ogre::Quaternion,
+        ControllerAxisMotion,
         MouseMove,
         CommandType,
         TransformUpdate

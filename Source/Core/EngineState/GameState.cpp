@@ -210,6 +210,8 @@ void GameState::update(void)
             case SDL_MOUSEBUTTONUP:
             case SDL_KEYDOWN:
             case SDL_TEXTINPUT:
+            case SDL_CONTROLLERBUTTONDOWN:
+            case SDL_CONTROLLERBUTTONUP:
                 // Temporary exit handling.
                 if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE){
                     m_world->getNetwork()->endGame();
@@ -227,7 +229,7 @@ void GameState::update(void)
                         child->showBoundingBox(bb);
                     }
                 }
-
+                
                 // Send input commands to the player.
                 m_world->handleInput(e);
                 break;
@@ -244,6 +246,25 @@ void GameState::update(void)
                     m_world->getPlayer()->message(msg);
                     m_world->getNetwork()->sendMouseMove(mm.relx, mm.rely);
                 }
+                break;
+
+            case SDL_CONTROLLERAXISMOTION:                
+                {
+                    ControllerAxisMotion m = m_world->getInput()->handleControllerAxisMotion(e);
+                    //printf("AxisMotion:\n %d, %d\n%d, %d\n", m.x1, m.y1, m.x2, m.y2);
+
+                    ComponentMessage msg(ComponentMessage::Type::Move);
+                    msg.data = m;
+                    m_world->getPlayer()->message(msg);
+                }
+                break;
+
+            case SDL_CONTROLLERDEVICEADDED:
+                m_world->getInput()->addGamepad(e.cdevice.which);
+                break;
+
+            case SDL_CONTROLLERDEVICEREMOVED:
+                m_world->getInput()->removeGamepad(e.cdevice.which);
                 break;
 
             case SDL_QUIT:
@@ -353,7 +374,7 @@ void GameState::addNetworkPlayers(void)
 
         // Attach player components.
         m_world->attachComponent<ActorComponent>(e);
-        m_world->attachComponent<ModelComponent>(e)->setMesh("Cylinder.mesh");
+        m_world->attachComponent<ModelComponent>(e)->setMesh("Cylinder.mesh", "Board.jpg");
         LightComponentPtr lightC = 
             m_world->attachComponent<LightComponent>(e);
         lightC->setType(LightComponent::Type::Spotlight);
