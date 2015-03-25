@@ -105,6 +105,9 @@ public:
     // Returns pointer to kinematic character controller.
     KCC* getKCC(void) const;
 
+    // Returns pointer to roll node (lowest in hierarchy).
+    Ogre::SceneNode* getRollNode(void) const;
+
     // Setters:
 
     // Sets position of actor's root node and character controller's position.

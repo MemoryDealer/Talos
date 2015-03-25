@@ -235,7 +235,7 @@ const ControllerAxisMotion Input::handleControllerAxisMotion(const SDL_Event& e)
 
 void Input::update(void)
 {
-    /*if (keystate[SDL_SCANCODE_W]){
+    if (keystate[SDL_SCANCODE_W]){
         this->pushCommand(m_keymap[SDLK_w]);
     }
     if (keystate[SDL_SCANCODE_S]){
@@ -246,7 +246,7 @@ void Input::update(void)
     }
     if (keystate[SDL_SCANCODE_D]){
         this->pushCommand(m_keymap[SDLK_d]);
-    }*/
+    }
 }
 
 // ========================================================================= //

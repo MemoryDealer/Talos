@@ -1,3 +1,11 @@
+import diffuse_template from "diffuse.material"
+
+material DiffuseBlack : diffuse_template
+{
+    set_texture_alias ambient_tex black.jpg
+	set_texture_alias diffuse_tex black.jpg
+}
+
 material BaseRedNoLighting
 {
 	technique
@@ -7,6 +15,20 @@ material BaseRedNoLighting
 			texture_unit
 			{
 				colour_op_ex source1 src_manual src_current 1 0 0
+			}
+		}
+	}
+}
+
+material GunTest
+{
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture black.jpg
 			}
 		}
 	}

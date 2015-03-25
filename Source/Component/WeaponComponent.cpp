@@ -15,58 +15,71 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: ComponentDecls.hpp
+// File: WeaponComponent.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Forward declares classes for each type of Component and the typedefs for
-// pointers to them.
+// Implements WeaponComponent class.
 // ========================================================================= //
 
-#ifndef __COMPONENTDECLS_HPP__
-#define __COMPONENTDECLS_HPP__
-
-// ========================================================================= //
-
-class Component;
-class ActorComponent;
-class CameraComponent;
-class CollisionComponent;
-class LightComponent;
-class LinkComponent;
-class ModelComponent;
-class NetworkComponent;
-class ParticleComponent;
-class PhysicsComponent;
-class RotationComponent;
-class SceneComponent;
-class StatComponent;
-class TrackComponent;
-class WeaponComponent;
-
-// Other forward declarations.
-
-struct ComponentMessage;
-
-// All component pointer typedefs.
-
-typedef Component* ComponentPtr;
-typedef ActorComponent* ActorComponentPtr;
-typedef CameraComponent* CameraComponentPtr;
-typedef CollisionComponent* CollisionComponentPtr;
-typedef LightComponent* LightComponentPtr;
-typedef LinkComponent* LinkComponentPtr;
-typedef ModelComponent* ModelComponentPtr;
-typedef NetworkComponent* NetworkComponentPtr;
-typedef ParticleComponent* ParticleComponentPtr;
-typedef PhysicsComponent* PhysicsComponentPtr;
-typedef RotationComponent* RotationComponentPtr;
-typedef SceneComponent* SceneComponentPtr;
-typedef StatComponent* StatComponentPtr;
-typedef TrackComponent* TrackComponentPtr;
-typedef WeaponComponent* WeaponComponentPtr;
+#include "WeaponComponent.hpp"
+#include "World/World.hpp"
 
 // ========================================================================= //
 
-#endif
+WeaponComponent::WeaponComponent(void) :
+m_node(nullptr),
+m_entity(nullptr)
+{
+
+}
+
+// ========================================================================= //
+
+WeaponComponent::~WeaponComponent(void)
+{
+
+}
+
+// ========================================================================= //
+
+void WeaponComponent::init(void)
+{
+
+}
+
+// ========================================================================= //
+
+void WeaponComponent::destroy(void)
+{
+
+}
+
+// ========================================================================= //
+
+void WeaponComponent::update(void)
+{
+
+}
+
+// ========================================================================= //
+
+void WeaponComponent::message(ComponentMessage& msg)
+{
+
+}
+
+// ========================================================================= //
+
+void WeaponComponent::setup(Ogre::SceneNode* actorRollNode)
+{
+    m_node = actorRollNode->createChildSceneNode();
+    m_entity = this->getWorld()->getSceneManager()->createEntity("laserrifle.mesh");
+    m_entity->setMaterialName("DiffuseBlack");    
+    m_node->attachObject(m_entity);
+
+    m_node->translate(0.9f, -0.6f, -6.0f);
+    m_node->rotate(Ogre::Vector3::UNIT_X, Ogre::Degree(-90.f));
+    m_node->rotate(Ogre::Vector3::UNIT_Y, Ogre::Degree(180.f));
+}
 
 // ========================================================================= //

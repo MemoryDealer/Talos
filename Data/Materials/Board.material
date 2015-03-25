@@ -2,6 +2,18 @@ import diffuse_template from "diffuse.material"
 
 material Board : diffuse_template
 {
-	set_texture_alias ambient_tex board.jpg
-	set_texture_alias diffuse_tex board.jpg
+	set_texture_alias ambient_tex MarbleTile1.jpg
+	set_texture_alias diffuse_tex MarbleTile1.jpg
+}
+
+material MarbleWall : diffuse_template
+{
+    set_texture_alias ambient_tex MarbleWall1.jpg
+	set_texture_alias diffuse_tex MarbleWall1.jpg
+}
+
+material BlueMetal : diffuse_template
+{
+    set_texture_alias ambient_tex art4.jpg
+	set_texture_alias diffuse_tex art4.jpg
 }

@@ -15,55 +15,47 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: ComponentDecls.hpp
+// File: ParticleComponent.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Forward declares classes for each type of Component and the typedefs for
-// pointers to them.
+// Defines ParticleComponent class.
 // ========================================================================= //
 
-#ifndef __COMPONENTDECLS_HPP__
-#define __COMPONENTDECLS_HPP__
+#ifndef __PARTICLECOMPONENT_HPP__
+#define __PARTICLECOMPONENT_HPP__
 
 // ========================================================================= //
 
-class Component;
-class ActorComponent;
-class CameraComponent;
-class CollisionComponent;
-class LightComponent;
-class LinkComponent;
-class ModelComponent;
-class NetworkComponent;
-class ParticleComponent;
-class PhysicsComponent;
-class RotationComponent;
-class SceneComponent;
-class StatComponent;
-class TrackComponent;
-class WeaponComponent;
+#include "Component.hpp"
 
-// Other forward declarations.
+// ========================================================================= //
+// Holds a particle system.
+class ParticleComponent : public Component
+{
+public:
+    // Default initializes member data.
+    explicit ParticleComponent(void);
 
-struct ComponentMessage;
+    // Empty destructor.
+    virtual ~ParticleComponent(void) override;
 
-// All component pointer typedefs.
+    
+    virtual void init(void) override;
 
-typedef Component* ComponentPtr;
-typedef ActorComponent* ActorComponentPtr;
-typedef CameraComponent* CameraComponentPtr;
-typedef CollisionComponent* CollisionComponentPtr;
-typedef LightComponent* LightComponentPtr;
-typedef LinkComponent* LinkComponentPtr;
-typedef ModelComponent* ModelComponentPtr;
-typedef NetworkComponent* NetworkComponentPtr;
-typedef ParticleComponent* ParticleComponentPtr;
-typedef PhysicsComponent* PhysicsComponentPtr;
-typedef RotationComponent* RotationComponentPtr;
-typedef SceneComponent* SceneComponentPtr;
-typedef StatComponent* StatComponentPtr;
-typedef TrackComponent* TrackComponentPtr;
-typedef WeaponComponent* WeaponComponentPtr;
+    virtual void destroy(void) override;
+
+    virtual void update(void) override;
+
+    virtual void message(ComponentMessage& msg) override;
+
+    // Component functions:
+
+    // Creates particle system under specified scene node.
+    void setup(Ogre::SceneNode* node);
+
+private:
+    Ogre::ParticleSystem* m_ps;
+};
 
 // ========================================================================= //
 

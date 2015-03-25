@@ -21,10 +21,13 @@
     <ClCompile Include="Source\Component\LinkComponent.cpp" />
     <ClCompile Include="Source\Component\ModelComponent.cpp" />
     <ClCompile Include="Source\Component\NetworkComponent.cpp" />
+    <ClCompile Include="Source\Component\ParticleComponent.cpp" />
     <ClCompile Include="Source\Component\PhysicsComponent.cpp" />
     <ClCompile Include="Source\Component\RotationComponent.cpp" />
     <ClCompile Include="Source\Component\SceneComponent.cpp" />
+    <ClCompile Include="Source\Component\StatComponent.cpp" />
     <ClCompile Include="Source\Component\TrackComponent.cpp" />
+    <ClCompile Include="Source\Component\WeaponComponent.cpp" />
     <ClCompile Include="Source\Config\Config.cpp" />
     <ClCompile Include="Source\Core\Assert.cpp" />
     <ClCompile Include="Source\Core\Engine.cpp" />
@@ -109,10 +112,13 @@
     <ClInclude Include="Source\Component\ModelComponent.hpp" />
     <ClInclude Include="Source\Component\NetworkComponent.hpp" />
     <ClInclude Include="Source\Component\NullComponent.hpp" />
+    <ClInclude Include="Source\Component\ParticleComponent.hpp" />
     <ClInclude Include="Source\Component\PhysicsComponent.hpp" />
     <ClInclude Include="Source\Component\RotationComponent.hpp" />
     <ClInclude Include="Source\Component\SceneComponent.hpp" />
+    <ClInclude Include="Source\Component\StatComponent.hpp" />
     <ClInclude Include="Source\Component\TrackComponent.hpp" />
+    <ClInclude Include="Source\Component\WeaponComponent.hpp" />
     <ClInclude Include="Source\Config\Config.hpp" />
     <ClInclude Include="Source\Core\Assert.hpp" />
     <ClInclude Include="Source\Core\Engine.hpp" />
@@ -233,7 +239,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>ws2_32.lib;RakNet_VS2008_DLL_Debug_Win32.lib;OgreMain_d.lib;RenderSystem_Direct3D9_d.lib;RenderSystem_GL_d.lib;Plugin_OctreeSceneManager_d.lib;Plugin_CgProgramManager_d.lib;Hydrax_d.lib;SDL2.lib;SDL2main.lib;CEGUIBase-0_d.lib;CEGUIOgreRenderer-0_d.lib;PhysX3DEBUG_x86.lib;PhysX3CommonDEBUG_x86.lib;PhysX3ExtensionsDEBUG.lib;PhysX3CharacterKinematicDEBUG_x86.lib;PhysXVisualDebuggerSDKDEBUG.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;RakNet_VS2008_DLL_Debug_Win32.lib;OgreMain_d.lib;RenderSystem_Direct3D9_d.lib;RenderSystem_GL_d.lib;Plugin_OctreeSceneManager_d.lib;Plugin_CgProgramManager_d.lib;Plugin_ParticleFX_d.lib;Hydrax_d.lib;SDL2.lib;SDL2main.lib;CEGUIBase-0_d.lib;CEGUIOgreRenderer-0_d.lib;PhysX3DEBUG_x86.lib;PhysX3CommonDEBUG_x86.lib;PhysX3ExtensionsDEBUG.lib;PhysX3CharacterKinematicDEBUG_x86.lib;PhysXVisualDebuggerSDKDEBUG.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <Bscmake>
@@ -256,7 +262,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>ws2_32.lib;RakNet_VS2008_DLL_Release_Win32.lib;OgreMain.lib;RenderSystem_Direct3D9.lib;RenderSystem_GL.lib;Plugin_OctreeSceneManager.lib;Hydrax.lib;SDL2.lib;CEGUIBase-0.lib;CEGUIOgreRenderer-0.lib;PhysX3_x86.lib;PhysX3Common_x86.lib;PhysX3Extensions.lib;PhysX3CharacterKinematic_x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;RakNet_VS2008_DLL_Release_Win32.lib;OgreMain.lib;RenderSystem_Direct3D9.lib;RenderSystem_GL.lib;Plugin_OctreeSceneManager.lib;Plugin_ParticleFX.lib;Hydrax.lib;SDL2.lib;CEGUIBase-0.lib;CEGUIOgreRenderer-0.lib;PhysX3_x86.lib;PhysX3Common_x86.lib;PhysX3Extensions.lib;PhysX3CharacterKinematic_x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -15,58 +15,55 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: ComponentDecls.hpp
+// File: StatComponent.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Forward declares classes for each type of Component and the typedefs for
-// pointers to them.
+// Implements StatComponent class.
 // ========================================================================= //
 
-#ifndef __COMPONENTDECLS_HPP__
-#define __COMPONENTDECLS_HPP__
-
-// ========================================================================= //
-
-class Component;
-class ActorComponent;
-class CameraComponent;
-class CollisionComponent;
-class LightComponent;
-class LinkComponent;
-class ModelComponent;
-class NetworkComponent;
-class ParticleComponent;
-class PhysicsComponent;
-class RotationComponent;
-class SceneComponent;
-class StatComponent;
-class TrackComponent;
-class WeaponComponent;
-
-// Other forward declarations.
-
-struct ComponentMessage;
-
-// All component pointer typedefs.
-
-typedef Component* ComponentPtr;
-typedef ActorComponent* ActorComponentPtr;
-typedef CameraComponent* CameraComponentPtr;
-typedef CollisionComponent* CollisionComponentPtr;
-typedef LightComponent* LightComponentPtr;
-typedef LinkComponent* LinkComponentPtr;
-typedef ModelComponent* ModelComponentPtr;
-typedef NetworkComponent* NetworkComponentPtr;
-typedef ParticleComponent* ParticleComponentPtr;
-typedef PhysicsComponent* PhysicsComponentPtr;
-typedef RotationComponent* RotationComponentPtr;
-typedef SceneComponent* SceneComponentPtr;
-typedef StatComponent* StatComponentPtr;
-typedef TrackComponent* TrackComponentPtr;
-typedef WeaponComponent* WeaponComponentPtr;
+#include "StatComponent.hpp"
 
 // ========================================================================= //
 
-#endif
+StatComponent::StatComponent(void) :
+m_hp(100)
+{
+
+}
+
+// ========================================================================= //
+
+StatComponent::~StatComponent(void)
+{
+
+}
+
+// ========================================================================= //
+
+void StatComponent::init(void)
+{
+
+}
+
+// ========================================================================= //
+
+void StatComponent::destroy(void)
+{
+
+}
+
+// ========================================================================= //
+
+void StatComponent::update(void)
+{
+
+}
+
+// ========================================================================= //
+
+void StatComponent::message(ComponentMessage& msg)
+{
+
+}
 
 // ========================================================================= //

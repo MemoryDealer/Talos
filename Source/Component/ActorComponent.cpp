@@ -324,7 +324,7 @@ void ActorComponent::attachFlashlight(Ogre::Light* light)
            "Non-spotlight added as flashlight");
 
     Ogre::SceneNode* flashlight = m_rollNode->createChildSceneNode();
-    flashlight->translate(0.5f, -0.45f, 0.f);
+    flashlight->translate(0.5f, -0.45f, -3.f);
 
     light->setDirection(Ogre::Vector3::NEGATIVE_UNIT_Z);
     flashlight->attachObject(light);
@@ -517,9 +517,9 @@ void ActorComponent::action(void)
 {    
     // Construct a direction from the player's origin going forward in the 
     // direction they are looking.
-    Ogre::Vector3 dir = this->getPosition() +
-        (m_yawNode->getOrientation() * m_pitchNode->getOrientation() *
-        Ogre::Vector3::NEGATIVE_UNIT_Z) * 10000.f;
+    Ogre::Vector3 dir = //this->getPosition() +
+        (m_yawNode->getOrientation() * m_pitchNode->getOrientation()) * 
+        Ogre::Vector3::NEGATIVE_UNIT_Z;
 
     // Setup raycast data.
     PScene::Ray ray;
@@ -528,27 +528,48 @@ void ActorComponent::action(void)
     ray.dist = 100.f;
     ray.origin = Physics::toPx(this->getPosition());
 
-    // Run the raycast and check results.
-    bool status = this->getWorld()->getPScene()->raycast(ray);
-    const PxReal minDistance = 3.f;
-    if (status){
-        const PxReal dist = ray.hit.block.distance;
-        if (dist > 0.f && dist < 3.f){
-            // Get the EntityID of what was hit, stored in the actor's user data.
-            const EntityID id = reinterpret_cast<const EntityID>(
-                static_cast<void*>(ray.hit.block.actor->userData));           
+    const PxU32 size = 5;
+    PxRaycastHit hitBuffer[size];
+    PxRaycastBuffer buf(hitBuffer, size);
 
-            // Get EntityPtr from world.
-            EntityPtr entity = this->getWorld()->getEntityPtr(id);
-            Assert(entity != nullptr, 
-                   "Invalid EntityPtr retrieved from World in action");
-
-            // Send entity an action message.
-            ComponentMessage msg(ComponentMessage::Type::Action);
-            entity->message(msg);
-            printf("Action hit: %.2f\tEntityID: %d\n", dist, id);
+    bool hasHit = this->getWorld()->getPScene()->getScene()->raycast(ray.origin,
+                                                                     ray.dir,
+                                                                     ray.dist,
+                                                                     buf);
+    if (hasHit){
+        for (PxU32 i = 0; i < buf.nbTouches; ++i){
+            if (buf.touches[i].distance < 4.f){
+                const EntityID id = reinterpret_cast<const EntityID>(
+                    static_cast<void*>(buf.touches[i].actor->userData));
+                //printf("Hit EntityID %d, %.2f\n", id, buf.touches[i].distance);
+                EntityPtr entity = this->getWorld()->getEntityPtr(id);
+                ComponentMessage msg(ComponentMessage::Type::Action);
+                entity->message(msg);
+            }
         }
     }
+    
+    // Run the raycast and check results.
+    //bool status = this->getWorld()->getPScene()->raycast(ray);
+    //const PxReal minDistance = 5.f;
+    //if (status){
+    //    const PxReal dist = ray.hit.block.distance;
+    //    if (dist > 0.f && dist < minDistance){
+    //        // Get the EntityID of what was hit, stored in the actor's user data.
+    //        const EntityID id = reinterpret_cast<const EntityID>(
+    //            static_cast<void*>(ray.hit.block.actor->userData));           
+
+    //        // Get EntityPtr from world.
+    //        EntityPtr entity = this->getWorld()->getEntityPtr(id);
+    //        Assert(entity != nullptr, 
+    //               "Invalid EntityPtr retrieved from World in action");
+
+    //        // Send entity an action message.
+    //        ComponentMessage msg(ComponentMessage::Type::Action);
+    //        entity->message(msg);
+    //        printf("Action hit: %.2f\tEntityID: %d\n", dist, id);
+    //    }
+    //}
 }
 
 // ========================================================================= //
@@ -586,6 +607,13 @@ const Ogre::Quaternion& ActorComponent::getPitchOrientation(void) const
 KCC* ActorComponent::getKCC(void) const
 {
     return m_kcc;
+}
+
+// ========================================================================= //
+
+Ogre::SceneNode* ActorComponent::getRollNode(void) const
+{
+    return m_rollNode;
 }
 
 // ========================================================================= //

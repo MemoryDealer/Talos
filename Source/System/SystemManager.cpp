@@ -132,6 +132,12 @@ void SystemManager::processEntity(EntityPtr entity)
                 static_cast<ActorComponentPtr>(sceneC));
         }
 
+        // Attach particle component.
+        if (entity->hasComponent<ParticleComponent>()){
+            entity->getComponent<ParticleComponent>()->setup(
+                sceneC->getSceneNode());
+        }
+
         // Setup rotation component.
         if (entity->hasComponent<RotationComponent>()){
             entity->getComponent<RotationComponent>()->setup(sceneC);
@@ -141,6 +147,14 @@ void SystemManager::processEntity(EntityPtr entity)
         if (entity->hasComponent<TrackComponent>()){
             entity->getComponent<TrackComponent>()->setup(
                 sceneC->getSceneNode());
+        }
+
+        // Attach weapon component.
+        if (entity->hasComponent<WeaponComponent>()){
+            if (entity->hasComponent<ActorComponent>()){
+                entity->getComponent<WeaponComponent>()->setup(
+                    entity->getComponent<ActorComponent>()->getRollNode());
+            }
         }
     }
     

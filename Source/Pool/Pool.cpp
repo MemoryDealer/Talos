@@ -34,10 +34,13 @@ template class Pool<LightComponent>;
 template class Pool<LinkComponent>;
 template class Pool<ModelComponent>;
 template class Pool<NetworkComponent>;
+template class Pool<ParticleComponent>;
 template class Pool<PhysicsComponent>;
 template class Pool<RotationComponent>;
 template class Pool<SceneComponent>;
+template class Pool<StatComponent>;
 template class Pool<TrackComponent>;
+template class Pool<WeaponComponent>;
 
 // ========================================================================= //
 

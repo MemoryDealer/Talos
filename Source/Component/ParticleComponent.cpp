@@ -15,58 +15,64 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: ComponentDecls.hpp
+// File: ParticleComponent.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Forward declares classes for each type of Component and the typedefs for
-// pointers to them.
+// Implements ParticleComponent class.
 // ========================================================================= //
 
-#ifndef __COMPONENTDECLS_HPP__
-#define __COMPONENTDECLS_HPP__
-
-// ========================================================================= //
-
-class Component;
-class ActorComponent;
-class CameraComponent;
-class CollisionComponent;
-class LightComponent;
-class LinkComponent;
-class ModelComponent;
-class NetworkComponent;
-class ParticleComponent;
-class PhysicsComponent;
-class RotationComponent;
-class SceneComponent;
-class StatComponent;
-class TrackComponent;
-class WeaponComponent;
-
-// Other forward declarations.
-
-struct ComponentMessage;
-
-// All component pointer typedefs.
-
-typedef Component* ComponentPtr;
-typedef ActorComponent* ActorComponentPtr;
-typedef CameraComponent* CameraComponentPtr;
-typedef CollisionComponent* CollisionComponentPtr;
-typedef LightComponent* LightComponentPtr;
-typedef LinkComponent* LinkComponentPtr;
-typedef ModelComponent* ModelComponentPtr;
-typedef NetworkComponent* NetworkComponentPtr;
-typedef ParticleComponent* ParticleComponentPtr;
-typedef PhysicsComponent* PhysicsComponentPtr;
-typedef RotationComponent* RotationComponentPtr;
-typedef SceneComponent* SceneComponentPtr;
-typedef StatComponent* StatComponentPtr;
-typedef TrackComponent* TrackComponentPtr;
-typedef WeaponComponent* WeaponComponentPtr;
+#include "ParticleComponent.hpp"
+#include "World/World.hpp"
 
 // ========================================================================= //
 
-#endif
+ParticleComponent::ParticleComponent(void) :
+m_ps(nullptr)
+{
+
+}
+
+// ========================================================================= //
+
+ParticleComponent::~ParticleComponent(void)
+{
+
+}
+
+// ========================================================================= //
+
+void ParticleComponent::init(void)
+{
+    m_ps = this->getWorld()->getSceneManager()->createParticleSystem("Test",
+                                                                     "PurpleFountain");
+}
+
+// ========================================================================= //
+
+void ParticleComponent::destroy(void)
+{
+
+}
+
+// ========================================================================= //
+
+void ParticleComponent::update(void)
+{
+
+}
+
+// ========================================================================= //
+
+void ParticleComponent::message(ComponentMessage& msg)
+{
+
+}
+
+// ========================================================================= //
+
+void ParticleComponent::setup(Ogre::SceneNode* node)
+{
+    node->attachObject(m_ps);
+}
 
 // ========================================================================= //

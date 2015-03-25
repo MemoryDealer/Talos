@@ -451,6 +451,14 @@
     Also directional lights perpendicular to materials using make it completely white. So either the shader must be fixed or a different material used for scenes where it's needed.
 * Added shadow support; soft shadows. Only spotlights work well with these. Point lights can work but they are glitchy.
 
+== 3/22/16 ==
+* Added gamepad support for local player movement.
+
+== 3/24/16 ==
+* Added ParticleComponent, StatComponent, and WeaponComponent.
+* Discovered the way I was doing PhysX raycasts was hitting the player's kinematic actor and would return, not reporting what should have been hit. Temporarily solved by raytesting against up to 5 contacts.
+* Added some test scene entities such as pistons and spotlights.
+
 == TODO ==
 * Add PScene::addActor()
 * Move input update into world.
@@ -483,7 +491,6 @@
 * With soft shadows, pointing a spotlight at an object with a point light near it casts a black square on nearby objects.
 * Directional lights perpendicular to diffuse_materials make it appear entirely white (or the colour of the light) if ambient shaders are used.
 * Casting ray upwards with PhysX (PScene::raycast()) still returns a result if no hit.
-* Raycast doesn't hit dynamic actor.
 * Hydrax/SkyX need to be shared between states--make them world dependencies perhaps and add code to check if they are already initialized.
 * CEGUI disappears when resizing window.
 ** Hydrax underwater is sped up, fix. (E:\Engine\Ogre3D\Hydrax-v0.5.1\Hydrax\Hydrax.vcproj to recompile).

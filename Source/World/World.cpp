@@ -99,7 +99,7 @@ void World::init(const bool usePhysics)
 
     case Graphics::High:
         m_scene->setShadowTextureSelfShadow(true);
-        
+
         // Set shadow shader.
         m_scene->setShadowTextureCasterMaterial("Sparks/shadow_caster");
 
@@ -120,11 +120,11 @@ void World::init(const bool usePhysics)
 
         /*const uint32_t rtts = m_scene->getShadowTextureCount();
         for (uint32_t i = 0; i < rtts; ++i){
-            Ogre::TexturePtr tex = m_scene->getShadowTexture(i);
-            Ogre::Viewport* vp = 
-                tex->getBuffer()->getRenderTarget()->getViewport(0);
-            vp->setBackgroundColour(Ogre::ColourValue(1.f, 1.f, 1.f, 1.f));
-            vp->setClearEveryFrame(true);
+        Ogre::TexturePtr tex = m_scene->getShadowTexture(i);
+        Ogre::Viewport* vp =
+        tex->getBuffer()->getRenderTarget()->getViewport(0);
+        vp->setBackgroundColour(Ogre::ColourValue(1.f, 1.f, 1.f, 1.f));
+        vp->setClearEveryFrame(true);
         }*/
         break;
     }
@@ -157,14 +157,20 @@ void World::init(const bool usePhysics)
         new Pool<ModelComponent>(common));
     m_componentPools[&typeid(NetworkComponent)].reset(
         new Pool<NetworkComponent>(4));
+    m_componentPools[&typeid(ParticleComponent)].reset(
+        new Pool<ParticleComponent>(common));
     m_componentPools[&typeid(PhysicsComponent)].reset(
         new Pool<PhysicsComponent>(common));
     m_componentPools[&typeid(RotationComponent)].reset(
         new Pool<RotationComponent>(common));
     m_componentPools[&typeid(SceneComponent)].reset(
         new Pool<SceneComponent>(common));
+    m_componentPools[&typeid(StatComponent)].reset(
+        new Pool<StatComponent>(common));
     m_componentPools[&typeid(TrackComponent)].reset(
         new Pool<TrackComponent>(common));
+    m_componentPools[&typeid(WeaponComponent)].reset(
+        new Pool<WeaponComponent>(common));
 
     m_systemManager.reset(new SystemManager(shared_from_this()));
 
@@ -493,6 +499,23 @@ World::attachComponent<NetworkComponent>(EntityPtr entity)
 
 // ========================================================================= //
 
+template<> struct World::componentReturn<ParticleComponent>{
+    typedef ParticleComponentPtr type;
+};
+
+template<> World::componentReturn<ParticleComponent>::type
+World::attachComponent<ParticleComponent>(EntityPtr entity)
+{
+    Pool<ParticleComponent>* pool = static_cast<Pool<ParticleComponent>*>(
+        m_componentPools[&typeid(ParticleComponent)].get());
+
+    ParticleComponentPtr c = pool->create();
+    initComponent(c, entity, shared_from_this());
+    return c;
+}
+
+// ========================================================================= //
+
 template<> struct World::componentReturn<PhysicsComponent>{ 
     typedef PhysicsComponentPtr type; 
 };
@@ -544,6 +567,23 @@ World::attachComponent<SceneComponent>(EntityPtr entity)
 
 // ========================================================================= //
 
+template<> struct World::componentReturn<StatComponent>{
+    typedef StatComponentPtr type;
+};
+
+template<> World::componentReturn<StatComponent>::type
+World::attachComponent<StatComponent>(EntityPtr entity)
+{
+    Pool<StatComponent>* pool = static_cast<Pool<StatComponent>*>(
+        m_componentPools[&typeid(StatComponent)].get());
+
+    StatComponentPtr c = pool->create();
+    initComponent(c, entity, shared_from_this());
+    return c;
+}
+
+// ========================================================================= //
+
 template<> struct World::componentReturn<TrackComponent>{
     typedef TrackComponentPtr type;
 };
@@ -555,6 +595,23 @@ World::attachComponent<TrackComponent>(EntityPtr entity)
         m_componentPools[&typeid(TrackComponent)].get());
 
     TrackComponentPtr c = pool->create();
+    initComponent(c, entity, shared_from_this());
+    return c;
+}
+
+// ========================================================================= //
+
+template<> struct World::componentReturn<WeaponComponent>{
+    typedef WeaponComponentPtr type;
+};
+
+template<> World::componentReturn<WeaponComponent>::type
+World::attachComponent<WeaponComponent>(EntityPtr entity)
+{
+    Pool<WeaponComponent>* pool = static_cast<Pool<WeaponComponent>*>(
+        m_componentPools[&typeid(WeaponComponent)].get());
+
+    WeaponComponentPtr c = pool->create();
     initComponent(c, entity, shared_from_this());
     return c;
 }

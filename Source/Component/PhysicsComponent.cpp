@@ -126,6 +126,8 @@ void PhysicsComponent::init(EntityPtr entity)
     // Add actor to PhysX scene.
     this->getWorld()->getPScene()->getScene()->addActor(*m_rigidActor);
 
+    m_rigidActor->addForce(PxVec3(0.f, 1000.f, 1000.f));
+
     // Add to debug drawer if activated.
     if (this->getWorld()->getPScene()->isUsingDebugDrawer()){
         this->getWorld()->getPScene()->addToDebugDrawer(m_rigidActor, *geometry);

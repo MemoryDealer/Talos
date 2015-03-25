@@ -33,10 +33,13 @@
 #include "LinkComponent.hpp"
 #include "ModelComponent.hpp"
 #include "NetworkComponent.hpp"
+#include "ParticleComponent.hpp"
 #include "PhysicsComponent.hpp"
 #include "RotationComponent.hpp"
 #include "SceneComponent.hpp"
+#include "StatComponent.hpp"
 #include "TrackComponent.hpp"
+#include "WeaponComponent.hpp"
 
 // ========================================================================= //
 

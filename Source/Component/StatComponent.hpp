@@ -15,55 +15,41 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: ComponentDecls.hpp
+// File: StatComponent.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Forward declares classes for each type of Component and the typedefs for
-// pointers to them.
+// Defines StatComponent class.
 // ========================================================================= //
 
-#ifndef __COMPONENTDECLS_HPP__
-#define __COMPONENTDECLS_HPP__
+#ifndef __STATCOMPONENT_HPP__
+#define __STATCOMPONENT_HPP__
 
 // ========================================================================= //
 
-class Component;
-class ActorComponent;
-class CameraComponent;
-class CollisionComponent;
-class LightComponent;
-class LinkComponent;
-class ModelComponent;
-class NetworkComponent;
-class ParticleComponent;
-class PhysicsComponent;
-class RotationComponent;
-class SceneComponent;
-class StatComponent;
-class TrackComponent;
-class WeaponComponent;
+#include "Component.hpp"
 
-// Other forward declarations.
+// ========================================================================= //
+// Holds stats for a player, monster, or for any need.
+class StatComponent : public Component
+{
+public:
+    // Default initializes member data.
+    explicit StatComponent(void);
 
-struct ComponentMessage;
+    virtual ~StatComponent(void) override;
 
-// All component pointer typedefs.
+    virtual void init(void) override;
 
-typedef Component* ComponentPtr;
-typedef ActorComponent* ActorComponentPtr;
-typedef CameraComponent* CameraComponentPtr;
-typedef CollisionComponent* CollisionComponentPtr;
-typedef LightComponent* LightComponentPtr;
-typedef LinkComponent* LinkComponentPtr;
-typedef ModelComponent* ModelComponentPtr;
-typedef NetworkComponent* NetworkComponentPtr;
-typedef ParticleComponent* ParticleComponentPtr;
-typedef PhysicsComponent* PhysicsComponentPtr;
-typedef RotationComponent* RotationComponentPtr;
-typedef SceneComponent* SceneComponentPtr;
-typedef StatComponent* StatComponentPtr;
-typedef TrackComponent* TrackComponentPtr;
-typedef WeaponComponent* WeaponComponentPtr;
+    virtual void destroy(void) override;
+
+    virtual void update(void) override;
+
+    virtual void message(ComponentMessage& msg) override;
+
+private:
+    // @TODO: Use a polymorphic struct
+    uint32_t m_hp;
+};
 
 // ========================================================================= //
 

@@ -15,55 +15,50 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: ComponentDecls.hpp
+// File: WeaponComponent.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Forward declares classes for each type of Component and the typedefs for
-// pointers to them.
+// Defines WeaponComponent class.
 // ========================================================================= //
 
-#ifndef __COMPONENTDECLS_HPP__
-#define __COMPONENTDECLS_HPP__
+#ifndef __WEAPONCOMPONENT_HPP__
+#define __WEAPONCOMPONENT_HPP__
 
 // ========================================================================= //
 
-class Component;
-class ActorComponent;
-class CameraComponent;
-class CollisionComponent;
-class LightComponent;
-class LinkComponent;
-class ModelComponent;
-class NetworkComponent;
-class ParticleComponent;
-class PhysicsComponent;
-class RotationComponent;
-class SceneComponent;
-class StatComponent;
-class TrackComponent;
-class WeaponComponent;
+#include "Component.hpp"
 
-// Other forward declarations.
+// ========================================================================= //
+// A weapon an actor can wield.
+class WeaponComponent : public Component
+{
+public:
+    // Default initializes member data.
+    explicit WeaponComponent(void);
 
-struct ComponentMessage;
+    // Empty destructor.
+    virtual ~WeaponComponent(void) override;
 
-// All component pointer typedefs.
+    // 
+    virtual void init(void) override;
 
-typedef Component* ComponentPtr;
-typedef ActorComponent* ActorComponentPtr;
-typedef CameraComponent* CameraComponentPtr;
-typedef CollisionComponent* CollisionComponentPtr;
-typedef LightComponent* LightComponentPtr;
-typedef LinkComponent* LinkComponentPtr;
-typedef ModelComponent* ModelComponentPtr;
-typedef NetworkComponent* NetworkComponentPtr;
-typedef ParticleComponent* ParticleComponentPtr;
-typedef PhysicsComponent* PhysicsComponentPtr;
-typedef RotationComponent* RotationComponentPtr;
-typedef SceneComponent* SceneComponentPtr;
-typedef StatComponent* StatComponentPtr;
-typedef TrackComponent* TrackComponentPtr;
-typedef WeaponComponent* WeaponComponentPtr;
+    virtual void destroy(void) override;
+
+    virtual void update(void) override;
+
+    virtual void message(ComponentMessage& msg) override;
+
+    // Component functions:
+
+    // Creates Ogre::Entity and SceneNode with weapon model under actor's
+    // roll node.
+    void setup(Ogre::SceneNode* actorRollNode);
+
+private:
+    Ogre::SceneNode* m_node;
+    Ogre::Entity* m_entity;
+
+};
 
 // ========================================================================= //
 
