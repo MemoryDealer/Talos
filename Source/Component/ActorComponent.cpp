@@ -257,15 +257,8 @@ void ActorComponent::message(ComponentMessage& msg)
                 boost::get<ControllerAxisMotion>(msg.data);
 
             this->move(m.x1, m.y1);
-            static auto lastX2 = 0.f, lastY2 = 0.f;
-            //m.x2 *= 0.0001f;
-            //m.y2 *= 0.0001f;
-
             m_controllerAxis->x2 = m.x2;
             m_controllerAxis->y2 = m.y2;
-
-            
-            //this->look(m.x2, m.y2);
         }
         break;
 

@@ -180,12 +180,12 @@
 * Was caused by setting the colour of hydrax's sun directly from getting Environment::m_sun's diffuse colour. I've just removed it.
 * Have a basic day/night cycle.
 * Added an EntityPtr to World which points to the player's entity. This is useful for the Ocean setup and will be useful in the future. 
-* (Officially 2/16, but whatever) Rebuilding Ogre to support D3D9 because D3D11 support is utter garbage.
+* (Officially 2/15, but whatever) Rebuilding Ogre to support D3D9 because D3D11 support is utter garbage.
 * Rebuilt latest Ogre with D3D9 support, I may have to rebuild CEGUI and Hydrax/SkyX with the rebuilt version of Ogre, not sure.
 * Using D3D9 fixed the underwater issues, except the underwater compositor still ticks way faster than it should.
 * Still no above water reflections even though everything is setup as it should be.
 
-== 2/16/15 ==
+== 2/15/15 ==
 * By not loading the Hydrax config file, reflections are enabled. So something in the .hdx file is disabling them.
 * Compiled latest community Hydrax source, testing.
 * It seems setting <float>GlobalTransparency=0.5 enabled reflection along with everything else working fine.
@@ -370,7 +370,7 @@
     So to manually create a new Entity without using World::setupEntities(), one could add the components like normal, then call Entity::setupComponents() directly, and World::addEntityToSystem().
 * Added Talos.hpp/cpp which defines MS_PER_UPDATE (16.0 for now) and the version major and minor values for engine.
 
-== 3/6/16 ==
+== 3/6/15 ==
 * Changed PhysicsComponent to store the EntityID in the PhysX actor's user data rather than the EntityPtr itself.
 * Added a hash table into World that stores EntityIDs and EntityPtrs, so looking up an Entity by its ID is O(1). A little extra overhead but worth it for raycasting PhysX actors.
 * Added Typedefs.hpp to Source directory, which forward declares most classes and several typedefs. Anything that must be forward declared in a header file more than once should go here.
@@ -381,14 +381,14 @@
 * Removed Ogre::Camera pointer from ActorComponent. Now the translation vector per frame is modified to maintain the same velocity regardless of pitch using the roll nodes derived orientation.
 * Added Network::getNumPlayers() and Network::addPlayerEntity(). In GameState::enter(), an entity is created for each player and added to the server.
 
-== 3/7/16 ==
+== 3/7/15 ==
 * Changed CommandRepository to use a hash table for storing CommandPtr objects.
-* (3/8/16) Added CommandType.hpp which enumerates the strongly typed CommandType. Now Command has a member CommandType, for use as a key in CommandRepository's hash table.
+* (3/8/15) Added CommandType.hpp which enumerates the strongly typed CommandType. Now Command has a member CommandType, for use as a key in CommandRepository's hash table.
     Note this is only for networking code--to identify which type of command the client sent without needing serialization. Serialization of the entire Command objects seems like a waste of
     bandwidth, but if I have extra time I will see if it can be implemented. Or perhaps the RakNet RPC4 plugin would be useful for this.
 * Got basic client movement working with server. 
 
-== 3/9/16 ==
+== 3/9/15 ==
 * Note that the error C2440: 'static_cast' : cannot convert from 'Component *' to 'xxxComponent *' when calling Entity::getComponent<T> is caused by not including the header associated with 
     that component.
 * Added CollisionComponent, which separates the extra clutter from PhysicsComponent for managing both static and dynamic PhysX actors. CollisionComponents are for static actors, while 
@@ -404,7 +404,7 @@
 * Created PScene::raycast() which uses the PScene::Ray struct.
 * Fixed server player updates sent to clients. 
 
-== 3/10/16 ==
+== 3/10/15 ==
 * Fixed client/server player updates. It scales to multiple clients now.
 * Removed the typedefs for the hash tables of players in Client and Server, and put it in Network. Now Network has an instance of the table to store every player, and it also has a pointer
     to the local player instance. All server/client operations should use the single Network instance through its helper functions.
@@ -416,34 +416,34 @@
     message the player entity move the camera using the "Look" message.
     This makes it so I don't have to send "released" events from the client to the server, by setting the actor component's movement values to false each frame in its update function.
 
-== 3/14/16 ==
+== 3/14/15 ==
 * Changed Command's execute() functions to send messages to the entity rather than accessing components directly (except spectator, which is temporary).
 * Made NetEvent use boost::variant, Server now notifies engine state of player updates, which the game state then retrieves the entity from the world using the		
 	entity ID saved in the TransformUpdate struct by the Server.
 * Removed ActorComponent's setMovingForward() etc. and it is now handled with messaging.
 * Added NetworkComponent for client-side prediction. Doesn't work yet, jumps around too much.
 
-== 3/15/16 ==
+== 3/15/15 ==
 * Fixed client-side prediction--the input processing needed to be changed. Rather than setting bit values when the movement keys are pressed, the actor should just be translated immediately,
     which eliminates the problem of the server not moving the client's actor the frame after receiving a move command, since the bit values were being reset.
 * The above re-introduced the problem of moving faster when going diagonal, since the normalised vector is just the movement vector for one direction and not both.
 
-== 3/17/16 ==
+== 3/17/15 ==
 * Completely restructured how the World object is managed. Before it was stack allocated in EngineState, but now it's a smart pointer and passed everywhere. 
 * Also eliminated the need for passing World into Component init, update, and destroy methods. Component now just stores a smart pointer to the World. 
 
-== 3/18/16 ==
+== 3/18/15 ==
 * Added player action ability; pressing e casts a ray forward and sends an action message to the Entity that was hit. This will be used for interacting with world objects.
 * Server wasn't clearing player & client list on destruction, fixed that.
 * Added RotationComponent which rotates a scene node every frame. It can handle mutliple nodes that are part of a mesh; a helicopter for instance.
 
-== 3/19/16 ==
+== 3/19/15 ==
 * Eliminated ComponentFactory as it was needlessly redundant, moved all pools to World.
 * Created TrackComponent, which animates entities along a set of points with time, position, and orientation. Can be looped if desired.
     This can be used for doors by calling the reverse() method, to open/close it.
 * Made a working door.
 
-== 3/20/16 ==
+== 3/20/15 ==
 * Created LinkComponent which can be used for buttons/switches to activate other entities.
 * Added per-pixel lighting using some soft shadow shaders. Had to for the ambient ambient lighting colour down by 10% in ambient.cg (ambient_vs), because otherwise 
     textures would just be rendered as the ambient colour.
@@ -451,13 +451,20 @@
     Also directional lights perpendicular to materials using make it completely white. So either the shader must be fixed or a different material used for scenes where it's needed.
 * Added shadow support; soft shadows. Only spotlights work well with these. Point lights can work but they are glitchy.
 
-== 3/22/16 ==
+== 3/22/15 ==
 * Added gamepad support for local player movement.
 
-== 3/24/16 ==
+== 3/24/15 ==
 * Added ParticleComponent, StatComponent, and WeaponComponent.
 * Discovered the way I was doing PhysX raycasts was hitting the player's kinematic actor and would return, not reporting what should have been hit. Temporarily solved by raytesting against up to 5 contacts.
 * Added some test scene entities such as pistons and spotlights.
+
+== 3/25-26/15 ==
+* Worked on optimizing shadows for slower machines.
+
+== 3/29/15 ==
+* Added render queue listener for weapon entity to render in front of all other objects for player.
+* Fixed jumping code; it now casts a ray down every frame that tests against 5 contacts, before the single contact was going through the floor for some reason.
 
 == TODO ==
 * Add PScene::addActor()

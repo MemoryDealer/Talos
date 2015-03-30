@@ -113,22 +113,31 @@ const PxExtendedVec3 KCC::update(std::shared_ptr<World> world)
     PxExtendedVec3 pos = m_controller->getPosition();
 
     // Perform a raycast straight down.
-    PScene::Ray ray;
-    ray.origin = PxVec3(pos.x, pos.y, pos.z);
-    bool status = world->getPScene()->raycast(ray);
+    PxVec3 origin;
+    origin.x = pos.x;
+    origin.y = pos.y;
+    origin.z = pos.z;
+    const PxU32 size = 5;
+    PxRaycastHit hitBuffer[size];
+    PxRaycastBuffer buf(hitBuffer, size);
 
-    // If there was a hit, process it.
-    if (status){
-        if (ray.hit.hasBlock){
-            // Determine if player is standing on a surface.
-            const PxReal surfaceMax = 1.32f; 
-            if (ray.hit.block.distance <= surfaceMax){
+    bool hasHit = world->getPScene()->getScene()->raycast(origin,
+                                                          PxVec3(0.f, -1.f, 0.f),
+                                                          100.f,
+                                                          buf);
+    
+    m_onSurface = false;
+    if (hasHit){
+        printf("Hits: \n");
+        for (PxU32 i = 0; i < buf.nbTouches; ++i){
+            printf("\tDist: %.2f\n", buf.touches[i].distance);
+            if (buf.touches[i].distance > 0.f &&
+                buf.touches[i].distance <= 1.45f){
                 m_onSurface = true;
-                m_yVel = 0.f;
-                m_jumping = false;
-            }
-            else{
-                m_onSurface = false;
+                if (m_jumping){
+                    m_yVel = 0.f;
+                    m_jumping = false;
+                }
             }
         }
     }
