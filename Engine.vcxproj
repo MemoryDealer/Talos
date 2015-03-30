@@ -152,6 +152,7 @@
     <ClInclude Include="Source\Rendering\DynamicLines.hpp" />
     <ClInclude Include="Source\Rendering\DynamicRenderable.hpp" />
     <ClInclude Include="Source\Rendering\GraphicsSettings.hpp" />
+    <ClInclude Include="Source\Rendering\Listeners\WeaponListener.hpp" />
     <ClInclude Include="Source\Rendering\Ocean\Ocean.hpp" />
     <ClInclude Include="Source\Rendering\Ocean\OceanHighGraphics.hpp" />
     <ClInclude Include="Source\Rendering\Ocean\OceanLowGraphics.hpp" />

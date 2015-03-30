@@ -30,6 +30,7 @@
 #include "Network/Server/Server.hpp"
 #include "Physics/PScene.hpp"
 #include "Pool/Pool.hpp"
+#include "Rendering/Listeners/WeaponListener.hpp"
 #include "System/System.hpp"
 #include "System/SystemManager.hpp"
 #include "World.hpp"
@@ -90,6 +91,7 @@ void World::init(const bool usePhysics)
 {
     // Create Ogre scene for rendering.
     m_scene = m_root->createSceneManager(Ogre::ST_GENERIC);
+    m_scene->addRenderQueueListener(new WeaponRenderListener());
 
     switch (m_graphics.shadows){
     default:

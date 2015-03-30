@@ -80,6 +80,9 @@ void WeaponComponent::setup(Ogre::SceneNode* actorRollNode)
     m_node->translate(0.9f, -0.6f, -6.0f);
     m_node->rotate(Ogre::Vector3::UNIT_X, Ogre::Degree(-90.f));
     m_node->rotate(Ogre::Vector3::UNIT_Y, Ogre::Degree(180.f));
+
+    // Setup node for render listener.
+    m_entity->setRenderQueueGroup(Ogre::RenderQueueGroupID::RENDER_QUEUE_9);
 }
 
 // ========================================================================= //

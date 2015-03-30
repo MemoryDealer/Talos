@@ -157,6 +157,9 @@
     <Filter Include="Source Files\Factory">
       <UniqueIdentifier>{f3747e03-9928-4640-a029-18a38e95ad1a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Rendering\Listeners">
+      <UniqueIdentifier>{4848ce7d-0b5f-407e-9a50-cd82fa649b1b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\main.cpp">
@@ -685,6 +688,9 @@
     </ClInclude>
     <ClInclude Include="Source\Component\StatComponent.hpp">
       <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\Listeners\WeaponListener.hpp">
+      <Filter>Header Files\Rendering\Listeners</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -495,6 +495,7 @@ void GameState::addNetworkPlayers(void)
         lightC->setType(LightComponent::Type::Spotlight);
         lightC->setColour(1.f, 1.f, 1.f);
         lightC->setRange(1000.f);
+        m_world->attachComponent<WeaponComponent>(e);
 
         i.second.entity = e;
     }
