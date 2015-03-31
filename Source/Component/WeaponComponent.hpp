@@ -54,10 +54,16 @@ public:
     // roll node.
     void setup(Ogre::SceneNode* actorRollNode);
 
+    // Setters:
+
+    // Sets the weapon to be rendered last if true. Needed for local 
+    // player's weapon.
+    void setClearDepth(const bool clear);
+
 private:
     Ogre::SceneNode* m_node;
     Ogre::Entity* m_entity;
-
+    bool m_clearDepth;
 };
 
 // ========================================================================= //

@@ -317,7 +317,7 @@ void ActorComponent::attachFlashlight(Ogre::Light* light)
            "Non-spotlight added as flashlight");
 
     Ogre::SceneNode* flashlight = m_rollNode->createChildSceneNode();
-    flashlight->translate(0.5f, -0.45f, -3.f);
+    flashlight->translate(0.f, -0.2f, -0.2f);
 
     light->setDirection(Ogre::Vector3::NEGATIVE_UNIT_Z);
     flashlight->attachObject(light);

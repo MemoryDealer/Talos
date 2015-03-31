@@ -29,6 +29,26 @@
 
 // ========================================================================= //
 
+class KCCBehaviorCallback : public PxControllerBehaviorCallback
+{
+public:
+    PxControllerBehaviorFlags getBehaviorFlags(const PxShape& shape,
+                                               const PxActor& actor){
+        return PxControllerBehaviorFlag::eCCT_CAN_RIDE_ON_OBJECT;
+    }
+
+    PxControllerBehaviorFlags getBehaviorFlags(const PxController& controller){
+        return PxControllerBehaviorFlags(0);
+    }
+
+    PxControllerBehaviorFlags getBehaviorFlags(const PxObstacle& obstacle){
+        return PxControllerBehaviorFlag::eCCT_CAN_RIDE_ON_OBJECT;
+    }
+};
+
+// ========================================================================= //
+// ========================================================================= //
+
 KCC::KCC(void) :
 m_controller(nullptr),
 m_lastMove(0.f, 0.f, 0.f),
@@ -54,6 +74,7 @@ bool KCC::init(std::shared_ptr<World> world)
     desc.position = PxExtendedVec3(0.f, 0.f, 0.f);
     desc.height = 1.8288f;
     desc.radius = 0.3048f;
+    desc.behaviorCallback = new KCCBehaviorCallback();
 
     PxMaterial* mat = world->getPScene()->getSDK()->createMaterial(0.5f,
                                                                   0.5f,
@@ -84,7 +105,7 @@ const PxExtendedVec3 KCC::move(const Ogre::Vector3& translate)
     PxVec3 disp(translate.x, 0.f, translate.z);
     m_lastMove += disp;
     
-    m_controller->move(disp, 0.1f, 1.f / Talos::MS_PER_UPDATE, 0);
+    m_controller->move(disp, 0.001f, 1.f / Talos::MS_PER_UPDATE, 0);
 
     return m_controller->getPosition();
 }
@@ -107,7 +128,7 @@ const PxExtendedVec3 KCC::update(std::shared_ptr<World> world)
 
     PxVec3 disp(0.f, m_yVel, 0.f);
     // Move the kinematic actor.
-    m_controller->move(disp, 0.1f, 1.f / Talos::MS_PER_UPDATE, 0);
+    m_controller->move(disp, 0.001f, 1.f / Talos::MS_PER_UPDATE, 0);
  
     // Get position for raycast origin.
     PxExtendedVec3 pos = m_controller->getPosition();
@@ -128,9 +149,9 @@ const PxExtendedVec3 KCC::update(std::shared_ptr<World> world)
     
     m_onSurface = false;
     if (hasHit){
-        printf("Hits: \n");
+        //printf("Hits: \n");
         for (PxU32 i = 0; i < buf.nbTouches; ++i){
-            printf("\tDist: %.2f\n", buf.touches[i].distance);
+            //printf("\tDist: %.2f\n", buf.touches[i].distance);
             if (buf.touches[i].distance > 0.f &&
                 buf.touches[i].distance <= 1.45f){
                 m_onSurface = true;

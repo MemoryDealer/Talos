@@ -466,7 +466,13 @@
 * Added render queue listener for weapon entity to render in front of all other objects for player.
 * Fixed jumping code; it now casts a ray down every frame that tests against 5 contacts, before the single contact was going through the floor for some reason.
 
+== 3/30/15 ==
+* Enabled kinematic character controller to ride on moving platforms horizontally, by defining a behavior callback in KCC.cpp and assigning it in the controller description struct.
+
 == TODO ==
+* Network yaw & pitch orientation.
+* Audio!!!
+* Reduce data members in components for setup.
 * Add PScene::addActor()
 * Move input update into world.
 * Changed all resources to single directory (e.g., point exe in debug/release directories to directory above for finding resources).

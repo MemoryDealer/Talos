@@ -51,20 +51,7 @@ void PhysicsSystem::onEntityAttached(EntityPtr entity)
     PhysicsComponentPtr physicsC =
         entity->getComponent<PhysicsComponent>();
 
-    physicsC->init(entity);
-    
-    /*if (physicsC->isKinematic()){
-        PxObstacleContext* oc = m_world->getPScene()->getControllerManager()->createObstacleContext();
-        PxBoxObstacle bo;
-        PxExtendedVec3 pos;
-        pos.x = Physics::toPx(physicsC->getPosition()).x;
-        pos.y = Physics::toPx(physicsC->getPosition()).y;
-        pos.z = Physics::toPx(physicsC->getPosition()).z;
-        bo.mPos = pos;
-        bo.mRot = Physics::toPx(physicsC->getOrientation());
-        bo.mHalfExtents = physicsC->getRigidActor()->getWorldBounds().getDimensions();
-        m_oHandles[0] = oc->addObstacle(bo);
-    }*/
+    physicsC->init(entity);   
 }
 
 // ========================================================================= //
@@ -81,16 +68,6 @@ void PhysicsSystem::update(void)
         if (physicsC->isKinematic()){
             physicsC->setPosition(sceneC->getPosition());
             physicsC->setOrientation(sceneC->getOrientation());
-
-            /*PxObstacleContext* oc = m_world->getPScene()->getControllerManager()->getObstacleContext(0);
-            PxBoxObstacle* bo = static_cast<PxBoxObstacle*>(const_cast<PxObstacle*>(oc->getObstacle(0)));
-            PxVec3 pos = Physics::toPx(physicsC->getPosition());
-            PxExtendedVec3 epos(pos.x, pos.y, pos.z);
-            bo->mPos = epos;
-            bo->mRot = Physics::toPx(physicsC->getOrientation());
-            PxTransform tr = m_world->getPlayer()->getComponent<ActorComponent>()->getKCC()->m_controller->getActor()->getGlobalPose();
-            
-            oc->updateObstacle(m_oHandles[0], *bo);*/
         }
         else{
             sceneC->setPosition(physicsC->getPosition());

@@ -69,7 +69,7 @@ void GameState::enter(void)
     m_world->attachComponent<CameraComponent>(player);
     m_world->attachComponent<ModelComponent>(player)->setMesh("Cylinder.mesh");
     m_world->attachComponent<NetworkComponent>(player);
-    m_world->attachComponent<WeaponComponent>(player);
+    m_world->attachComponent<WeaponComponent>(player)->setClearDepth(true);
     lightC = m_world->attachComponent<LightComponent>(player);
     lightC->setType(LightComponent::Type::Spotlight);
     lightC->setColour(1.f, 1.f, 1.f);
@@ -81,9 +81,9 @@ void GameState::enter(void)
     EntityPtr plane = m_world->createEntity();
     m_world->attachComponent<SceneComponent>(plane);
     m_world->attachComponent<ModelComponent>(plane)->setMesh("Plane/Board", "MarbleWall");      
-    m_world->attachComponent<CollisionComponent>(plane);
-    /*m_world->attachComponent<RotationComponent>(plane)->addRotation(
-        Ogre::Vector3::UNIT_Y, 0.1f);*/
+    m_world->attachComponent<PhysicsComponent>(plane)->setKinematic(true);
+    m_world->attachComponent<RotationComponent>(plane)->addRotation(
+        Ogre::Vector3::UNIT_Y, 0.3f);
     ComponentMessage msg(ComponentMessage::Type::Translate);
     msg.data = Ogre::Vector3(0.f, -50.f, 0.f);
     plane->message(msg);

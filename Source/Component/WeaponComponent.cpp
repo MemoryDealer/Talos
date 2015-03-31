@@ -28,7 +28,8 @@
 
 WeaponComponent::WeaponComponent(void) :
 m_node(nullptr),
-m_entity(nullptr)
+m_entity(nullptr),
+m_clearDepth(false)
 {
 
 }
@@ -70,6 +71,10 @@ void WeaponComponent::message(ComponentMessage& msg)
 
 // ========================================================================= //
 
+// Component functions:
+
+// ========================================================================= //
+
 void WeaponComponent::setup(Ogre::SceneNode* actorRollNode)
 {
     m_node = actorRollNode->createChildSceneNode();
@@ -81,8 +86,23 @@ void WeaponComponent::setup(Ogre::SceneNode* actorRollNode)
     m_node->rotate(Ogre::Vector3::UNIT_X, Ogre::Degree(-90.f));
     m_node->rotate(Ogre::Vector3::UNIT_Y, Ogre::Degree(180.f));
 
-    // Setup node for render listener.
-    m_entity->setRenderQueueGroup(Ogre::RenderQueueGroupID::RENDER_QUEUE_9);
+    
+
+    // Setup node for render listener, so the weapon renders last.
+    if (m_clearDepth){
+        m_entity->setRenderQueueGroup(Ogre::RenderQueueGroupID::RENDER_QUEUE_9);
+    }
+}
+
+// ========================================================================= //
+
+// Setters:
+
+// ========================================================================= //
+
+void WeaponComponent::setClearDepth(const bool clear)
+{
+    m_clearDepth = clear;
 }
 
 // ========================================================================= //
