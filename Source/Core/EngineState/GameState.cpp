@@ -62,6 +62,7 @@ void GameState::enter(void)
     LightComponentPtr lightC = nullptr;
     ModelComponentPtr modelC = nullptr;
     PhysicsComponentPtr physicsC = nullptr;
+    TrackComponentPtr track = nullptr;
 
     // Create player.
     EntityPtr player = m_world->createEntity();
@@ -81,22 +82,27 @@ void GameState::enter(void)
     EntityPtr plane = m_world->createEntity();
     m_world->attachComponent<SceneComponent>(plane);
     m_world->attachComponent<ModelComponent>(plane)->setMesh("Plane/Board", "MarbleWall");      
-    m_world->attachComponent<PhysicsComponent>(plane)->setKinematic(true);
     m_world->attachComponent<RotationComponent>(plane)->addRotation(
-        Ogre::Vector3::UNIT_Y, 0.3f);
+        Ogre::Vector3::UNIT_Y, 0.3f);    
+    m_world->attachComponent<PhysicsComponent>(plane)->setKinematic(true);
+    
+    plane->getComponent<SceneComponent>()->getSceneNode()->translate(0.f, -50.f, 0.f);    
     ComponentMessage msg(ComponentMessage::Type::Translate);
-    msg.data = Ogre::Vector3(0.f, -50.f, 0.f);
-    plane->message(msg);
 
     plane = m_world->createEntity();
     m_world->attachComponent<SceneComponent>(plane);
     m_world->attachComponent<ModelComponent>(plane)->setMesh("Plane/Board", "MarbleWall");
-    m_world->attachComponent<CollisionComponent>(plane);
+    m_world->attachComponent<PhysicsComponent>(plane)->setKinematic(true);
     /*m_world->attachComponent<RotationComponent>(plane)->addRotation(
     Ogre::Vector3::UNIT_Y, 0.1f);*/
     plane->getComponent<SceneComponent>()->getSceneNode()->rotate(Ogre::Vector3::UNIT_Z, Ogre::Degree(45.f));
     msg.data = Ogre::Vector3(40.f, -50.f, 0.f);
     plane->message(msg);
+    track = m_world->attachComponent<TrackComponent>(plane);
+    track->addKeyFrame(0.f, Ogre::Vector3(40.f, -50.f, 0.f));
+    track->addKeyFrame(3000.f, Ogre::Vector3(40.f, -35.f, 0.f));
+    track->setEnabled(true);
+    track->setReversalLoop(true);
 
     plane = m_world->createEntity();
     m_world->attachComponent<SceneComponent>(plane);
@@ -145,7 +151,7 @@ void GameState::enter(void)
     msg.data = Ogre::Vector3(-750.f, 0.f, 0.f);
     house->message(msg);
 
-    TrackComponentPtr track = m_world->attachComponent<TrackComponent>(house);
+    track = m_world->attachComponent<TrackComponent>(house);
     track->addKeyFrame(0.f, Ogre::Vector3(-750.f, 0.f, 1500.f));
     track->addKeyFrame(1000.f, Ogre::Vector3(-750.f, 0.f, -2000.f));
     track->setReversalLoop(true);
