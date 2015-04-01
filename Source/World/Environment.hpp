@@ -29,6 +29,12 @@
 #include "stdafx.hpp"
 
 // ========================================================================= //
+
+class Geom;
+class SSAO;
+struct QuadRenderer;
+
+// ========================================================================= //
 // Responsible for managing visual environment rendered in Ogre3D.
 class Environment final
 {
@@ -60,6 +66,9 @@ public:
 
     // Allocates Sky object, uses config file passed in for settings.
     void loadSky(const std::string& = "");
+
+    // Loads rendering effects such as shadows, SSAO if activated.
+    void loadEffects(void);
 
     // Getters:
 
@@ -142,6 +151,11 @@ private:
     std::shared_ptr<Sky> m_sky;
     bool m_renderOcean, m_renderSky;
     std::string m_oceanCfg, m_skyCfg;
+
+    // SSAO.
+    std::shared_ptr<SSAO> m_ssao;
+    std::shared_ptr<Geom> m_geom;
+    std::shared_ptr<QuadRenderer> m_qr;
 };
 
 // ========================================================================= //

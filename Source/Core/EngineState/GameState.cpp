@@ -273,6 +273,8 @@ void GameState::enter(void)
     // Create sky.
     m_world->getEnvironment()->loadSky();
 
+    m_world->getEnvironment()->loadEffects();
+
     // Network game setup.
     if (m_world->getNetwork()->initialized()){
         this->addNetworkPlayers();
@@ -344,7 +346,7 @@ void GameState::update(void)
                     static bool al = false;
                     al = !al;
                     if (al){
-                        m_world->getEnvironment()->setAmbientLight(5.f, 5.f, 5.f);
+                        m_world->getEnvironment()->setAmbientLight(0.6f, 0.6f, 0.6f);
                     }
                     else{
                         m_world->getEnvironment()->setAmbientLight(0.f, 0.f, 0.f);

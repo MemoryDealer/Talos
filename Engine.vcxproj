@@ -75,6 +75,9 @@
     <ClCompile Include="Source\Rendering\Sky\SkyX\VClouds\Lightning.cpp" />
     <ClCompile Include="Source\Rendering\Sky\SkyX\VClouds\LightningManager.cpp" />
     <ClCompile Include="Source\Rendering\Sky\SkyX\VClouds\VClouds.cpp" />
+    <ClCompile Include="Source\Rendering\SSAO\Geom.cpp" />
+    <ClCompile Include="Source\Rendering\SSAO\SSAO.cpp" />
+    <ClCompile Include="Source\Rendering\SSAO\SSEffect.cpp" />
     <ClCompile Include="Source\System\CollisionSystem.cpp" />
     <ClCompile Include="Source\System\PhysicsSystem.cpp" />
     <ClCompile Include="Source\System\System.cpp" />
@@ -178,6 +181,9 @@
     <ClInclude Include="Source\Rendering\Sky\SkyX\VClouds\Lightning.h" />
     <ClInclude Include="Source\Rendering\Sky\SkyX\VClouds\LightningManager.h" />
     <ClInclude Include="Source\Rendering\Sky\SkyX\VClouds\VClouds.h" />
+    <ClInclude Include="Source\Rendering\SSAO\Geom.hpp" />
+    <ClInclude Include="Source\Rendering\SSAO\SSAO.hpp" />
+    <ClInclude Include="Source\Rendering\SSAO\SSEffect.hpp" />
     <ClInclude Include="Source\stdafx.hpp" />
     <ClInclude Include="Source\System\CollisionSystem.hpp" />
     <ClInclude Include="Source\System\PhysicsSystem.hpp" />

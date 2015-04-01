@@ -9,17 +9,14 @@ VOut ambient_vs(
     in float4 p : POSITION,
     in float2 uv : TEXCOORD0,
     uniform float3 ambient,
-    uniform float4x4 wvp,
-	uniform float4x4 texMat
+    uniform float4x4 wvp
     ) {
     VOut OUT;
     OUT.p = mul(wvp, p);
     // just use projective texture which == OUT.p
-    //OUT.ssaoUV = OUT.p;
-    //OUT.a = normalize(ambient);
-    OUT.a = ambient * 0.1; // Must multiply this down or everything appears only as the ambient colour.
+    OUT.ssaoUV = OUT.p;
+    OUT.a = ambient;
     OUT.uv = uv;
-	//OUT.uv = mul(texMat, float4(uv, 0, 1)).xy;
     return OUT;
 }
 
@@ -32,12 +29,12 @@ struct PIn {
 float4 ambient_ps(PIn IN,
     uniform sampler2D diffuseTex : TEXUNIT0,
     uniform sampler2D ssaoTex    : TEXUNIT1): COLOR0 {
-    //float2 ssaoUV = IN.ssaoUV.xy / IN.ssaoUV.w; // perspective divide
+    float2 ssaoUV = IN.ssaoUV.xy / IN.ssaoUV.w; // perspective divide
 
     // move into texture space
-    //ssaoUV = (float2(ssaoUV.x, -ssaoUV.y) + 1.0) * 0.5;
-    //float3 ssao = tex2D(ssaoTex, ssaoUV).rgb;
+    ssaoUV = (float2(ssaoUV.x, -ssaoUV.y) + 1.0) * 0.5;
+    float3 ssao = tex2D(ssaoTex, ssaoUV).rgb;
 
     float3 diffuse = tex2D(diffuseTex, IN.uv).rgb;
-    return float4(diffuse * IN.a/* * ssao*/, 1);
+    return float4(diffuse * IN.a * ssao, 1);
 }

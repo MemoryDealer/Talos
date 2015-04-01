@@ -160,6 +160,12 @@
     <Filter Include="Header Files\Rendering\Listeners">
       <UniqueIdentifier>{4848ce7d-0b5f-407e-9a50-cd82fa649b1b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Rendering\SSAO">
+      <UniqueIdentifier>{67349015-eb93-4900-b6e5-461d15737bb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering\SSAO">
+      <UniqueIdentifier>{80ae8c97-5389-49af-b4b5-93b38b2d520a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\main.cpp">
@@ -380,6 +386,15 @@
     </ClCompile>
     <ClCompile Include="Source\Component\StatComponent.cpp">
       <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\SSAO\SSEffect.cpp">
+      <Filter>Source Files\Rendering\SSAO</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\SSAO\SSAO.cpp">
+      <Filter>Source Files\Rendering\SSAO</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rendering\SSAO\Geom.cpp">
+      <Filter>Source Files\Rendering\SSAO</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -691,6 +706,15 @@
     </ClInclude>
     <ClInclude Include="Source\Rendering\Listeners\WeaponListener.hpp">
       <Filter>Header Files\Rendering\Listeners</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\SSAO\SSAO.hpp">
+      <Filter>Header Files\Rendering\SSAO</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\SSAO\SSEffect.hpp">
+      <Filter>Header Files\Rendering\SSAO</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rendering\SSAO\Geom.hpp">
+      <Filter>Header Files\Rendering\SSAO</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

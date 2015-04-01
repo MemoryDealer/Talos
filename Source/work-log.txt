@@ -469,6 +469,9 @@
 == 3/30/15 ==
 * Enabled kinematic character controller to ride on moving platforms horizontally, by defining a behavior callback in KCC.cpp and assigning it in the controller description struct.
 
+== 3/31/15 ==
+* 
+
 == TODO ==
 * Network yaw & pitch orientation.
 * Audio!!!
@@ -501,6 +504,7 @@
 
 == BUGS ==
 * Moving diagonally is faster, due to changes in input system. Fix in KCC or ActorComponent.
+* Combining track & rotation components yields the rotation component useless, since the track component's animation overrides the orientation.
 * With soft shadows, pointing a spotlight at an object with a point light near it casts a black square on nearby objects.
 * Directional lights perpendicular to diffuse_materials make it appear entirely white (or the colour of the light) if ambient shaders are used.
 * Casting ray upwards with PhysX (PScene::raycast()) still returns a result if no hit.

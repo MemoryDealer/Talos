@@ -2,8 +2,8 @@ import diffuse_template from "diffuse.material"
 
 material DiffuseBlack : diffuse_template
 {
-    set_texture_alias ambient_tex black.jpg
-	set_texture_alias diffuse_tex black.jpg
+    set_texture_alias ambient_tex black.png
+	set_texture_alias diffuse_tex black.png
 }
 
 material BaseRedNoLighting
@@ -28,7 +28,7 @@ material GunTest
 		{
 			texture_unit
 			{
-				texture black.jpg
+				texture black.png
 			}
 		}
 	}

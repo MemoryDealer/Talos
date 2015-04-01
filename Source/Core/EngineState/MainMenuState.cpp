@@ -82,6 +82,9 @@ void MainMenuState::enter(void)
 
     // Create sky.
     m_world->getEnvironment()->loadSky();
+    
+    // Load world effects.
+    m_world->getEnvironment()->loadEffects();
 
     // Load GUI.
     m_ui.reset(new MainMenuUI());

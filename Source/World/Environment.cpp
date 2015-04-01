@@ -28,6 +28,8 @@
 #include "Rendering/Ocean/OceanHighGraphics.hpp"
 #include "Rendering/Ocean/OceanLowGraphics.hpp"
 #include "Rendering/Sky/SkyHighGraphics.hpp"
+#include "Rendering/SSAO/Geom.hpp"
+#include "Rendering/SSAO/SSAO.hpp"
 #include "World.hpp"
 
 // ========================================================================= //
@@ -75,7 +77,7 @@ void Environment::init(void)
     m_moon->setType(Ogre::Light::LT_DIRECTIONAL);
     m_moon->setDiffuseColour(Ogre::ColourValue::Black);
     m_moon->setSpecularColour(Ogre::ColourValue::Black);
-    m_moon->setDirection(Ogre::Vector3::NEGATIVE_UNIT_Y);
+    m_moon->setDirection(Ogre::Vector3::NEGATIVE_UNIT_Y);    
 }
 
 // ========================================================================= //
@@ -130,6 +132,14 @@ void Environment::update(void)
     if (m_renderSky){
         m_sky->update();
     }
+
+    if (m_graphics.ssao){
+        m_geom->clear();
+        m_geom->update();
+
+        m_ssao->clear();
+        m_ssao->update();
+    }
 }
 
 // ========================================================================= //
@@ -176,6 +186,26 @@ void Environment::loadSky(const std::string& cfg)
 
     m_renderSky = true;
     m_skyCfg = cfg;
+}
+
+// ========================================================================= //
+
+void Environment::loadEffects(void)
+{
+    // Init SSAO.
+    if (m_graphics.ssao){
+        m_qr.reset(new QuadRenderer(m_world->getMainCamera()->getCamera()));
+
+        m_geom.reset(new Geom("geom", *m_qr.get()));
+        m_geom->create(m_world->getViewport()->getActualWidth(),
+                       m_world->getViewport()->getActualHeight(),
+                       Ogre::PF_FLOAT32_RGBA);
+
+        m_ssao.reset(new SSAO("ssao", *m_qr.get()));
+        m_ssao->create(m_world->getViewport()->getActualWidth(),
+                       m_world->getViewport()->getActualHeight(),
+                       Ogre::PF_R8G8B8);
+    }
 }
 
 // ========================================================================= //

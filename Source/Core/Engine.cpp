@@ -153,6 +153,7 @@ bool Engine::init(void)
     m_graphics.meshes = Graphics::Setting::High;
     m_graphics.textures = Graphics::Setting::High;
     m_graphics.shadows = Graphics::Setting::High;
+    m_graphics.ssao = Graphics::Setting::On;
 #ifdef _DEBUG
     m_graphics.ocean = Graphics::Setting::Low;
 #else

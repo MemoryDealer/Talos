@@ -15,46 +15,40 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: GraphicsSettings.hpp
+// File: Geom.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines Graphics struct and enumerates graphics setting values.
+// Defines Geom class.
 // ========================================================================= //
 
-#ifndef __GRAPHICSSETTINGS_HPP__
-#define __GRAPHICSSETTINGS_HPP__
+#ifndef __GEOM_HPP__
+#define __GEOM_HPP__
 
 // ========================================================================= //
-// Graphics settings for rendering engine.
-struct Graphics{
 
-    enum Setting{
-        Off = 0,
-        Abysmal,
-        Low,
-        Medium,
-        High,
+#include "SSEffect.hpp"
 
-        On
-    };
+// ========================================================================= //
 
-    Setting meshes;
-    Setting textures;
-    Setting shadows;
-    Setting ssao;
-    Setting ocean;
-    Setting sky;
+namespace Ogre{
+    class Material;
+}
 
-    // Default initialize setting values.
-    explicit Graphics(void) :
-        meshes(Setting::Off),
-        textures(Setting::Off),
-        shadows(Setting::Off),
-        ssao(Setting::Off),
-        ocean(Setting::Off),
-        sky(Setting::Off)
-    { }
+// ========================================================================= //
+
+class Geom : public SSEffect
+{
+public:
+    explicit Geom(const std::string& n, QuadRenderer& qr);
+
+    virtual ~Geom(void);
+
+    void update(void);
+
+    void create(size_t w, size_t h, Ogre::PixelFormat pf = Ogre::PF_R8G8B8);
 };
+
+// ========================================================================= //
 
 // ========================================================================= //
 

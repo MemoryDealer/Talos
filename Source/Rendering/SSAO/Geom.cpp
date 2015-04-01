@@ -15,49 +15,57 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: GraphicsSettings.hpp
+// File: Geom.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines Graphics struct and enumerates graphics setting values.
+// Implements Geom class.
 // ========================================================================= //
 
-#ifndef __GRAPHICSSETTINGS_HPP__
-#define __GRAPHICSSETTINGS_HPP__
-
-// ========================================================================= //
-// Graphics settings for rendering engine.
-struct Graphics{
-
-    enum Setting{
-        Off = 0,
-        Abysmal,
-        Low,
-        Medium,
-        High,
-
-        On
-    };
-
-    Setting meshes;
-    Setting textures;
-    Setting shadows;
-    Setting ssao;
-    Setting ocean;
-    Setting sky;
-
-    // Default initialize setting values.
-    explicit Graphics(void) :
-        meshes(Setting::Off),
-        textures(Setting::Off),
-        shadows(Setting::Off),
-        ssao(Setting::Off),
-        ocean(Setting::Off),
-        sky(Setting::Off)
-    { }
-};
+#include "Geom.hpp"
+#include <OgreMaterial.h>
+#include <OgreMaterialManager.h>
+#include <OgrePass.h>
+#include <OgreTechnique.h>
+#include <OgreViewport.h>
+#include <OgreCamera.h>
+#include <OgreSceneManager.h>
 
 // ========================================================================= //
 
-#endif
+Geom::Geom(const std::string &n, QuadRenderer &qr) : SSEffect(n, qr) 
+{
+
+}
+
+// ========================================================================= //
+
+Geom::~Geom(void) 
+{
+
+}
+
+// ========================================================================= //
+
+void Geom::create(size_t w, size_t h, Ogre::PixelFormat pf) 
+{
+    SSEffect::create(w, h, pf);
+}
+
+// ========================================================================= //
+
+void Geom::update(void) 
+{
+    if (!enabled) return;
+
+    vp->setMaterialScheme("geom");
+    Ogre::MaterialManager::getSingleton().setActiveScheme("geom");
+
+    // render using the geom scheme to our viewport
+    // using the main scene camera
+    qr.cam->getSceneManager()->_renderScene(qr.cam, vp, false);
+
+    SSEffect::update();
+}
+
 
 // ========================================================================= //
