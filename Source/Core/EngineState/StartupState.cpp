@@ -85,7 +85,7 @@ void StartupState::update(void)
         if (m_loaded == true){
             // Done loading, notify engine to start main menu.
             m_subject.notify(EngineNotification::PopAndPush, 
-                             EngineStateID::MainMenu);
+                             EngineStateID::Game);
         }
     }
 }

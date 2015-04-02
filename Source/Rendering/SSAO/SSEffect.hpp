@@ -57,6 +57,7 @@ struct QuadRenderer {
     ~QuadRenderer(void);
 
     void go(Ogre::Pass *p, Ogre::Viewport *vp) const;
+    void destroy(void);
 };
 
 // ========================================================================= //

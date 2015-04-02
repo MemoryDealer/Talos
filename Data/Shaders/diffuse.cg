@@ -1,12 +1,10 @@
-struct VIn
-{
+struct VIn {
     float4 p    : POSITION;
     float3 n    : NORMAL;
     float2 uv   : TEXCOORD0;
 };
 
-struct VOut
-{
+struct VOut {
     float4 p    : POSITION;
 
     float2 uv   : TEXCOORD0;
@@ -16,8 +14,7 @@ struct VOut
     float3 sdir : TEXCOORD4;
 };
 
-struct PIn
-{
+struct PIn {
     float2 uv   : TEXCOORD0;
     float4 wp   : TEXCOORD1;
     float3 n    : TEXCOORD2;
@@ -25,8 +22,7 @@ struct PIn
     float3 sdir : TEXCOORD4;
 };
 
-struct POut
-{
+struct POut {
     float4 c : COLOR;
 };
 
@@ -34,16 +30,13 @@ VOut diffuse_vs(VIn IN,
     uniform float4x4 wMat,
     uniform float4x4 wvpMat,
     uniform float4x4 tvpMat,
-	//uniform float4x4 texMat,
     uniform float4 spotlightDir
-)
-{
+    ) {
     VOut OUT;
     OUT.wp = mul(wMat, IN.p);
     OUT.p = mul(wvpMat, IN.p);
 
     OUT.uv = IN.uv;
-	//OUT.uv = mul(texMat, float4(IN.uv, 0, 1)).xy;
 
     OUT.n = mul(wMat, float4(IN.n, 0)).xyz; // world-space normal
     OUT.sdir = mul(wMat, spotlightDir).xyz; // spotlight dir in world space
@@ -53,8 +46,7 @@ VOut diffuse_vs(VIn IN,
     return OUT;
 }
 
-float4 btex2D(sampler2D map, float2 uv, float radius, float steps)
-{
+float4 btex2D(sampler2D map, float2 uv, float radius, float steps) {
     half stepSize = 2.0 * radius / steps;
     uv.xy -= radius.xx;
 
@@ -68,11 +60,10 @@ float4 btex2D(sampler2D map, float2 uv, float radius, float steps)
 }
 
 float computeShadow(
-    sampler2D shadowMap, float4 shadowMapPos, float ourDepth)
-{
+    sampler2D shadowMap, float4 shadowMapPos, float ourDepth) {
     float2 suv = shadowMapPos.xy / shadowMapPos.w;
 
-    float2 moments = btex2D(shadowMap, suv, 0.01, 4).rg;
+    float2 moments = btex2D(shadowMap, suv, 0.004, 4).rg;
     float litFactor = (ourDepth <= moments.x ? 1 : 0);
 
     // standard variance shadow mapping code
@@ -83,23 +74,23 @@ float computeShadow(
     float m_d = moments.x - ourDepth;
     float p = variance / (variance + m_d * m_d);
 
-    return smoothstep(0.2, 1, max(litFactor, p));
+    return smoothstep(0.4, 1, max(litFactor, p));
+    //return litFactor;
 }
 
 // to put it simply, this does 100% per pixel diffuse lighting
-POut diffuse_ps(
-    PIn IN,
+POut diffuse_ps(PIn IN,
     uniform float3 lightDif0,
     uniform float4 lightPos0,
     uniform float4 lightAtt0,
     uniform float3 lightSpec0,
     uniform float shininess,
     uniform float3 camPos,
-    uniform float4 invSMSize,
+    //uniform float4 invSMSize,
     uniform float4 spotlightParams,
     uniform sampler2D dMap : TEXUNIT0,
-    uniform sampler2D shadowMap : TEXUNIT1)
-{
+    uniform sampler2D shadowMap : TEXUNIT1
+    ) {
     POut OUT;
 
     // direction
@@ -134,41 +125,32 @@ POut diffuse_ps(
     float3 specularContrib = (specular * lightSpec0);// * specTex.rgb);
     float3 light0C = (diffuseContrib + specularContrib) * la * spot;
 
-    float3 shadow = computeShadow(
-        // pass in the shadow map
-        shadowMap,
-        // the calculated shadow position in the shadow map
-        IN.lp,
-        // distance to light, done just as in the caster shader
-        lightDist).xxx; // 3 components
+    float3 shadow =
+        computeShadow(
+            // pass in the shadow map
+            shadowMap,
+            // the calculated shadow position in the shadow map
+            IN.lp,
+            // distance to light, done just as in the caster shader
+            lightDist).xxx; // 3 components
 
     //OUT.c = float4(light0C * ld0, 1); // Makes colours change based on direction (FUN)
     OUT.c = float4(light0C * shadow, 1);
-    //OUT.c = float4(1, 0, 0, 1);
 
     return OUT;
 }
 
-void geom_vs(
-    in float4 p : POSITION, in float3 n : NORMAL,
+void geom_vs(in float4 p : POSITION, in float3 n : NORMAL,
     out float4 cp : POSITION,
     out float4 vp : TEXCOORD0, // view-space position
     out float4 vn : TEXCOORD1,
-    uniform float4x4 wvpMat, uniform float4x4 wvMat)
-{
+    uniform float4x4 wvpMat, uniform float4x4 wvMat) {
     cp = mul(wvpMat, p);
     vp = mul(wvMat, p);
     vn = mul(wvMat, float4(n, 0));
 }
 
-struct geomOut
-{
-    float4 c : COLOR0;
-};
-
-geomOut geom_ps(in float4 vp : TEXCOORD0, in float4 vn : TEXCOORD1, uniform float far)
-{
-    geomOut OUT;
-    OUT.c = float4(length(vp.xyz) / far, normalize(vn.xyz).xyz);
-    return OUT;
+float4 geom_ps(in float4 vp : TEXCOORD0, in float4 vn : TEXCOORD1): COLOR0 {
+    //return float4(length(vp.xyz), 0, 0, 0);
+    return float4(normalize(vn.xyz), length(vp.xyz));
 }

@@ -90,8 +90,7 @@ QuadRenderer::QuadRenderer(Ogre::Camera *c) : quad(NULL), cam(c)
 
 QuadRenderer::~QuadRenderer(void)
 {
-    quad->_getManager()->destroyManualObject(quad);
-    quad = NULL;
+    
 }
 
 // ========================================================================= //
@@ -111,12 +110,12 @@ void QuadRenderer::go(Ogre::Pass *p, Ogre::Viewport *vp) const
     sceneMgr->_setPass(p, true, false);
     if (p->hasVertexProgram())
         rs->bindGpuProgramParameters(
-        Ogre::GPT_VERTEX_PROGRAM, p->getVertexProgramParameters(), 0);
+        Ogre::GPT_VERTEX_PROGRAM, p->getVertexProgramParameters(), 0x01);
     else
         rs->unbindGpuProgram(Ogre::GPT_VERTEX_PROGRAM);
     if (p->hasFragmentProgram())
         rs->bindGpuProgramParameters(
-        Ogre::GPT_FRAGMENT_PROGRAM, p->getFragmentProgramParameters(), 0);
+        Ogre::GPT_FRAGMENT_PROGRAM, p->getFragmentProgramParameters(), 0x01);
     else
         rs->unbindGpuProgram(Ogre::GPT_FRAGMENT_PROGRAM);
 
@@ -127,6 +126,14 @@ void QuadRenderer::go(Ogre::Pass *p, Ogre::Viewport *vp) const
     rs->_render(rop);
 
     rs->_endFrame();
+}
+
+// ========================================================================= //
+
+void QuadRenderer::destroy(void)
+{
+    quad->_getManager()->destroyManualObject(quad);
+    quad = NULL;
 }
 
 // ========================================================================= //
@@ -154,8 +161,8 @@ void SSEffect::destroy(void)
     if (!texIsExtern) {
         if (tex)
             Ogre::TextureManager::getSingleton().remove(tex->getName());
-        if (cam)
-            cam->getSceneManager()->destroyCamera(cam);
+        /*if (cam)
+            cam->getSceneManager()->destroyCamera(cam);*/
     }
 
     tex = NULL;

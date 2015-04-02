@@ -82,7 +82,8 @@ bool Engine::init(void)
     m_root = new Ogre::Root();
 
     // Set render system.
-    Ogre::RenderSystem* rs = m_root->getRenderSystemByName("Direct3D9 Rendering Subsystem");
+    Ogre::RenderSystem* rs = m_root->getRenderSystemByName(
+        "Direct3D9 Rendering Subsystem");
     if (!(rs->getName() == "Direct3D9 Rendering Subsystem")){
         return false;
     }
@@ -131,15 +132,21 @@ bool Engine::init(void)
     params["externalWindowHandle"] = wHandle;
     params["vsync"] = "true";
     params["FSAA"] = "16";
-    m_renderWindow = m_root->createRenderWindow("Engine",
+    m_renderWindow = m_root->createRenderWindow("Talos",
                                                 width,
                                                 height,
                                                 false,
                                                 &params);
 
+    Ogre::MaterialManager::getSingleton().
+        setDefaultTextureFiltering(Ogre::TFO_ANISOTROPIC);
+
     // Initialize Ogre viewport for render window.
     m_viewport = m_renderWindow->addViewport(nullptr);
     m_viewport->setBackgroundColour(Ogre::ColourValue::Black);
+
+    m_viewport->setClearEveryFrame(false);
+    m_renderWindow->setAutoUpdated(false);
 
     // Activate the  Ogre render window.
     m_renderWindow->setActive(true);
@@ -159,16 +166,15 @@ bool Engine::init(void)
 #else
     m_graphics.ocean = Graphics::Setting::High;
 #endif
-    m_graphics.sky = Graphics::Setting::High;
-
-    Ogre::MaterialManager::getSingleton().setDefaultTextureFiltering(Ogre::TFO_ANISOTROPIC);
+    m_graphics.sky = Graphics::Setting::High;    
 
     // === //
 
     // CEGUI:
 
     // Bootstrap the rendering system.
-    m_ceguiRenderer = &CEGUI::OgreRenderer::bootstrapSystem(*(m_root->getRenderTarget("Engine"))); 
+    m_ceguiRenderer = &CEGUI::OgreRenderer::bootstrapSystem(
+        *(m_root->getRenderTarget("Talos"))); 
 
     // === //
 
@@ -234,6 +240,8 @@ void Engine::start(const EngineStateID id)
 
         // Update the engine if the render window is active.
         if (m_renderWindow->isActive()){
+            Ogre::WindowEventUtilities::messagePump();
+
             float current = m_timer->getMilliseconds();
             float elapsed = current - prev;
             prev = current;

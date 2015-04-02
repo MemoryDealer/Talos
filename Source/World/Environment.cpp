@@ -47,7 +47,10 @@ m_sky(nullptr),
 m_renderOcean(false),
 m_renderSky(false),
 m_oceanCfg(""),
-m_skyCfg("")
+m_skyCfg(""),
+m_ssao(nullptr),
+m_geom(nullptr),
+m_qr(nullptr)
 {
     m_world = world;
 }
@@ -93,6 +96,10 @@ void Environment::destroy(void)
 
     m_world->getSceneManager()->destroyLight(m_sun);
     m_world->getSceneManager()->destroyLight(m_moon);
+
+    if (m_qr){
+        m_qr->destroy();
+    }
 }
 
 // ========================================================================= //
@@ -196,14 +203,17 @@ void Environment::loadEffects(void)
     if (m_graphics.ssao){
         m_qr.reset(new QuadRenderer(m_world->getMainCamera()->getCamera()));
 
+        Ogre::RenderWindow* rw = static_cast<Ogre::RenderWindow*>(
+            Ogre::Root::getSingleton().getRenderTarget("Talos"));
+
         m_geom.reset(new Geom("geom", *m_qr.get()));
-        m_geom->create(m_world->getViewport()->getActualWidth(),
-                       m_world->getViewport()->getActualHeight(),
+        m_geom->create(rw->getWidth(),
+                       rw->getHeight(),
                        Ogre::PF_FLOAT32_RGBA);
 
         m_ssao.reset(new SSAO("ssao", *m_qr.get()));
-        m_ssao->create(m_world->getViewport()->getActualWidth(),
-                       m_world->getViewport()->getActualHeight(),
+        m_ssao->create(rw->getWidth(),
+                       rw->getHeight(),
                        Ogre::PF_R8G8B8);
     }
 }

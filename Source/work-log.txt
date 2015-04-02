@@ -470,7 +470,10 @@
 * Enabled kinematic character controller to ride on moving platforms horizontally, by defining a behavior callback in KCC.cpp and assigning it in the controller description struct.
 
 == 3/31/15 ==
-* 
+* Messed around with SSAO, not working yet.
+
+== 4/1/15 ==
+* Got rudimentary SSAO working, it doesn't affect the gun like I want it to, but it works as in nullsquared's demo. As shader programming is not the focus of this project I will move on.
 
 == TODO ==
 * Network yaw & pitch orientation.

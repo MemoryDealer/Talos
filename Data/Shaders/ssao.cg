@@ -1,178 +1,255 @@
-struct VIn
-{
+
+//! Ogre SSAO Shader
+
+//! Probably zlib or something, just don't claim
+//! it as your own uber-1337 shader xD
+
+struct VIn {
     float4 p   : POSITION;
     float3 n   : NORMAL;
     float2 uv  : TEXCOORD0;
 };
 
-struct VOut
-{
+struct VOut {
     float4 p   : POSITION;
     float2 uv  : TEXCOORD0;
     float3 ray : TEXCOORD1;
 };
 
-struct PIn
-{
+struct fsquad_PIn {
     float2 uv  : TEXCOORD0;
     float3 ray : TEXCOORD1;
 };
 
-VOut ssao_vs(VIn IN, uniform float4x4 wvp, uniform float3 farCorner)
-{
+VOut fsquad_vs(VIn IN) {
     VOut OUT;
-    OUT.p = mul(wvp, IN.p);
-    // clean up inaccuracies for the UV coords
+    OUT.p = IN.p;
+    // clean up inaccuracies
     float2 uv = sign(IN.p);
     // convert to image space
     uv = (float2(uv.x, -uv.y) + 1.0) * 0.5;
     OUT.uv = uv;
-    // calculate the correct ray (modify XY parameters based on screen-space quad XY)
-    OUT.ray = farCorner * float3(sign(IN.p.xy), 1);
+    // pass the ray
+    OUT.ray = IN.n;
     return OUT;
 }
 
-float3 computeZ(float2 xy)
-{
-    return float3(xy, sqrt(1.0 - dot(xy, xy)));
+// compute view-space position based on camera->pixel ray + depth
+float4 computeViewPos(float3 ray, float depth) {
+    //return float4(normalize(ray) * abs(depth), abs(depth));
+    return float4(normalize(ray) * depth, depth);
 }
 
-// for ps_3_0, we want to use tex2Dlod because it's faster
-ps_3_0 float4 TEX2DLOD(sampler2D map, float2 uv)
-{
-    return tex2Dlod(map, float4(uv.xy, 0, 0));
+// compute view-space normal based on view-space position
+float3 computeViewNorm(float4 D) {
+    float3 b = normalize(ddx(D.xyz));
+    float3 t = normalize(ddy(D.xyz));
+    return cross(t, b);
 }
 
-float4 TEX2DLOD(sampler2D map, float2 uv)
-{
-    return tex2D(map, uv);
+float3 expand(float3 n) {
+    return n * 2 - 1;
 }
 
-float4 ssao_ps(
-    PIn IN,
-    uniform float4x4 ptMat,
-    uniform float far,
-    uniform sampler2D geomMap : TEXUNIT0,
-    uniform sampler2D randMap  : TEXUNIT1): COLOR0
-{
-    #define MAX_RAND_SAMPLES 14
+float occlusion(const float ZD) {
+    return 1.0 / (1.0 + ZD * ZD);
+}
 
-    const float3 RAND_SAMPLES[MAX_RAND_SAMPLES] =
-    {
-        float3(1, 0, 0),
-        float3(	-1, 0, 0),
-        float3(0, 1, 0),
-        float3(0, -1, 0),
-        float3(0, 0, 1),
-        float3(0, 0, -1),
-        normalize(float3(1, 1, 1)),
-        normalize(float3(-1, 1, 1)),
-        normalize(float3(1, -1, 1)),
-        normalize(float3(1, 1, -1)),
-        normalize(float3(-1, -1, 1)),
-        normalize(float3(-1, 1, -1)),
-        normalize(float3(1, -1, -1)),
-        normalize(float3(-1, -1, -1))
+float4 ssao_ps(fsquad_PIn IN,
+    uniform float4x4 pMat,
+    uniform sampler2D depthMap : TEXUNIT0,
+    uniform sampler2D randMap  : TEXUNIT1): COLOR0 {
+
+    const float3 RAND_SAMPLES[128] = {
+        float3(-0.027131, -0.246559, 0.530992),
+        float3(0.210791, -0.976012, 0.357158),
+        float3(0.0462355, -0.106906, 0.671804),
+        float3(-0.806879, 0.610157, -0.245094),
+        float3(0.117038, 0.691458, -0.163793),
+        float3(-0.754204, -0.859249, 0.118931),
+        float3(-0.907285, -0.24601, 0.0990326),
+        float3(-0.153844, -0.0475784, -0.492111),
+        float3(0.467757, -0.0378735, -0.401471),
+        float3(-0.393292, 0.00106815, -0.951292),
+        float3(-0.248573, -0.507859, -0.433943),
+        float3(-0.0719932, 0.67626, -0.825373),
+        float3(-0.285318, 0.1948, 0.835505),
+        float3(0.525193, 0.0574664, 0.346782),
+        float3(-0.251198, 0.946715, -0.500229),
+        float3(-0.675222, 0.62212, -0.263466),
+        float3(0.404584, 0.275735, 0.308756),
+        float3(0.452986, 0.742607, 0.350566),
+        float3(-0.834834, -0.402081, -0.705924),
+        float3(-0.649709, 0.363628, 0.928953),
+        float3(-0.0367138, -0.968261, -0.775384),
+        float3(-0.287881, 0.269204, -0.113926),
+        float3(0.131077, 0.229408, 0.0739463),
+        float3(-0.79754, -0.412885, 0.852046),
+        float3(-0.38731, -0.770135, 0.984191),
+        float3(-0.00729392, 0.886288, -0.752007),
+        float3(-0.363811, -0.750237, -0.520249),
+        float3(0.361858, -0.352947, -0.945433),
+        float3(0.869442, 0.830988, -0.827387),
+        float3(-0.864193, 0.280496, 0.746574),
+        float3(-0.36021, -0.88757, 0.157933),
+        float3(-0.131687, -0.515244, -0.471969),
+        float3(0.313211, -0.565233, -0.0259713),
+        float3(0.639332, 0.80932, -0.242286),
+        float3(-0.331156, -0.729423, 0.646657),
+        float3(0.415204, -0.901975, -0.952269),
+        float3(0.312052, 0.85406, 0.199255),
+        float3(0.32316, -0.746574, 0.215613),
+        float3(0.0924406, -0.895627, 0.343303),
+        float3(0.19602, -0.251259, -0.700064),
+        float3(0.392376, -0.245277, -0.885067),
+        float3(-0.406659, 0.776849, -0.517197),
+        float3(-0.74102, -0.741142, -0.758538),
+        float3(0.443831, -0.903806, 0.230934),
+        float3(0.940794, -0.699576, -0.739128),
+        float3(-0.259621, -0.219153, 0.538011),
+        float3(0.684744, 0.829218, 0.125217),
+        float3(-0.40141, 0.444563, -0.943297),
+        float3(-0.0746178, -0.262062, 0.442366),
+        float3(0.710196, -0.659536, 0.416974),
+        float3(-0.520188, 0.830988, -0.0925626),
+        float3(0.0415357, 0.289712, 0.37022),
+        float3(0.324503, 0.861934, 0.0868862),
+        float3(0.785943, -0.089938, 0.845332),
+        float3(0.20127, -0.606494, -0.199194),
+        float3(0.333048, -0.644154, -0.216651),
+        float3(0.949461, 0.295999, 0.150792),
+        float3(0.616688, 0.986511, -0.000335704),
+        float3(-0.682119, -0.886898, -0.992309),
+        float3(0.892209, -0.69335, 0.542467),
+        float3(0.349712, 0.527512, -0.235023),
+        float3(0.032075, 0.41612, -0.664174),
+        float3(0.477035, 0.00393689, -0.382305),
+        float3(0.0550859, 0.320353, -0.447066),
+        float3(0.487411, 0.633839, -0.194678),
+        float3(-0.921323, -0.965514, 0.420515),
+        float3(-0.241066, 0.484054, -0.601062),
+        float3(0.449507, -0.284402, 0.252602),
+        float3(-0.131016, -0.362163, 0.577685),
+        float3(-0.28251, -0.674734, -0.295755),
+        float3(-0.892392, -0.165929, 0.172277),
+        float3(0.623768, 0.815485, 0.768975),
+        float3(0.821223, -0.570788, 0.802301),
+        float3(-0.381817, -0.214087, 0.174047),
+        float3(-0.875973, 0.566454, 0.454451),
+        float3(-0.133457, 0.237037, 0.800653),
+        float3(0.599414, 0.190222, -0.912168),
+        float3(0.489303, -0.311563, -0.178808),
+        float3(-0.589099, 0.141636, 0.0583819),
+        float3(-0.843867, 0.79461, -0.342692),
+        float3(-0.984863, 0.262551, 0.0802332),
+        float3(0.380474, -0.0780358, -0.135594),
+        float3(-0.344707, 0.469955, -0.661977),
+        float3(0.175634, 0.203589, 0.898984),
+        float3(0.270974, -0.606922, 0.475021),
+        float3(0.395184, 0.604663, 0.663076),
+        float3(-0.362651, 0.635914, 0.765496),
+        float3(-0.667837, 0.772759, 0.00863674),
+        float3(-0.310465, -0.703604, -0.919187),
+        float3(-0.748833, -0.847224, 0.26017),
+        float3(-0.648061, -0.717215, -0.472884),
+        float3(0.717887, 0.271767, 0.539537),
+        float3(-0.974975, 0.470748, 0.120884),
+        float3(0.125706, -0.505539, -0.508408),
+        float3(-0.56859, 0.0946989, 0.827387),
+        float3(0.949156, -0.837214, -0.829524),
+        float3(-0.956053, -0.794488, -0.0399487),
+        float3(-0.776238, 0.115268, 0.598804),
+        float3(-0.943724, 0.814142, 0.586352),
+        float3(-0.177099, 0.382244, -0.889035),
+        float3(-0.937193, -0.281961, 0.445662),
+        float3(0.506455, -0.376629, -0.716422),
+        float3(-0.457869, -0.768364, -0.779717),
+        float3(-0.273598, 0.861202, 0.289468),
+        float3(0.130772, -0.64391, -0.951353),
+        float3(0.0165716, -0.478133, -0.858577),
+        float3(0.789483, 0.586291, -0.809198),
+        float3(-0.261452, 0.971191, -0.234107),
+        float3(-0.456221, -0.194983, 0.993652),
+        float3(0.240089, 0.875423, 0.410871),
+        float3(0.784356, -0.186743, 0.0116886),
+        float3(-0.63976, -0.916135, 0.803461),
+        float3(-0.621387, 0.235755, -0.436323),
+        float3(-0.060213, 0.558946, -0.0224311),
+        float3(-0.662465, -0.923093, -0.600208),
+        float3(-0.189306, -0.569079, 0.0380566),
+        float3(0.734001, -0.668203, -0.230506),
+        float3(-0.101169, -0.223792, 0.569323),
+        float3(0.249367, 0.0263985, 0.258522),
+        float3(-0.171667, 0.452498, -0.816401),
+        float3(0.365764, 0.13303, -0.431257),
+        float3(0.0129093, 0.53502, 0.0798669),
+        float3(-0.912534, -0.788751, 0.18009),
+        float3(-0.0874355, -0.178747, 0.709342),
+        float3(-0.595264, 0.632984, -0.176061),
+        float3(0.166417, 0.766961, 0.959349),
+        float3(0.766167, 0.0951872, -0.844478),
+        float3(-0.0554521, -0.670034, -0.0729087)
     };
 
-    // constant expressin != const int :(
-    #define NUM_BASE_SAMPLES 6
+    const float RADIUS = 0.12;//0.08;
+    const int NUM_SAMPLES = 12;
 
-    // random normal lookup from a texture and expand to [-1..1]
-    float3 randN = TEX2DLOD(randMap, IN.uv * 24).xyz * 2.0 - 1.0;
-    float4 geom = TEX2DLOD(geomMap, IN.uv);
-    float depth = geom.x;
+    // random normal lookup from a texture
+    #ifdef SM3
+    float3 randN = tex2Dlod(randMap, float4(IN.uv * 24, 0, 0)).xyz;
+    #else
+    float3 randN = tex2D(randMap, IN.uv * 24).xyz;
+    #endif
+    randN = expand(randN);
 
-    // IN.ray will be distorted slightly due to interpolation
-    // it should be normalized here
-    float3 viewPos = IN.ray * depth;
-
-    // by computing Z manually, we lose some accuracy under extreme angles
-    // considering this is just for bias, this loss is acceptable
-    float3 viewNorm = geom.yzw;//computeZ(geom.yz);
+    // our "current" depth/position and normals
+    #ifdef SM3
+    float4 geom = tex2Dlod(depthMap, float4(IN.uv.xy, 0, 0));
+    #else
+    float4 geom = tex2D(depthMap, IN.uv.xy);
+    #endif
+    // view-space position
+    float4 D = computeViewPos(IN.ray, geom.w);
+    // view-space normals
+    float3 N = geom.xyz;
 
     // accumulated occlusion factor
     float occ = 0;
-    for (int i = 0; i < NUM_BASE_SAMPLES; ++i)
-    {
+    for (int i = 0; i < NUM_SAMPLES; ++i) {
         // reflected direction to move in for the sphere
         // (based on random samples and a random texture sample)
+        float3 RN = reflect(RAND_SAMPLES[i], randN);
+
         // bias the random direction away from the normal
         // this tends to minimize self occlusion
-        float3 randomDir = reflect(RAND_SAMPLES[i], randN) + viewNorm;
+        const float DIR_BIAS = 1.5;
+        RN += N * DIR_BIAS;
 
-        // move new view-space position back into texture space
-        #define RADIUS 0.2125
-        float4 nuv = mul(ptMat, float4(viewPos.xyz + randomDir * RADIUS, 1));
+        // new (view-space) position in a sphere of RADIUS
+        float3 vp = D.xyz + RN * RADIUS;
+
+        // move this new position back into texture space
+        float4 nuv = mul(pMat, float4(vp, 1));
         nuv.xy /= nuv.w;
 
-        // compute occlusion based on the (scaled) Z difference
-        float zd = saturate(far * (depth - TEX2DLOD(geomMap, nuv.xy).x));
-        // this is a sample occlusion function, you can always play with
-        // other ones, like 1.0 / (1.0 + zd * zd) and stuff
-        occ += saturate(pow(1.0 - zd, 11) + zd);
-    }
-    occ /= NUM_BASE_SAMPLES;
+        // look up the new depth
+        #ifdef SM3
+        float depth = tex2Dlod(depthMap, float4(nuv.xy, 0, 0)).w;
+        #else
+        float depth = tex2D(depthMap, nuv.xy).w;
+        #endif
 
-    return float4(occ, occ, occ, 1);
+        // get the (scaled) Z difference
+        const float ZSCALE = 50;
+        float ZD = ZSCALE * max(D.w - depth, 0);
+
+        // quadratic falloff is both accurate
+        // and it avoids the halo effect (mostly)
+        const float MAX_DIFF = 2;
+        const float NO_OCC = 4;
+        occ += (ZD < ZSCALE * MAX_DIFF ? occlusion(ZD) : NO_OCC);
+    } occ = occ / NUM_SAMPLES;
+    occ = lerp(0.3, 1, occ);
+
+    return float4(occ.xxx, 1);
 }
-
-#define NUM_BLUR_SAMPLES 8
-
-float4 ssaoBlurX_ps(float2 uv : TEXCOORD0,
-    uniform float4 invTexSize,
-    uniform sampler2D map : TEXUNIT0, uniform sampler2D geomMap : TEXUNIT1): COLOR0
-{
-//    return TEX2DLOD(ssaoMap, uv);
-    float2 o = float2(invTexSize.x, 0);
-    float4 sum = TEX2DLOD(map, uv) * (NUM_BLUR_SAMPLES + 1);
-    float denom = NUM_BLUR_SAMPLES + 1;
-    float4 geom = TEX2DLOD(geomMap, uv);
-    for (int i = 1; i <= NUM_BLUR_SAMPLES; ++i)
-    {
-        float2 nuv = uv + o * i;
-        float4 nGeom = TEX2DLOD(geomMap, nuv);
-        float coef = (NUM_BLUR_SAMPLES + 1 - i) * (dot(geom.yzw, nGeom.yzw) > 0.9);
-        sum += TEX2DLOD(map, nuv) * coef;
-        denom += coef;
-    }
-    for (int i = 1; i <= 4; ++i)
-    {
-        float2 nuv = uv + o * -i;
-        float4 nGeom = TEX2DLOD(geomMap, nuv);
-        float coef = (NUM_BLUR_SAMPLES + 1 - i) * (dot(geom.yzw, nGeom.yzw) > 0.9);
-        sum += TEX2DLOD(map, nuv) * coef;
-        denom += coef;
-    }
-    return sum / denom;
-}
-
-float4 ssaoBlurY_ps(float2 uv : TEXCOORD0,
-    uniform float4 invTexSize,
-    uniform sampler2D map : TEXUNIT0, uniform sampler2D geomMap : TEXUNIT1): COLOR0
-{
-//    return TEX2DLOD(map, uv);
-    float2 o = float2(0, invTexSize.y);
-    float4 sum = TEX2DLOD(map, uv) * (NUM_BLUR_SAMPLES + 1);
-    float denom = NUM_BLUR_SAMPLES + 1;
-    float4 geom = TEX2DLOD(geomMap, uv);
-    for (int i = 1; i <= NUM_BLUR_SAMPLES; ++i)
-    {
-        float2 nuv = uv + o * i;
-        float4 nGeom = TEX2DLOD(geomMap, nuv);
-        float coef = (NUM_BLUR_SAMPLES + 1 - i) * (dot(geom.yzw, nGeom.yzw) > 0.9);
-        sum += TEX2DLOD(map, nuv) * coef;
-        denom += coef;
-    }
-    for (int i = 1; i <= 4; ++i)
-    {
-        float2 nuv = uv + o * -i;
-        float4 nGeom = TEX2DLOD(geomMap, nuv);
-        float coef = (NUM_BLUR_SAMPLES + 1 - i) * (dot(geom.yzw, nGeom.yzw) > 0.9);
-        sum += TEX2DLOD(map, nuv) * coef;
-        denom += coef;
-    }
-    return sum / denom;
-}
-
-

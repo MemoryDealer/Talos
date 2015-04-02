@@ -1,8 +1,24 @@
 material diffuse_template
 {
+    technique geom
+	{
+	    scheme geom
+
+	    pass
+	    {
+	        vertex_program_ref geom_vs
+	        {
+	        }
+
+	        fragment_program_ref geom_ps
+	        {
+	        }
+	    }
+	}
+
 	technique lighting
 	{
-	    scheme lighting
+	    //scheme lighting
 
 	    pass
 	    {
@@ -10,10 +26,9 @@ material diffuse_template
             diffuse  0 0 0
             specular 0 0 0 0
             emissive 0 0 0
-			//cull_hardware none
 
             vertex_program_ref ambient_vs
-            {				
+            {
             }
 
             fragment_program_ref ambient_ps
@@ -22,6 +37,17 @@ material diffuse_template
 
             texture_unit ambient_tex
             {
+            }
+
+            // screen space SSAO texture to modulate
+            // ambient light by
+
+            // NOTE: we want to load this material ONLY AFTER
+            // we created the in-code SSAO, _NOT_ after or Ogre
+            // will complain about ssao_tex missing
+            texture_unit ssao_tex
+            {
+                texture ssao_tex
             }
 	    }
 		pass
@@ -44,7 +70,6 @@ material diffuse_template
 
 			texture_unit diffuse_tex
 			{
-				
 			}
 
             texture_unit shadow_tex
@@ -56,23 +81,5 @@ material diffuse_template
                 tex_border_colour 1 1 1
             }
 		}
-	}
-
-    // this is the technique for the scheme "geom" that the SSAO
-    // compositor uses to render the geometry map
-	technique geom
-	{
-	    scheme geom
-
-	    pass
-	    {
-	        vertex_program_ref geom_vs
-	        {
-	        }
-
-	        fragment_program_ref geom_ps
-	        {
-	        }
-	    }
 	}
 }

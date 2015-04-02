@@ -52,6 +52,7 @@ GameState::~GameState(void)
 void GameState::enter(void)
 {
     m_world->init(true);
+    
     m_world->getInput()->setMode(Input::Mode::Player);
     //m_world->getPScene()->loadDebugDrawer();
 
@@ -77,6 +78,8 @@ void GameState::enter(void)
     lightC->setRange(125.f);
 
     m_world->setPlayer(player);
+
+    m_world->getEnvironment()->loadEffects();
     
     // Create basic plane.
     EntityPtr plane = m_world->createEntity();
@@ -257,7 +260,7 @@ void GameState::enter(void)
     
     
     // Setup visual scene settings.
-    //m_world->getEnvironment()->setAmbientLight(5.f, 5.f, 5.f);
+    m_world->getEnvironment()->setAmbientLight(0.6f, 0.6f, 0.6f);
     //m_world->getEnvironment()->setSunColour(2.f, 1.75f, 1.89f);
     //m_world->getEnvironment()->setMoonColour(.50f, .50f, 5.f);
 
@@ -271,9 +274,9 @@ void GameState::enter(void)
     m_world->getEnvironment()->setOceanPosition(0.f, -100.f, 0.f);
 
     // Create sky.
-    m_world->getEnvironment()->loadSky();
+    //m_world->getEnvironment()->loadSky();
 
-    m_world->getEnvironment()->loadEffects();
+    
 
     // Network game setup.
     if (m_world->getNetwork()->initialized()){
@@ -413,6 +416,19 @@ void GameState::update(void)
             command->execute(m_world->getPlayer());
         }
         m_world->getPlayer()->getComponent<ActorComponent>()->update();
+
+
+        Ogre::Root::getSingleton().getRenderSystem()->_setViewport(m_world->getViewport());
+
+        Ogre::Root::getSingleton().getRenderSystem()->clearFrameBuffer(Ogre::FBT_COLOUR | Ogre::FBT_DEPTH);
+
+        m_world->getSceneManager()->_renderScene(m_world->getMainCamera()->getCamera(),
+                                                 m_world->getViewport(),
+                                                 true);
+
+        static_cast<Ogre::RenderWindow*>(
+            Ogre::Root::getSingleton().getRenderTarget("Talos"))->swapBuffers();
+
                 
         /*if (m_ui->update() == true){
             this->handleUIEvents();

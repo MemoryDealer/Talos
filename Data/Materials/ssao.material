@@ -1,48 +1,49 @@
 
 // full screen quad with camera-to-pixel ray calculations
 
-vertex_program ssao_vs cg
+vertex_program fsquad_vs cg
 {
     source ssao.cg
     profiles vs_1_1 arbvp1
-    entry_point ssao_vs
+    entry_point fsquad_vs
     default_params
     {
-        param_named_auto wvp worldviewproj_matrix
+        //param_named_auto wvp worldviewproj_matrix
+        //param_named_auto texOffsets texel_offsets
     }
 }
 
-fragment_program ssao_ps cg
+fragment_program ssao_ps_sm2 cg
 {
     source ssao.cg
     entry_point ssao_ps
-    // will run on anything with pixel shader 2.b and up
     profiles ps_2_x arbfp1
     default_params
     {
+        //param_named_auto far far_clip_distance
+        //param_named_auto texOffsets inverse_texture_size 1
     }
 }
 
-fragment_program ssaoBlurX_ps cg
+fragment_program ssao_ps_sm3 cg
 {
     source ssao.cg
-    entry_point ssaoBlurX_ps
-    profiles ps_2_x arbfp1
+    entry_point ssao_ps
+    profiles ps_3_0
     default_params
     {
-        param_named_auto invTexSize inverse_texture_size 0
+        //param_named_auto far far_clip_distance
+        //param_named_auto texOffsets inverse_texture_size 1
     }
+    compile_aruments -DSM3
 }
 
-fragment_program ssaoBlurY_ps cg
+fragment_program ssao_ps unified
 {
-    source ssao.cg
-    entry_point ssaoBlurY_ps
-    profiles ps_2_x arbfp1
-    default_params
-    {
-        param_named_auto invTexSize inverse_texture_size 0
-    }
+    // prefer sm3
+    delegate ssao_ps_sm3
+    // but allow sm2
+    delegate ssao_ps_sm2
 }
 
 material ssao
@@ -51,7 +52,10 @@ material ssao
     {
         pass
         {
-            vertex_program_ref ssao_vs
+            depth_check off
+            depth_write off
+
+            vertex_program_ref fsquad_vs
             {
             }
 
@@ -59,89 +63,41 @@ material ssao
             {
             }
 
-            texture_unit geomMap
+            texture_unit geom_map
             {
                 tex_address_mode clamp
-                filtering bilinear
             }
 
-            texture_unit randMap
+            texture_unit rand_map
             {
-                texture random.png
+                texture random.png 2d 0 PF_R8G8B8A8
                 filtering none
             }
         }
     }
 }
 
-material ssaoBlurX
+material ssao_debug
 {
     technique
     {
         pass
         {
-            fragment_program_ref ssaoBlurX_ps
+            texture_unit
             {
-            }
-
-            texture_unit map
-            {
-                tex_address_mode clamp
-                filtering bilinear
-            }
-
-            texture_unit geomMap
-            {
-                tex_address_mode clamp
-                filtering bilinear
             }
         }
     }
 }
 
-material ssaoBlurY
+material geom_debug
 {
     technique
     {
         pass
         {
-            fragment_program_ref ssaoBlurY_ps
-            {
-            }
-
-            texture_unit map
-            {
-                tex_address_mode clamp
-                filtering bilinear
-            }
-
-            texture_unit geomMap
-            {
-                tex_address_mode clamp
-                filtering bilinear
-            }
-        }
-    }
-}
-
-material modulate
-{
-    technique
-    {
-        pass
-        {
-            lighting off
-
             texture_unit
             {
-                texture white.bmp
-                filtering bilinear
-            }
-
-            texture_unit
-            {
-                texture white.bmp
-                filtering bilinear
             }
         }
     }

@@ -9,7 +9,6 @@ vertex_program diffuse_vs cg
         param_named_auto wMat world_matrix
         param_named_auto wvpMat worldviewproj_matrix
         param_named_auto tvpMat texture_viewproj_matrix 0
-		//param_named_auto texMat texture_matrix 0 // someone said they needed this in the vertex_program_ref in the .material file instead.
         param_named_auto spotlightDir light_direction_object_space 0
     }
 }
@@ -54,6 +53,6 @@ fragment_program geom_ps cg
 
     default_params
     {
-        param_named_auto far far_clip_distance
+        //param_named_auto far far_clip_distance
     }
 }
