@@ -15,35 +15,68 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: AllComponents.hpp
+// File: MultiModelComponent.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Simply includes all component classes for easy access when needed.
+// Implements MultiModelComponent class.
 // ========================================================================= //
 
-#ifndef __ALLCOMPONENTS_HPP__
-#define __ALLCOMPONENTS_HPP__
-
-// ========================================================================= //
-
-#include "ActorComponent.hpp"
-#include "CameraComponent.hpp"
-#include "CollisionComponent.hpp"
-#include "LightComponent.hpp"
-#include "LinkComponent.hpp"
-#include "ModelComponent.hpp"
+#include "Loader/DotSceneLoader.hpp"
 #include "MultiModelComponent.hpp"
-#include "NetworkComponent.hpp"
-#include "ParticleComponent.hpp"
-#include "PhysicsComponent.hpp"
-#include "RotationComponent.hpp"
-#include "SceneComponent.hpp"
-#include "StatComponent.hpp"
-#include "TrackComponent.hpp"
-#include "WeaponComponent.hpp"
+#include "World/World.hpp"
 
 // ========================================================================= //
 
-#endif
+MultiModelComponent::MultiModelComponent(void) :
+m_sceneFile("")
+{
+
+}
+
+// ========================================================================= //
+
+MultiModelComponent::~MultiModelComponent(void)
+{
+
+}
+
+// ========================================================================= //
+
+void MultiModelComponent::destroy(void)
+{
+
+}
+
+// ========================================================================= //
+
+void MultiModelComponent::message(ComponentMessage& msg)
+{
+
+}
+
+// ========================================================================= //
+
+// Component functions:
+
+// ========================================================================= //
+
+void MultiModelComponent::setMesh(const std::string& file,
+                                  const std::string& mat)
+{
+    m_sceneFile = file;
+}
+
+// ========================================================================= //
+
+void MultiModelComponent::setup(Ogre::SceneNode* attachNode)
+{
+    DotSceneLoader loader;
+    loader.parseDotScene(m_sceneFile,
+                         "General",
+                         this->getWorld()->getSceneManager(),
+                         attachNode);
+
+    m_sceneFile.clear();
+}
 
 // ========================================================================= //

@@ -33,6 +33,7 @@ template class Pool<CollisionComponent>;
 template class Pool<LightComponent>;
 template class Pool<LinkComponent>;
 template class Pool<ModelComponent>;
+template class Pool<MultiModelComponent>;
 template class Pool<NetworkComponent>;
 template class Pool<ParticleComponent>;
 template class Pool<PhysicsComponent>;

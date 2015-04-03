@@ -480,6 +480,10 @@
 * Created attack flare which flashes a blue light at the muzzle of the gun.
 * Added .scene parsing, tested with helicopter model. This will be the flying planes in the demo level.
 
+== 4/3/15 ==
+* Added MultiModelComponent which parses .scene file to load a set of meshes.
+* Tested rotation component behavior on multi model--helicopter blades spin.
+
 == TODO ==
 * Network yaw & pitch orientation.
 * Audio!!!

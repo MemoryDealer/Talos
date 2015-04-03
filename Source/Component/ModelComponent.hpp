@@ -51,6 +51,8 @@ public:
     // Empty.
     virtual void message(ComponentMessage& msg) override;
 
+    // Component functions:
+
     // Loads Ogre::Entity with mesh and material.
     virtual void setMesh(const std::string& mesh,
                          const std::string& mat = "");

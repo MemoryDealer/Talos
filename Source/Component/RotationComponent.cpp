@@ -91,6 +91,31 @@ void RotationComponent::addRotation(const Ogre::Vector3& axis,
 
 // ========================================================================= //
 
+static Ogre::SceneNode* findChild(Ogre::SceneNode* parent, 
+                                  const std::string& name)
+{
+    Ogre::SceneNode* child = nullptr;
+    try{
+        child = static_cast<Ogre::SceneNode*>(
+            parent->getChild(name));
+    }
+    catch (Ogre::ItemIdentityException){
+        // Search children of children.
+        auto itr = parent->getChildIterator();
+        while (itr.hasMoreElements()){
+            child = findChild(static_cast<Ogre::SceneNode*>(
+                itr.getNext()), name);
+            if (child){
+                return child;
+            }
+        }
+    }
+
+    return child;
+}
+
+// ========================================================================= //
+
 void RotationComponent::setup(SceneComponentPtr sceneC)
 {
     // Find the scene nodes in the scene component with the assigned names and
@@ -106,8 +131,11 @@ void RotationComponent::setup(SceneComponentPtr sceneC)
         }
         else{
             // Find the child scene node with the name.
-            Ogre::SceneNode* node = sceneC->getSceneNode();
-            rotation->node = node->getChild(name);
+            Ogre::SceneNode* node = findChild(sceneC->getSceneNode(), *name);
+            if (node){
+                rotation->node = node;
+            }
+            //rotation->node = node->getChild(name);
             /*auto itr = node->getChildIterator();
             while(itr.hasMoreElements()){
                 Ogre::SceneNode* child = 

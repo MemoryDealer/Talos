@@ -414,6 +414,9 @@
     <ClCompile Include="Source\Loader\DotSceneLoader.cpp">
       <Filter>Source Files\Loader</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Component\MultiModelComponent.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\Engine.hpp">
@@ -745,6 +748,9 @@
     </ClInclude>
     <ClInclude Include="Source\rapidxml.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\MultiModelComponent.hpp">
+      <Filter>Header Files\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

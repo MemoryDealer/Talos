@@ -41,16 +41,16 @@ public:
     virtual ~Component(void) = 0;
 
     // Interface function for initialization.
-    virtual void init(void) = 0;
+    virtual void init(void) { }
 
     // Interface function for destruction.
-    virtual void destroy(void) = 0;
+    virtual void destroy(void) { }
 
     // Interface function for updating.
-    virtual void update(void) = 0;
+    virtual void update(void) { }
 
     // Handles a message received from parent Entity.
-    virtual void message(ComponentMessage& msg) = 0;
+    virtual void message(ComponentMessage& msg) { }
 
     // Triggered for all attached components when a new component is 
     // attached to an Entity.

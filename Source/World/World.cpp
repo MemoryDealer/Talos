@@ -157,6 +157,8 @@ void World::init(const bool usePhysics)
         new Pool<LinkComponent>(common));
     m_componentPools[&typeid(ModelComponent)].reset(
         new Pool<ModelComponent>(common));
+    m_componentPools[&typeid(MultiModelComponent)].reset(
+        new Pool<MultiModelComponent>(common));
     m_componentPools[&typeid(NetworkComponent)].reset(
         new Pool<NetworkComponent>(4));
     m_componentPools[&typeid(ParticleComponent)].reset(
@@ -484,11 +486,28 @@ World::attachComponent<ModelComponent>(EntityPtr entity)
 
 // ========================================================================= //
 
+template<> struct World::componentReturn<MultiModelComponent>{
+    typedef MultiModelComponentPtr type;
+};
+
+template<> World::componentReturn<MultiModelComponent>::type
+World::attachComponent<MultiModelComponent>(EntityPtr entity)
+{
+    Pool<MultiModelComponent>* pool = static_cast<Pool<MultiModelComponent>*>(
+        m_componentPools[&typeid(MultiModelComponent)].get());
+
+    MultiModelComponentPtr c = pool->create();
+    initComponent(c, entity, shared_from_this());
+    return c;
+}
+
+// ========================================================================= //
+
 template<> struct World::componentReturn<NetworkComponent>{
     typedef NetworkComponentPtr type;
 };
 
-template<> World::componentReturn<NetworkComponent>::type 
+template<> World::componentReturn<NetworkComponent>::type
 World::attachComponent<NetworkComponent>(EntityPtr entity)
 {
     Pool<NetworkComponent>* pool = static_cast<Pool<NetworkComponent>*>(

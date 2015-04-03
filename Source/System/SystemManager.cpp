@@ -122,6 +122,12 @@ void SystemManager::processEntity(EntityPtr entity)
                 entity->getComponent<ModelComponent>()->getOgreEntity());
         }
 
+        // Attach multi model scene node to entity's root scene node.
+        if (entity->hasComponent<MultiModelComponent>()){
+            entity->getComponent<MultiModelComponent>()->setup(
+                sceneC->getSceneNode());
+        }
+
         // Link actor to its associated network component.
         if (entity->hasComponent<NetworkComponent>()){
             // Set the world pointer (needed for client input sequence number).

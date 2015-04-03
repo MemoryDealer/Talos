@@ -82,19 +82,18 @@ void GameState::enter(void)
 
     m_world->getEnvironment()->loadEffects();
 
-    DotSceneLoader loader;
+    /*DotSceneLoader loader;
     Ogre::SceneNode* airship = m_world->getSceneManager()->getRootSceneNode()->createChildSceneNode("airship");
     loader.parseDotScene("Bumblebee.scene", "General", m_world->getSceneManager(), airship);
-    airship->translate(0.f, -50.f, -100.f);
+    airship->translate(0.f, -50.f, -100.f);*/
 
     EntityPtr chopper = m_world->createEntity();
     m_world->attachComponent<SceneComponent>(chopper);
-    m_world->attachComponent<ModelComponent>(chopper)->setMesh("Bumblebee.scene", "Board");
-    m_world->attachComponent<CollisionComponent>(chopper);
+    m_world->attachComponent<MultiModelComponent>(chopper)->setMesh("Bumblebee.scene", "Board");
+    //m_world->attachComponent<CollisionComponent>(chopper);
     RotationComponentPtr rot = m_world->attachComponent<RotationComponent>(chopper);
     rot->addRotation(Ogre::Vector3::UNIT_Y, 1.f, "Cylinder.024");
     rot->addRotation(Ogre::Vector3::UNIT_Y, 1.f, "Cylinder.008");
-    ; add "dotscene" component for loading .scene models 
     
     // Create basic plane.
     EntityPtr plane = m_world->createEntity();

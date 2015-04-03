@@ -52,6 +52,7 @@ public:
     // Processes player/UI interaction.
     virtual void update(void) override;
 
+    // Constructs the virtual world.
     void createScene(void);
 
     // Processes network events.

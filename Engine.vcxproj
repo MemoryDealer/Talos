@@ -20,6 +20,7 @@
     <ClCompile Include="Source\Component\LightComponent.cpp" />
     <ClCompile Include="Source\Component\LinkComponent.cpp" />
     <ClCompile Include="Source\Component\ModelComponent.cpp" />
+    <ClCompile Include="Source\Component\MultiModelComponent.cpp" />
     <ClCompile Include="Source\Component\NetworkComponent.cpp" />
     <ClCompile Include="Source\Component\ParticleComponent.cpp" />
     <ClCompile Include="Source\Component\PhysicsComponent.cpp" />
@@ -116,6 +117,7 @@
     <ClInclude Include="Source\Component\LightComponent.hpp" />
     <ClInclude Include="Source\Component\LinkComponent.hpp" />
     <ClInclude Include="Source\Component\ModelComponent.hpp" />
+    <ClInclude Include="Source\Component\MultiModelComponent.hpp" />
     <ClInclude Include="Source\Component\NetworkComponent.hpp" />
     <ClInclude Include="Source\Component\NullComponent.hpp" />
     <ClInclude Include="Source\Component\ParticleComponent.hpp" />
