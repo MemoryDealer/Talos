@@ -26,6 +26,7 @@
 #include "Core/EngineNotifications.hpp"
 #include "GameState.hpp"
 #include "Input/Input.hpp"
+#include "Loader/DotSceneLoader.hpp"
 #include "Network/Network.hpp"
 #include "Network/Update.hpp"
 #include "Physics/PScene.hpp"
@@ -80,6 +81,20 @@ void GameState::enter(void)
     m_world->setPlayer(player);
 
     m_world->getEnvironment()->loadEffects();
+
+    DotSceneLoader loader;
+    Ogre::SceneNode* airship = m_world->getSceneManager()->getRootSceneNode()->createChildSceneNode("airship");
+    loader.parseDotScene("Bumblebee.scene", "General", m_world->getSceneManager(), airship);
+    airship->translate(0.f, -50.f, -100.f);
+
+    EntityPtr chopper = m_world->createEntity();
+    m_world->attachComponent<SceneComponent>(chopper);
+    m_world->attachComponent<ModelComponent>(chopper)->setMesh("Bumblebee.scene", "Board");
+    m_world->attachComponent<CollisionComponent>(chopper);
+    RotationComponentPtr rot = m_world->attachComponent<RotationComponent>(chopper);
+    rot->addRotation(Ogre::Vector3::UNIT_Y, 1.f, "Cylinder.024");
+    rot->addRotation(Ogre::Vector3::UNIT_Y, 1.f, "Cylinder.008");
+    ; add "dotscene" component for loading .scene models 
     
     // Create basic plane.
     EntityPtr plane = m_world->createEntity();
@@ -232,7 +247,7 @@ void GameState::enter(void)
     track->setEnabled(true);
     track->setReversalLoop(true);
 
-    spotlight = m_world->createEntity();
+    /*spotlight = m_world->createEntity();
     m_world->attachComponent<SceneComponent>(spotlight);
     light = m_world->attachComponent<LightComponent>(spotlight);
     light->setType(LightComponent::Type::Spotlight);
@@ -240,8 +255,7 @@ void GameState::enter(void)
     light->setRange(1000.f);
     s = spotlight->getComponent<SceneComponent>();
     s->setPosition(0.f, -45.f, 50.f);
-    s->getSceneNode()->rotate(Ogre::Vector3::UNIT_X, Ogre::Degree(-190.f));
-    m_world->attachComponent<ParticleComponent>(spotlight);
+    s->getSceneNode()->rotate(Ogre::Vector3::UNIT_X, Ogre::Degree(-190.f));*/
 
     // Create ball.
     EntityPtr ball = m_world->createEntity();
@@ -430,6 +444,13 @@ void GameState::update(void)
             this->handleUIEvents();
         } */
     }
+}
+
+// ========================================================================= //
+
+void GameState::createScene(void)
+{
+
 }
 
 // ========================================================================= //

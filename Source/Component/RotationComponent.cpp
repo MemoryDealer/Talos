@@ -107,14 +107,15 @@ void RotationComponent::setup(SceneComponentPtr sceneC)
         else{
             // Find the child scene node with the name.
             Ogre::SceneNode* node = sceneC->getSceneNode();
-            auto itr = node->getChildIterator();
+            rotation->node = node->getChild(name);
+            /*auto itr = node->getChildIterator();
             while(itr.hasMoreElements()){
                 Ogre::SceneNode* child = 
                     static_cast<Ogre::SceneNode*>(itr.getNext());
                 if (child->getName().compare(*name) == 0){
                     rotation->node = child;
                 }
-            }
+            }*/
         }
 
         Assert(rotation->node != nullptr, "Rotation node not found!");

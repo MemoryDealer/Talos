@@ -478,10 +478,12 @@
 == 4/2/15 ==
 * Created basic weapon firing with a hitscan test.
 * Created attack flare which flashes a blue light at the muzzle of the gun.
+* Added .scene parsing, tested with helicopter model. This will be the flying planes in the demo level.
 
 == TODO ==
 * Network yaw & pitch orientation.
 * Audio!!!
+* Eventually add config parsing for weapons - type objects, attack flares.
 * Reduce data members in components for setup.
 * Add PScene::addActor()
 * Move input update into world.

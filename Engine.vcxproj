@@ -42,6 +42,7 @@
     <ClCompile Include="Source\Entity\Entity.cpp" />
     <ClCompile Include="Source\Entity\EntityPool.cpp" />
     <ClCompile Include="Source\Input\Input.cpp" />
+    <ClCompile Include="Source\Loader\DotSceneLoader.cpp" />
     <ClCompile Include="Source\Log\Log.cpp" />
     <ClCompile Include="Source\Network\Client\Client.cpp" />
     <ClCompile Include="Source\Network\Network.cpp" />
@@ -140,6 +141,7 @@
     <ClInclude Include="Source\Entity\Entity.hpp" />
     <ClInclude Include="Source\Entity\EntityPool.hpp" />
     <ClInclude Include="Source\Input\Input.hpp" />
+    <ClInclude Include="Source\Loader\DotSceneLoader.hpp" />
     <ClInclude Include="Source\Log\Log.hpp" />
     <ClInclude Include="Source\Network\Client\Client.hpp" />
     <ClInclude Include="Source\Network\NetData.hpp" />
@@ -154,6 +156,7 @@
     <ClInclude Include="Source\Physics\Physics.hpp" />
     <ClInclude Include="Source\Physics\PScene.hpp" />
     <ClInclude Include="Source\Pool\Pool.hpp" />
+    <ClInclude Include="Source\rapidxml.hpp" />
     <ClInclude Include="Source\Rendering\DynamicLines.hpp" />
     <ClInclude Include="Source\Rendering\DynamicRenderable.hpp" />
     <ClInclude Include="Source\Rendering\GraphicsSettings.hpp" />

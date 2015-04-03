@@ -172,6 +172,12 @@
     <Filter Include="Source Files\Weapon">
       <UniqueIdentifier>{7dc4152e-2f2f-48db-8c25-9e8b3c7d74c0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Loader">
+      <UniqueIdentifier>{a727eb41-6553-447a-87f7-e82d5a2b3eea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Loader">
+      <UniqueIdentifier>{260be67d-b5c4-421a-b253-fef0ad781608}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\main.cpp">
@@ -404,6 +410,9 @@
     </ClCompile>
     <ClCompile Include="Source\Weapon\AttackFlare.cpp">
       <Filter>Source Files\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Loader\DotSceneLoader.cpp">
+      <Filter>Source Files\Loader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -730,6 +739,12 @@
     </ClInclude>
     <ClInclude Include="Source\Weapon\AttackFlare.hpp">
       <Filter>Header Files\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Loader\DotSceneLoader.hpp">
+      <Filter>Header Files\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\rapidxml.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
