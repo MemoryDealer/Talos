@@ -85,6 +85,7 @@
     <ClCompile Include="Source\UI\LobbyUI.cpp" />
     <ClCompile Include="Source\UI\MainMenuUI.cpp" />
     <ClCompile Include="Source\UI\UI.cpp" />
+    <ClCompile Include="Source\Weapon\AttackFlare.cpp" />
     <ClCompile Include="Source\World\Environment.cpp" />
     <ClCompile Include="Source\World\World.cpp" />
   </ItemGroup>
@@ -99,6 +100,7 @@
     <ClInclude Include="Source\Command\Actor\MoveForward.hpp" />
     <ClInclude Include="Source\Command\Actor\MoveLeft.hpp" />
     <ClInclude Include="Source\Command\Actor\MoveRight.hpp" />
+    <ClInclude Include="Source\Command\Actor\Weapon.hpp" />
     <ClInclude Include="Source\Command\Command.hpp" />
     <ClInclude Include="Source\Command\CommandRepository.hpp" />
     <ClInclude Include="Source\Command\CommandTypes.hpp" />
@@ -193,6 +195,7 @@
     <ClInclude Include="Source\UI\LobbyUI.hpp" />
     <ClInclude Include="Source\UI\MainMenuUI.hpp" />
     <ClInclude Include="Source\UI\UI.hpp" />
+    <ClInclude Include="Source\Weapon\AttackFlare.hpp" />
     <ClInclude Include="Source\World\Environment.hpp" />
     <ClInclude Include="Source\World\World.hpp" />
   </ItemGroup>

@@ -29,9 +29,7 @@
 // ========================================================================= //
 
 TrackComponent::TrackComponent(void) :
-m_animation(nullptr),
 m_animationState(nullptr),
-m_track(nullptr),
 m_keyFrames(),
 m_enabled(false),
 m_loop(false),
@@ -62,9 +60,9 @@ void TrackComponent::destroy(void)
 {
     Ogre::SceneManager* scene = this->getWorld()->getSceneManager();
 
-    m_track->removeAllKeyFrames();
+    /*m_track->removeAllKeyFrames();
     m_animation->destroyAllNodeTracks();
-    scene->destroyAnimation(m_animation->getName());
+    scene->destroyAnimation(m_animation->getName());*/
 }
 
 // ========================================================================= //
@@ -146,14 +144,14 @@ void TrackComponent::setup(Ogre::SceneNode* node)
     Ogre::Real length = m_keyFrames.back().dt;
 
     // Create the animation and set it to spline interpolation.
-    m_animation = scene->createAnimation(name, length);
-    m_animation->setInterpolationMode(Ogre::Animation::IM_SPLINE);
+    Ogre::Animation* animation = scene->createAnimation(name, length);
+    animation->setInterpolationMode(Ogre::Animation::IM_SPLINE);
 
     // Create animation track.
-    m_track = m_animation->createNodeTrack(0, node);
+    Ogre::NodeAnimationTrack* track = animation->createNodeTrack(0, node);
     for (auto& i : m_keyFrames){
         // Create the key frame with time step.
-        Ogre::TransformKeyFrame* kf = m_track->createNodeKeyFrame(i.dt);
+        Ogre::TransformKeyFrame* kf = track->createNodeKeyFrame(i.dt);
 
         // Set the position of where the node will be at this time.
         kf->setTranslate(i.pos);

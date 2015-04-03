@@ -115,7 +115,19 @@ void Input::handle(const SDL_Event& e)
             }
         }
         else{
+            switch (e.button.button){
+            default:
+                break;
 
+            case SDL_BUTTON_LEFT:
+                this->pushCommand(
+                    m_commandRepo->getCommand(CommandType::Weapon));
+                break;
+
+            case SDL_BUTTON_RIGHT:
+
+                break;
+            }
         }
         break;
 

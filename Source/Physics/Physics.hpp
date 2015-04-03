@@ -47,7 +47,14 @@ public:
 
     void destroy(void);
 
-    // Conversion functions:
+    // Talos conversion functions:
+
+    static const EntityID toEntityID(const PxRigidActor* actor){
+        return reinterpret_cast<const EntityID>(
+            static_cast<void*>(actor->userData));
+    }
+
+    // Ogre-PhysX Conversion functions:
 
     static Ogre::Vector3 toOgre(const PxVec3 &vec3)
     {

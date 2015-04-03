@@ -15,78 +15,52 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: ComponentMessage.hpp
+// File: AttackFlare.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines ComponentMessage struct for Components.
+// Defines AttackFlare class.
 // ========================================================================= //
 
-#ifndef __COMPONENTMESSAGE_HPP__
-#define __COMPONENTMESSAGE_HPP__
+#ifndef __ATTACKFLARE_HPP__
+#define __ATTACKFLARE_HPP__
 
 // ========================================================================= //
 
-#include "Command/CommandTypes.hpp"
-#include "Network/Update.hpp"
 #include "stdafx.hpp"
 
 // ========================================================================= //
+// Displays a flare from a weapon attack (e.g., muzzle flare for gun, spark 
+// from sword hitting surface).
+class AttackFlare final
+{
+public:
+    // Default initializes member data.
+    explicit AttackFlare(void);
 
-// @TODO: Find a better place to put these structs.
+    // Empty destructor.
+    ~AttackFlare(void);
 
-struct ControllerAxisMotion{
-    Sint16 x1; // x-position of left joystick.
-    Sint16 y1; // y-position of left joystick.
-    Sint16 x2; // x-position of right joystick.
-    Sint16 y2; // y-position of right joystick.
-};
+    // Creates data to animate attack flare from config file.
+    void init(std::shared_ptr<World> world, 
+              Ogre::SceneNode* parent, 
+              const std::string& cfg);
 
+    // Shows attack flare if not already active.
+    void activate(void);
 
-struct MouseMove{
-    int32_t relx;
-    int32_t rely;
-};
-// ========================================================================= //
+    // Processes flare time.
+    void update(void);
 
-struct ComponentMessage{
-
-    enum class Type{
-        Null = 0,
-
-        // Direct positional functions.
-        GetPosition,
-        SetPosition,
-        GetOrientation,
-        SetOrientation,
-        Translate,
-        TransformUpdate,
-
-        // Player-world interaction functions (input driven).
-        Move,
-        Look,
-        Action,
-        Command,
-
-        // Entity-world interaction functions.
-        LinkActivate,                
-        Hitscan,
-        
-        End
-    };
-
-    explicit ComponentMessage(const Type type = Type::Null) : type(type) { }
-
-    Type type;
-
-    boost::variant<
-        std::string, 
-        Ogre::Vector3,
-        Ogre::Quaternion,
-        ControllerAxisMotion,
-        MouseMove,
-        CommandType,
-        TransformUpdate
-        > data;
+private:
+    std::shared_ptr<World> m_world;
+    Ogre::SceneNode* m_node;
+    Ogre::BillboardSet* m_bbSet;
+    Ogre::Billboard* m_bb;
+    Ogre::Light* m_light;
+    Ogre::Timer m_timer;
+    Ogre::Real m_scale;
+    Ogre::Real m_life, m_rate, m_max;
+    bool m_active;
 };
 
 // ========================================================================= //

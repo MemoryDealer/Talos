@@ -69,13 +69,13 @@ void ActorComponent::init(void)
     m_rootNode = this->getSceneNode();
 
     // Create yaw node as the camera's top node.
-    m_yawNode = m_rootNode->createChildSceneNode();
+    m_yawNode = m_rootNode->createChildSceneNode("yaw");
 
     // Create pitch node as the camera's middle node.
-    m_pitchNode = m_yawNode->createChildSceneNode();
+    m_pitchNode = m_yawNode->createChildSceneNode("pitch");
 
     // Create roll node as the camera's bottom node.
-    m_rollNode = m_pitchNode->createChildSceneNode();
+    m_rollNode = m_pitchNode->createChildSceneNode("roll");
 
     // Set to identity rotations.
     m_yawNode->setOrientation(Ogre::Quaternion::IDENTITY);

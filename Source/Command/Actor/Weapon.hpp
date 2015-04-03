@@ -15,78 +15,33 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: ComponentMessage.hpp
+// File: Weapon.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Defines ComponentMessage struct for Components.
+// Defines WeaponCommand class.
 // ========================================================================= //
 
-#ifndef __COMPONENTMESSAGE_HPP__
-#define __COMPONENTMESSAGE_HPP__
-
-// ========================================================================= //
-
-#include "Command/CommandTypes.hpp"
-#include "Network/Update.hpp"
-#include "stdafx.hpp"
+#ifndef __WEAPONCOMMAND_HPP__
+#define __WEAPONCOMMAND_HPP__
 
 // ========================================================================= //
 
-// @TODO: Find a better place to put these structs.
+#include "Command/Command.hpp"
 
-struct ControllerAxisMotion{
-    Sint16 x1; // x-position of left joystick.
-    Sint16 y1; // y-position of left joystick.
-    Sint16 x2; // x-position of right joystick.
-    Sint16 y2; // y-position of right joystick.
-};
-
-
-struct MouseMove{
-    int32_t relx;
-    int32_t rely;
-};
 // ========================================================================= //
 
-struct ComponentMessage{
+class WeaponCommand : public Command
+{
+public:
+    explicit WeaponCommand(void){
+        this->setType(CommandType::Weapon);
+    }
 
-    enum class Type{
-        Null = 0,
-
-        // Direct positional functions.
-        GetPosition,
-        SetPosition,
-        GetOrientation,
-        SetOrientation,
-        Translate,
-        TransformUpdate,
-
-        // Player-world interaction functions (input driven).
-        Move,
-        Look,
-        Action,
-        Command,
-
-        // Entity-world interaction functions.
-        LinkActivate,                
-        Hitscan,
-        
-        End
-    };
-
-    explicit ComponentMessage(const Type type = Type::Null) : type(type) { }
-
-    Type type;
-
-    boost::variant<
-        std::string, 
-        Ogre::Vector3,
-        Ogre::Quaternion,
-        ControllerAxisMotion,
-        MouseMove,
-        CommandType,
-        TransformUpdate
-        > data;
+    virtual void execute(EntityPtr entity) override{
+        ComponentMessage msg(ComponentMessage::Type::Command);
+        msg.data = CommandType::Weapon;
+        entity->message(msg);
+    }
 };
 
 // ========================================================================= //

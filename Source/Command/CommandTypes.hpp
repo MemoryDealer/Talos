@@ -35,6 +35,8 @@ enum class CommandType{
     Action,
     Jump,
     Flashlight,
+    Weapon,
+    WeaponAlt,
     Spectator
 };
 

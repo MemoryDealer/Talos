@@ -89,9 +89,7 @@ public:
     };
 
 private:
-    Ogre::Animation* m_animation;
     Ogre::AnimationState* m_animationState;
-    Ogre::NodeAnimationTrack* m_track;
     std::vector<KeyFrame> m_keyFrames;
     bool m_enabled;
     bool m_loop, m_reversalLoop;

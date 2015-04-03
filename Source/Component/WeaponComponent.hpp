@@ -26,6 +26,8 @@
 
 // ========================================================================= //
 
+class AttackFlare;
+
 #include "Component.hpp"
 
 // ========================================================================= //
@@ -54,6 +56,12 @@ public:
     // roll node.
     void setup(Ogre::SceneNode* actorRollNode);
 
+    // Runs the weapon's attack procedure.
+    void attack(void);
+
+    // Performs ray test in direction weapon is facing.
+    void hitscan(void);
+
     // Setters:
 
     // Sets the weapon to be rendered last if true. Needed for local 
@@ -64,6 +72,11 @@ private:
     Ogre::SceneNode* m_node;
     Ogre::Entity* m_entity;
     bool m_clearDepth;
+
+    std::shared_ptr<AttackFlare> m_attackFlare;
+
+    // Weapon fire animation.
+    Ogre::AnimationState* m_animationState;
 };
 
 // ========================================================================= //

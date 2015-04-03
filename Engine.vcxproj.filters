@@ -166,6 +166,12 @@
     <Filter Include="Source Files\Rendering\SSAO">
       <UniqueIdentifier>{80ae8c97-5389-49af-b4b5-93b38b2d520a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Weapon">
+      <UniqueIdentifier>{b507ce6b-3c8c-44ee-addb-2c3401ad84d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Weapon">
+      <UniqueIdentifier>{7dc4152e-2f2f-48db-8c25-9e8b3c7d74c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\main.cpp">
@@ -395,6 +401,9 @@
     </ClCompile>
     <ClCompile Include="Source\Rendering\SSAO\Geom.cpp">
       <Filter>Source Files\Rendering\SSAO</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Weapon\AttackFlare.cpp">
+      <Filter>Source Files\Weapon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -715,6 +724,12 @@
     </ClInclude>
     <ClInclude Include="Source\Rendering\SSAO\Geom.hpp">
       <Filter>Header Files\Rendering\SSAO</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Command\Actor\Weapon.hpp">
+      <Filter>Header Files\Command\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Weapon\AttackFlare.hpp">
+      <Filter>Header Files\Weapon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -140,11 +140,6 @@ void GameState::enter(void)
     
     // === //
 
-    EntityPtr gun = m_world->createEntity();
-    m_world->attachComponent<SceneComponent>(gun);
-    m_world->attachComponent<ModelComponent>(gun)->setMesh("laserrifle.mesh");
-
-
     EntityPtr house = m_world->createEntity();
     m_world->attachComponent<SceneComponent>(house);
     m_world->attachComponent<ModelComponent>(house)->setMesh("tudorhouse.mesh", "BlueMetal");
@@ -260,7 +255,7 @@ void GameState::enter(void)
     
     
     // Setup visual scene settings.
-    m_world->getEnvironment()->setAmbientLight(0.6f, 0.6f, 0.6f);
+    m_world->getEnvironment()->setAmbientLight(0.3f, 0.3f, 0.3f);
     //m_world->getEnvironment()->setSunColour(2.f, 1.75f, 1.89f);
     //m_world->getEnvironment()->setMoonColour(.50f, .50f, 5.f);
 
@@ -416,6 +411,7 @@ void GameState::update(void)
             command->execute(m_world->getPlayer());
         }
         m_world->getPlayer()->getComponent<ActorComponent>()->update();
+        m_world->getPlayer()->getComponent<WeaponComponent>()->update();
 
 
         Ogre::Root::getSingleton().getRenderSystem()->_setViewport(m_world->getViewport());

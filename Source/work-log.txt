@@ -475,6 +475,10 @@
 == 4/1/15 ==
 * Got rudimentary SSAO working, it doesn't affect the gun like I want it to, but it works as in nullsquared's demo. As shader programming is not the focus of this project I will move on.
 
+== 4/2/15 ==
+* Created basic weapon firing with a hitscan test.
+* Created attack flare which flashes a blue light at the muzzle of the gun.
+
 == TODO ==
 * Network yaw & pitch orientation.
 * Audio!!!

@@ -84,6 +84,10 @@ void SceneComponent::message(ComponentMessage& msg)
     case ComponentMessage::Type::Translate:
         m_node->translate(boost::get<Ogre::Vector3>(msg.data));
         break;
+
+    case ComponentMessage::Type::Hitscan:
+        printf("Hitscan received!\n");
+        break;
     }
 }
 

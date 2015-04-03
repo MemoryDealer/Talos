@@ -30,6 +30,7 @@
 #include "Command/Actor/MoveForward.hpp"
 #include "Command/Actor/MoveLeft.hpp"
 #include "Command/Actor/MoveRight.hpp"
+#include "Command/Actor/Weapon.hpp"
 #include "Command/Actor/Debug/Spectator.hpp"
 
 // ========================================================================= //
@@ -61,6 +62,9 @@ m_commands()
     this->addCommand(command);
 
     command = new FlashlightCommand();
+    this->addCommand(command);
+
+    command = new WeaponCommand();
     this->addCommand(command);
 
     command = new SpectatorCommand();
