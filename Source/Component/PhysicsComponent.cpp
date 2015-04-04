@@ -23,6 +23,7 @@
 
 #include "Entity/Entity.hpp"
 #include "ModelComponent.hpp"
+#include "Physics/Cooker.hpp"
 #include "Physics/PScene.hpp"
 #include "PhysicsComponent.hpp"
 #include "SceneComponent.hpp"
@@ -63,10 +64,39 @@ void PhysicsComponent::init(EntityPtr entity)
         m_mat = this->getWorld()->getPScene()->getDefaultMaterial();
     }
 
-    // Get Ogre::Entity for mesh data.
-    Ogre::Entity* e = entity->getComponent<ModelComponent>()->getOgreEntity();
-    PxVec3 pos(Physics::toPx(
-        entity->getComponent<SceneComponent>()->getPosition()));
+    // Add all attach meshes for multi-model.
+    if (entity->hasComponent<MultiModelComponent>()){
+        auto rootNode = entity->getComponent<SceneComponent>()->getSceneNode();
+        auto itr = rootNode->getChildIterator();
+        while (itr.hasMoreElements()){
+            auto node = static_cast<Ogre::SceneNode*>(itr.getNext());
+            auto aoitr = node->getAttachedObjectIterator();
+            while (aoitr.hasMoreElements()){
+                auto ao = aoitr.getNext();
+                if (typeid(*ao) == typeid(Ogre::Entity)){
+                    auto e = static_cast<Ogre::Entity*>(ao);
+                    this->createActor(e,
+                                      entity->getID(),
+                                      node->_getDerivedPosition());
+                }
+            }
+        }
+    }
+    // Just add the one mesh.
+    else if(entity->hasComponent<ModelComponent>()){
+        auto e = entity->getComponent<ModelComponent>()->getOgreEntity();
+        auto pos = entity->getComponent<SceneComponent>()->getPosition();
+        this->createActor(e, entity->getID(), pos);
+    }        
+}
+
+// ========================================================================= //
+
+void PhysicsComponent::createActor(Ogre::Entity* e, 
+                                   const EntityID id,
+                                   const Ogre::Vector3& p)
+{
+    PxVec3 pos(Physics::toPx(p));
     std::shared_ptr<PxGeometry> geometry;
 
     // Determine type of collision volume to create.
@@ -90,6 +120,13 @@ void PhysicsComponent::init(EntityPtr entity)
             // Create PhysX geometry.
             geometry.reset(new PxBoxGeometry(v));
             //Assert(geometry->isValid(), "Invalid PxBoxGeometry for PhysicsComponent");
+
+            // Create dynamic actor.
+            m_rigidActor = PxCreateDynamic(*this->getWorld()->getPScene()->getSDK(),
+                                           PxTransform(pos),
+                                           *geometry,
+                                           *m_mat,
+                                           m_density);
         }
         break;
 
@@ -98,29 +135,60 @@ void PhysicsComponent::init(EntityPtr entity)
             // Create sphere geometry.
             geometry.reset(new PxSphereGeometry(e->getBoundingRadius()));
             //Assert(geometry->isValid(), "Invalid PxSphereGeometry for PhysicsComponent");
+
+            // Create dynamic actor.
+            m_rigidActor = PxCreateDynamic(*this->getWorld()->getPScene()->getSDK(),
+                                           PxTransform(pos),
+                                           *geometry,
+                                           *m_mat,
+                                           m_density);
         }
         break;
 
-    case Type::Mesh:
+    case Type::TriangleMesh:
+        {
+            PxTriangleMesh* mesh = this->getWorld()->getPScene()->
+                getCooker()->createTriangleMesh(e->getMesh());
+            
+            geometry.reset(new PxTriangleMeshGeometry(mesh));
 
+            /*m_rigidActor = PxCreateDynamic(*this->getWorld()->getPScene()->getSDK(),
+                                           PxTransform(pos),
+                                           *geometry,
+                                           *m_mat,
+                                           m_density);*/
+            m_rigidActor = PxCreateKinematic(*this->getWorld()->getPScene()->getSDK(),
+                                             PxTransform(pos),
+                                             *geometry,
+                                             *m_mat,
+                                             m_density);
+            //Assert(static_cast<PxTriangleMeshGeometry*>(geometry.get())->isValid(), "Invalid geom for PhysicsComponent");
+        }
+        break;
+
+    case Type::ConvexMesh:
+        ;
+        {
+            PxConvexMesh* mesh = this->getWorld()->getPScene()->
+                getCooker()->createConvexMesh(e->getMesh());
+
+            geometry.reset(new PxConvexMeshGeometry(mesh));
+            m_rigidActor = PxCreateDynamic(*this->getWorld()->getPScene()->getSDK(),
+                                           PxTransform(pos),
+                                           *geometry,
+                                           *m_mat,
+                                           m_density);                        
+        }
         break;
     }
 
-    // Create dynamic actor.
-    m_rigidActor = PxCreateDynamic(*this->getWorld()->getPScene()->getSDK(),
-                                   PxTransform(pos),
-                                   *geometry,
-                                   *m_mat,
-                                   m_density);
-
     // Assign actor's user data to EntityID.
     m_rigidActor->userData = reinterpret_cast<void*>(
-        static_cast<const EntityID>(entity->getID()));
+        static_cast<const EntityID>(id));
 
     // Set this actor to kinematic if specified.
     if (m_kinematic){
         m_rigidActor->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, true);
-        
     }
 
     // Add actor to PhysX scene.

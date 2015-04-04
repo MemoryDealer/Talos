@@ -46,14 +46,20 @@ public:
     enum class Type{
         Box,
         Sphere,
-        Mesh
+        TriangleMesh,
+        ConvexMesh
     };
 
     // Empty destructor.
     virtual void init(void) override;
 
-    // Initializes PhysX actor, adds to World's PxScene.
+    // Adds actor(s) needed for Entity.
     virtual void init(EntityPtr entity);
+
+    // Initializes PhysX actor, adds to World's PxScene.
+    virtual void createActor(Ogre::Entity* e, 
+                             const EntityID id,
+                             const Ogre::Vector3& p);
 
     // Removes PhysX actor from World's PxScene.
     virtual void destroy(void) override;

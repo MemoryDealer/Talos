@@ -52,240 +52,8 @@ GameState::~GameState(void)
 
 void GameState::enter(void)
 {
-    m_world->init(true);
+    this->createScene();
     
-    m_world->getInput()->setMode(Input::Mode::Player);
-    //m_world->getPScene()->loadDebugDrawer();
-
-    // Add systems.
-    m_world->addSystem(new CollisionSystem());
-    m_world->addSystem(new PhysicsSystem());
-
-    LightComponentPtr lightC = nullptr;
-    ModelComponentPtr modelC = nullptr;
-    PhysicsComponentPtr physicsC = nullptr;
-    TrackComponentPtr track = nullptr;
-
-    // Create player.
-    EntityPtr player = m_world->createEntity();
-    m_world->attachComponent<ActorComponent>(player);
-    m_world->attachComponent<CameraComponent>(player);
-    m_world->attachComponent<ModelComponent>(player)->setMesh("Cylinder.mesh");
-    m_world->attachComponent<NetworkComponent>(player);
-    m_world->attachComponent<WeaponComponent>(player)->setClearDepth(true);
-    lightC = m_world->attachComponent<LightComponent>(player);
-    lightC->setType(LightComponent::Type::Spotlight);
-    lightC->setColour(1.f, 1.f, 1.f);
-    lightC->setRange(125.f);
-
-    m_world->setPlayer(player);
-
-    m_world->getEnvironment()->loadEffects();
-
-    /*DotSceneLoader loader;
-    Ogre::SceneNode* airship = m_world->getSceneManager()->getRootSceneNode()->createChildSceneNode("airship");
-    loader.parseDotScene("Bumblebee.scene", "General", m_world->getSceneManager(), airship);
-    airship->translate(0.f, -50.f, -100.f);*/
-
-    EntityPtr chopper = m_world->createEntity();
-    m_world->attachComponent<SceneComponent>(chopper);
-    m_world->attachComponent<MultiModelComponent>(chopper)->setMesh("Bumblebee.scene", "Board");
-    //m_world->attachComponent<CollisionComponent>(chopper);
-    RotationComponentPtr rot = m_world->attachComponent<RotationComponent>(chopper);
-    rot->addRotation(Ogre::Vector3::UNIT_Y, 1.f, "Cylinder.024");
-    rot->addRotation(Ogre::Vector3::UNIT_Y, 1.f, "Cylinder.008");
-    
-    // Create basic plane.
-    EntityPtr plane = m_world->createEntity();
-    m_world->attachComponent<SceneComponent>(plane);
-    m_world->attachComponent<ModelComponent>(plane)->setMesh("Plane/Board", "MarbleWall");      
-    m_world->attachComponent<RotationComponent>(plane)->addRotation(
-        Ogre::Vector3::UNIT_Y, 0.3f);    
-    m_world->attachComponent<PhysicsComponent>(plane)->setKinematic(true);
-    
-    plane->getComponent<SceneComponent>()->getSceneNode()->translate(0.f, -50.f, 0.f);    
-    ComponentMessage msg(ComponentMessage::Type::Translate);
-
-    plane = m_world->createEntity();
-    m_world->attachComponent<SceneComponent>(plane);
-    m_world->attachComponent<ModelComponent>(plane)->setMesh("Plane/Board", "MarbleWall");
-    m_world->attachComponent<PhysicsComponent>(plane)->setKinematic(true);
-    /*m_world->attachComponent<RotationComponent>(plane)->addRotation(
-    Ogre::Vector3::UNIT_Y, 0.1f);*/
-    plane->getComponent<SceneComponent>()->getSceneNode()->rotate(Ogre::Vector3::UNIT_Z, Ogre::Degree(45.f));
-    msg.data = Ogre::Vector3(40.f, -50.f, 0.f);
-    plane->message(msg);
-    track = m_world->attachComponent<TrackComponent>(plane);
-    track->addKeyFrame(0.f, Ogre::Vector3(40.f, -50.f, 0.f));
-    track->addKeyFrame(3000.f, Ogre::Vector3(40.f, -35.f, 0.f));
-    track->setEnabled(true);
-    track->setReversalLoop(true);
-
-    plane = m_world->createEntity();
-    m_world->attachComponent<SceneComponent>(plane);
-    m_world->attachComponent<ModelComponent>(plane)->setMesh("Plane/Board", "Board");
-    m_world->attachComponent<CollisionComponent>(plane);
-    plane->getComponent<SceneComponent>()->getSceneNode()->rotate(Ogre::Vector3::UNIT_Z, Ogre::Degree(-90.f));
-    msg.data = Ogre::Vector3(-50.f, -50.f, 0.f);
-    plane->message(msg);
-
-    plane = m_world->createEntity();
-    m_world->attachComponent<SceneComponent>(plane);
-    m_world->attachComponent<ModelComponent>(plane)->setMesh("Plane/Board", "Board");
-    m_world->attachComponent<CollisionComponent>(plane);
-    plane->getComponent<SceneComponent>()->getSceneNode()->rotate(Ogre::Vector3::UNIT_Z, Ogre::Degree(90.f));
-    msg.data = Ogre::Vector3(50.f, -50.f, 0.f);
-    plane->message(msg);
-
-    plane = m_world->createEntity();
-    m_world->attachComponent<SceneComponent>(plane);
-    m_world->attachComponent<ModelComponent>(plane)->setMesh("Plane/Board", "Board");
-    m_world->attachComponent<CollisionComponent>(plane);
-    plane->getComponent<SceneComponent>()->getSceneNode()->rotate(Ogre::Vector3::UNIT_X, Ogre::Degree(-90.f));
-    msg.data = Ogre::Vector3(0.f, -50.f, 50.f);
-    plane->message(msg);
-
-    plane = m_world->createEntity();
-    m_world->attachComponent<SceneComponent>(plane);
-    m_world->attachComponent<ModelComponent>(plane)->setMesh("Plane/Board", "Board");
-    m_world->attachComponent<CollisionComponent>(plane);
-    plane->getComponent<SceneComponent>()->getSceneNode()->rotate(Ogre::Vector3::UNIT_X, Ogre::Degree(180.f));
-    
-    
-    // === //
-
-    EntityPtr house = m_world->createEntity();
-    m_world->attachComponent<SceneComponent>(house);
-    m_world->attachComponent<ModelComponent>(house)->setMesh("tudorhouse.mesh", "BlueMetal");
-    m_world->attachComponent<CollisionComponent>(house);
-   /* m_world->attachComponent<RotationComponent>(house)->addRotation(
-        Ogre::Vector3::UNIT_Y, 1.f);*/
-    msg.data = Ogre::Vector3(-750.f, 0.f, 0.f);
-    house->message(msg);
-
-    track = m_world->attachComponent<TrackComponent>(house);
-    track->addKeyFrame(0.f, Ogre::Vector3(-750.f, 0.f, 1500.f));
-    track->addKeyFrame(1000.f, Ogre::Vector3(-750.f, 0.f, -2000.f));
-    track->setReversalLoop(true);
-    track->setEnabled(true);
-
-    EntityPtr door = m_world->createEntity();
-    m_world->attachComponent<SceneComponent>(door);
-    m_world->attachComponent<ModelComponent>(door)->setMesh("Plane/Board", "Board");
-    m_world->attachComponent<CollisionComponent>(door);
-    door->getComponent<SceneComponent>()->getSceneNode()->rotate(Ogre::Vector3::UNIT_X, Ogre::Degree(90.f));
-    door->getComponent<SceneComponent>()->getSceneNode()->translate(0.f, -50.f, -50.f);
-    track = m_world->attachComponent<TrackComponent>(door);
-    track->addKeyFrame(0.f, Ogre::Vector3(0.f, -50.f, -50.f));
-    track->addKeyFrame(5000.f, Ogre::Vector3(0.f, -102.f, -50.f));
-    track->setLocked(true);
-
-    // Create switch to door.
-    EntityPtr link = m_world->createEntity();
-    m_world->attachComponent<SceneComponent>(link);
-    m_world->attachComponent<ModelComponent>(link)->setMesh("cylinder.mesh", "BlueMetal");
-    m_world->attachComponent<CollisionComponent>(link);
-    m_world->attachComponent<LinkComponent>(link)->addLinkID(door->getID());
-    link->getComponent<SceneComponent>()->setPosition(-30.f, -49.f, 0.f);
-    track = m_world->attachComponent<TrackComponent>(link);    
-    track->addKeyFrame(0.f, Ogre::Vector3(-30.f, -49.f, 0.f));
-    track->addKeyFrame(2500.f, Ogre::Vector3(-30.f, -50.f, 0.f));
-
-    // Create light shining down.
-    EntityPtr spotlight = m_world->createEntity();
-    m_world->attachComponent<SceneComponent>(spotlight);
-    LightComponentPtr light = m_world->attachComponent<LightComponent>(spotlight);
-    light->setType(LightComponent::Type::Spotlight);
-    light->setColour(0.1f, 0.3f, 1.f);
-    light->setRange(1000.f);
-    SceneComponentPtr s = spotlight->getComponent<SceneComponent>();
-    s->setPosition(-25.f, -5.f, 20.f);
-    s->getSceneNode()->rotate(Ogre::Vector3::UNIT_X, Ogre::Degree(-250.f));
-
-    spotlight = m_world->createEntity();
-    m_world->attachComponent<SceneComponent>(spotlight);
-    light = m_world->attachComponent<LightComponent>(spotlight);
-    light->setType(LightComponent::Type::Spotlight);
-    light->setColour(0.1f, 1.f, 0.1f);
-    light->setRange(1000.f);
-    s = spotlight->getComponent<SceneComponent>();
-    s->setPosition(25.f, -5.f, -20.f);
-    s->getSceneNode()->rotate(Ogre::Vector3::UNIT_X, Ogre::Degree(-280.f));
-
-    // Random pistons.
-    EntityPtr piston = m_world->createEntity();
-    m_world->attachComponent<SceneComponent>(piston);
-    m_world->attachComponent<ModelComponent>(piston)->setMesh("cylinder.mesh", "BlueMetal");
-    m_world->attachComponent<CollisionComponent>(piston);
-    track = m_world->attachComponent<TrackComponent>(piston);
-    piston->getComponent<SceneComponent>()->setPosition(30.f, -49.f, -10.f);
-    track->addKeyFrame(0.f, Ogre::Vector3(30.f, -49.f, -10.f));
-    track->addKeyFrame(3000.f, Ogre::Vector3(30.f, -50.5f, -10.f));
-    track->setEnabled(true);
-    track->setReversalLoop(true);
-
-    piston = m_world->createEntity();
-    m_world->attachComponent<SceneComponent>(piston);
-    m_world->attachComponent<ModelComponent>(piston)->setMesh("cylinder.mesh", "BlueMetal");
-    m_world->attachComponent<CollisionComponent>(piston);
-    track = m_world->attachComponent<TrackComponent>(piston);
-    piston->getComponent<SceneComponent>()->setPosition(28.f, -49.f, -13.f);
-    track->addKeyFrame(0.f, Ogre::Vector3(28.f, -49.f, -13.f));
-    track->addKeyFrame(3500.f, Ogre::Vector3(28.f, -50.5f, -13.f));
-    track->setEnabled(true);
-    track->setReversalLoop(true);
-
-    piston = m_world->createEntity();
-    m_world->attachComponent<SceneComponent>(piston);
-    m_world->attachComponent<ModelComponent>(piston)->setMesh("cylinder.mesh", "BlueMetal");
-    m_world->attachComponent<CollisionComponent>(piston);
-    track = m_world->attachComponent<TrackComponent>(piston);
-    piston->getComponent<SceneComponent>()->setPosition(31.f, -49.5f, -13.f);
-    track->addKeyFrame(0.f, Ogre::Vector3(31.f, -49.5f, -13.f));
-    track->addKeyFrame(4500.f, Ogre::Vector3(31.f, -51.f, -13.f));
-    track->setEnabled(true);
-    track->setReversalLoop(true);
-
-    /*spotlight = m_world->createEntity();
-    m_world->attachComponent<SceneComponent>(spotlight);
-    light = m_world->attachComponent<LightComponent>(spotlight);
-    light->setType(LightComponent::Type::Spotlight);
-    light->setColour(1.f, 0.1f, 0.1f);
-    light->setRange(1000.f);
-    s = spotlight->getComponent<SceneComponent>();
-    s->setPosition(0.f, -45.f, 50.f);
-    s->getSceneNode()->rotate(Ogre::Vector3::UNIT_X, Ogre::Degree(-190.f));*/
-
-    // Create ball.
-    EntityPtr ball = m_world->createEntity();
-    m_world->attachComponent<SceneComponent>(ball);
-    m_world->attachComponent<ModelComponent>(ball)->setMesh(
-        "icosphere.mesh", "Board");
-    physicsC = m_world->attachComponent<PhysicsComponent>(ball);
-    physicsC->setType(PhysicsComponent::Type::Sphere);
-    msg.data = Ogre::Vector3(10.f, -25.f, 0.f);
-    ball->message(msg);
-    
-    
-    // Setup visual scene settings.
-    m_world->getEnvironment()->setAmbientLight(0.3f, 0.3f, 0.3f);
-    //m_world->getEnvironment()->setSunColour(2.f, 1.75f, 1.89f);
-    //m_world->getEnvironment()->setMoonColour(.50f, .50f, 5.f);
-
-    // Create Ocean.
-#ifdef _DEBUG
-    m_world->getEnvironment()->loadOcean("Ocean2_HLSL_GLSL");
-#else
-    m_world->getEnvironment()->loadOcean("HydraxDemo.hdx");
-#endif
-
-    m_world->getEnvironment()->setOceanPosition(0.f, -100.f, 0.f);
-
-    // Create sky.
-    //m_world->getEnvironment()->loadSky();
-
-    
-
     // Network game setup.
     if (m_world->getNetwork()->initialized()){
         this->addNetworkPlayers();
@@ -438,6 +206,7 @@ void GameState::update(void)
         static_cast<Ogre::RenderWindow*>(
             Ogre::Root::getSingleton().getRenderTarget("Talos"))->swapBuffers();
 
+        m_world->getEntityPtr(3)->getComponent<SceneComponent>()->getSceneNode()->translate(0.f, 0.f, 0.1f);
                 
         /*if (m_ui->update() == true){
             this->handleUIEvents();
@@ -449,7 +218,78 @@ void GameState::update(void)
 
 void GameState::createScene(void)
 {
+    m_world->init(true);
 
+    m_world->getInput()->setMode(Input::Mode::Player);
+    //m_world->getPScene()->loadDebugDrawer();
+
+    // Add systems.
+    m_world->addSystem(new CollisionSystem());
+    m_world->addSystem(new PhysicsSystem());
+
+    LightComponentPtr lightC = nullptr;
+    ModelComponentPtr modelC = nullptr;
+    PhysicsComponentPtr physicsC = nullptr;
+    TrackComponentPtr track = nullptr;
+
+    // Create player.
+    EntityPtr player = m_world->createEntity();
+    m_world->attachComponent<ActorComponent>(player)->setPosition(Ogre::Vector3(0.f, 100.f, 0.f));
+    m_world->attachComponent<CameraComponent>(player);
+    m_world->attachComponent<ModelComponent>(player)->setMesh("Cylinder.mesh");
+    m_world->attachComponent<NetworkComponent>(player);
+    m_world->attachComponent<WeaponComponent>(player)->setClearDepth(true);
+    lightC = m_world->attachComponent<LightComponent>(player);
+    lightC->setType(LightComponent::Type::Spotlight);
+    lightC->setColour(1.f, 1.f, 1.f);
+    lightC->setRange(125.f);
+
+    m_world->setPlayer(player);
+
+    m_world->getEnvironment()->loadEffects();
+
+    EntityPtr chopper = m_world->createEntity();
+    m_world->attachComponent<SceneComponent>(chopper);
+    m_world->attachComponent<MultiModelComponent>(chopper)->setMesh("Bumblebee.scene", "Board");
+    m_world->attachComponent<PhysicsComponent>(chopper)->setKinematic(true);
+    //chopper->getComponent<PhysicsComponent>()->setType(PhysicsComponent::Type::TriangleMesh);
+    RotationComponentPtr rot = m_world->attachComponent<RotationComponent>(chopper);
+    rot->addRotation(Ogre::Vector3::UNIT_Y, 100.f, "Cylinder.024");
+    rot->addRotation(Ogre::Vector3::UNIT_Y, 100.f, "Cylinder.008");
+
+    // Create basic plane.
+    EntityPtr plane = m_world->createEntity();
+    m_world->attachComponent<SceneComponent>(plane);
+    m_world->attachComponent<ModelComponent>(plane)->setMesh("Plane/Board", "MarbleWall");
+    m_world->attachComponent<RotationComponent>(plane)->addRotation(
+        Ogre::Vector3::UNIT_Y, 0.3f);
+    m_world->attachComponent<PhysicsComponent>(plane)->setKinematic(true);
+
+    EntityPtr ogre = m_world->createEntity();
+    m_world->attachComponent<SceneComponent>(ogre)->setPosition(25.f, 0.f, 0.f);
+    m_world->attachComponent<ModelComponent>(ogre)->setMesh("ogrehead.mesh", "Board");
+    m_world->attachComponent<PhysicsComponent>(ogre)->setKinematic(true);
+    ogre->getComponent<PhysicsComponent>()->setType(PhysicsComponent::Type::TriangleMesh);
+
+
+    // Setup visual scene settings.
+    m_world->getEnvironment()->setAmbientLight(0.6f, 0.6f, 0.6f);
+    //m_world->getEnvironment()->setSunColour(2.f, 1.75f, 1.89f);
+    //m_world->getEnvironment()->setMoonColour(.50f, .50f, 5.f);
+
+    // Create Ocean.
+#ifdef _DEBUG
+    m_world->getEnvironment()->loadOcean("Ocean2_HLSL_GLSL");
+#else
+    m_world->getEnvironment()->loadOcean("HydraxDemo.hdx");
+#endif
+
+    m_world->getEnvironment()->setOceanPosition(0.f, -100.f, 0.f);
+
+    // Create sky.
+    m_world->getEnvironment()->loadSky();
+    m_world->getEnvironment()->getSky()->loadPreset(
+        SkyPresets[SkyPreset::Thunderstorm2]);
 }
 
 // ========================================================================= //

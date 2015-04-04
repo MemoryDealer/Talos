@@ -28,7 +28,8 @@
 // ========================================================================= //
 
 MultiModelComponent::MultiModelComponent(void) :
-m_sceneFile("")
+m_sceneFile(),
+m_mat()
 {
 
 }
@@ -64,6 +65,7 @@ void MultiModelComponent::setMesh(const std::string& file,
                                   const std::string& mat)
 {
     m_sceneFile = file;
+    m_mat = mat;
 }
 
 // ========================================================================= //

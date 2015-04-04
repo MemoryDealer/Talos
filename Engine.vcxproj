@@ -49,6 +49,7 @@
     <ClCompile Include="Source\Network\Network.cpp" />
     <ClCompile Include="Source\Network\Server\Server.cpp" />
     <ClCompile Include="Source\Observer\Subject.cpp" />
+    <ClCompile Include="Source\Physics\Cooker.cpp" />
     <ClCompile Include="Source\Physics\PDebugDrawer.cpp" />
     <ClCompile Include="Source\Physics\Physics.cpp" />
     <ClCompile Include="Source\Physics\PScene.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="Source\Network\Update.hpp" />
     <ClInclude Include="Source\Observer\Observer.hpp" />
     <ClInclude Include="Source\Observer\Subject.hpp" />
+    <ClInclude Include="Source\Physics\Cooker.hpp" />
     <ClInclude Include="Source\Physics\PDebugDrawer.hpp" />
     <ClInclude Include="Source\Physics\Physics.hpp" />
     <ClInclude Include="Source\Physics\PScene.hpp" />
@@ -254,7 +256,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>ws2_32.lib;RakNet_VS2008_DLL_Debug_Win32.lib;OgreMain_d.lib;RenderSystem_Direct3D9_d.lib;RenderSystem_GL_d.lib;Plugin_OctreeSceneManager_d.lib;Plugin_CgProgramManager_d.lib;Plugin_ParticleFX_d.lib;Hydrax_d.lib;SDL2.lib;SDL2main.lib;CEGUIBase-0_d.lib;CEGUIOgreRenderer-0_d.lib;PhysX3DEBUG_x86.lib;PhysX3CommonDEBUG_x86.lib;PhysX3ExtensionsDEBUG.lib;PhysX3CharacterKinematicDEBUG_x86.lib;PhysXVisualDebuggerSDKDEBUG.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;RakNet_VS2008_DLL_Debug_Win32.lib;OgreMain_d.lib;RenderSystem_Direct3D9_d.lib;RenderSystem_GL_d.lib;Plugin_OctreeSceneManager_d.lib;Plugin_CgProgramManager_d.lib;Plugin_ParticleFX_d.lib;Hydrax_d.lib;SDL2.lib;SDL2main.lib;CEGUIBase-0_d.lib;CEGUIOgreRenderer-0_d.lib;PhysX3DEBUG_x86.lib;PhysX3CommonDEBUG_x86.lib;PhysX3CookingDEBUG_x86.lib;PhysX3ExtensionsDEBUG.lib;PhysX3CharacterKinematicDEBUG_x86.lib;PhysXVisualDebuggerSDKDEBUG.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <Bscmake>

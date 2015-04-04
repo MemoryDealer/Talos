@@ -30,7 +30,8 @@ m_foundation(nullptr),
 m_physx(nullptr),
 m_defaultAllocator(),
 m_defaultErrorCallback(),
-m_debuggerConnection(nullptr)
+m_debuggerConnection(nullptr),
+m_cookingInterface(nullptr)
 {
     
 }
@@ -73,6 +74,14 @@ const bool Physics::init(void)
         port,
         timeout,
         connectionFlags);*/
+
+    // Initialize cooking interface.
+    m_cookingInterface = PxCreateCooking(PX_PHYSICS_VERSION,
+                                         m_physx->getFoundation(),
+                                         PxCookingParams(PxTolerancesScale()));
+    if (!m_cookingInterface){
+        throw std::exception("Failed to create PhysX cooking interface");
+    }
 
     return true;
 }

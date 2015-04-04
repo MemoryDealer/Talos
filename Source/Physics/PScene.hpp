@@ -29,11 +29,15 @@
 #include "Physics.hpp"
 
 // ========================================================================= //
+
+class Cooker;
+
+// ========================================================================= //
 // A single physics scene to be used by a state (PScene is easier to type).
 class PScene final
 {
 public:
-    explicit PScene(const std::shared_ptr<Physics>);
+    explicit PScene(const std::shared_ptr<Physics> physics);
 
     ~PScene(void);
 
@@ -47,7 +51,7 @@ public:
     void loadDebugDrawer(void);
 
     // Adds the actor to the internal debug drawer.
-    void addToDebugDrawer(PxRigidActor*, PxGeometry&);
+    void addToDebugDrawer(PxRigidActor* actor, PxGeometry& geometry);
 
     // Raycasting:
 
@@ -81,9 +85,12 @@ public:
     // Returns true if the debug drawer is activated.
     const bool isUsingDebugDrawer(void) const;
 
+    // Returns pointer to Cooker class.
+    std::shared_ptr<Cooker> getCooker(void) const;
+
     // Setters:
 
-public:
+private:
     PxPhysics* m_physx;
     PxScene* m_scene;
     PxMaterial* m_defaultMaterial;
@@ -91,31 +98,8 @@ public:
     PxControllerManager* m_controllerManager;
     std::shared_ptr<PDebugDrawer> m_debugDrawer;
     bool m_useDebugDrawer;
+    std::shared_ptr<Cooker> m_cooker;
 };
-
-// ========================================================================= //
-
-// Getters:
-
-inline PxPhysics* PScene::getSDK(void) const{
-    return m_physx;
-}
-
-inline PxScene* PScene::getScene(void) const{
-    return m_scene;
-}
-
-inline PxMaterial* PScene::getDefaultMaterial(void) const{
-    return m_defaultMaterial;
-}
-
-inline PxControllerManager* PScene::getControllerManager(void) const{
-    return m_controllerManager;
-}
-
-inline const bool PScene::isUsingDebugDrawer(void) const{
-    return m_useDebugDrawer;
-}
 
 // ========================================================================= //
 

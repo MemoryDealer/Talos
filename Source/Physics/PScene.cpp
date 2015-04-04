@@ -21,6 +21,7 @@
 // Implements PhysicsScene class.
 // ========================================================================= //
 
+#include "Cooker.hpp"
 #include "Core/Talos.hpp"
 #include "PDebugDrawer.hpp"
 #include "PScene.hpp"
@@ -34,7 +35,8 @@ m_defaultMaterial(nullptr),
 m_cpuDispatcher(nullptr),
 m_controllerManager(nullptr),
 m_debugDrawer(nullptr),
-m_useDebugDrawer(false)
+m_useDebugDrawer(false),
+m_cooker(new Cooker(physics->m_physx, physics->m_cookingInterface))
 {
     
 }
@@ -77,6 +79,7 @@ const bool PScene::init(void)
 
     // Create default material.
     m_defaultMaterial = m_physx->createMaterial(0.5f, 0.5f, 0.1f);
+    m_cooker->setDefaultMaterial(m_defaultMaterial);
 
     // Create character controller manager.
     m_controllerManager = PxCreateControllerManager(*m_scene);
@@ -142,6 +145,52 @@ bool PScene::raycast(Ray& ray)
                             ray.hit,
                             PxHitFlags(PxHitFlag::eDEFAULT),
                             fd);
+}
+
+// ========================================================================= //
+
+// Getters:
+
+// ========================================================================= //
+
+PxPhysics* PScene::getSDK(void) const
+{
+    return m_physx;
+}
+
+// ========================================================================= //
+
+PxScene* PScene::getScene(void) const
+{
+    return m_scene;
+}
+
+// ========================================================================= //
+
+PxMaterial* PScene::getDefaultMaterial(void) const
+{
+    return m_defaultMaterial;
+}
+
+// ========================================================================= //
+
+PxControllerManager* PScene::getControllerManager(void) const
+{
+    return m_controllerManager;
+}
+
+// ========================================================================= //
+
+const bool PScene::isUsingDebugDrawer(void) const
+{
+    return m_useDebugDrawer;
+}
+
+// ========================================================================= //
+
+std::shared_ptr<Cooker> PScene::getCooker(void) const
+{
+    return m_cooker;
 }
 
 // ========================================================================= //

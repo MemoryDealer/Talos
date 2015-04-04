@@ -484,7 +484,12 @@
 * Added MultiModelComponent which parses .scene file to load a set of meshes.
 * Tested rotation component behavior on multi model--helicopter blades spin.
 
+== 4/4/15 ==
+* Got triangle mesh and convex mesh cooking working for physx. Tested with ogrehead model.
+
 == TODO ==
+* Added a list of scene nodes that should be added in the physics/collision component to the multimodelcomponent, so it can retrieve that list and add them.
+    Create test model with non-collision propellers for this.
 * Network yaw & pitch orientation.
 * Audio!!!
 * Eventually add config parsing for weapons - type objects, attack flares.
@@ -518,9 +523,7 @@
 == BUGS ==
 * Moving diagonally is faster, due to changes in input system. Fix in KCC or ActorComponent.
 * Combining track & rotation components yields the rotation component useless, since the track component's animation overrides the orientation.
-* With soft shadows, pointing a spotlight at an object with a point light near it casts a black square on nearby objects.
 * Directional lights perpendicular to diffuse_materials make it appear entirely white (or the colour of the light) if ambient shaders are used.
-* Casting ray upwards with PhysX (PScene::raycast()) still returns a result if no hit.
 * Hydrax/SkyX need to be shared between states--make them world dependencies perhaps and add code to check if they are already initialized.
 * CEGUI disappears when resizing window.
 ** Hydrax underwater is sped up, fix. (E:\Engine\Ogre3D\Hydrax-v0.5.1\Hydrax\Hydrax.vcproj to recompile).

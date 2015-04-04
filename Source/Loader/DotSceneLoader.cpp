@@ -701,6 +701,7 @@ void DotSceneLoader::processEntity(rapidxml::xml_node<>* XMLNode, Ogre::SceneNod
     {
         Ogre::MeshManager::getSingleton().load(meshFile, m_sGroupName);
         pEntity = mSceneMgr->createEntity(meshFile);
+        pEntity->setMaterialName("Airship");
         pEntity->setCastShadows(castShadows);
         pParent->attachObject(pEntity);
 

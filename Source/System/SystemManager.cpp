@@ -67,21 +67,6 @@ void SystemManager::addSystem(System* system)
 
 void SystemManager::processEntity(EntityPtr entity)
 {
-    // Collision System.
-    if (this->hasSystem<CollisionSystem>()){
-        if (entity->hasComponent<SceneComponent>() &&
-            entity->hasComponent<CollisionComponent>()){
-            this->getSystem<CollisionSystem>()->attachEntity(entity);
-        }
-    }
-    // Physics System.
-    if (this->hasSystem<PhysicsSystem>()){
-        if (entity->hasComponent<SceneComponent>() &&
-            entity->hasComponent<PhysicsComponent>()){
-            this->getSystem<PhysicsSystem>()->attachEntity(entity);
-        }
-    }    
-
     // Additional setup, linking component data together.
     if (entity->hasComponent<ActorComponent>() ||
         entity->hasComponent<SceneComponent>()){
@@ -164,6 +149,20 @@ void SystemManager::processEntity(EntityPtr entity)
         }
     }
     
+    // Collision System.
+    if (this->hasSystem<CollisionSystem>()){
+        if (entity->hasComponent<SceneComponent>() &&
+            entity->hasComponent<CollisionComponent>()){
+            this->getSystem<CollisionSystem>()->attachEntity(entity);
+        }
+    }
+    // Physics System.
+    if (this->hasSystem<PhysicsSystem>()){
+        if (entity->hasComponent<SceneComponent>() &&
+            entity->hasComponent<PhysicsComponent>()){
+            this->getSystem<PhysicsSystem>()->attachEntity(entity);
+        }
+    }
 }
 
 // ========================================================================= //
