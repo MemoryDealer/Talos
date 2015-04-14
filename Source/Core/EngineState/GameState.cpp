@@ -30,6 +30,8 @@
 #include "Network/Network.hpp"
 #include "Network/Update.hpp"
 #include "Physics/PScene.hpp"
+#include "Rendering/Sky/Sky.hpp"
+#include "Rendering/Sky/SkyPresets.hpp"
 #include "System/CollisionSystem.hpp"
 #include "System/PhysicsSystem.hpp"
 #include "World/Environment.hpp"
@@ -193,20 +195,6 @@ void GameState::update(void)
         }
         m_world->getPlayer()->getComponent<ActorComponent>()->update();
         m_world->getPlayer()->getComponent<WeaponComponent>()->update();
-
-
-        Ogre::Root::getSingleton().getRenderSystem()->_setViewport(m_world->getViewport());
-
-        Ogre::Root::getSingleton().getRenderSystem()->clearFrameBuffer(Ogre::FBT_COLOUR | Ogre::FBT_DEPTH);
-
-        m_world->getSceneManager()->_renderScene(m_world->getMainCamera()->getCamera(),
-                                                 m_world->getViewport(),
-                                                 true);
-
-        static_cast<Ogre::RenderWindow*>(
-            Ogre::Root::getSingleton().getRenderTarget("Talos"))->swapBuffers();
-
-        m_world->getEntityPtr(3)->getComponent<SceneComponent>()->getSceneNode()->translate(0.f, 0.f, 0.1f);
                 
         /*if (m_ui->update() == true){
             this->handleUIEvents();
@@ -248,14 +236,14 @@ void GameState::createScene(void)
 
     m_world->getEnvironment()->loadEffects();
 
-    EntityPtr chopper = m_world->createEntity();
-    m_world->attachComponent<SceneComponent>(chopper);
-    m_world->attachComponent<MultiModelComponent>(chopper)->setMesh("Bumblebee.scene", "Board");
-    m_world->attachComponent<PhysicsComponent>(chopper)->setKinematic(true);
-    //chopper->getComponent<PhysicsComponent>()->setType(PhysicsComponent::Type::TriangleMesh);
-    RotationComponentPtr rot = m_world->attachComponent<RotationComponent>(chopper);
-    rot->addRotation(Ogre::Vector3::UNIT_Y, 100.f, "Cylinder.024");
-    rot->addRotation(Ogre::Vector3::UNIT_Y, 100.f, "Cylinder.008");
+    //EntityPtr chopper = m_world->createEntity();
+    //m_world->attachComponent<SceneComponent>(chopper);
+    //m_world->attachComponent<MultiModelComponent>(chopper)->setMesh("Bumblebee.scene", "Board");
+    //m_world->attachComponent<PhysicsComponent>(chopper)->setKinematic(true);
+    ////chopper->getComponent<PhysicsComponent>()->setType(PhysicsComponent::Type::TriangleMesh);
+    //RotationComponentPtr rot = m_world->attachComponent<RotationComponent>(chopper);
+    //rot->addRotation(Ogre::Vector3::UNIT_Y, 100.f, "Cylinder.024");
+    //rot->addRotation(Ogre::Vector3::UNIT_Y, 100.f, "Cylinder.008");
 
     // Create basic plane.
     EntityPtr plane = m_world->createEntity();
@@ -264,13 +252,6 @@ void GameState::createScene(void)
     m_world->attachComponent<RotationComponent>(plane)->addRotation(
         Ogre::Vector3::UNIT_Y, 0.3f);
     m_world->attachComponent<PhysicsComponent>(plane)->setKinematic(true);
-
-    EntityPtr ogre = m_world->createEntity();
-    m_world->attachComponent<SceneComponent>(ogre)->setPosition(25.f, 0.f, 0.f);
-    m_world->attachComponent<ModelComponent>(ogre)->setMesh("ogrehead.mesh", "Board");
-    m_world->attachComponent<PhysicsComponent>(ogre)->setKinematic(true);
-    ogre->getComponent<PhysicsComponent>()->setType(PhysicsComponent::Type::TriangleMesh);
-
 
     // Setup visual scene settings.
     m_world->getEnvironment()->setAmbientLight(0.6f, 0.6f, 0.6f);
@@ -287,9 +268,9 @@ void GameState::createScene(void)
     m_world->getEnvironment()->setOceanPosition(0.f, -100.f, 0.f);
 
     // Create sky.
-    m_world->getEnvironment()->loadSky();
+    /*m_world->getEnvironment()->loadSky();
     m_world->getEnvironment()->getSky()->loadPreset(
-        SkyPresets[SkyPreset::Thunderstorm2]);
+        SkyPresets[SkyPreset::Thunderstorm2]);*/
 }
 
 // ========================================================================= //

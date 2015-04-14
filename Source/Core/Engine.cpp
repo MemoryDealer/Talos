@@ -145,8 +145,8 @@ bool Engine::init(void)
     m_viewport = m_renderWindow->addViewport(nullptr);
     m_viewport->setBackgroundColour(Ogre::ColourValue::Black);
 
-    m_viewport->setClearEveryFrame(false);
-    m_renderWindow->setAutoUpdated(false);
+    /*m_viewport->setClearEveryFrame(false);
+    m_renderWindow->setAutoUpdated(false);*/
 
     // Activate the  Ogre render window.
     m_renderWindow->setActive(true);
@@ -159,8 +159,8 @@ bool Engine::init(void)
     // @TODO: Load from config file.
     m_graphics.meshes = Graphics::Setting::High;
     m_graphics.textures = Graphics::Setting::High;
-    m_graphics.shadows = Graphics::Setting::High;
-    m_graphics.ssao = Graphics::Setting::On;
+    m_graphics.shadows = Graphics::Setting::Off;
+    m_graphics.ssao = Graphics::Setting::Off;
 #ifdef _DEBUG
     m_graphics.ocean = Graphics::Setting::Low;
 #else
@@ -240,7 +240,7 @@ void Engine::start(const EngineStateID id)
 
         // Update the engine if the render window is active.
         if (m_renderWindow->isActive()){
-            Ogre::WindowEventUtilities::messagePump();
+            //Ogre::WindowEventUtilities::messagePump();
 
             float current = m_timer->getMilliseconds();
             float elapsed = current - prev;

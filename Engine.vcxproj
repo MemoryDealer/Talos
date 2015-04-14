@@ -279,7 +279,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>ws2_32.lib;RakNet_VS2008_DLL_Release_Win32.lib;OgreMain.lib;RenderSystem_Direct3D9.lib;RenderSystem_GL.lib;Plugin_OctreeSceneManager.lib;Plugin_ParticleFX.lib;Hydrax.lib;SDL2.lib;CEGUIBase-0.lib;CEGUIOgreRenderer-0.lib;PhysX3_x86.lib;PhysX3Common_x86.lib;PhysX3Extensions.lib;PhysX3CharacterKinematic_x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;RakNet_VS2008_DLL_Release_Win32.lib;OgreMain.lib;RenderSystem_Direct3D9.lib;RenderSystem_GL.lib;Plugin_OctreeSceneManager.lib;Plugin_ParticleFX.lib;Hydrax.lib;SDL2.lib;CEGUIBase-0.lib;CEGUIOgreRenderer-0.lib;PhysX3_x86.lib;PhysX3Common_x86.lib;PhysX3Cooking_x86.lib;PhysX3Extensions.lib;PhysX3CharacterKinematic_x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

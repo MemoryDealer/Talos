@@ -45,10 +45,10 @@ material diffuse_template
             // NOTE: we want to load this material ONLY AFTER
             // we created the in-code SSAO, _NOT_ after or Ogre
             // will complain about ssao_tex missing
-            texture_unit ssao_tex
+            //texture_unit ssao_tex
             {
-                texture ssao_tex
-            }
+            //    texture ssao_tex
+            //}
 	    }
 		pass
 		{
