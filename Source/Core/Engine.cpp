@@ -49,6 +49,7 @@ m_physics(nullptr),
 m_server(nullptr),
 m_client(nullptr),
 m_input(nullptr),
+m_soundEngine(nullptr),
 m_states(),
 m_stateStack(),
 m_active(false)
@@ -100,8 +101,8 @@ bool Engine::init(void)
     }   
 
     // Create the main window with SDL.
-    const int width = 1024;
-    const int height = 768;
+    const int width = 1280;
+    const int height = 960;
     m_sdlWindow = SDL_CreateWindow(
         "Engine",
         SDL_WINDOWPOS_CENTERED,
@@ -159,8 +160,8 @@ bool Engine::init(void)
     // @TODO: Load from config file.
     m_graphics.meshes = Graphics::Setting::High;
     m_graphics.textures = Graphics::Setting::High;
-    m_graphics.shadows = Graphics::Setting::Off;
-    m_graphics.ssao = Graphics::Setting::Off;
+    m_graphics.shadows = Graphics::Setting::On;
+    m_graphics.ssao = Graphics::Setting::On;
 #ifdef _DEBUG
     m_graphics.ocean = Graphics::Setting::Low;
 #else
@@ -193,6 +194,15 @@ bool Engine::init(void)
 
     // === //
 
+    // Audio:
+
+    m_soundEngine = irrklang::createIrrKlangDevice();
+    if (!m_soundEngine){
+        throw std::exception("Failed to create irrKlang sound engine");
+    }
+
+    // === //
+
     // Engine:
 
     // Allocate input handler.
@@ -214,6 +224,7 @@ bool Engine::init(void)
 
 void Engine::shutdown(void)
 {
+    m_soundEngine->drop();
     m_physics->destroy();
     delete m_root;
     delete Talos::Log::getSingletonPtr();
@@ -300,6 +311,7 @@ void Engine::registerState(const EngineStateID id)
     deps.graphics = m_graphics;
     deps.server = m_server;
     deps.client = m_client;
+    deps.soundEngine = m_soundEngine;
     state->getWorld()->injectDependencies(deps);
 
     // Add self as an Observer to listen for events.

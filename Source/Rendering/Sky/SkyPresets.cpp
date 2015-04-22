@@ -34,7 +34,7 @@ SkyPreset SkyPresets[6] = {
     // Thunderstorm 1.
     SkyPreset(Ogre::Vector3(12.23f, 7.5f, 20.5f), 0.f, 0.f, SkyX::AtmosphereManager::Options(9.77501f, 10.2963f, 0.01f, 0.00545f, 0.000375f, 30.f, Ogre::Vector3(0.55f, 0.54f, 0.52f), -0.991f, 1.f, 4.f), false, true, 300.f, false, Ogre::Radian(0.f), Ogre::Vector3(0.63f, 0.63f, 0.7f), Ogre::Vector4(0.25f, 0.4f, 0.5f, 0.1f), Ogre::Vector4(0.45f, 0.3f, 0.6f, 0.1f), Ogre::Vector2(1.f, 1.f), true, 0.5f, Ogre::Vector3(1.f, 0.976f, 0.92f), 1.f),
     // Thunderstorm 2.
-    SkyPreset(Ogre::Vector3(10.23f, 7.5f, 20.5f), 0.f, 0.f, SkyX::AtmosphereManager::Options(9.77501f, 10.2963f, 0.01f, 0.00545f, 0.000375f, 30.f, Ogre::Vector3(0.55f, 0.54f, 0.52f), -0.991f, 0.5f, 4.f), false, true, 300.f, false, Ogre::Radian(0.f), Ogre::Vector3(0.63f, 0.63f, 0.7f), Ogre::Vector4(0.f, 0.02f, 0.34f, 0.24f), Ogre::Vector4(0.29f, 0.3f, 0.6f, 1.f), Ogre::Vector2(1.f, 1.f), true, 0.5f, Ogre::Vector3(0.8f, 0.f, 0.8f), 1.f),
+    SkyPreset(Ogre::Vector3(10.23f, 7.5f, 20.5f), 0.f, 0.f, SkyX::AtmosphereManager::Options(9.77501f, 10.2963f, 0.01f, 0.00545f, 0.000375f, 30.f, Ogre::Vector3(0.55f, 0.54f, 0.52f), -0.991f, 0.5f, 4.f), false, true, 300.f, false, Ogre::Radian(0.f), Ogre::Vector3(0.63f, 0.63f, 0.7f), Ogre::Vector4(0.f, 0.02f, 0.34f, 0.24f), Ogre::Vector4(0.29f, 0.3f, 0.6f, 1.f), Ogre::Vector2(1.f, 1.f), true, 0.5f, Ogre::Vector3(0.949f, 0.094f, 0.922f), 1.f),
     // Desert.
     SkyPreset(Ogre::Vector3(7.59f, 7.5f, 20.5f), 0.f, -0.8f, SkyX::AtmosphereManager::Options(9.77501f, 10.2963f, 0.01f, 0.0072f, 0.000925f, 30.f, Ogre::Vector3(0.71f, 0.59f, 0.53f), -0.997f, 2.5f, 1.f), true),
     // Night.

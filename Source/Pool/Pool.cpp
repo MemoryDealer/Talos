@@ -39,6 +39,7 @@ template class Pool<ParticleComponent>;
 template class Pool<PhysicsComponent>;
 template class Pool<RotationComponent>;
 template class Pool<SceneComponent>;
+template class Pool<SoundComponent>;
 template class Pool<StatComponent>;
 template class Pool<TrackComponent>;
 template class Pool<WeaponComponent>;

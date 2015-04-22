@@ -103,6 +103,9 @@ private:
     // Input handler.
     std::shared_ptr<Input> m_input;
 
+    // Audio.
+    irrklang::ISoundEngine* m_soundEngine;
+
     // State management.
     EngineStateList m_states;
     EngineStateStack m_stateStack;

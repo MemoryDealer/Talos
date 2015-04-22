@@ -134,6 +134,12 @@ void SystemManager::processEntity(EntityPtr entity)
             entity->getComponent<RotationComponent>()->setup(sceneC);
         }
 
+        // Setup audio.
+        if (entity->hasComponent<SoundComponent>()){
+            entity->getComponent<SoundComponent>()->setSceneNode(
+                sceneC->getSceneNode());
+        }
+
         // Setup track animation component.
         if (entity->hasComponent<TrackComponent>()){
             entity->getComponent<TrackComponent>()->setup(

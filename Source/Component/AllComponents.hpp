@@ -38,6 +38,7 @@
 #include "PhysicsComponent.hpp"
 #include "RotationComponent.hpp"
 #include "SceneComponent.hpp"
+#include "SoundComponent.hpp"
 #include "StatComponent.hpp"
 #include "TrackComponent.hpp"
 #include "WeaponComponent.hpp"

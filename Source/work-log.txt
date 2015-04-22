@@ -487,6 +487,9 @@
 == 4/4/15 ==
 * Got triangle mesh and convex mesh cooking working for physx. Tested with ogrehead model.
 
+== 4/22/15 ==
+* Implemented 3D audio support, pretty simple.
+
 == TODO ==
 * Added a list of scene nodes that should be added in the physics/collision component to the multimodelcomponent, so it can retrieve that list and add them.
     Create test model with non-collision propellers for this.

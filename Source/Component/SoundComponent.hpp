@@ -15,65 +15,46 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: stdafx.hpp
+// File: SoundComponent.hpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// A single point of access for needed headers.
+// Defines SoundComponent class.
 // ========================================================================= //
 
-#ifndef __STDAFX_HPP__
-#define __STDAFX_HPP__
+#ifndef __SOUNDCOMPONENT_HPP__
+#define __SOUNDCOMPONENT_HPP__
 
 // ========================================================================= //
 
-// My own files.
-#include "Typedefs.hpp"
-#include "Core/HelperFunctions.hpp"
-#include "Core/Assert.hpp"
-#include "Log/Log.hpp"
-#include "Rendering/GraphicsSettings.hpp"
+#include "Component.hpp"
 
-// C++.
-#include <list>
-#include <map>
-#include <stack>
-#include <thread>
+// ========================================================================= //
+// Associates a 3D sound with an entity.
+class SoundComponent final : public Component
+{
+public:
+    explicit SoundComponent(void);
 
-// Boost.
-#include <boost/variant.hpp>
+    virtual ~SoundComponent(void) override;
 
-// Ogre3D.
-#include <Ogre.h>
+    virtual void destroy(void) override;
 
-// SDL.
-#include <SDL.h>
-#include <SDL_syswm.h>
+    virtual void update(void) override;
 
-// CEGUI.
-#include <CEGUI/CEGUI.h>
-#include <CEGUI/RendererModules/Ogre/Renderer.h>
+    virtual void message(ComponentMessage& msg) override;
 
-// Define NDEBUG for PhysX in release mode.
-#ifndef _DEBUG
-#define NDEBUG
-#endif
+    // Component functions:
 
-// PhysX.
-#include <PxPhysicsAPI.h>
+    void addSound(const std::string& file, const bool looped = true);
 
-// RakNet.
-#include <RakPeerInterface.h>
-#include <MessageIdentifiers.h>
-#include <RakNetTypes.h>
-#include <BitStream.h>
-#include <GetTime.h>
+    // Sets internal scene node pointer to positional updates.
+    void setSceneNode(Ogre::SceneNode* node);
 
-// irrKlang.
-#include <irrKlang.h>
-
-#ifdef WIN32
-#define _WINSOCKAPI_ // Prevent automatic inclusion of winsock.h.
-#endif
+private:
+    irrklang::ISound* m_sound;
+    Ogre::SceneNode* m_node;
+    bool m_looped;
+};
 
 // ========================================================================= //
 

@@ -420,6 +420,9 @@
     <ClCompile Include="Source\Physics\Cooker.cpp">
       <Filter>Source Files\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Component\SoundComponent.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\Engine.hpp">
@@ -757,6 +760,9 @@
     </ClInclude>
     <ClInclude Include="Source\Physics\Cooker.hpp">
       <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\SoundComponent.hpp">
+      <Filter>Header Files\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

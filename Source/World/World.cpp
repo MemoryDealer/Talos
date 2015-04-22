@@ -60,9 +60,12 @@ m_systemManager(nullptr),
 m_player(nullptr),
 m_hasPlayer(false),
 m_mainCameraC(nullptr),
-m_input(nullptr)
+m_input(nullptr),
+m_soundEngine(nullptr),
+m_sounds(),
+m_musicCount(0)
 {
-    
+    m_sounds.reserve(10);
 }
 
 // ========================================================================= //
@@ -83,6 +86,7 @@ void World::injectDependencies(const Dependencies& deps)
     m_graphics = deps.graphics;
     m_server = deps.server;
     m_client = deps.client;
+    m_soundEngine = deps.soundEngine;
 }
 
 // ========================================================================= //
@@ -169,6 +173,8 @@ void World::init(const bool usePhysics)
         new Pool<RotationComponent>(common));
     m_componentPools[&typeid(SceneComponent)].reset(
         new Pool<SceneComponent>(common));
+    m_componentPools[&typeid(SoundComponent)].reset(
+        new Pool<SoundComponent>(32));
     m_componentPools[&typeid(StatComponent)].reset(
         new Pool<StatComponent>(common));
     m_componentPools[&typeid(TrackComponent)].reset(
@@ -204,6 +210,16 @@ void World::destroy(void)
     if (m_usePhysics){
         m_PScene->destroy();
     }
+
+    // Stop all sounds.
+    m_soundEngine->stopAllSounds();
+    for (std::vector<irrklang::ISound*>::iterator itr = std::begin(m_sounds);
+         itr != std::end(m_sounds);
+         ++itr){
+        (*itr)->drop();
+    }
+    m_sounds.clear();
+    m_musicCount = 0;
 
     m_scene->destroyAllCameras();
     m_scene->clearScene();
@@ -257,6 +273,17 @@ void World::update(void)
     }
 
     m_environment->update();
+
+    // Update listener position in 3D audio engine.
+    if (m_player){
+        Ogre::Vector3 pos = m_player->getComponent<ActorComponent>()->
+            getPosition();
+        Ogre::Vector3 look = m_player->getComponent<ActorComponent>()->
+            getOrientation() * Ogre::Vector3::NEGATIVE_UNIT_Z;
+
+        m_soundEngine->setListenerPosition(irrklang::vec3df(pos.x, pos.y, pos.z),
+                                           irrklang::vec3df(-look.x, look.y, -look.z)); 
+    }
 }
 
 // ========================================================================= //
@@ -588,6 +615,23 @@ World::attachComponent<SceneComponent>(EntityPtr entity)
 
 // ========================================================================= //
 
+template<> struct World::componentReturn<SoundComponent>{
+    typedef SoundComponentPtr type;
+};
+
+template<> World::componentReturn<SoundComponent>::type
+World::attachComponent<SoundComponent>(EntityPtr entity)
+{
+    Pool<SoundComponent>* pool = static_cast<Pool<SoundComponent>*>(
+        m_componentPools[&typeid(SoundComponent)].get());
+
+    SoundComponentPtr c = pool->create();
+    initComponent(c, entity, shared_from_this());
+    return c;
+}
+
+// ========================================================================= //
+
 template<> struct World::componentReturn<StatComponent>{
     typedef StatComponentPtr type;
 };
@@ -658,6 +702,24 @@ CommandPtr World::handleInput(const SDL_Event& e)
     m_input->handle(e);
     
     return nullptr;
+}
+
+// ========================================================================= //
+
+void World::playMusic(const std::string& file, const uint32_t instance)
+{
+    m_sounds.push_back(m_soundEngine->play2D(file.c_str(), true));
+    ++m_musicCount;
+}
+
+// ========================================================================= //
+
+void World::stopMusic(const uint32_t instance)
+{
+    m_sounds[instance]->stop();
+    m_sounds[instance]->drop();
+    m_sounds.erase(m_sounds.begin() + instance);
+    --m_musicCount;
 }
 
 // ========================================================================= //

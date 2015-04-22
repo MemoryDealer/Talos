@@ -149,6 +149,16 @@ public:
 
     // === //
 
+    // Music:
+
+    // Starts background music on loop.
+    void playMusic(const std::string& file, const uint32_t instance = 0);
+
+    // Stops background music of specified instance.
+    void stopMusic(const uint32_t instance = 0);
+
+    // === //
+
     // Getters:
 
     // Returns pointer to Ogre::Root object.
@@ -181,6 +191,9 @@ public:
     // Returns reference to internal Input instance.
     Input* getInput(void) const;
 
+    // Returns pointer to internal irrKlang sound engine.
+    irrklang::ISoundEngine* getSoundEngine(void) const;
+
     // Setters:
 
     // Sets pointer to Entity controlled by player.
@@ -200,6 +213,7 @@ public:
         Graphics graphics;
         std::shared_ptr<Network> server;
         std::shared_ptr<Network> client;
+        irrklang::ISoundEngine* soundEngine;
     };
 
 private:
@@ -243,6 +257,11 @@ private:
 
     // Input component.
     Input* m_input;
+
+    // Audio.
+    irrklang::ISoundEngine* m_soundEngine;
+    std::vector<irrklang::ISound*> m_sounds;
+    uint32_t m_musicCount;    
 };
 
 // ========================================================================= //
@@ -287,6 +306,10 @@ inline Network* World::getNetwork(void) const{
 
 inline Input* World::getInput(void) const{
     return m_input;
+}
+
+inline irrklang::ISoundEngine* World::getSoundEngine(void) const{
+    return m_soundEngine;
 }
 
 // Setters:

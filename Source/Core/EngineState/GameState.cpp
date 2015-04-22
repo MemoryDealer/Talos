@@ -224,7 +224,7 @@ void GameState::createScene(void)
     EntityPtr player = m_world->createEntity();
     m_world->attachComponent<ActorComponent>(player)->setPosition(Ogre::Vector3(0.f, 100.f, 0.f));
     m_world->attachComponent<CameraComponent>(player);
-    m_world->attachComponent<ModelComponent>(player)->setMesh("Cylinder.mesh");
+    m_world->attachComponent<ModelComponent>(player)->setMesh("Player.mesh");
     m_world->attachComponent<NetworkComponent>(player);
     m_world->attachComponent<WeaponComponent>(player)->setClearDepth(true);
     lightC = m_world->attachComponent<LightComponent>(player);
@@ -236,21 +236,38 @@ void GameState::createScene(void)
 
     m_world->getEnvironment()->loadEffects();
 
-    //EntityPtr chopper = m_world->createEntity();
-    //m_world->attachComponent<SceneComponent>(chopper);
-    //m_world->attachComponent<MultiModelComponent>(chopper)->setMesh("Bumblebee.scene", "Board");
-    //m_world->attachComponent<PhysicsComponent>(chopper)->setKinematic(true);
-    ////chopper->getComponent<PhysicsComponent>()->setType(PhysicsComponent::Type::TriangleMesh);
-    //RotationComponentPtr rot = m_world->attachComponent<RotationComponent>(chopper);
-    //rot->addRotation(Ogre::Vector3::UNIT_Y, 100.f, "Cylinder.024");
-    //rot->addRotation(Ogre::Vector3::UNIT_Y, 100.f, "Cylinder.008");
+    // Tower city
+    EntityPtr tower = m_world->createEntity();
+    m_world->attachComponent<SceneComponent>(tower)->setPosition(Ogre::Vector3(1500.f, -150.f, 17000.f));
+    tower->getComponent<SceneComponent>()->getSceneNode()->scale(1000.f, 1000.f, 1000.f);
+    m_world->attachComponent<MultiModelComponent>(tower)->setMesh("tower-city.scene");
+
+    // Chopper
+    EntityPtr chopper = m_world->createEntity();
+    m_world->attachComponent<SceneComponent>(chopper)->setPosition(Ogre::Vector3(-300.f, 1250.f, 16050.f));
+    chopper->getComponent<SceneComponent>()->getSceneNode()->scale(25.f, 25.f, 25.f);
+    Ogre::SceneNode* n = chopper->getComponent<SceneComponent>()->getSceneNode();
+    n->rotate(Ogre::Vector3::UNIT_Y, Ogre::Degree(180.f));
+    n->rotate(Ogre::Vector3::UNIT_Z, Ogre::Degree(35.f));
+    n->rotate(Ogre::Vector3::UNIT_X, Ogre::Degree(15.f));
+    m_world->attachComponent<MultiModelComponent>(chopper)->setMesh("BlackHawk.scene");
+
+    // SOund test.
+    EntityPtr sound = m_world->createEntity();
+    m_world->attachComponent<SceneComponent>(sound);
+    m_world->attachComponent<ModelComponent>(sound)->setMesh("Player.mesh");
+    m_world->attachComponent<SoundComponent>(sound)->addSound("Data/Audio/Sounds/kepler.ogg");
+    track = m_world->attachComponent<TrackComponent>(sound);
+    track->addKeyFrame(0.f, Ogre::Vector3(0.f, 0.f, 0.f));
+    track->addKeyFrame(3000.f, Ogre::Vector3(50.f, 0.f, 0.f));
+    track->setReversalLoop(true);
 
     // Create basic plane.
     EntityPtr plane = m_world->createEntity();
     m_world->attachComponent<SceneComponent>(plane);
-    m_world->attachComponent<ModelComponent>(plane)->setMesh("Plane/Board", "MarbleWall");
-    m_world->attachComponent<RotationComponent>(plane)->addRotation(
-        Ogre::Vector3::UNIT_Y, 0.3f);
+    m_world->attachComponent<ModelComponent>(plane)->setMesh("Plane/Board", "Board");
+    /*m_world->attachComponent<RotationComponent>(plane)->addRotation(
+        Ogre::Vector3::UNIT_Y, 0.3f);*/
     m_world->attachComponent<PhysicsComponent>(plane)->setKinematic(true);
 
     // Setup visual scene settings.
@@ -268,9 +285,12 @@ void GameState::createScene(void)
     m_world->getEnvironment()->setOceanPosition(0.f, -100.f, 0.f);
 
     // Create sky.
-    /*m_world->getEnvironment()->loadSky();
+    m_world->getEnvironment()->loadSky();
     m_world->getEnvironment()->getSky()->loadPreset(
-        SkyPresets[SkyPreset::Thunderstorm2]);*/
+        SkyPresets[SkyPreset::Desert]);
+
+    // Add music.
+    //m_world->playMusic("Data/Audio/Music/flying.ogg");
 }
 
 // ========================================================================= //

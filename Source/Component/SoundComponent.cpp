@@ -15,95 +15,102 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================= //
-// File: StartupState.cpp
+// File: SoundComponent.cpp
 // Author: Jordan Sparks <unixunited@live.com>
 // ========================================================================= //
-// Implements StartupState class.
+// Implements SoundComponent class.
 // ========================================================================= //
 
-#include "Core/EngineNotifications.hpp"
-#include "Core/EngineState/EngineStateID.hpp"
-#include "Core/Resources.hpp"
-#include "StartupState.hpp"
-
-// ========================================================================= //
-
-StartupState::StartupState(void) :
-m_loaded(false)
-{
-    this->setID(EngineStateID::Startup);
-}
+#include "ComponentMessage.hpp"
+#include "SoundComponent.hpp"
+#include "World/World.hpp"
 
 // ========================================================================= //
 
-StartupState::~StartupState(void)
+SoundComponent::SoundComponent(void) :
+m_sound(nullptr),
+m_node(nullptr),
+m_looped(true)
 {
 
 }
 
 // ========================================================================= //
 
-void StartupState::enter(void)
-{
-    // Create thread for loading engine resources.
-    // @TODO: Thread causes random hanging.
-    /*std::thread t(&StartupState::loadResources, this);
-    t.detach();*/
-    this->loadResources();
-}
-
-// ========================================================================= //
-
-void StartupState::exit(void)
+SoundComponent::~SoundComponent(void)
 {
 
 }
 
 // ========================================================================= //
 
-void StartupState::pause(void)
+void SoundComponent::destroy(void)
 {
-
-}
-
-// ========================================================================= //
-
-void StartupState::resume(void)
-{
-
-}
-
-// ========================================================================= //
-
-void StartupState::update(void)
-{
-    if (m_active == true){
-
-        // Render something simple...
-        // ...
-
-        if (m_loaded == true){
-            // Done loading, notify engine to start main menu.
-            m_subject.notify(EngineNotification::PopAndPush, 
-                             EngineStateID::MainMenu);
-        }
+    if (m_sound){
+        m_sound->drop();
     }
 }
 
 // ========================================================================= //
 
-void StartupState::loadResources(void)
+void SoundComponent::update(void)
 {
-    // Load resources for Ogre (from Resources.hpp).
-    printf("Loading Ogre resources...\n");
-    loadOgreResources();
-    printf("Loading meshes...\n");
-    loadMeshes();
-    printf("Loading CEGUI resources...\n");
-    loadCEGUIResources();
-    printf("Done loading.\n");
+    // Update 3D position of sound.
+    if (m_sound){
+        Ogre::Vector3 pos = m_node->_getDerivedPosition();
 
-    m_loaded = true;
+        m_sound->setPosition(irrklang::vec3df(pos.x, pos.y, pos.z));
+
+        if (m_sound->isFinished()){
+            m_sound->drop();
+            m_sound = nullptr;
+        }
+    }    
+}
+
+// ========================================================================= //
+
+void SoundComponent::message(ComponentMessage& msg)
+{
+    switch (msg.type){
+    default:
+        break;
+
+    case ComponentMessage::Type::Action:
+        if (!m_looped){
+            if (m_sound){
+                m_sound->setIsPaused(false);
+            }
+        }
+        break;
+    }
+}
+
+// ========================================================================= //
+
+// Component functions:
+
+// ========================================================================= //
+
+void SoundComponent::addSound(const std::string& file, const bool looped)
+{
+    m_looped = looped;
+
+    irrklang::ISoundEngine* soundEngine = this->getWorld()->getSoundEngine();
+    irrklang::vec3df pos(0.f, 0.f, 0.f);
+
+    m_sound = soundEngine->play3D(file.c_str(),
+                                  pos,
+                                  m_looped,
+                                  !m_looped,
+                                  true);
+}
+
+// ========================================================================= //
+
+void SoundComponent::setSceneNode(Ogre::SceneNode* node)
+{
+    m_node = node;
 }
 
 // ========================================================================= //

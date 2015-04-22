@@ -58,6 +58,8 @@ void LobbyState::enter(void)
     m_world->init();
     m_world->getInput()->setMode(Input::Mode::UI);
 
+    m_world->getEnvironment()->loadEffects();
+
     // Setup visual scene settings.
     m_world->getEnvironment()->setAmbientLight(255.f, 255.f, 255.f);
     m_world->getEnvironment()->setSunColour(200.f, 175.f, 189.f);
@@ -73,7 +75,7 @@ void LobbyState::enter(void)
     // Create sky.
     m_world->getEnvironment()->loadSky();
     m_world->getEnvironment()->getSky()->loadPreset(
-        SkyPresets[SkyPreset::Thunderstorm1]);
+        SkyPresets[SkyPreset::Thunderstorm2]);
 
     // Load UI.
     m_ui.reset(new LobbyUI());
