@@ -32,7 +32,7 @@
 // ========================================================================= //
 
 PhysicsComponent::PhysicsComponent(void) :
-m_rigidActor(nullptr),
+m_rigidActors(),
 m_type(Type::Box),
 m_mat(nullptr),
 m_density(1.f),
@@ -98,6 +98,7 @@ void PhysicsComponent::createActor(Ogre::Entity* e,
 {
     PxVec3 pos(Physics::toPx(p));
     std::shared_ptr<PxGeometry> geometry;
+    PxRigidDynamic* rigidActor = nullptr;
 
     // Determine type of collision volume to create.
     switch (m_type){
@@ -122,7 +123,7 @@ void PhysicsComponent::createActor(Ogre::Entity* e,
             //Assert(geometry->isValid(), "Invalid PxBoxGeometry for PhysicsComponent");
 
             // Create dynamic actor.
-            m_rigidActor = PxCreateDynamic(*this->getWorld()->getPScene()->getSDK(),
+            rigidActor = PxCreateDynamic(*this->getWorld()->getPScene()->getSDK(),
                                            PxTransform(pos),
                                            *geometry,
                                            *m_mat,
@@ -137,7 +138,7 @@ void PhysicsComponent::createActor(Ogre::Entity* e,
             //Assert(geometry->isValid(), "Invalid PxSphereGeometry for PhysicsComponent");
 
             // Create dynamic actor.
-            m_rigidActor = PxCreateDynamic(*this->getWorld()->getPScene()->getSDK(),
+            rigidActor = PxCreateDynamic(*this->getWorld()->getPScene()->getSDK(),
                                            PxTransform(pos),
                                            *geometry,
                                            *m_mat,
@@ -157,7 +158,7 @@ void PhysicsComponent::createActor(Ogre::Entity* e,
                                            *geometry,
                                            *m_mat,
                                            m_density);*/
-            m_rigidActor = PxCreateKinematic(*this->getWorld()->getPScene()->getSDK(),
+            rigidActor = PxCreateKinematic(*this->getWorld()->getPScene()->getSDK(),
                                              PxTransform(pos),
                                              *geometry,
                                              *m_mat,
@@ -173,7 +174,7 @@ void PhysicsComponent::createActor(Ogre::Entity* e,
                 getCooker()->createConvexMesh(e->getMesh());
 
             geometry.reset(new PxConvexMeshGeometry(mesh));
-            m_rigidActor = PxCreateDynamic(*this->getWorld()->getPScene()->getSDK(),
+            rigidActor = PxCreateDynamic(*this->getWorld()->getPScene()->getSDK(),
                                            PxTransform(pos),
                                            *geometry,
                                            *m_mat,
@@ -183,32 +184,33 @@ void PhysicsComponent::createActor(Ogre::Entity* e,
     }
 
     // Assign actor's user data to EntityID.
-    m_rigidActor->userData = reinterpret_cast<void*>(
+    rigidActor->userData = reinterpret_cast<void*>(
         static_cast<const EntityID>(id));
 
     // Set this actor to kinematic if specified.
     if (m_kinematic){
-        m_rigidActor->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, true);
+        rigidActor->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, true);
     }
 
     // Add actor to PhysX scene.
-    this->getWorld()->getPScene()->getScene()->addActor(*m_rigidActor);
-
-    m_rigidActor->addForce(PxVec3(0.f, 1000.f, 1000.f));
+    this->getWorld()->getPScene()->getScene()->addActor(*rigidActor);
 
     // Add to debug drawer if activated.
     if (this->getWorld()->getPScene()->isUsingDebugDrawer()){
-        this->getWorld()->getPScene()->addToDebugDrawer(m_rigidActor, *geometry);
+        this->getWorld()->getPScene()->addToDebugDrawer(rigidActor, *geometry);
     }
+
+    // Add rigid actor to list.
+    m_rigidActors.push_back(rigidActor);
 }
 
 // ========================================================================= //
 
 void PhysicsComponent::destroy(void)
-{
-    Assert(m_rigidActor != nullptr, "Null m_actor!");
-
-    this->getWorld()->getPScene()->getScene()->removeActor(*m_rigidActor);
+{    
+    for (auto& i : m_rigidActors){
+        this->getWorld()->getPScene()->getScene()->removeActor(*i);
+    }
 }
 
 // ========================================================================= //
@@ -235,13 +237,15 @@ void PhysicsComponent::translate(const PxReal dx,
                                  const PxReal dy, 
                                  const PxReal dz)
 {
-    PxTransform transform = m_rigidActor->getGlobalPose();
+    for (auto& i : m_rigidActors){
+        PxTransform transform = i->getGlobalPose();
 
-    transform.p.x += dx;
-    transform.p.y += dy;
-    transform.p.z += dz;
+        transform.p.x += dx;
+        transform.p.y += dy;
+        transform.p.z += dz;
 
-    m_rigidActor->setGlobalPose(transform, true);
+        i->setGlobalPose(transform, true);
+    }
 }
 
 // ========================================================================= //
@@ -251,13 +255,13 @@ void PhysicsComponent::rotate(const PxReal rx,
                               const PxReal rz)
 {
     // @TODO: This doesn't worK!
-    PxTransform transform = m_rigidActor->getGlobalPose();
+    //PxTransform transform = m_rigidActor->getGlobalPose();
 
-    PxVec3 v(rx, ry, rz);
-    //v.normalize();
-    transform.rotate(v);
+    //PxVec3 v(rx, ry, rz);
+    ////v.normalize();
+    //transform.rotate(v);
 
-    m_rigidActor->setGlobalPose(transform, true);
+    //m_rigidActor->setGlobalPose(transform, true);
 }
 
 // ========================================================================= //
@@ -268,7 +272,7 @@ void PhysicsComponent::rotate(const PxReal rx,
 
 const Ogre::Vector3 PhysicsComponent::getPosition(void) const
 {
-    PxTransform transform = m_rigidActor->getGlobalPose();
+    PxTransform transform = m_rigidActors[0]->getGlobalPose();
 
     return Ogre::Vector3(transform.p.x, 
                          transform.p.y, 
@@ -279,7 +283,7 @@ const Ogre::Vector3 PhysicsComponent::getPosition(void) const
 
 const Ogre::Quaternion PhysicsComponent::getOrientation(void) const
 {
-    PxTransform transform = m_rigidActor->getGlobalPose();
+    PxTransform transform = m_rigidActors[0]->getGlobalPose();
 
     return Ogre::Quaternion(transform.q.w,
                             transform.q.x,
@@ -291,7 +295,7 @@ const Ogre::Quaternion PhysicsComponent::getOrientation(void) const
 
 PxRigidDynamic* PhysicsComponent::getRigidActor(void) const
 {
-    return m_rigidActor;
+    return m_rigidActors[0];
 }
 
 // ========================================================================= //
@@ -307,12 +311,20 @@ const bool PhysicsComponent::isKinematic(void) const
 
 // ========================================================================= //
 
-void PhysicsComponent::setPosition(const Ogre::Vector3& pos)
+void PhysicsComponent::setPosition(const Ogre::Vector3& pos,
+                                   const uint32_t index)
 {
-    PxTransform transform = m_rigidActor->getGlobalPose();
+    /*for (auto& i : m_rigidActors){
+        PxTransform transform = i->getGlobalPose();
+
+        transform.p = Physics::toPx(pos);
+        i->setGlobalPose(transform, true);
+    }*/
+
+    PxTransform transform = m_rigidActors[index]->getGlobalPose();
 
     transform.p = Physics::toPx(pos);
-    m_rigidActor->setGlobalPose(transform, true);
+    m_rigidActors[index]->setGlobalPose(transform, true);
 }
 
 // ========================================================================= //
@@ -328,10 +340,12 @@ void PhysicsComponent::setPosition(const PxReal x,
 
 void PhysicsComponent::setOrientation(const Ogre::Quaternion& orientation)
 {
-    PxTransform transform = m_rigidActor->getGlobalPose();
+    for (auto& i : m_rigidActors){
+        PxTransform transform = i->getGlobalPose();
 
-    transform.q = Physics::toPx(orientation);
-    m_rigidActor->setGlobalPose(transform, true);
+        transform.q = Physics::toPx(orientation);
+        i->setGlobalPose(transform, true);
+    }
 }
 
 // ========================================================================= //

@@ -261,6 +261,22 @@ void GameState::createScene(void)
     track->addKeyFrame(0.f, Ogre::Vector3(0.f, 0.f, 0.f));
     track->addKeyFrame(3000.f, Ogre::Vector3(50.f, 0.f, 0.f));
     track->setReversalLoop(true);
+    track->setEnabled(true);
+
+    // Magic carpet.
+    EntityPtr carpet = m_world->createEntity();
+    m_world->attachComponent<SceneComponent>(carpet)->setPosition(Ogre::Vector3(0.f, 2.f, -50.f));
+    m_world->attachComponent<MultiModelComponent>(carpet)->setMesh("carpet.scene");
+    
+    RotationComponentPtr rot = m_world->attachComponent<RotationComponent>(carpet);
+    rot->addRotation(Ogre::Vector3::UNIT_Y, 5.f, "Prop1");
+    rot->addRotation(Ogre::Vector3::UNIT_Y, 5.f, "Prop2");
+    //rot->addRotation(Ogre::Vector3::UNIT_Y, 1.f);
+    track = m_world->attachComponent<TrackComponent>(carpet);
+    track->addKeyFrame(0.f, Ogre::Vector3(0.f, 2.f, -50.f));
+    track->addKeyFrame(250000.f, Ogre::Vector3(0.f, 300.f, 17000.f));
+    track->setEnabled(true);
+    m_world->attachComponent<PhysicsComponent>(carpet)->setKinematic(true);
 
     // Create basic plane.
     EntityPtr plane = m_world->createEntity();
@@ -268,10 +284,10 @@ void GameState::createScene(void)
     m_world->attachComponent<ModelComponent>(plane)->setMesh("Plane/Board", "Board");
     /*m_world->attachComponent<RotationComponent>(plane)->addRotation(
         Ogre::Vector3::UNIT_Y, 0.3f);*/
-    m_world->attachComponent<PhysicsComponent>(plane)->setKinematic(true);
+    /*m_world->attachComponent<PhysicsComponent>(plane)->setKinematic(true);*/
 
     // Setup visual scene settings.
-    m_world->getEnvironment()->setAmbientLight(0.6f, 0.6f, 0.6f);
+    m_world->getEnvironment()->setAmbientLight(90.6f, 90.6f, 90.6f);
     //m_world->getEnvironment()->setSunColour(2.f, 1.75f, 1.89f);
     //m_world->getEnvironment()->setMoonColour(.50f, .50f, 5.f);
 

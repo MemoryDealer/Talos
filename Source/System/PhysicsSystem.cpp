@@ -66,8 +66,18 @@ void PhysicsSystem::update(void)
 
         // Update SceneComponent's position and orientaiton.
         if (physicsC->isKinematic()){
-            physicsC->setPosition(sceneC->getPosition());
-            physicsC->setOrientation(sceneC->getOrientation());
+            if (i.second->hasComponent<MultiModelComponent>()){
+                auto itr = sceneC->getSceneNode()->getChildIterator();
+                for (uint32_t j = 0; itr.hasMoreElements(); ++j){
+                    auto node = static_cast<Ogre::SceneNode*>(itr.getNext());
+                    physicsC->setPosition(node->_getDerivedPosition(), j);
+                    physicsC->setOrientation(node->getOrientation());
+                }
+            }
+            else{
+                physicsC->setPosition(sceneC->getPosition());
+                physicsC->setOrientation(sceneC->getOrientation());
+            }
         }
         else{
             sceneC->setPosition(physicsC->getPosition());

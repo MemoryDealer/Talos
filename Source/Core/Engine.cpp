@@ -160,8 +160,8 @@ bool Engine::init(void)
     // @TODO: Load from config file.
     m_graphics.meshes = Graphics::Setting::High;
     m_graphics.textures = Graphics::Setting::High;
-    m_graphics.shadows = Graphics::Setting::On;
-    m_graphics.ssao = Graphics::Setting::On;
+    m_graphics.shadows = Graphics::Setting::Off;
+    m_graphics.ssao = Graphics::Setting::Off;
 #ifdef _DEBUG
     m_graphics.ocean = Graphics::Setting::Low;
 #else

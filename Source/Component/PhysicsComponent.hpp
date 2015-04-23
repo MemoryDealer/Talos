@@ -100,7 +100,7 @@ public:
     // Setters:
 
     // Sets PhysX pose position.
-    void setPosition(const Ogre::Vector3& pos);
+    void setPosition(const Ogre::Vector3& pos, const uint32_t index = 0);
 
     // Sets PhysX pose position to these coordinates.
     void setPosition(const PxReal x,
@@ -132,7 +132,7 @@ public:
     void setKinematic(const bool kinematic);
 
 private:
-    PxRigidDynamic* m_rigidActor;
+    std::vector<PxRigidDynamic*> m_rigidActors;
     Type m_type;
     PxMaterial* m_mat;
     PxReal m_density;
