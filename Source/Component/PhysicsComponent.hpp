@@ -56,11 +56,6 @@ public:
     // Adds actor(s) needed for Entity.
     virtual void init(EntityPtr entity);
 
-    // Initializes PhysX actor, adds to World's PxScene.
-    virtual void createActor(Ogre::Entity* e, 
-                             const EntityID id,
-                             const Ogre::Vector3& p);
-
     // Removes PhysX actor from World's PxScene.
     virtual void destroy(void) override;
 
@@ -73,6 +68,12 @@ public:
 
     // Component functions:
 
+    // Initializes PhysX actor, adds to World's PxScene.
+    virtual void createActor(Ogre::Entity* e,
+                             const EntityID id,
+                             const Ogre::Vector3& p,
+                             Ogre::SceneNode* node = nullptr);
+
     // Translates the PhysX pose directly.
     void translate(const PxReal dx, 
                    const PxReal dy, 
@@ -82,6 +83,9 @@ public:
     void rotate(const PxReal rx, 
                 const PxReal ry, 
                 const PxReal rz);
+
+    // Updates transforms of all rigid actors for multi-model component.
+    void updateAllKinematics(void);
 
     // Getters:
 
@@ -100,7 +104,7 @@ public:
     // Setters:
 
     // Sets PhysX pose position.
-    void setPosition(const Ogre::Vector3& pos, const uint32_t index = 0);
+    void setPosition(const Ogre::Vector3& pos);
 
     // Sets PhysX pose position to these coordinates.
     void setPosition(const PxReal x,
@@ -131,8 +135,17 @@ public:
     // Sets internal boolean for kinematic actor during creation.
     void setKinematic(const bool kinematic);
 
+    // === //
+
+    typedef struct{
+        Ogre::SceneNode* node;
+        PxRigidDynamic* actor;
+    } KinematicActor;
+
 private:
-    std::vector<PxRigidDynamic*> m_rigidActors;
+    PxRigidDynamic* m_rigidActor;
+    // Store all nodes => actor associations for multi-model kinematic actors.
+    std::vector<KinematicActor> m_kinematicActors; 
     Type m_type;
     PxMaterial* m_mat;
     PxReal m_density;

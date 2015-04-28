@@ -32,7 +32,8 @@
 // ========================================================================= //
 
 PhysicsComponent::PhysicsComponent(void) :
-m_rigidActors(),
+m_rigidActor(nullptr),
+m_kinematicActors(),
 m_type(Type::Box),
 m_mat(nullptr),
 m_density(1.f),
@@ -77,7 +78,8 @@ void PhysicsComponent::init(EntityPtr entity)
                     auto e = static_cast<Ogre::Entity*>(ao);
                     this->createActor(e,
                                       entity->getID(),
-                                      node->_getDerivedPosition());
+                                      node->_getDerivedPosition(),
+                                      node);
                 }
             }
         }
@@ -94,7 +96,8 @@ void PhysicsComponent::init(EntityPtr entity)
 
 void PhysicsComponent::createActor(Ogre::Entity* e, 
                                    const EntityID id,
-                                   const Ogre::Vector3& p)
+                                   const Ogre::Vector3& p,
+                                   Ogre::SceneNode* node)
 {
     PxVec3 pos(Physics::toPx(p));
     std::shared_ptr<PxGeometry> geometry;
@@ -168,7 +171,6 @@ void PhysicsComponent::createActor(Ogre::Entity* e,
         break;
 
     case Type::ConvexMesh:
-        ;
         {
             PxConvexMesh* mesh = this->getWorld()->getPScene()->
                 getCooker()->createConvexMesh(e->getMesh());
@@ -190,6 +192,12 @@ void PhysicsComponent::createActor(Ogre::Entity* e,
     // Set this actor to kinematic if specified.
     if (m_kinematic){
         rigidActor->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, true);
+
+        // Add to kinematic actor list.
+        KinematicActor k;
+        k.node = node;
+        k.actor = rigidActor;
+        m_kinematicActors.push_back(k);
     }
 
     // Add actor to PhysX scene.
@@ -200,16 +208,20 @@ void PhysicsComponent::createActor(Ogre::Entity* e,
         this->getWorld()->getPScene()->addToDebugDrawer(rigidActor, *geometry);
     }
 
-    // Add rigid actor to list.
-    m_rigidActors.push_back(rigidActor);
+    // Assign rigid actor pointer.  
+    m_rigidActor = rigidActor;
 }
 
 // ========================================================================= //
 
 void PhysicsComponent::destroy(void)
 {    
-    for (auto& i : m_rigidActors){
-        this->getWorld()->getPScene()->getScene()->removeActor(*i);
+    if (m_rigidActor){
+        this->getWorld()->getPScene()->getScene()->removeActor(*m_rigidActor);
+    }
+
+    for (auto& i : m_kinematicActors){
+        this->getWorld()->getPScene()->getScene()->removeActor(*i.actor);
     }
 }
 
@@ -237,15 +249,13 @@ void PhysicsComponent::translate(const PxReal dx,
                                  const PxReal dy, 
                                  const PxReal dz)
 {
-    for (auto& i : m_rigidActors){
-        PxTransform transform = i->getGlobalPose();
+    PxTransform transform = m_rigidActor->getGlobalPose();
 
-        transform.p.x += dx;
-        transform.p.y += dy;
-        transform.p.z += dz;
+    transform.p.x += dx;
+    transform.p.y += dy;
+    transform.p.z += dz;
 
-        i->setGlobalPose(transform, true);
-    }
+    m_rigidActor->setGlobalPose(transform, true);
 }
 
 // ========================================================================= //
@@ -266,13 +276,27 @@ void PhysicsComponent::rotate(const PxReal rx,
 
 // ========================================================================= //
 
+void PhysicsComponent::updateAllKinematics(void)
+{
+    for (auto& i : m_kinematicActors){
+        PxTransform transform = i.actor->getGlobalPose();
+
+        transform.p = Physics::toPx(i.node->_getDerivedPosition());
+        transform.q = Physics::toPx(i.node->_getDerivedOrientation());
+
+        i.actor->setGlobalPose(transform);
+    }
+}
+
+// ========================================================================= //
+
 // Getters:
 
 // ========================================================================= //
 
 const Ogre::Vector3 PhysicsComponent::getPosition(void) const
 {
-    PxTransform transform = m_rigidActors[0]->getGlobalPose();
+    PxTransform transform = m_rigidActor->getGlobalPose();
 
     return Ogre::Vector3(transform.p.x, 
                          transform.p.y, 
@@ -283,7 +307,7 @@ const Ogre::Vector3 PhysicsComponent::getPosition(void) const
 
 const Ogre::Quaternion PhysicsComponent::getOrientation(void) const
 {
-    PxTransform transform = m_rigidActors[0]->getGlobalPose();
+    PxTransform transform = m_rigidActor->getGlobalPose();
 
     return Ogre::Quaternion(transform.q.w,
                             transform.q.x,
@@ -295,7 +319,7 @@ const Ogre::Quaternion PhysicsComponent::getOrientation(void) const
 
 PxRigidDynamic* PhysicsComponent::getRigidActor(void) const
 {
-    return m_rigidActors[0];
+    return m_rigidActor;
 }
 
 // ========================================================================= //
@@ -311,8 +335,7 @@ const bool PhysicsComponent::isKinematic(void) const
 
 // ========================================================================= //
 
-void PhysicsComponent::setPosition(const Ogre::Vector3& pos,
-                                   const uint32_t index)
+void PhysicsComponent::setPosition(const Ogre::Vector3& pos)
 {
     /*for (auto& i : m_rigidActors){
         PxTransform transform = i->getGlobalPose();
@@ -321,10 +344,10 @@ void PhysicsComponent::setPosition(const Ogre::Vector3& pos,
         i->setGlobalPose(transform, true);
     }*/
 
-    PxTransform transform = m_rigidActors[index]->getGlobalPose();
+    PxTransform transform = m_rigidActor->getGlobalPose();
 
     transform.p = Physics::toPx(pos);
-    m_rigidActors[index]->setGlobalPose(transform, true);
+    m_rigidActor->setGlobalPose(transform, true);
 }
 
 // ========================================================================= //
@@ -340,12 +363,10 @@ void PhysicsComponent::setPosition(const PxReal x,
 
 void PhysicsComponent::setOrientation(const Ogre::Quaternion& orientation)
 {
-    for (auto& i : m_rigidActors){
-        PxTransform transform = i->getGlobalPose();
+    PxTransform transform = m_rigidActor->getGlobalPose();
 
-        transform.q = Physics::toPx(orientation);
-        i->setGlobalPose(transform, true);
-    }
+    transform.q = Physics::toPx(orientation);
+    m_rigidActor->setGlobalPose(transform, true);
 }
 
 // ========================================================================= //

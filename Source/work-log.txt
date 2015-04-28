@@ -490,6 +490,9 @@
 == 4/22/15 ==
 * Implemented 3D audio support, pretty simple.
 
+== 4/27/15 ==
+* Fixed PhysicsComponent to allow a MultiModelComponent to function as a single unit of kinematic actors.
+
 == TODO ==
 * Added a list of scene nodes that should be added in the physics/collision component to the multimodelcomponent, so it can retrieve that list and add them.
     Create test model with non-collision propellers for this.
