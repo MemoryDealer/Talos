@@ -4,9 +4,7 @@ A 3D game engine emphasizing efficient architecture, with low coupling and high 
 
 * Hierarchical design to minimize complexity, control flow, and data flow
 * Scalable networked multiplayer with high-latency mitigation using client-side prediction (RakNet)
-* Usage of design patterns: flyweight, observer, object pool, chain of responsibility, command, factory
 * Entity-component system for easy customization of world objects
-* Frame-rate independence without the need for delta time values in every system
 * Ogre3D integration with NVIDIA PhysX - static/dynamic object support
 * Kinematic character controller for world navigation (using NVIDIA PhysX)
 * Fundamental first-person shooter mechanics; player-world interaction
@@ -17,5 +15,7 @@ A 3D game engine emphasizing efficient architecture, with low coupling and high 
 ![poster](Poster.png)
 
 ===========================================================
+
+Note: Exeuction flow chart was provided for presentation purposes - for those I talked to not familiar with game loops
 
 ![flowchart](Flow-Chart.png)
