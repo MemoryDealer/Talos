@@ -1,7 +1,5 @@
 ### Talos
 
-A 3D game engine emphasizing efficient architecture, with low coupling and high cohesion.
-
 * Hierarchical design to minimize complexity, control flow, and data flow
 * Scalable networked multiplayer with high-latency mitigation using client-side prediction (RakNet)
 * Ogre3D integration with NVIDIA PhysX - static/dynamic object support
